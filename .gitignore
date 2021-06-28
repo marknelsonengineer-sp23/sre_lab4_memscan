@@ -1,2 +1,27 @@
-memscan
+###############################################################################
+### University of Hawaii, College of Engineering
+### EE 491F - Software Reverse Engineering
+### Lab 04a - Memory Scan
+###
+### @file .gitignore
+### @version 1.0
+###
+### Tells git which files to ignore
+###
+### @author Mark Nelson <marknels@hawaii.edu>
+### @brief  Lab 04a - Memory Scan - EE 491F - Spr 2021
+### @date   22 Feb 2021
+###############################################################################
+
+# All object files
 *.o
+
+# The executable
+memscan
+
+# A hidden file for MacOS filesystems
+.DS_Store
+
+# fi Swap files
+*.swp
+

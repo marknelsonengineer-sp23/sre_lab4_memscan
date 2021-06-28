@@ -72,23 +72,23 @@ struct Permission {
 
 /// Map the permissions onto the sPermissions string
 union PermissionUnion {
-   char sPermissions[1024];
+   char   sPermissions[1024];
    struct Permission permissions;   
 };
 
 
 /// Holds the original (and some processed data) from each map entry
 struct MapEntry {
-   char sAddresses[1024];  ///< String buffer for the original address range
-   char* sAddressStart;    ///< String pointer to the start of the address range
-   char* sAddressEnd;      ///< String pointer to the end of the address range
-   void* pAddressStart;    ///< Pointer to the start of the memory mapped region
-   void* pAddressEnd;      ///< Pointer to the byte just *after* the end of the memory mapped region
+   char  sAddresses[1024];  ///< String buffer for the original address range
+   char* sAddressStart;     ///< String pointer to the start of the address range
+   char* sAddressEnd;       ///< String pointer to the end of the address range
+   void* pAddressStart;     ///< Pointer to the start of the memory mapped region
+   void* pAddressEnd;       ///< Pointer to the byte just *after* the end of the memory mapped region
    union PermissionUnion uPerms;  ///< Permissions to the region
-   char sOffset[1024];     ///< String buffer for the offset
-   char sDevice[1024];     ///< String buffer for the device name
-   char sInode[1024];      ///< String buffer for the iNode number
-   char sPath[1024];       ///< String buffer for the path
+   char  sOffset[1024];     ///< String buffer for the offset
+   char  sDevice[1024];     ///< String buffer for the device name
+   char  sInode[1024];      ///< String buffer for the iNode number
+   char  sPath[1024];       ///< String buffer for the path
 };
 
 /// The maximum number of MapEntry records in map
@@ -149,12 +149,16 @@ void scanEntries() {
    int a = 0;
    for ( int i = 0 ; i < numMaps ; i++ ) {
 
-      printEntry ( i );
+      // printEntry ( i );
       
       /// Skip non-readable regions
       if (map[i].uPerms.permissions.readPerm != 'r' ) {
          continue;
       }
+      
+		if( strcmp( map[i].sPath, "[vvar]" ) == 0 ) {  // Skip [vvar]
+			continue;
+		}
 
       for (void* j = map[i].pAddressStart ; j < map[i].pAddressEnd ; j++ ) {
          // printf ("0x%p < 0x%p\n ", j, map[i].pAddressEnd );
@@ -163,7 +167,18 @@ void scanEntries() {
          } 
          c++;
       }
-      printf ("Number of bytes read [%d]   Number of 'A' is [%d]\n", c, a);
+      
+      printf ("%d:  0x%p - 0x%p  %c%c%c%c  Number of bytes read [%d]   Number of 'A' is [%d]\n", 
+           i
+          ,map[i].pAddressStart
+          ,map[i].pAddressEnd
+          ,map[i].uPerms.permissions.readPerm
+          ,map[i].uPerms.permissions.writePerm
+          ,map[i].uPerms.permissions.executePerm
+          ,map[i].uPerms.permissions.sharedPerm
+          ,c
+          ,a);
+          
       c = 0;
       a = 0;
    } 
@@ -206,7 +221,7 @@ void readEntries() {
    
    /// This loop reads the file character-by-character until EOF (end of file)
    for (char c = fgetc( file ) ; c != EOF ; c = fgetc ( file )) {
-      printf("%c", c);
+      // printf("%c", c);
    
       // Deal with the starting condition
       if (mode == UNKNOWN) {
@@ -310,7 +325,7 @@ int main( int argc, char* argv[] ) {
    
    scanEntries();
    
-   printEntries();
+   // printEntries();
  
    fclose (file);
    
