@@ -1,23 +1,44 @@
 ###############################################################################
-# University of Hawaii, College of Engineering
-# EE 491F - Software Reverse Engineering
-# Lab 04a - Memory Scanner
-#
-# @file    Makefile
-# @version 1.0 - Initial implementation
-#
-# @author Mark Nelson <marknels@hawaii.edu>
-# @brief  Lab 04a - Memory Scanner - EE 491F - Spr 2021
-# @date   28 Jun 2021
+###          University of Hawaii, College of Engineering
+### @brief   Lab 03a - Memory Scanner - EE 491F - Spr 2022
+###
+### @file    Makefile
+### @version 1.0 - Initial implementation
+###
+### Build and test an energy unit conversion program
+###
+### @author  Mark Nelson <marknels@hawaii.edu>
+### @date    5_Feb_2022
+###
+### @see     https://www.gnu.org/software/make/manual/make.html
 ###############################################################################
 
-all:  clean memscan test
+
+TARGET = memscan
+
+
+all:  $(TARGET)
+
+
+CC     = gcc
+CFLAGS = -Wall -Wextra $(DEBUG_FLAGS)
+
+
+debug: DEBUG_FLAGS = -g -DDEBUG
+debug: clean $(TARGET)
+
+
+memscan.o: memscan.c
+	$(CC) $(CFLAGS) -c memscan.c
+
+
+memscan: memscan.o
+	$(CC) $(CFLAGS) -o $(TARGET) memscan.o
+
+
+test: $(TARGET)
+	./$(TARGET)
+
 
 clean:
-	rm -f memscan *.o
-
-memscan: memscan.c
-	gcc -o memscan memscan.c
-
-test: memscan
-	./memscan
+	rm -f $(TARGET) *.o

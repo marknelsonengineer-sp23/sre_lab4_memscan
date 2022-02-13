@@ -1,7 +1,6 @@
 ###############################################################################
-### University of Hawaii, College of Engineering
-### EE 491F - Software Reverse Engineering
-### Lab 04a - Memory Scan
+###         University of Hawaii, College of Engineering
+### @brief  Lab 03a - Memory Scan - EE 491F - Spr 2022
 ###
 ### @file .gitignore
 ### @version 1.0
@@ -9,19 +8,19 @@
 ### Tells git which files to ignore
 ###
 ### @author Mark Nelson <marknels@hawaii.edu>
-### @brief  Lab 04a - Memory Scan - EE 491F - Spr 2021
-### @date   22 Feb 2021
+### @date   05_Feb_2022
 ###############################################################################
 
-# All object files
+
+# Ignore all object files
 *.o
 
-# The executable
+# Ignore the executable file
 memscan
+a.out
 
-# A hidden file for MacOS filesystems
+# Ignore a hidden file for MacOS filesystems
 .DS_Store
 
-# fi Swap files
-*.swp
-
+# Ignore vi swap files
+.*.swp
