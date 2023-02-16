@@ -10,9 +10,10 @@
 /// @date   2 Feb 21
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <locale.h>  // For set_locale() LC_NUMERIC
+#include <stdio.h>   // For printf() fopen() and FILE
+#include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
+#include <string.h>  // For strtok() strcmp() and memset()
 
 /// Each row in /proc/$PID/maps describes a region of contiguous
 /// virtual memory in a process or thread.  Where $PID is 'self'
@@ -52,6 +53,12 @@
 ///                   [heap], [stack], or [vdso]. [vdso] stands for virtual
 ///                   dynamic shared object. It's used by system calls to
 ///                   switch to kernel mode.
+
+///
+/// Notes:
+///   - maps reports addresses like this:  [ 00403000-00404000 )...
+///     the "end address" is just outside the valid range.  When memscan prints
+///     the range, it shows inclusive addresses like this: [ 00403000-00403fff ]
 
 /// The maps file we intend to read from /proc
 #define MEMORY_MAP_FILE "/proc/self/maps"
@@ -97,42 +104,42 @@ size_t numMaps = 0 ;
 /// a MapEntry field.  This function makes heavy use of strtok().
 ///
 void readEntries( FILE* file ) {
-	char* pRead ;
+   char* pRead ;
 
    pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file ) ;
 
    while( pRead != NULL ) {
-   	map[numMaps].sAddressStart = strtok( map[numMaps].szLine, "-" ) ;
-   	map[numMaps].sAddressEnd   = strtok( NULL, " "   ) ;
-   	map[numMaps].sPermissions  = strtok( NULL, " "   ) ;
-   	map[numMaps].sOffset       = strtok( NULL, " "   ) ;
-   	map[numMaps].sDevice       = strtok( NULL, " "   ) ;
-   	map[numMaps].sInode        = strtok( NULL, " "   ) ;
-   	map[numMaps].sPath         = strtok( NULL, " \n" ) ;
-   	/// @todo Add tests to check if anything returns NULL or does anything
-   	///       out of the ordinary
+      map[numMaps].sAddressStart = strtok( map[numMaps].szLine, "-" ) ;
+      map[numMaps].sAddressEnd   = strtok( NULL, " "   ) ;
+      map[numMaps].sPermissions  = strtok( NULL, " "   ) ;
+      map[numMaps].sOffset       = strtok( NULL, " "   ) ;
+      map[numMaps].sDevice       = strtok( NULL, " "   ) ;
+      map[numMaps].sInode        = strtok( NULL, " "   ) ;
+      map[numMaps].sPath         = strtok( NULL, " \n" ) ;
+      /// @todo Add tests to check if anything returns NULL or does anything
+      ///       out of the ordinary
 
-		// Convert the strings holding the start & end address into pointers
+      // Convert the strings holding the start & end address into pointers
       sscanf( map[numMaps].sAddressStart, "%p", &(map[numMaps].pAddressStart) ) ;
       sscanf( map[numMaps].sAddressEnd,   "%p", &(map[numMaps].pAddressEnd  ) ) ;
 
-   	#ifdef DEBUG
-   		printf( "DEBUG:  " ) ;
-   		printf( "numMaps[%lu]  ",       numMaps );
-   		printf( "sAddressStart=[%s]  ", map[numMaps].sAddressStart ) ;
-   		printf( "pAddressStart=[%p]  ", map[numMaps].pAddressStart ) ;
-   		printf( "sAddressEnd=[%s]  ",   map[numMaps].sAddressEnd ) ;
-     		printf( "pAddressEnd=[%p]  ",   map[numMaps].pAddressEnd ) ;
-   		printf( "sPermissions=[%s]  ",  map[numMaps].sPermissions ) ;
-   		printf( "sOffset=[%s]  ",       map[numMaps].sOffset ) ;
-   		printf( "sDevice=[%s]  ",       map[numMaps].sDevice ) ;
-   		printf( "sInode=[%s]  ",        map[numMaps].sInode ) ;
-   		printf( "sPath=[%s]  ",         map[numMaps].sPath ) ;
-   		printf( "\n" ) ;
-    	#endif
+      #ifdef DEBUG
+         printf( "DEBUG:  " ) ;
+         printf( "numMaps[%lu]  ",       numMaps );
+         printf( "sAddressStart=[%s]  ", map[numMaps].sAddressStart ) ;
+         printf( "pAddressStart=[%p]  ", map[numMaps].pAddressStart ) ;
+         printf( "sAddressEnd=[%s]  ",   map[numMaps].sAddressEnd ) ;
+         printf( "pAddressEnd=[%p]  ",   map[numMaps].pAddressEnd ) ;
+         printf( "sPermissions=[%s]  ",  map[numMaps].sPermissions ) ;
+         printf( "sOffset=[%s]  ",       map[numMaps].sOffset ) ;
+         printf( "sDevice=[%s]  ",       map[numMaps].sDevice ) ;
+         printf( "sInode=[%s]  ",        map[numMaps].sInode ) ;
+         printf( "sPath=[%s]  ",         map[numMaps].sPath ) ;
+         printf( "\n" ) ;
+      #endif
 
-   	numMaps++;
-   	pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file );
+      numMaps++;
+      pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file );
    } // while()
 } // readEntries()
 
@@ -152,10 +159,11 @@ void scanEntries() {
 
       // Skip [vvar]
       if( map[i].sPath != NULL ) {
-			if( strcmp( map[i].sPath, "[vvar]" ) == 0 ) {
-				continue ;
-			}
-		}
+         if( strcmp( map[i].sPath, "[vvar]" ) == 0 ) {
+            printf( "%2ld: %s skipped\n", i, map[i].sPath );
+            continue ;
+         }
+      }
 
       for( void* scanThisAddress = map[i].pAddressStart ; scanThisAddress < map[i].pAddressEnd ; scanThisAddress++ ) {
          if( *(char*)scanThisAddress == CHAR_TO_SCAN_FOR ) {
@@ -164,10 +172,10 @@ void scanEntries() {
          numBytesScanned++ ;
       }
 
-      printf( "%ld:  0x%p - 0x%p  %s  Number of bytes read [%d]   Number of '%c' is [%d]\n",
+      printf( "%2ld: %p - %p  %s  Number of bytes read %'10d  Count of 0x%02x is %'7d\n",
            i
           ,map[i].pAddressStart
-          ,map[i].pAddressEnd
+          ,map[i].pAddressEnd - 1
           ,map[i].sPermissions
           ,numBytesScanned
           ,CHAR_TO_SCAN_FOR
@@ -177,11 +185,13 @@ void scanEntries() {
 
 
 /// Memory scanner
-int main( int, char* argv[] ) {
+int main( int argc __attribute__((unused)), char* argv[] ) {
    printf( "Memory scanner\n" ) ;
+   
+   setlocale( LC_NUMERIC, "" ) ;
 
-	/// File handle to MEMORY_MAP_FILE
-	FILE* file = NULL ;
+   /// File handle to MEMORY_MAP_FILE
+   FILE* file = NULL ;
 
    file = fopen( MEMORY_MAP_FILE, "r" ) ;
 
@@ -198,5 +208,5 @@ int main( int, char* argv[] ) {
 
    fclose( file ) ;
 
-	return EXIT_SUCCESS ;
+   return EXIT_SUCCESS ;
 }
