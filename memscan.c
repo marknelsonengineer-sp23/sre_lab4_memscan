@@ -1,15 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///         University of Hawaii, College of Engineering
-/// @brief  Lab 03a - Memory Scanner - EE 491F - Spr 2022
+///         Lab 03a - Memory Scanner - EE 491F - Spr 2022
 ///////////////////////////////////////////////////////////////////////////////
 ///
-/// @file memscan.c
-/// @version 1.0
-///
+/// @file   memscan.c
 /// @author Mark Nelson <marknels@hawaii.edu>
-/// @date   2 Feb 21
 ///////////////////////////////////////////////////////////////////////////////
-
 #include <locale.h>  // For set_locale() LC_NUMERIC
 #include <stdio.h>   // For printf() fopen() and FILE
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
