@@ -1,15 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////////
-///         University of Hawaii, College of Engineering
-///         Lab 03a - Memory Scanner - EE 491F - Spr 2022
-///////////////////////////////////////////////////////////////////////////////
+//   University of Hawaii, College of Engineering
+//   Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
+//
+/// We live in an ocean of illegal addresses sprinkled with islands of legal
+/// addresses.  Let's explore every grain of sand on our islands.
 ///
 /// @file   memscan.c
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
+
 #include <locale.h>  // For set_locale() LC_NUMERIC
 #include <stdio.h>   // For printf() fopen() and FILE
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
 #include <string.h>  // For strtok() strcmp() and memset()
+
 
 /// Each row in /proc/$PID/maps describes a region of contiguous
 /// virtual memory in a process or thread.  Where $PID is 'self'
@@ -49,7 +53,6 @@
 ///                   [heap], [stack], or [vdso]. [vdso] stands for virtual
 ///                   dynamic shared object. It's used by system calls to
 ///                   switch to kernel mode.
-
 ///
 /// Notes:
 ///   - maps reports addresses like this:  [ 00403000-00404000 )...
@@ -67,6 +70,12 @@
 
 /// The byte to scan for
 #define CHAR_TO_SCAN_FOR 'A'
+
+/// Define an array of paths we should not read.  On x86 architectures, we
+/// should avoid the "[vvar]" path.  The list ends with an empty value.
+///
+/// @see https://lwn.net/Articles/615809/
+char* ExcludePaths[] = { "[vvar]", "" };
 
 
 /// Holds the original (and some processed data) from each map entry
@@ -153,12 +162,14 @@ void scanEntries() {
          continue ;
       }
 
-      // Skip [vvar]
+      // Skip excluded paths
       if( map[i].sPath != NULL ) {
-         if( strcmp( map[i].sPath, "[vvar]XXX" ) == 0 ) {
-            printf( "%2zu: %s skipped\n", i, map[i].sPath );
-            continue ;
-         }
+      	for( size_t j = 0 ; ExcludePaths[j][0] != '\0' ; j++ ) {
+         	if( strcmp( map[i].sPath, ExcludePaths[j] ) == 0 ) {
+            	printf( "%2zu: %s skipped\n", i, map[i].sPath );
+            	goto skipScan;
+         	}
+      	}
       }
 
       for( void* scanThisAddress = map[i].pAddressStart ; scanThisAddress < map[i].pAddressEnd ; scanThisAddress++ ) {
@@ -177,6 +188,7 @@ void scanEntries() {
           ,CHAR_TO_SCAN_FOR
           ,numBytesFound) ;
       // printf( "%s\n", map[i].sPath != NULL ? map[i].sPath : "" );
+      skipScan:
    } // for()
 } // scanEntries()
 
