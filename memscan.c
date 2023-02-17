@@ -155,8 +155,8 @@ void scanEntries() {
 
       // Skip [vvar]
       if( map[i].sPath != NULL ) {
-         if( strcmp( map[i].sPath, "[vvar]" ) == 0 ) {
-            printf( "%2ld: %s skipped\n", i, map[i].sPath );
+         if( strcmp( map[i].sPath, "[vvar]XXX" ) == 0 ) {
+            printf( "%2zu: %s skipped\n", i, map[i].sPath );
             continue ;
          }
       }
@@ -168,7 +168,7 @@ void scanEntries() {
          numBytesScanned++ ;
       }
 
-      printf( "%2ld: %p - %p  %s  Number of bytes read %'10d  Count of 0x%02x is %'7d\n",
+      printf( "%2zu: %p - %p  %s  Number of bytes read %'10d  Count of 0x%02x is %'7d\n",
            i
           ,map[i].pAddressStart
           ,map[i].pAddressEnd - 1
@@ -176,6 +176,7 @@ void scanEntries() {
           ,numBytesScanned
           ,CHAR_TO_SCAN_FOR
           ,numBytesFound) ;
+      // printf( "%s\n", map[i].sPath != NULL ? map[i].sPath : "" );
    } // for()
 } // scanEntries()
 
