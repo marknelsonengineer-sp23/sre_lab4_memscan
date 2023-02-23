@@ -137,7 +137,7 @@ void readEntries( FILE* file ) {
 		if( retVal1 != 1 || retVal2 != 1 ) {
       	printf( "Map entry %zu is unable parse start [%s] or end address [%s].  Exiting.\n"
       	      ,numMaps
-      	      ,map[numMaps].sAddressStart 
+      	      ,map[numMaps].sAddressStart
       	      ,map[numMaps].sAddressEnd ) ;
       	exit( EXIT_FAILURE );
 		}
@@ -168,21 +168,28 @@ void readEntries( FILE* file ) {
 /// times CHAR_TO_SCAN_FOR appears in the region...
 void scanEntries() {
    for( size_t i = 0 ; i < numMaps ; i++ ) {
+      printf( "%2zu: %p - %p  %s  ",
+               i
+              ,map[i].pAddressStart
+              ,map[i].pAddressEnd - 1
+              ,map[i].sPermissions
+      ) ;
+
       int numBytesScanned = 0 ;  ///< Number of bytes scanned in this region
       int numBytesFound   = 0 ;  ///< Number of CHAR_TO_SCAN_FOR found in this region
 
       // Skip non-readable regions
       if( map[i].sPermissions[0] != 'r' ) {
-      	/// @todo print skip message
-         continue ;
+         printf( "read permission not set on %s", map[i].sPath );
+         goto finishRegion;
       }
 
       // Skip excluded paths
       if( map[i].sPath != NULL ) {
       	for( size_t j = 0 ; ExcludePaths[j][0] != '\0' ; j++ ) {
          	if( strcmp( map[i].sPath, ExcludePaths[j] ) == 0 ) {
-            	printf( "%2zu: %s skipped\n", i, map[i].sPath );
-            	goto skipScan;
+            	printf( "%s excluded", map[i].sPath );
+            	goto finishRegion;
          	}
       	}
       }
@@ -194,17 +201,14 @@ void scanEntries() {
          numBytesScanned++ ;
       }
 
-      printf( "%2zu: %p - %p  %s  Number of bytes read %'10d  Count of 0x%02x is %'7d\n",
-           i
-          ,map[i].pAddressStart
-          ,map[i].pAddressEnd - 1
-          ,map[i].sPermissions
-          ,numBytesScanned
+      printf( "Number of bytes read %'10d  Count of 0x%02x is %'7d",
+           numBytesScanned
           ,CHAR_TO_SCAN_FOR
           ,numBytesFound) ;
+
+      finishRegion:
       // printf( "%s\n", map[i].sPath != NULL ? map[i].sPath : "" );
-      skipScan:
-      	continue;
+      printf( "\n" );
    } // for()
 } // scanEntries()
 
