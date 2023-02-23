@@ -22,6 +22,7 @@ all:  $(TARGET)
 
 CC     = gcc
 CFLAGS = -Wall -Wextra $(DEBUG_FLAGS)
+LINTER = clang-tidy --quiet 
 
 
 debug: DEBUG_FLAGS = -g -DDEBUG
@@ -29,11 +30,12 @@ debug: clean $(TARGET)
 
 
 memscan.o: memscan.c
-	$(CC) $(CFLAGS) -c memscan.c
+	$(CC) $(CFLAGS) -c $^
+	$(LINTER) memscan.c --
 
 
 memscan: memscan.o
-	$(CC) $(CFLAGS) -o $(TARGET) memscan.o
+	$(CC) $(CFLAGS) -o $(TARGET) $^
 
 
 test: $(TARGET)
