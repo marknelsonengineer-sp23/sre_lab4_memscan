@@ -114,6 +114,10 @@ void readEntries( FILE* file ) {
    pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file ) ;
 
    while( pRead != NULL ) {
+      #ifdef DEBUG
+         printf( "%s", map[numMaps].szLine ) ;
+      #endif
+
       map[numMaps].sAddressStart = strtok( map[numMaps].szLine, "-" ) ;
       map[numMaps].sAddressEnd   = strtok( NULL, " "   ) ;
       map[numMaps].sPermissions  = strtok( NULL, " "   ) ;
@@ -125,12 +129,22 @@ void readEntries( FILE* file ) {
       ///       out of the ordinary
 
       // Convert the strings holding the start & end address into pointers
-      sscanf( map[numMaps].sAddressStart, "%p", &(map[numMaps].pAddressStart) ) ;
-      sscanf( map[numMaps].sAddressEnd,   "%p", &(map[numMaps].pAddressEnd  ) ) ;
+		int retVal1;
+		int retVal2;
+      retVal1 = sscanf( map[numMaps].sAddressStart, "%p", &(map[numMaps].pAddressStart) ) ;
+      retVal2 = sscanf( map[numMaps].sAddressEnd,   "%p", &(map[numMaps].pAddressEnd  ) ) ;
+
+		if( retVal1 != 1 || retVal2 != 1 ) {
+      	printf( "Map entry %zu is unable parse start [%s] or end address [%s].  Exiting.\n"
+      	      ,numMaps
+      	      ,map[numMaps].sAddressStart 
+      	      ,map[numMaps].sAddressEnd ) ;
+      	exit( EXIT_FAILURE );
+		}
 
       #ifdef DEBUG
          printf( "DEBUG:  " ) ;
-         printf( "numMaps[%lu]  ",       numMaps );
+         printf( "numMaps[%zu]  ",       numMaps );
          printf( "sAddressStart=[%s]  ", map[numMaps].sAddressStart ) ;
          printf( "pAddressStart=[%p]  ", map[numMaps].pAddressStart ) ;
          printf( "sAddressEnd=[%s]  ",   map[numMaps].sAddressEnd ) ;
@@ -159,6 +173,7 @@ void scanEntries() {
 
       // Skip non-readable regions
       if( map[i].sPermissions[0] != 'r' ) {
+      	/// @todo print skip message
          continue ;
       }
 
@@ -189,6 +204,7 @@ void scanEntries() {
           ,numBytesFound) ;
       // printf( "%s\n", map[i].sPath != NULL ? map[i].sPath : "" );
       skipScan:
+      	continue;
    } // for()
 } // scanEntries()
 
@@ -196,8 +212,13 @@ void scanEntries() {
 /// Memory scanner
 int main( int argc __attribute__((unused)), char* argv[] ) {
    printf( "Memory scanner\n" ) ;
-   
-   setlocale( LC_NUMERIC, "" ) ;
+
+	char* sRetVal;
+   sRetVal = setlocale( LC_NUMERIC, "" ) ;
+   if( sRetVal == NULL ) {
+      printf( "%s: Unable to set locale.  Exiting.\n", argv[0] ) ;
+      return EXIT_FAILURE ;
+   }
 
    /// File handle to MEMORY_MAP_FILE
    FILE* file = NULL ;
@@ -213,9 +234,18 @@ int main( int argc __attribute__((unused)), char* argv[] ) {
 
    readEntries( file ) ;
 
+	int iRetVal;
+   iRetVal = fclose( file ) ;
+   if( iRetVal != 0 ) {
+      printf( "%s: Unable to close [%s].  Exiting.\n", argv[0], MEMORY_MAP_FILE ) ;
+      return EXIT_FAILURE ;
+   }
+
    scanEntries() ;
 
-   fclose( file ) ;
-
    return EXIT_SUCCESS ;
-}
+} // main()
+
+// When reviewing this for the class:
+//   - Describe what happens with a fork()
+//   - Then parlay that into a discussion of backing memory (file vs. swap)
