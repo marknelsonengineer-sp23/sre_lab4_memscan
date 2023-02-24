@@ -112,13 +112,24 @@ struct MapEntry map[MAX_ENTRIES] ;
 size_t numMaps = 0 ;
 
 
+/// The name of the program (copied from `argv[0]`)
+char* programName = NULL ;
+
+
 /// Parse each line from #MEMORY_MAP_FILE, mapping the data into
 /// a MapEntry field.  This function makes heavy use of [strtok()][3].
 ///
 /// [3]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
-///
-/// @param file The file to process.
-void readEntries( FILE* file ) {
+void readEntries() {
+   FILE* file = NULL ;  // File handle to #MEMORY_MAP_FILE
+
+   file = fopen( MEMORY_MAP_FILE, "r" ) ;
+
+   if( file == NULL ) {
+      printf( "%s: Unable to open [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;
+      exit( EXIT_FAILURE );
+   }
+
    char* pRead ;
 
    pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file ) ;
@@ -170,6 +181,14 @@ void readEntries( FILE* file ) {
       numMaps++;
       pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file );
    } // while()
+
+   int iRetVal;
+   iRetVal = fclose( file ) ;
+   if( iRetVal != 0 ) {
+      printf( "%s: Unable to close [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;
+      exit( EXIT_FAILURE ) ;
+   }
+
 } // readEntries()
 
 
@@ -236,33 +255,18 @@ int main( int argc, char* argv[] ) {
       return EXIT_FAILURE ;
    }
 
+   programName = argv[0];
+
 	char* sRetVal;
    sRetVal = setlocale( LC_NUMERIC, "" ) ;
    if( sRetVal == NULL ) {
-      printf( "%s: Unable to set locale.  Exiting.\n", argv[0] ) ;
-      return EXIT_FAILURE ;
-   }
-
-   // File handle to #MEMORY_MAP_FILE
-   FILE* file = NULL ;
-
-   file = fopen( MEMORY_MAP_FILE, "r" ) ;
-
-   if( file == NULL ) {
-      printf( "%s: Unable to open [%s].  Exiting.\n", argv[0], MEMORY_MAP_FILE ) ;
+      printf( "%s: Unable to set locale.  Exiting.\n", programName ) ;
       return EXIT_FAILURE ;
    }
 
    memset( map, 0, sizeof( map ));  // Zero out the map data structure
 
-   readEntries( file ) ;
-
-	int iRetVal;
-   iRetVal = fclose( file ) ;
-   if( iRetVal != 0 ) {
-      printf( "%s: Unable to close [%s].  Exiting.\n", argv[0], MEMORY_MAP_FILE ) ;
-      return EXIT_FAILURE ;
-   }
+   readEntries() ;
 
    scanEntries() ;
 
