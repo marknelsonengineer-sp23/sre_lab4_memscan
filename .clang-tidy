@@ -13,7 +13,6 @@
 ---
 Checks:          '-checks=-*,boost-*,bugprone-*,cert-*,clang-analyzer-*,llvm-*,-llvm-header-guard,misc-*,performance-*,portability-*,readability-*,-readability-implicit-bool-conversion,-cert-msc30-c,-cert-msc50-cpp,-readability-redundant-access-specifiers,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling'
 WarningsAsErrors: ''
-#HeaderFilterRegex: '.+.h'
 AnalyzeTemporaryDtors: false
 FormatStyle:     none
 User:            marknels
@@ -56,5 +55,6 @@ CheckOptions:
     value:           'false'
   - key:             google-readability-function-size.StatementThreshold
     value:           '800'
+UseColor:        true
 ...
 

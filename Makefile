@@ -12,29 +12,29 @@
 
 TARGET = memscan
 
-all:  $(TARGET)
+all:  $(TARGET) lint doc
 
 CC     = gcc
 CFLAGS = -Wall -Wextra $(DEBUG_FLAGS)
 LINTER = clang-tidy --quiet
 
-
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: clean $(TARGET)
 
-
 memscan.o: memscan.c
 	$(CC) $(CFLAGS) -c $^
-	$(LINTER) memscan.c --
-
 
 memscan: memscan.o
 	$(CC) $(CFLAGS) -o $(TARGET) $^
 
+lint: $(TARGET)
+	$(LINTER) memscan.c --
+
+doc: $(TARGET)
+	doxygen .doxygen/Doxyfile
 
 test: $(TARGET)
 	./$(TARGET)
-
 
 clean:
 	rm -f $(TARGET) *.o

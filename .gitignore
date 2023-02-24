@@ -20,6 +20,13 @@ a.out
 
 # Ignore a hidden file for MacOS filesystems
 .DS_Store
+Thumbs.db
 
 # Ignore vi swap files
 .*.swp
+
+# Ignore Doxygen docs
+.doxygen/docs
+
+# Ignore CLion files
+.idea
