@@ -126,7 +126,8 @@ void readEntries() {
    file = fopen( MEMORY_MAP_FILE, "r" ) ;
 
    if( file == NULL ) {
-      printf( "%s: Unable to open [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;
+      fprintf( stderr, "%s: Unable to open [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
+
       exit( EXIT_FAILURE );
    }
 
@@ -156,7 +157,8 @@ void readEntries() {
       retVal2 = sscanf( map[numMaps].sAddressEnd,   "%p", &(map[numMaps].pAddressEnd  ) ) ;
 
 		if( retVal1 != 1 || retVal2 != 1 ) {
-      	printf( "Map entry %zu is unable parse start [%s] or end address [%s].  Exiting.\n"
+         fprintf( stderr, "%s: Map entry %zu is unable parse start [%s] or end address [%s].  Exiting.\n"  // NOLINT(cert-err33-c): No need to check the return value of fprintf
+               ,programName
       	      ,numMaps
       	      ,map[numMaps].sAddressStart
       	      ,map[numMaps].sAddressEnd ) ;
@@ -185,7 +187,7 @@ void readEntries() {
    int iRetVal;
    iRetVal = fclose( file ) ;
    if( iRetVal != 0 ) {
-      printf( "%s: Unable to close [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;
+      fprintf( stderr, "%s: Unable to close [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
       exit( EXIT_FAILURE ) ;
    }
 
@@ -251,7 +253,7 @@ int main( int argc, char* argv[] ) {
    printf( "Memory scanner\n" ) ;
 
    if( argc != 1 ) {
-      printf( "%s: Usage memscan\n", argv[0] ) ;
+      fprintf( stderr, "%s: Usage memscan\n", argv[0] ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
       return EXIT_FAILURE ;
    }
 
@@ -260,7 +262,7 @@ int main( int argc, char* argv[] ) {
 	char* sRetVal;
    sRetVal = setlocale( LC_NUMERIC, "" ) ;
    if( sRetVal == NULL ) {
-      printf( "%s: Unable to set locale.  Exiting.\n", programName ) ;
+      fprintf( stderr, "%s: Unable to set locale.  Exiting.\n", programName ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
       return EXIT_FAILURE ;
    }
 
