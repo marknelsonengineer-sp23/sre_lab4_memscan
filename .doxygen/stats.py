@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 ###############################################################################
-##                University of Hawaii, College of Engineering
-##                ee205_animal_farm - EE 205 - Spring 2023
+##   University of Hawaii, College of Engineering
+##   Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
 ##
 ### Generate project statistics
 ###
@@ -21,8 +21,8 @@ import locale
 import re
 
 
-GITHUB_USERNAME="marknelsonengineer"
-GITHUB_REPO="ee205_animal_farm_reference"
+GITHUB_USERNAME="marknelsonengineer-sp23"
+GITHUB_REPO="sre_lab4_memscan"
 STYLE="social"
 
 
