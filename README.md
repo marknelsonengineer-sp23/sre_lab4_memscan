@@ -68,9 +68,8 @@ Memscan uses the following `Makefile` targets:
 
 # The Assignment
 
-You are to write a program from scratch.  
-Feel free to incorporate artifacts from other labs such as `.gitignore`, header blocks or a simple `Makefile`.  
-Your lab must include a Makefile, which must have (at least) the following targets:
+You are to write a program from scratch.  Feel free to incorporate artifacts from other labs such as `.gitignore`, 
+header blocks or a simple `Makefile`.  Your lab must include a Makefile, which must have (at least) the following targets:
   - `make clean`
   - `make`
   - `make test`
