@@ -21,14 +21,17 @@ LINTER = clang-tidy --quiet
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: clean $(TARGET)
 
-memscan.o: memscan.c
-	$(CC) $(CFLAGS) -c $^
+maps.o: maps.c maps.h memscan.h
+	$(CC) $(CFLAGS) -c $<
 
-memscan: memscan.o
+memscan.o: memscan.c memscan.h maps.h
+	$(CC) $(CFLAGS) -c $<
+
+memscan: memscan.o maps.o
 	$(CC) $(CFLAGS) -o $(TARGET) $^
 
 lint: $(TARGET)
-	$(LINTER) memscan.c --
+	$(LINTER) memscan.c maps.c --
 
 doc: $(TARGET)
 	doxygen .doxygen/Doxyfile
