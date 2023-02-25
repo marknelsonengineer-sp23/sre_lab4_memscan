@@ -40,16 +40,16 @@
 ///                    and minor device number (in hex) where the file lives.
 ///   - `inode`:       If the region was mapped from a file, this is the file number.
 ///   - `pathname`:    If the region was mapped from a file, this is the name
-///                    of the file. This field is blank for anonymous mapped
+///                    of the file. This field is blank for anonymously mapped
 ///                    regions. There are also special regions with names like
-///                    `[heap]`, `[stack]`, or `[vdso]`. `[vdso]` stands for virtual
-///                    dynamic shared object.  It's used by system calls to
-///                    switch to kernel mode.
+///                    `[heap]`, `[stack]`, or `[vdso]`.
 ///
 /// Notes:
 ///   - maps reports addresses like this:  [ `00403000-00404000` )...
 ///     the "end address" one byte past the valid range.  When memscan prints
 ///     the range, it shows inclusive addresses like this: [ `00403000-00403fff` ]
+///   - `[vdso]` stands for virtual dynamic shared object.  It's used by system
+///     calls to switch to kernel mode.
 ///
 /// [1]: https://man7.org/linux/man-pages/man2/mprotect.2.html
 /// [2]: https://man7.org/linux/man-pages/man2/mmap.2.html
