@@ -58,6 +58,7 @@ Notes:
   - maps reports addresses like this:  [ `00403000-00404000` )... the "end address" one byte past the valid range.  When 
     memscan prints a range, it shows inclusive addresses like this: [ `00403000-00403fff` ]
   - `[vdso]` stands for virtual dynamic shared object.  It's used by system calls to switch to kernel mode.
+  - Permissions can be changed using the [mprotect()][1] system call.
 
 [1]: https://man7.org/linux/man-pages/man2/mprotect.2.html
 [2]: https://man7.org/linux/man-pages/man2/mmap.2.html

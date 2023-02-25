@@ -2,59 +2,9 @@
 //   University of Hawaii, College of Engineering
 //   Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
 //
-/// We live in an ocean of illegal addresses dotted with islands of legal
-/// addresses.  Let's explore every grain of sand on our islands.
+/// Read, parse and process the `/proc/$PID/maps` file
 ///
-/// Each row in `/proc/$PID/maps` describes a region of contiguous
-/// virtual memory in a process or thread.  When `$PID` is `self`
-/// the file is the memory map for the current process.
-///
-/// For example:
-/// ````
-/// address                  perms offset   dev   inode      pathname
-/// 00403000-00404000         r--p 00002000 00:30 641        /mnt/src/Src/tmp/t
-/// 00404000-00405000         rw-p 00003000 00:30 641        /mnt/src/Src/tmp/t
-/// 00405000-00587000         rw-p 00000000 00:00 0
-/// 00cc3000-00ce4000         rw-p 00000000 00:00 0          [heap]
-/// 7f8670628000-7f867062a000 rw-p 00000000 00:00 0
-/// 7f867062a000-7f8670650000 r--p 00000000 00:1f 172006     /usr/lib64/libc-2.32.so
-/// 7f8670650000-7f867079f000 r-xp 00026000 00:1f 172006     /usr/lib64/libc-2.32.so
-/// ````
-///
-/// Each row has the following fields:
-///   - `address`:     The starting and ending address of the region in the
-///                    process's address space
-///   - `permissions`: This describes how pages in the region can be accessed.
-///                    There are four different permissions: `r`ead, `w`rite,
-///                    e`x`ecute, and `s`hared. If read/write/execute are disabled,
-///                    a `-` will appear instead of the `r`/`w`/`x`. If a region is not
-///                    shared, it is private, and a `p` will appear instead of an `s`.
-///                    If the process attempts to access memory in a way that is
-///                    not permitted, the memory manager will interrupt the CPU
-///                    with a segmentation fault.
-///                    Permissions can be changed using the [mprotect()][1] system call.
-///   - `offset`:      If the region was mapped from a file (using [mmap()][2]), this
-///                    is the offset in the file where the mapping begins.
-///                    If the memory was not mapped from a file, it's `0`.
-///   - `device`:      If the region was mapped from a file, this is the major
-///                    and minor device number (in hex) where the file lives.
-///   - `inode`:       If the region was mapped from a file, this is the file number.
-///   - `pathname`:    If the region was mapped from a file, this is the name
-///                    of the file. This field is blank for anonymously mapped
-///                    regions. There are also special regions with names like
-///                    `[heap]`, `[stack]`, or `[vdso]`.
-///
-/// Notes:
-///   - maps reports addresses like this:  [ `00403000-00404000` )...
-///     the "end address" one byte past the valid range.  When memscan prints
-///     the range, it shows inclusive addresses like this: [ `00403000-00403fff` ]
-///   - `[vdso]` stands for virtual dynamic shared object.  It's used by system
-///     calls to switch to kernel mode.
-///
-/// [1]: https://man7.org/linux/man-pages/man2/mprotect.2.html
-/// [2]: https://man7.org/linux/man-pages/man2/mmap.2.html
-///
-/// @file   memscan.c
+/// @file   maps.c
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
