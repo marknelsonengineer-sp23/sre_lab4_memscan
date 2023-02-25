@@ -62,6 +62,7 @@
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
 #include <string.h>  // For strtok() strcmp() and memset()
 
+#include "colors.h"
 #include "maps.h"
 #include "memscan.h"
 
@@ -204,7 +205,7 @@ void scanEntries() {
 
       // Skip non-readable regions
       if( map[i].sPermissions[0] != 'r' ) {
-         printf( "read permission not set on %s", map[i].sPath );
+         printf( ANSI_COLOR_RED "read permission not set on %s" ANSI_COLOR_RESET, map[i].sPath );
          goto finishRegion;
       }
 
@@ -212,7 +213,7 @@ void scanEntries() {
       if( map[i].sPath != NULL ) {
       	for( size_t j = 0 ; ExcludePaths[j][0] != '\0' ; j++ ) {
          	if( strcmp( map[i].sPath, ExcludePaths[j] ) == 0 ) {
-            	printf( "%s excluded", map[i].sPath );
+            	printf( ANSI_COLOR_RED "%s excluded" ANSI_COLOR_RESET, map[i].sPath );
             	goto finishRegion;
          	}
       	}
