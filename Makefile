@@ -39,6 +39,7 @@ lint: $(TARGET)
 
 doc: $(TARGET)
 	.doxygen/stats.py
+	.doxygen/update_usage.py
 	doxygen .doxygen/Doxyfile
 	rsync --recursive --mkpath --checksum --delete .doxygen/images .doxygen/docs/html/.doxygen
 	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan
