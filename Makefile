@@ -21,6 +21,8 @@ LINTER = clang-tidy --quiet
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: clean $(TARGET)
 
+export FULL_VERSION = $(shell .doxygen/update_version.py)
+
 config.o: config.c config.h version.h
 	$(CC) $(CFLAGS) -c $<
 
@@ -30,7 +32,7 @@ maps.o: maps.c maps.h memscan.h
 memscan.o: memscan.c memscan.h maps.h
 	$(CC) $(CFLAGS) -c $<
 
-memscan: memscan.o maps.o
+memscan: memscan.o maps.o config.o
 	$(CC) $(CFLAGS) -o $(TARGET) $^
 
 lint: $(TARGET)
