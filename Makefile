@@ -23,20 +23,19 @@ debug: clean $(TARGET)
 
 export FULL_VERSION = $(shell .doxygen/update_version.py)
 
-config.o: config.c config.h version.h
+SRC = $(wildcard *.c)
+OBJ = $(SRC:.c=.o)
+
+maps.o: colors.h memscan.h
+memscan.o: maps.h config.h
+%.o: %.c %.h
 	$(CC) $(CFLAGS) -c $<
 
-maps.o: maps.c maps.h memscan.h
-	$(CC) $(CFLAGS) -c $<
-
-memscan.o: memscan.c memscan.h maps.h
-	$(CC) $(CFLAGS) -c $<
-
-memscan: memscan.o maps.o config.o
-	$(CC) $(CFLAGS) -o $(TARGET) $^
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $(OBJ)
 
 lint: $(TARGET)
-	$(LINTER) memscan.c maps.c config.c --
+	$(LINTER) $(SRC) --
 
 doc: $(TARGET)
 	.doxygen/stats.py
