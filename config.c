@@ -9,27 +9,32 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <stddef.h>  // For NULL
+#include <string.h>  // For strlen() & strncpy()
 
 #include "config.h"
 #include "version.h"
 
-char* programName = NULL ;
+/// Buffer to hold the program name
+char programName[MAX_PROGRAM_NAME] = {};
 
-/// Set the program name
-///
-/// @todo Copy into a buffer and do some parameter chacking
-///
-/// @param newProgramName The new program name
-/// @return `true` if successful.  `false` if unsuccessful.
+
 bool setProgramName( char* newProgramName ) {
-   programName = newProgramName;
+   if( newProgramName == NULL ) {
+      /// @todo Print an appropriate error message
+      return false ;
+   }
+
+   if( strlen( newProgramName ) == 0 ) {
+      /// @todo Print an appropriate error message
+      return false ;
+   }
+
+   strncpy( programName, newProgramName, MAX_PROGRAM_NAME );
 
    return true;
 }
 
-/// Get the program name
-///
-/// @return The program's name
+
 char* getProgramName() {
    return programName;
 }

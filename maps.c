@@ -74,7 +74,7 @@ void readEntries() {
    file = fopen( MEMORY_MAP_FILE, "r" ) ;
 
    if( file == NULL ) {
-      fprintf( stderr, "%s: Unable to open [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
+      fprintf( stderr, "%s: Unable to open [%s].  Exiting.\n", getProgramName(), MEMORY_MAP_FILE ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
 
       exit( EXIT_FAILURE );
    }
@@ -106,7 +106,7 @@ void readEntries() {
 
 		if( retVal1 != 1 || retVal2 != 1 ) {
          fprintf( stderr, "%s: Map entry %zu is unable parse start [%s] or end address [%s].  Exiting.\n"  // NOLINT(cert-err33-c): No need to check the return value of fprintf
-               ,programName
+               ,getProgramName()
       	      ,numMaps
       	      ,map[numMaps].sAddressStart
       	      ,map[numMaps].sAddressEnd ) ;
@@ -135,7 +135,7 @@ void readEntries() {
    int iRetVal;
    iRetVal = fclose( file ) ;
    if( iRetVal != 0 ) {
-      fprintf( stderr, "%s: Unable to close [%s].  Exiting.\n", programName, MEMORY_MAP_FILE ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
+      fprintf( stderr, "%s: Unable to close [%s].  Exiting.\n", getProgramName(), MEMORY_MAP_FILE ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
       exit( EXIT_FAILURE ) ;
    }
 

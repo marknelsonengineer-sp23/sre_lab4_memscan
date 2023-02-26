@@ -30,12 +30,12 @@ int main( int argc, char* argv[] ) {
       return EXIT_FAILURE ;
    }
 
-   programName = argv[0];
+   setProgramName( argv[0] ) ;
 
    char* sRetVal;
    sRetVal = setlocale( LC_NUMERIC, "" ) ;
    if( sRetVal == NULL ) {
-      fprintf( stderr, "%s: Unable to set locale.  Exiting.\n", programName ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
+      fprintf( stderr, "%s: Unable to set locale.  Exiting.\n", getProgramName() ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
       return EXIT_FAILURE ;
    }
 
