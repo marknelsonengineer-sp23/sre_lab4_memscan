@@ -15,11 +15,14 @@ TARGET = memscan
 all:  $(TARGET) lint doc
 
 CC     = gcc
-CFLAGS = -Wall -Wextra $(DEBUG_FLAGS)
+CFLAGS = -Wall -Wextra $(DEBUG_FLAGS) -std=c17
 LINTER = clang-tidy --quiet
 
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: clean $(TARGET)
+
+config.o: config.c config.h version.h
+	$(CC) $(CFLAGS) -c $<
 
 maps.o: maps.c maps.h memscan.h
 	$(CC) $(CFLAGS) -c $<
@@ -31,7 +34,7 @@ memscan: memscan.o maps.o
 	$(CC) $(CFLAGS) -o $(TARGET) $^
 
 lint: $(TARGET)
-	$(LINTER) memscan.c maps.c --
+	$(LINTER) memscan.c maps.c config.c --
 
 doc: $(TARGET)
 	.doxygen/stats.py

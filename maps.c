@@ -13,6 +13,7 @@
 #include <string.h>  // For strtok() strcmp() and memset()
 
 #include "colors.h"
+#include "config.h"
 #include "maps.h"
 #include "memscan.h"
 

@@ -12,11 +12,9 @@
 #include <stdio.h>   // For printf() fprintf()
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
 
+#include "config.h"
 #include "maps.h"
 #include "memscan.h"
-
-
-char* programName = NULL ;
 
 
 /// A basic memory scanner
