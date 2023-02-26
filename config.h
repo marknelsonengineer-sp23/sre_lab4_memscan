@@ -10,10 +10,17 @@
 #pragma once
 
 #include <stdbool.h>  // For bool
+#include <stdio.h>    // For FILE
+
+
+/// Print memscan's usage
+///
+/// @param outStream The output stream (usually `stderr` or `stdout`) to send
+///                  the usage statement
+void printUsage( FILE* outStream ) ;
 
 
 #define MAX_PROGRAM_NAME 32  ///< The maximum size of the program name
-
 
 /// Set the program name
 ///

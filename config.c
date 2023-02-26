@@ -9,6 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <stddef.h>  // For NULL
+#include <stdio.h>   // For printf()
+#include <stdlib.h>  // For EXIT_FAILURE
 #include <string.h>  // For strlen() & strncpy()
 
 #include "config.h"
@@ -16,6 +18,22 @@
 
 /// Buffer to hold the program name
 char programName[MAX_PROGRAM_NAME] = {};
+
+
+/// Print a line to outStream.  Ensure the print command was successful.
+///
+/// @param outStream The output stream (usually `stderr` or `stdout`) to print to
+/// @param format The `printf`-style format line
+#define PRINT_USAGE( outStream, format, ... )                  \
+   if( fprintf( outStream, format, __VA_ARGS__ ) <= 0 ) {      \
+       /** @todo Print an appropriate message for the user */  \
+      exit( EXIT_FAILURE );                                    \
+   }
+
+
+void printUsage( FILE* outStream ) {
+   PRINT_USAGE( outStream, "%s: Usage memscan\n", programName ) ;
+}
 
 
 bool setProgramName( char* newProgramName ) {

@@ -26,7 +26,7 @@ int main( int argc, char* argv[] ) {
    printf( "Memory scanner\n" ) ;
 
    if( argc != 1 ) {
-      fprintf( stderr, "%s: Usage memscan\n", argv[0] ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
+      printUsage( stderr ) ;
       return EXIT_FAILURE ;
    }
 
