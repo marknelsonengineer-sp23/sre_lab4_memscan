@@ -23,8 +23,6 @@
 /// @param argv An array of arguments passed to `memscan`
 /// @return The program's return code
 int main( int argc, char* argv[] ) {
-   printf( "Memory scanner\n" ) ;
-
    if( argc != 1 ) {
       printUsage( stderr ) ;
       return EXIT_FAILURE ;

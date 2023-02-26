@@ -22,17 +22,21 @@ char programName[MAX_PROGRAM_NAME] = {};
 
 /// Print a line to outStream.  Ensure the print command was successful.
 ///
+/// @todo Print an appropriate message for the user
+///
 /// @param outStream The output stream (usually `stderr` or `stdout`) to print to
-/// @param format The `printf`-style format line
-#define PRINT_USAGE( outStream, format, ... )                  \
-   if( fprintf( outStream, format, __VA_ARGS__ ) <= 0 ) {      \
-       /** @todo Print an appropriate message for the user */  \
-      exit( EXIT_FAILURE );                                    \
+#define PRINT_USAGE( outStream, ... )              \
+   if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
+      exit( EXIT_FAILURE );                        \
    }
 
 
 void printUsage( FILE* outStream ) {
-   PRINT_USAGE( outStream, "%s: Usage memscan\n", programName ) ;
+   PRINT_USAGE( outStream, "Usage: memscan [OPTION]...\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "The options below may be used to select memscan's operation\n" ) ;
+   PRINT_USAGE( outStream, "  -h, --help    display this help and exit\n" ) ;
+   PRINT_USAGE( outStream, "  -v, --version output version information and exit\n" ) ;
 }
 
 
