@@ -17,41 +17,6 @@
 #include "config.h"
 #include "version.h"
 
-/// Buffer to hold the program name
-char programName[MAX_PROGRAM_NAME] = {};
-
-
-/// Define the command line options for memscan
-static struct option long_options[] = {
-   { "block", required_argument,   0, 0 },
-   { "stream", required_argument,  0, 0 },
-   { "mmap", required_argument,    0, 0 },
-   { "fork", required_argument,    0, 'f' },
-   { "malloc", required_argument,  0, 'm' },
-   { "phys", required_argument,    0, 'p' },
-   { "shared", required_argument,  0, 's' },
-   { "threads", required_argument, 0, 't' },
-   { "help", no_argument,          0, 'h' },
-   { "verbose", no_argument,       0, 'v' },
-   { 0, 0, 0, 0 }
-};
-
-void processOptions( int argc, char* argv[] ) {
-
-   if( argc < 1 ) {
-      printf( "Unexpected argument count [%d].  Exiting.\n", argc );
-      exit( EXIT_FAILURE );
-   }
-
-   setProgramName( argv[0] ) ;
-
-   if( argc != 1 ) {
-      printUsage( stdout ) ;
-      exit( EXIT_SUCCESS );
-   }
-
-}
-
 
 /// Print a line to outStream.  Ensure the print command was successful.
 ///
@@ -62,6 +27,66 @@ void processOptions( int argc, char* argv[] ) {
    if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
       exit( EXIT_FAILURE );                        \
    }
+
+
+/// Buffer to hold the program name
+char programName[MAX_PROGRAM_NAME] = {};
+
+
+/// Define the command line options for memscan
+static struct option long_options[] = {
+   { "block",   required_argument, 0, 'b' },
+   { "stream",  required_argument, 0, '0' },
+   { "mmap",    required_argument, 0, '1' },
+   { "fork",    no_argument,       0, 'f' },
+   { "malloc",  required_argument, 0, 'm' },
+   { "phys",    no_argument,       0, 'p' },
+   { "shared",  required_argument, 0, 's' },
+   { "threads", required_argument, 0, 't' },
+   { "help",    no_argument,       0, 'h' },
+   { "verbose", no_argument,       0, 'v' },
+   { 0, 0, 0, 0 }
+};
+
+
+void processOptions( int argc, char* argv[] ) {
+
+   if( argc < 1 ) {
+      printf( "Unexpected argument count [%d].  Exiting.\n", argc );
+      exit( EXIT_FAILURE );
+   }
+
+   setProgramName( argv[0] ) ;
+
+   while( true ) {
+      int option_index = 0;
+      int optionChar;
+
+      optionChar = getopt_long(argc, argv, "b:fm:ps:t:hv", long_options, &option_index);
+
+      if( optionChar == -1 ) {
+         break ;  // Done processing getopt_long
+      }
+
+      switch ( optionChar ) {
+         case 'h':
+            printUsage( stdout ) ;
+            exit( EXIT_SUCCESS ) ;
+            break ;
+
+         default:
+            printUsage( stderr ) ;
+            exit( EXIT_FAILURE ) ;
+            break ;
+      }
+   }
+
+   if (optind < argc) {
+      PRINT_USAGE( stderr, "%s: Unknown additional arguments.  Exiting.\n", programName ) ;
+      printUsage( stderr ) ;
+      exit( EXIT_FAILURE ) ;
+   }
+}
 
 
 void printUsage( FILE* outStream ) {
