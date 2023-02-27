@@ -8,9 +8,10 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <getopt.h>  // For getopt_long() struct option
 #include <stddef.h>  // For NULL
 #include <stdio.h>   // For printf()
-#include <stdlib.h>  // For EXIT_FAILURE
+#include <stdlib.h>  // For exit() EXIT_SUCCESS EXIT_FAILURE
 #include <string.h>  // For strlen() & strncpy()
 
 #include "config.h"
@@ -18,6 +19,38 @@
 
 /// Buffer to hold the program name
 char programName[MAX_PROGRAM_NAME] = {};
+
+
+/// Define the command line options for memscan
+static struct option long_options[] = {
+   { "block", required_argument,   0, 0 },
+   { "stream", required_argument,  0, 0 },
+   { "mmap", required_argument,    0, 0 },
+   { "fork", required_argument,    0, 'f' },
+   { "malloc", required_argument,  0, 'm' },
+   { "phys", required_argument,    0, 'p' },
+   { "shared", required_argument,  0, 's' },
+   { "threads", required_argument, 0, 't' },
+   { "help", no_argument,          0, 'h' },
+   { "verbose", no_argument,       0, 'v' },
+   { 0, 0, 0, 0 }
+};
+
+void processOptions( int argc, char* argv[] ) {
+
+   if( argc < 1 ) {
+      printf( "Unexpected argument count [%d].  Exiting.\n", argc );
+      exit( EXIT_FAILURE );
+   }
+
+   setProgramName( argv[0] ) ;
+
+   if( argc != 1 ) {
+      printUsage( stdout ) ;
+      exit( EXIT_SUCCESS );
+   }
+
+}
 
 
 /// Print a line to outStream.  Ensure the print command was successful.

@@ -13,6 +13,14 @@
 #include <stdio.h>    // For FILE
 
 
+/// Process command line options
+///
+/// @param argc The number of command line options (including the program name)
+/// @param argv A `NULL` terminated array of `char[]` containing the command
+///             line options
+extern void processOptions( int argc, char* argv[] );
+
+
 /// Print memscan's usage
 ///
 /// @param outStream The output stream (usually `stderr` or `stdout`) to send

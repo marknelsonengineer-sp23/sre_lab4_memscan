@@ -23,12 +23,8 @@
 /// @param argv An array of arguments passed to `memscan`
 /// @return The program's return code
 int main( int argc, char* argv[] ) {
-   if( argc != 1 ) {
-      printUsage( stderr ) ;
-      return EXIT_FAILURE ;
-   }
+   processOptions( argc, argv ) ;
 
-   setProgramName( argv[0] ) ;
 
    char* sRetVal;
    sRetVal = setlocale( LC_NUMERIC, "" ) ;
