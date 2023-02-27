@@ -44,7 +44,7 @@ static struct option long_options[] = {
    { "shared",  required_argument, 0, 's' },
    { "threads", required_argument, 0, 't' },
    { "help",    no_argument,       0, 'h' },
-   { "verbose", no_argument,       0, 'v' },
+   { "version", no_argument,       0, 'v' },
    { 0, 0, 0, 0 }
 };
 
@@ -69,6 +69,13 @@ void processOptions( int argc, char* argv[] ) {
       }
 
       switch ( optionChar ) {
+         case 'v':
+            printf( "memscan version %s\n", FULL_VERSION ) ;
+            printf( "Copyright (C) 2023 Mark Nelson\n") ;
+            printf( "Written by Mark Nelson\n" );
+            exit( EXIT_SUCCESS ) ;
+            break ;
+
          case 'h':
             printUsage( stdout ) ;
             exit( EXIT_SUCCESS ) ;
