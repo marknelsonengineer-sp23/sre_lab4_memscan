@@ -16,6 +16,7 @@
 #include "config.h"
 #include "maps.h"
 #include "memscan.h"
+#include "pagemap.h"
 
 
 /// The `maps` file we intend to read from `/proc`
@@ -181,6 +182,12 @@ void scanEntries() {
       finishRegion:
       // printf( "%s\n", map[i].sPath != NULL ? map[i].sPath : "" );
       printf( "\n" );
+
+      int numPages = ( map[i].pAddressEnd - map[i].pAddressStart ) / getPageSizeInBytes();
+
+      for( int i = 0 ; i < numPages ; i++ ) {
+         doP( map[i].pAddressStart + i * getPageSizeInBytes() );
+      }
    } // for()
 } // scanEntries()
 
