@@ -52,11 +52,12 @@ extern char* getProgramName() ;
 ///
 /// @param msg The message to print out.  When printed, it will begin
 ///            with `progName: ` and end with `.  Exiting.`.
-#define FATAL_ERROR( msg, ... )  \
-   fprintf(                      \
-      stderr                     \
-     ,"%s: " msg ".  Exiting.\n" \
-     ,getProgramName()           \
-     ,__VA_ARGS__ ) ;            \
-   exit( EXIT_FAILURE )          \
+#define FATAL_ERROR( msg, ... ) { \
+   fprintf(                       \
+      stderr                      \
+     ,"%s: " msg ".  Exiting.\n"  \
+     ,getProgramName()            \
+     ,__VA_ARGS__ ) ;             \
+   exit( EXIT_FAILURE ); }        \
+   (void)                         \
    /* NOLINTEND(cert-err33-c) */

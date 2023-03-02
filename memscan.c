@@ -25,12 +25,10 @@
 int main( int argc, char* argv[] ) {
    processOptions( argc, argv ) ;
 
-
    char* sRetVal;
    sRetVal = setlocale( LC_NUMERIC, "" ) ;
    if( sRetVal == NULL ) {
-      fprintf( stderr, "%s: Unable to set locale.  Exiting.\n", getProgramName() ) ;  // NOLINT(cert-err33-c): No need to check the return value of fprintf
-      return EXIT_FAILURE ;
+      FATAL_ERROR( "Unable to set %s", "locale" ) ;
    }
 
    readEntries() ;
