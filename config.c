@@ -26,7 +26,8 @@
 #define PRINT_USAGE( outStream, ... )              \
    if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
       exit( EXIT_FAILURE );                        \
-   }
+   }                                               \
+   (void)
 
 
 /// Buffer to hold the program name
