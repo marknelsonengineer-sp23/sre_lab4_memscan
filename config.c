@@ -27,8 +27,7 @@
    if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
       exit( EXIT_FAILURE );                        \
    }                                               \
-   (void)
-
+   (void)0
 
 /// Buffer to hold the program name
 char programName[MAX_PROGRAM_NAME] = {};
@@ -51,7 +50,6 @@ static struct option long_options[] = {
 
 
 void processOptions( int argc, char* argv[] ) {
-
    if( argc < 1 ) {
       printf( "Unexpected argument count [%d].  Exiting.\n", argc );
       exit( EXIT_FAILURE );

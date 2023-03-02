@@ -59,5 +59,5 @@ extern char* getProgramName() ;
      ,getProgramName()            \
      ,__VA_ARGS__ ) ;             \
    exit( EXIT_FAILURE ); }        \
-   (void)                         \
-   /* NOLINTEND(cert-err33-c) */
+   /* NOLINTEND(cert-err33-c) */  \
+   (void)0
