@@ -74,7 +74,7 @@ void readEntries() {
    file = fopen( MEMORY_MAP_FILE, "r" ) ;
 
    if( file == NULL ) {
-      FATAL_ERROR( "Unable to open [%s]", MEMORY_MAP_FILE );
+      FATAL_ERROR( "Unable to open [%s]", MEMORY_MAP_FILE ) ;
    }
 
    char* pRead ;
