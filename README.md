@@ -12,10 +12,10 @@ The project's home page (hosted by GitHub) is [here](https://github.com/marknels
 The source code documentation (hosted by UH) is [here](https://www2.hawaii.edu/~marknels/sre/memscan)
 
 #### The Lab
-This lab looks looks easy at first, but (hopefully) proves to be quite challenging.
+This lab looks easy at first, but (hopefully) proves to be quite challenging.
 
 As you know, user-processes run in "Virtual Memory" process space — a process space that is unique for each process.  
-In actuality, the process space is made up of "regions".  Some of the regions are completely unique to the process 
+In actuality, the process space is made up of "regions".  Some the regions are completely unique to the process 
 (such as the read-write data pages and the stack for the process). 
 There are other regions that are shared amongst many processes.
 

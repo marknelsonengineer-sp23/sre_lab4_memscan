@@ -10,7 +10,6 @@
 ### @author Mark Nelson <marknels@hawaii.edu>
 ###############################################################################
 
-
 # Ignore all object files
 *.o
 
@@ -29,4 +28,5 @@ Thumbs.db
 .doxygen/docs
 
 # Ignore CLion files
-.idea
+# .idea
+
