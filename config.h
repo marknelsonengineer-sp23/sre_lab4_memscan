@@ -10,7 +10,7 @@
 #pragma once
 
 #include <stdbool.h>  // For bool
-#include <stdio.h>    // For FILE
+#include <stdio.h>    // For FILE stderr fprintf()
 
 
 /// Process command line options
@@ -43,3 +43,20 @@ extern bool setProgramName( char* newProgramName ) ;
 ///
 /// @return The program's name
 extern char* getProgramName() ;
+
+
+/// Print an error message to `stderr` (along with the program name) and then
+/// exit with a failure status.
+///
+/// @NOLINTBEGIN(cert-err33-c): No need to check the return value of `fprintf`
+///
+/// @param msg The message to print out.  When printed, it will begin
+///            with `progName: ` and end with `.  Exiting.`.
+#define FATAL_ERROR( msg, ... )  \
+   fprintf(                      \
+      stderr                     \
+     ,"%s: " msg ".  Exiting.\n" \
+     ,getProgramName()           \
+     ,__VA_ARGS__ ) ;            \
+   exit( EXIT_FAILURE )          \
+   /* NOLINTEND(cert-err33-c) */
