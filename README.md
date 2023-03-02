@@ -55,8 +55,8 @@ Each row has the following fields:
 | `pathname`    | If the region was mapped from a file, this is the name of the file. This field is blank for anonymously mapped regions. There are also special regions with names like `[heap]`, `[stack]`, or `[vdso]`.                                                                                                                                                                                                                                                     |
 
 Notes:
-  - maps reports addresses like this:  [ `00403000-00404000` )... the "end address" one byte past the valid range.  When 
-    memscan prints a range, it shows inclusive addresses like this: [ `00403000-00403fff` ]
+  - `maps` reports addresses like this:  [ `00403000-00404000` )... the "end address" one byte past the valid range.  
+    When memscan prints a range, it shows inclusive addresses like this: [ `00403000-00403fff` ]
   - `[vdso]` stands for virtual dynamic shared object.  It's used by system calls to switch to kernel mode.
   - Permissions can be changed using the [mprotect()][1] system call.
 
