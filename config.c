@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <getopt.h>  // For getopt_long() struct option
+#include <limits.h>  // For PATH_MAX
 #include <stddef.h>  // For NULL
 #include <stdio.h>   // For printf()
 #include <stdlib.h>  // For exit() EXIT_SUCCESS EXIT_FAILURE
@@ -94,6 +95,22 @@ void processOptions( int argc, char* argv[] ) {
    }
 }
 
+bool openFileWithBlockIO       = 0 ;
+bool openFileWithStreamIO      = 0 ;
+bool openFileWithMapIO         = 0 ;
+bool forkProcess               = 0 ;
+bool mallocMemory              = 0 ;
+bool includePhysicalMemoryInfo = 0 ;
+bool createSharedMemory        = 0 ;
+bool createThreads             = 0 ;
+
+char blockPath[ FILENAME_MAX ]   = {} ;
+char streamPath [ FILENAME_MAX ] = {} ;
+char mmapPath [ FILENAME_MAX ]   = {} ;
+
+size_t mallocSize = 0 ;
+size_t sharedSize = 0 ;
+size_t numThreads = 0 ;
 
 void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "Usage: memscan [OPTION]...\n" ) ;
