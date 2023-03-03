@@ -180,7 +180,9 @@ void scanEntries() {
           ,numBytesFound) ;
 
       finishRegion:
-      // printf( "%s\n", map[i].sPath != NULL ? map[i].sPath : "" );
+      if( printPath ) {
+         printf( "  %s", map[i].sPath != NULL ? map[i].sPath : "" );
+      }
       printf( "\n" );
 
       int numPages = ( map[i].pAddressEnd - map[i].pAddressStart ) / getPageSizeInBytes();
