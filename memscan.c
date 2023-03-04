@@ -12,9 +12,10 @@
 #include <stdio.h>   // For printf() fprintf()
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
 
-#include "config.h"
-#include "maps.h"
-#include "memscan.h"
+#include "config.h"   // For processOptions()
+#include "maps.h"     // For readEntries() scanEntries()
+#include "memscan.h"  // Just cuz
+#include "pagemap.h"  // For closePagemap()
 
 
 /// A basic memory scanner
@@ -34,6 +35,8 @@ int main( int argc, char* argv[] ) {
    readEntries() ;
 
    scanEntries() ;
+
+   closePagemap() ;
 
    return EXIT_SUCCESS ;
 } // main()

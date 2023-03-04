@@ -185,10 +185,10 @@ void scanEntries() {
       }
       printf( "\n" );
 
-      int numPages = ( map[i].pAddressEnd - map[i].pAddressStart ) / getPageSizeInBytes();
+      size_t numPages = ( map[i].pAddressEnd - map[i].pAddressStart ) / getPageSizeInBytes();
 
-      for( int i = 0 ; i < numPages ; i++ ) {
-         doP( map[i].pAddressStart + i * getPageSizeInBytes() );
+      for( size_t i = 0 ; i < numPages ; i++ ) {
+         doPagemap( map[i].pAddressStart + i * getPageSizeInBytes() );
       }
    } // for()
 } // scanEntries()

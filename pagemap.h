@@ -13,9 +13,27 @@
 
 #pragma once
 
+/// Hold all of the information about the physical page
+///
+/// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
+struct PhysicalPage {
+   size_t pfn;  ///< Page Frame Number (if present)
+   bool   soft_dirty_bit;  ///< pte is soft-dirty (see [Documentation/vm/soft-dirty.txt](https://www.kernel.org/doc/Documentation/vm/soft-dirty.txt))
+   bool   page_exclusively_mapped;  ///< Page exclusively mapped (since 4.2)
+   bool   file_mapped;  ///< `true` if the page is `file_mapped`.  Pages are either mapped to a file (file_mapped) or not (anonymously mapped).  See https://stackoverflow.com/questions/13024087/what-are-memory-mapped-page-and-anonymous-page
+   bool   swapped;  ///< `true` if the page is swapped
+   bool   present;  ///< `true` if the page is present
+   size_t page_count;  ///< From /proc/kpagecount.  This file contains a 64-bit count of the number of times each page is mapped, indexed by PFN.
+   // There are 26 other flags to get into (later)
+} ;
+
+
 /// Get the size of a page in bytes.  Must not be less than 1.
 ///
-/// @return The size of a page in bytes.
+/// @return The size of a page in bytes
 extern size_t getPageSizeInBytes() ;
 
-extern void doP( void* pAddr ) ;
+extern void doPagemap( void* pAddr ) ;
+
+/// Close any open resources
+extern void closePagemap() ;
