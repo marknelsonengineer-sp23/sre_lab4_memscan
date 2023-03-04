@@ -17,6 +17,7 @@ all:  $(TARGET) lint doc
 CC     = gcc
 CFLAGS = -Wall -Wextra $(DEBUG_FLAGS) -std=c17
 LINTER = clang-tidy --quiet
+MAKE   = make
 
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: clean $(TARGET)
@@ -36,6 +37,7 @@ $(TARGET): $(OBJ)
 
 lint: $(TARGET)
 	$(LINTER) $(SRC) --
+	cd tests && $(MAKE) lint
 
 doc: $(TARGET)
 	.doxygen/stats.py
@@ -47,7 +49,8 @@ publish: doc
 	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan
 
 test: $(TARGET)
-	./$(TARGET)
+	cd tests && $(MAKE) test
 
 clean:
 	rm -f $(TARGET) *.o
+	cd tests && $(MAKE) clean

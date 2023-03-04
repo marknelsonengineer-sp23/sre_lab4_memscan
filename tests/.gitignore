@@ -1,0 +1,25 @@
+###############################################################################
+### University of Hawaii, College of Engineering
+### Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
+###
+### Tells git which files to ignore
+###
+### @see https://git-scm.com/docs/gitignore
+###
+### @file .gitignore
+### @author Mark Nelson <marknels@hawaii.edu>
+###############################################################################
+
+# Ignore all object files
+*.o
+
+# Ignore the executable file
+boost_tests
+a.out
+
+# Ignore a hidden file for MacOS filesystems
+.DS_Store
+Thumbs.db
+
+# Ignore vi swap files
+.*.swp
