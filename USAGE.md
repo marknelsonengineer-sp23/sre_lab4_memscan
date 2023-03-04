@@ -10,6 +10,7 @@ The options below may be used to select memscan's operation
   -f, --fork               fork a process and display the combined parent and
                            child memscan
   -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan
+      --path               print the path (if available in the memscan
   -p, --phys               include physical addresses (w/ flags) in the memscan
   -s, --shared=NUM[K|M|G]  create a shared memory region of NUM bytes before
                            the memscan
