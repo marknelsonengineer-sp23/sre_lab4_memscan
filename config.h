@@ -78,7 +78,7 @@ extern size_t numThreads ;  ///< The number of threads specified by `--threads`
       stderr                      \
      ,"%s: " msg ".  Exiting.\n"  \
      ,getProgramName()            \
-     ,__VA_ARGS__ ) ;             \
+     ,##__VA_ARGS__ ) ;           \
    exit( EXIT_FAILURE ); }        \
    /* NOLINTEND(cert-err33-c) */  \
    (void)0

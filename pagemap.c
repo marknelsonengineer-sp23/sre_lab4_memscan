@@ -107,7 +107,7 @@ void doPagemap( void* pAddr ) {  /// @todo consider renaming to `vaddr`
    for( int i = 0; i < PAGEMAP_ENTRY ; i++) {
       int j = getc( pagefile );
       if( j == EOF ) {
-         FATAL_ERROR( "Failed to %s - End of file", "getc()" );
+         FATAL_ERROR( "failed to getc() - End of file" );
       }
 //      if(is_bigendian())
 //         c_buf[i] = c;

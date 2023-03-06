@@ -29,7 +29,7 @@ int main( int argc, char* argv[] ) {
    char* sRetVal;
    sRetVal = setlocale( LC_NUMERIC, "" ) ;
    if( sRetVal == NULL ) {
-      FATAL_ERROR( "Unable to set %s", "locale" ) ;
+      FATAL_ERROR( "Unable to set locale" ) ;
    }
 
    readEntries() ;
