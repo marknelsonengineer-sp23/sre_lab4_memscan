@@ -12,6 +12,7 @@
 #include <limits.h>   // For PATH_MAX
 #include <stdbool.h>  // For bool
 #include <stdio.h>    // For FILE stderr fprintf()
+#include <stdlib.h>   // For exit()
 
 
 /// Process command line options
