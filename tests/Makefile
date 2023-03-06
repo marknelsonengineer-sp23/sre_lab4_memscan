@@ -23,13 +23,14 @@ debug: clean $(TARGET)
 
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)
+TEST_OBJS = $(filter-out ../memscan.o, $(wildcard ../*.o))
 
 test_iomap.o: ../colors.h
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) -lboost_system -lboost_thread -lboost_unit_test_framework
+$(TARGET): $(OBJ) $(TEST_OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(TEST_OBJS) -lboost_system -lboost_thread -lboost_unit_test_framework
 
 lint: $(TARGET)
 	$(LINTER) $(SRC) --
