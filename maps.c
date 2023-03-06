@@ -67,7 +67,7 @@ struct MapEntry map[MAX_ENTRIES] ;
 size_t numMaps = 0 ;
 
 
-void readEntries() {
+void readMaps() {
    memset( map, 0, sizeof( map ));  // Zero out the map data structure
 
    FILE* file = NULL ;  // File handle to #MEMORY_MAP_FILE
@@ -136,10 +136,10 @@ void readEntries() {
       FATAL_ERROR( "Unable to close [%s]", MEMORY_MAP_FILE ) ;
    }
 
-} // readEntries()
+} // readMaps()
 
 
-void scanEntries() {
+void scanMaps() {
    for( size_t i = 0 ; i < numMaps ; i++ ) {
       printf( "%2zu: %p - %p  %s  ",
                i
@@ -191,7 +191,7 @@ void scanEntries() {
          doPagemap( map[i].pAddressStart + i * getPageSizeInBytes() );
       }
    } // for()
-} // scanEntries()
+} // scanMaps()
 
 
 // When reviewing this for the class:

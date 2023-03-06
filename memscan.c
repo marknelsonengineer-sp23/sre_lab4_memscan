@@ -32,9 +32,13 @@ int main( int argc, char* argv[] ) {
       FATAL_ERROR( "Unable to set locale" ) ;
    }
 
-   readEntries() ;
+   print_iomem() ;
 
-   scanEntries() ;
+   exit(0);
+
+   readMaps() ;
+
+   scanMaps() ;
 
    closePagemap() ;
 

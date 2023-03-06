@@ -14,9 +14,9 @@
 /// a MapEntry field.  This function makes heavy use of [strtok()][1].
 ///
 /// [1]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
-extern void readEntries() ;
+extern void readMaps() ;
 
 /// This is the workhorse of this program... Scan all readable memory
 /// regions, counting the number of bytes scanned and the number of
 /// times #CHAR_TO_SCAN_FOR appears in the region...
-extern void scanEntries() ;
+extern void scanMaps() ;
