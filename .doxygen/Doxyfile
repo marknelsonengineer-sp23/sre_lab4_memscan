@@ -913,6 +913,7 @@ WARN_LOGFILE           =
 
 INPUT                  = README.md     \
                          STATISTICS.md \
+                         CONTRIBUTE.md \
                          USAGE.md      \
                          .
 
