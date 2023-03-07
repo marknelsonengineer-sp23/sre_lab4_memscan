@@ -21,7 +21,7 @@
 
 #include <stdbool.h> // For true & false
 #include <stddef.h>  // For NULL
-#include <stdio.h>   // For printf()
+#include <stdio.h>   // For printf() fopen() and FILE
 #include <stdlib.h>  // For malloc() free()
 #include <string.h>  // For strncpy() memset() strlen()
 
@@ -303,8 +303,68 @@ void print_iomem() {
 bool read_iomem() {
    reset_iomem() ;
 
+   FILE* file = NULL ;  // File handle to #IOMEM_FILE
+
+   file = fopen( IOMEM_FILE, "r" ) ;
+   if( file == NULL ) {
+      FATAL_ERROR( "Unable to open [%s]", IOMEM_FILE ) ;
+   }
+
+   char* pRead ;
+   char szLine[ MAX_LINE_LENGTH ] ;
+
+   pRead = fgets( szLine, MAX_LINE_LENGTH, file ) ;
+   trim_edges( szLine ) ;
+
+   while( pRead != NULL ) {
+      #ifdef DEBUG
+         printf( "%s\n", szLine ) ;
+      #endif
+
+      char* sAddressStart = strtok( szLine, "-" ) ;
+      char* sAddressEnd = strtok( NULL, " "   ) ;
+      char* sDescription = strtok( NULL, "\n" ) + 2 ;  // The +2 skips over a ": "
+
+      // Convert the strings holding the start & end address into pointers
+      int retVal1 ;
+      int retVal2 ;
+      void* pAddressStart ;
+      void* pAddressEnd ;
+      retVal1 = sscanf( sAddressStart, "%p", &pAddressStart ) ;
+      retVal2 = sscanf( sAddressEnd,   "%p", &pAddressEnd   ) ;
+
+      if( retVal1 != 1 || retVal2 != 1 ) {
+         FATAL_ERROR( "iomem entry [%s] is unable parse start [%s] or end address [%s]"
+         ,sDescription
+         ,sAddressStart
+         ,sAddressEnd
+         ) ;
+      }
+
+      #ifdef DEBUG
+         printf( "DEBUG:  " ) ;
+         printf( "sAddressStart=[%s]  ", sAddressStart ) ;
+         printf( "pAddressStart=[%p]  ", pAddressStart ) ;
+         printf( "sAddressEnd=[%s]  ",   sAddressEnd ) ;
+         printf( "pAddressEnd=[%p]  ",   pAddressEnd ) ;
+         printf( "sDescription=[%s]  ",  sDescription ) ;
+         printf( "\n" ) ;
+      #endif
+
+      add_iomem_region( pAddressStart, pAddressEnd, sDescription ) ;
+
+      pRead = fgets( szLine, MAX_LINE_LENGTH, file );
+      trim_edges( szLine ) ;
+   } // while()
+
+
+   int iRetVal = fclose( file ) ;
+   if( iRetVal != 0 ) {
+      FATAL_ERROR( "Unable to close [%s]", IOMEM_FILE ) ;
+   }
+
    return true ;
-}
+} // read_iomem
 
 
 /// Typedef of #Iomem_type
@@ -356,7 +416,7 @@ void summarize_iomem() {
    Iomem_type_t* type = iomem_type_head;
 
    while( type != NULL ) {
-      printf( "[%-20s]  %'-20zu\n", type->description, type->size ) ;
+      printf( "%-28s  %'20zu\n", type->description, type->size ) ;
       type = type->next ;
    }
-}
+} // summarize_iomem
