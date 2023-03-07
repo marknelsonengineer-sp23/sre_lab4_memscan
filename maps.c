@@ -12,10 +12,9 @@
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
 #include <string.h>  // For strtok() strcmp() and memset()
 
-#include "colors.h"
-#include "config.h"
-#include "maps.h"
-#include "memscan.h"
+#include "colors.h"  // For ANSI colors i.e. #ANSI_COLOR_RED
+#include "config.h"  // For FATAL_ERROR and other configuration options
+#include "maps.h"    // Just cuz
 #include "pagemap.h"
 
 
@@ -26,6 +25,7 @@
 #define MAX_LINE_LENGTH 1024
 
 /// The maximum number of MapEntry records in #map
+/// @todo Consider converting to a linked list
 #define MAX_ENTRIES     256
 
 /// The byte to scan for
