@@ -27,6 +27,7 @@
 
 #include "config.h"  // For FATAL_ERROR()
 #include "iomem.h"   // Just cuz
+#include "trim.h"    // For trim_edges()
 
 
 /// The file to read from `/proc`
