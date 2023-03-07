@@ -58,6 +58,17 @@ struct Iomem_region {
 Iomem_region_t iomem_head = { 0, NULL, UNMAPPED_MEMORY_DESCRIPTION } ;
 
 
+/// Compute the end address of a region
+///
+/// @param region The region to process
+/// @return The ending physical address which is either:
+///         1) The byte before the next region's starting address
+///         2) or #MAX_PHYS_ADDR
+void* getEnd( Iomem_region_t* region ) {
+   return ( region->next == NULL ) ? ((void*)MAX_PHYS_ADDR) : ( region->next->start - 1 );
+}
+
+
 /// Recursively zero out and free the linked list
 ///
 /// @param region The region to zero out and free
@@ -170,13 +181,13 @@ bool add_iomem_region( const void* start, const void* end, const char* descripti
    }
 
    // Find the start...
-   Iomem_region_t* current = &iomem_head;
+   Iomem_region_t* current = &iomem_head ;
 
-   void* current_end = ( current->next == NULL ) ? ((void*) MAX_PHYS_ADDR) : ( current->next->start - 1 );
+   void* current_end = getEnd( current ) ;
 
    while( current->next != NULL && current->start < start && current_end < end ) {
-      current = current->next;
-      current_end = ( current->next == NULL ) ? ((void*) MAX_PHYS_ADDR) : ( current->next->start - 1 );
+      current = current->next ;
+      current_end = getEnd( current ) ;
    }
 
    // current should point to the region we need to insert into
@@ -277,12 +288,12 @@ bool add_iomem_region( const void* start, const void* end, const char* descripti
 
 
 void print_iomem() {
-   Iomem_region_t* current = &iomem_head;
+   Iomem_region_t* current = &iomem_head ;
 
    while( current != NULL ) {
-      void* end = ( current->next == NULL ) ? ((void*)MAX_PHYS_ADDR) : ( current->next->start - 1 );
+      void* end = getEnd( current ) ;
 
-      printf( "%012zx - %012zx  %s\n", (size_t) current->start, (size_t) end, current->description );
-      current = current->next;
+      printf( "%012zx - %012zx  %s\n", (size_t) current->start, (size_t) end, current->description ) ;
+      current = current->next ;
    }
 }
