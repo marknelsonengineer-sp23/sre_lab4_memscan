@@ -177,18 +177,18 @@ void scanMaps() {
       printf( "Number of bytes read %'10d  Count of 0x%02x is %'7d",
            numBytesScanned
           ,CHAR_TO_SCAN_FOR
-          ,numBytesFound) ;
+          ,numBytesFound ) ;
 
       finishRegion:
       if( printPath ) {
-         printf( "  %s", map[i].sPath != NULL ? map[i].sPath : "" );
+         printf( "  %s", map[i].sPath != NULL ? map[i].sPath : "" ) ;
       }
-      printf( "\n" );
+      printf( "\n" ) ;
 
-      size_t numPages = ( map[i].pAddressEnd - map[i].pAddressStart ) / getPageSizeInBytes();
+      size_t numPages = ( map[i].pAddressEnd - map[i].pAddressStart ) / getPageSizeInBytes() ;
 
       for( size_t i = 0 ; i < numPages ; i++ ) {
-         doPagemap( map[i].pAddressStart + i * getPageSizeInBytes() );
+         doPagemap( map[i].pAddressStart + i * getPageSizeInBytes() ) ;
       }
    } // for()
 } // scanMaps()
