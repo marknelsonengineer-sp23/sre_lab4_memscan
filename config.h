@@ -51,6 +51,7 @@ extern bool openFileWithBlockIO       ;  ///< `true` if `--block` is set
 extern bool openFileWithStreamIO      ;  ///< `true` if `--stream` is set
 extern bool openFileWithMapIO         ;  ///< `true` if `--mmap` is set
 extern bool forkProcess               ;  ///< `true` if `--fork` is set
+extern bool iomemSummary              ;  ///< `true` if `--iomem` is set
 extern bool mallocMemory              ;  ///< `true` if `--malloc` is set
 extern bool printPath                 ;  ///< `true` if `--path` is set
 extern bool includePhysicalMemoryInfo ;  ///< `true` if `--phys` is set

@@ -28,6 +28,11 @@ int main( int argc, char* argv[] ) {
 
    read_iomem() ;
 
+   if( iomemSummary ) {
+      summarize_iomem() ;
+      exit( EXIT_SUCCESS ) ;
+   }
+
    readMaps() ;
 
    scanMaps() ;

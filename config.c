@@ -86,6 +86,7 @@ bool openFileWithBlockIO       = 0 ;
 bool openFileWithStreamIO      = 0 ;
 bool openFileWithMapIO         = 0 ;
 bool forkProcess               = 0 ;
+bool iomemSummary              = 0 ;
 bool mallocMemory              = 0 ;
 bool printPath                 = 0 ;
 bool includePhysicalMemoryInfo = 0 ;
@@ -128,8 +129,7 @@ void processOptions( int argc, char* argv[] ) {
 
       switch ( optionChar ) {
          case 'i':
-            summarize_iomem() ;
-            exit( EXIT_SUCCESS ) ;
+            iomemSummary = true ;
             break ;
 
          case 'v':
