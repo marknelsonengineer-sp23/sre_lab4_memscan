@@ -23,6 +23,8 @@ MAKE      = make
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: $(TARGET)
 
+test: CFLAGS += -DTESTING
+
 export FULL_VERSION = $(shell .doxygen/update_version.py)
 
 SRC = $(wildcard *.c)
@@ -49,7 +51,7 @@ doc: $(TARGET)
 publish: doc
 	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan
 
-test: debug
+test: $(TARGET)
 	cd tests && $(MAKE) test
 
 clean:

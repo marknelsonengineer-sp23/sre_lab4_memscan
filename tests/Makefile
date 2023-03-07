@@ -22,6 +22,8 @@ LINTFLAGS = --quiet
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: $(TARGET)
 
+test: CFLAGS += -DTESTING
+
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)
 TEST_OBJS = $(filter-out ../memscan.o, $(wildcard ../*.o))
@@ -36,8 +38,8 @@ $(TARGET): $(OBJ) $(TEST_OBJS)
 lint: $(TARGET)
 	$(LINT) $(LINTFLAGS) $(SRC) --
 
-test: debug
-	./$(TARGET)
+test: $(TARGET)
+	./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
 
 clean:
 	rm -f $(TARGET) *.o

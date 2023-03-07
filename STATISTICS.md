@@ -17,7 +17,7 @@ No tags
 
 ## Software Engineering Metrics
 
-Number of commits:  68
+Number of commits:  69
 
 Number of unit tests:  10
 
@@ -28,4 +28,4 @@ Number of test points:  270
 |-------------------------------------|---------------------------|-------------------------|---------------------------|
 | ![GitHub code size	in	bytes](https://img.shields.io/github/languages/code-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub repo size](https://img.shields.io/github/repo-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social)	<br/>	![GitHub contributors](https://img.shields.io/github/contributors/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub last	commit](https://img.shields.io/github/last-commit/marknelsonengineer-sp23/sre_lab4_memscan?style=social)	| ![GitHub	issues](https://img.shields.io/github/issues-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub	closed issues](https://img.shields.io/github/issues-closed-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub forks](https://img.shields.io/github/forks/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub Repo	stars](https://img.shields.io/github/stars/marknelsonengineer-sp23/sre_lab4_memscan?style=social)	|
 
-Automatically generated on Tue 07 Mar 2023 01:29:23 PM 
+Automatically generated on Tue 07 Mar 2023 01:33:10 PM 

@@ -8,8 +8,8 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#define BOOST_TEST_MODULE Memscan  // in only one cpp file
-//#define BOOST_TEST_MAIN  // in only one cpp file
+//#define BOOST_TEST_MODULE Memscan  // in only one cpp file
+#define BOOST_TEST_MAIN  // in only one cpp file
 
 #include <boost/test/included/unit_test.hpp>  // include this to get main()
 

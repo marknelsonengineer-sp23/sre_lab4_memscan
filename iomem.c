@@ -184,28 +184,28 @@ bool add_iomem_region( const void* start, const void* end, const char* descripti
    }
 
    if( end == NULL ) {
-      #ifndef DEBUG
+      #ifndef TESTING
          FATAL_ERROR( "end can not be null" ) ;
       #endif
       return false ;
    }
 
    if( end <= start ) {
-      #ifndef DEBUG
+      #ifndef TESTING
          FATAL_ERROR( "end must be > start" ) ;
       #endif
       return false ;
    }
 
    if( description == NULL ) {
-      #ifndef DEBUG
+      #ifndef TESTING
          FATAL_ERROR( "invalid iomem description" ) ;
       #endif
       return false ;
    }
 
    if( strlen( description ) == 0 ) {
-      #ifndef DEBUG
+      #ifndef TESTING
          FATAL_ERROR( "description can not be empty" ) ;
       #endif
       return false ;
@@ -303,7 +303,7 @@ bool add_iomem_region( const void* start, const void* end, const char* descripti
       current->next = middleRegion ;
    } else {
       /// - Anything else should return an error (it's an overlapping region)
-      #ifndef DEBUG
+      #ifndef TESTING
          print_iomem_regions() ;
          FATAL_ERROR( "requested region overlaps and is not valid" );
       #endif
