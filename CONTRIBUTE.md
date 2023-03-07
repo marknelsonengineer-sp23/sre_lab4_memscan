@@ -68,3 +68,8 @@ Contribute to MemScan
   documentation in the `.c` files.
 - If there's a code-block that's longer than a page, I'll usually comment the 
   `}` with an indication of what it's closing.  Ex. `} // validate()` 
+
+### Release Procedures
+- Run `make lint`
+- Run `make clean` and then `make test`
+- Run `make doc` and then `make publish`
