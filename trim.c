@@ -104,7 +104,7 @@ enum CharClass classifyChar( const char inChar ) {
 /// @return                 The final string
 char* shift_left( char* string_base, size_t current_position, size_t distance ) {
 
-   printf( "Shifting c=%ld   d=%ld\n", current_position, distance );
+   // printf( "Shifting c=%ld   d=%ld\n", current_position, distance );
 
    /// Don't do anything if distance == 0
    /// @todo Raise an exception someday
