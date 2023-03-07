@@ -54,6 +54,15 @@ Contribute to MemScan
 - Put 2 blank lines between functions
 - Put a space before the `;`.  Ex. `return true ;`
 
+### Naming Conventions
+- I use CaMel case and snake_case interchangeably, depending on my mood.
+- File names and the functions that are in them represent the names of the
+  files they are processing.  Ie. `iomem`, `maps`, `pagemap`, et. al..
+- Function names start with lowercase letters.
+- I'm not using [Hungarian notation](https://en.wikipedia.org/wiki/Hungarian_notation)
+  in this project.
+- Structures start with uppercase.
+
 ### Documentation Conventions
 - Fully document "published" functions in `.h` files.  Leave internal 
   documentation in the `.c` files.
