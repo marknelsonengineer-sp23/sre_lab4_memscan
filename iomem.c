@@ -297,3 +297,65 @@ void print_iomem() {
       current = current->next ;
    }
 }
+
+
+bool read_iomem() {
+   reset_iomem() ;
+
+   return true ;
+}
+
+
+/// Typedef of #Iomem_type
+typedef struct Iomem_type Iomem_type_t ;
+
+
+/// Hold a summary (sizes) of iomem regions in a linked list
+struct Iomem_type {
+   /// The number of bytes in this type of region.
+   size_t        size;
+   /// Pointer to the next type.
+   Iomem_type_t* next;
+   /// The name/description of this memory region
+   char          description[ MAX_IOMEM_DESCRIPTION ];
+} ;
+
+
+/// The head pointer to the iomem type linked list
+Iomem_type_t* iomem_type_head = NULL ;
+
+
+void summarize_iomem() {
+   printf( "Summary of %s\n", IOMEM_FILE ) ;
+
+   Iomem_region_t* region = &iomem_head;
+
+   while( region != NULL ) {
+      Iomem_type_t* type = iomem_type_head;
+      while( type != NULL ) {
+         if( strncmp( region->description, type->description, MAX_IOMEM_DESCRIPTION ) == 0 ) {
+            type->size += getEnd( region ) - region->start + 1 ;
+            break ;
+         }
+         type = type->next ;
+      }
+
+      if( type == NULL ) {  // If we got to the end of the list without a hit, then add an entry
+         Iomem_type_t* newType = malloc( sizeof( Iomem_type_t ) ) ;
+         strncpy( newType->description, region->description, MAX_IOMEM_DESCRIPTION ) ;
+         newType->size = getEnd( region ) - region->start + 1 ;
+         newType->next = iomem_type_head ;  // Add newType to the front of the list
+         iomem_type_head = newType ;
+      }
+
+      region = region->next;
+   }
+
+   // Print the summary (unsorted)
+   Iomem_type_t* type = iomem_type_head;
+
+   while( type != NULL ) {
+      printf( "[%-20s]  %'-20zu\n", type->description, type->size ) ;
+      type = type->next ;
+   }
+}

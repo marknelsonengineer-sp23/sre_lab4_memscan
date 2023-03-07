@@ -1,7 +1,8 @@
 Usage
 =====
 ````
-Usage: memscan [OPTION]...
+Usage: memscan [OPTION]
+       memscan -i|--iomem
 
 The options below may be used to select memscan's operation
   -b, --block=FILE         open FILE using block I/O before the memscan
@@ -9,6 +10,7 @@ The options below may be used to select memscan's operation
       --mmap=FILE          open FILE using memory mapped I/O before the memscan
   -f, --fork               fork a process and display the combined parent and
                            child memscan
+  -i, --iomem              print a summary of /proc/iomem
   -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan
       --path               print the path (if available in the memscan
   -p, --phys               include physical addresses (w/ flags) in the memscan

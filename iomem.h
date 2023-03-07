@@ -32,3 +32,18 @@ extern void print_iomem() ;
 /// @param physAddr The physical address
 /// @return         A description of the region at `physAddr`
 extern const char* get_iomem_region_description( const void* physAddr ) ;
+
+
+/// Read `/proc/iomem` to characterize physical addresses
+///
+/// @return `true` if successful.  `false` if there was a problem.
+extern bool read_iomem() ;
+
+
+/// Print a summary of `/proc/iomem` printing the number of bytes used
+/// in each region.
+///
+/// ````
+/// Example
+/// ````
+extern void summarize_iomem() ;

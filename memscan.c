@@ -8,11 +8,11 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <locale.h>  // For set_locale() LC_NUMERIC
 #include <stdio.h>   // For printf() fprintf()
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
 
 #include "config.h"   // For processOptions()
+#include "iomem.h"    // For read_iomem()
 #include "maps.h"     // For readEntries() scanEntries()
 #include "memscan.h"  // Just cuz
 #include "pagemap.h"  // For closePagemap()
@@ -26,15 +26,7 @@
 int main( int argc, char* argv[] ) {
    processOptions( argc, argv ) ;
 
-   char* sRetVal;
-   sRetVal = setlocale( LC_NUMERIC, "" ) ;
-   if( sRetVal == NULL ) {
-      FATAL_ERROR( "Unable to set locale" ) ;
-   }
-
-   print_iomem() ;
-
-   exit(0);
+   read_iomem() ;
 
    readMaps() ;
 

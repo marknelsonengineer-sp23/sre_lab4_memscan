@@ -10,13 +10,15 @@
 
 #include <getopt.h>  // For getopt_long() struct option
 #include <limits.h>  // For PATH_MAX
+#include <locale.h>  // For set_locale() LC_NUMERIC
 #include <stddef.h>  // For NULL
 #include <stdio.h>   // For printf()
 #include <stdlib.h>  // For exit() EXIT_SUCCESS EXIT_FAILURE
 #include <string.h>  // For strlen() & strncpy()
 
-#include "config.h"
-#include "version.h"
+#include "config.h"  // Just cuz
+#include "iomem.h"   // For summarize_iomem()
+#include "version.h" // For FULL_VERSION
 
 
 /// Print a line to outStream.  Ensure the print command was successful.
@@ -30,16 +32,41 @@
    }                                               \
    (void)0
 
+
 /// Buffer to hold the program name
-char programName[MAX_PROGRAM_NAME] = {};
+char programName[ MAX_PROGRAM_NAME ] = {};
 
 
-/// Define the command line options for memscan
+void printUsage( FILE* outStream ) {
+   PRINT_USAGE( outStream, "Usage: memscan [OPTION]\n" ) ;
+   PRINT_USAGE( outStream, "       memscan -i|--iomem\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "The options below may be used to select memscan's operation\n" ) ;
+   PRINT_USAGE( outStream, "  -b, --block=FILE         open FILE using block I/O before the memscan\n" ) ;
+   PRINT_USAGE( outStream, "      --stream=FILE        open FILE using stream I/O before the memscan\n" ) ;
+   PRINT_USAGE( outStream, "      --mmap=FILE          open FILE using memory mapped I/O before the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
+   PRINT_USAGE( outStream, "                           child memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -i, --iomem              print a summary of /proc/iomem\n" ) ;
+   PRINT_USAGE( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
+   PRINT_USAGE( outStream, "      --path               print the path (if available in the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -p, --phys               include physical addresses (w/ flags) in the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -s, --shared=NUM[K|M|G]  create a shared memory region of NUM bytes before\n" ) ;
+   PRINT_USAGE( outStream, "                           the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -h, --help               display this help and exit\n" ) ;
+   PRINT_USAGE( outStream, "  -v, --version            output version information and exit\n" ) ;
+}
+
+
+/// Define the long command line options for memscan and map them to
+/// #SINGLE_OPTION_STRING
 static struct option long_options[] = {
    { "block",   required_argument, 0, 'b' },
    { "stream",  required_argument, 0, '0' },
    { "mmap",    required_argument, 0, '1' },
    { "fork",    no_argument,       0, 'f' },
+   { "iomem",   no_argument,       0, 'i' },
    { "malloc",  required_argument, 0, 'm' },
    { "path",    no_argument,       0, '2' },
    { "phys",    no_argument,       0, 'p' },
@@ -49,6 +76,10 @@ static struct option long_options[] = {
    { "version", no_argument,       0, 'v' },
    { 0, 0, 0, 0 }
 };
+
+
+/// Define the single character option string
+const char SINGLE_OPTION_STRING[] = "b:fim:ps:t:hv" ;
 
 
 bool openFileWithBlockIO       = 0 ;
@@ -78,17 +109,29 @@ void processOptions( int argc, char* argv[] ) {
 
    setProgramName( argv[0] ) ;
 
+   /// Set locale so numbers we can print localized numbers i.e. `1,024`.
+   char* sRetVal;
+   sRetVal = setlocale( LC_NUMERIC, "" ) ;
+   if( sRetVal == NULL ) {
+      FATAL_ERROR( "Unable to set locale" ) ;
+   }
+
    while( true ) {
       int option_index = 0;
       int optionChar;
 
-      optionChar = getopt_long(argc, argv, "b:fm:ps:t:hv", long_options, &option_index);
+      optionChar = getopt_long(argc, argv, SINGLE_OPTION_STRING, long_options, &option_index);
 
       if( optionChar == -1 ) {
          break ;  // Done processing getopt_long
       }
 
       switch ( optionChar ) {
+         case 'i':
+            summarize_iomem() ;
+            exit( EXIT_SUCCESS ) ;
+            break ;
+
          case 'v':
             printf( "memscan version %s\n", FULL_VERSION ) ;
             printf( "Copyright (C) 2023 Mark Nelson\n") ;
@@ -117,26 +160,6 @@ void processOptions( int argc, char* argv[] ) {
       printUsage( stderr ) ;
       exit( EXIT_FAILURE ) ;
    }
-}
-
-
-void printUsage( FILE* outStream ) {
-   PRINT_USAGE( outStream, "Usage: memscan [OPTION]...\n" ) ;
-   PRINT_USAGE( outStream, "\n" ) ;
-   PRINT_USAGE( outStream, "The options below may be used to select memscan's operation\n" ) ;
-   PRINT_USAGE( outStream, "  -b, --block=FILE         open FILE using block I/O before the memscan\n" ) ;
-   PRINT_USAGE( outStream, "      --stream=FILE        open FILE using stream I/O before the memscan\n" ) ;
-   PRINT_USAGE( outStream, "      --mmap=FILE          open FILE using memory mapped I/O before the memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
-   PRINT_USAGE( outStream, "                           child memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
-   PRINT_USAGE( outStream, "      --path               print the path (if available in the memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -p, --phys               include physical addresses (w/ flags) in the memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -s, --shared=NUM[K|M|G]  create a shared memory region of NUM bytes before\n" ) ;
-   PRINT_USAGE( outStream, "                           the memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -h, --help               display this help and exit\n" ) ;
-   PRINT_USAGE( outStream, "  -v, --version            output version information and exit\n" ) ;
 }
 
 
