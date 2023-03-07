@@ -21,13 +21,7 @@
 #define MAX_PHYS_ADDR 0xffffffffffff
 
 
-/// Print the iomem map.
-///
-/// Assumes a 48-bit physical address bus size (6 bytes or 12 characters wide).
-extern void print_iomem() ;
-
-
-/// Get the description of the iomem region at `physAddr`
+/// Get a description of the iomem region at `physAddr`
 ///
 /// @param physAddr The physical address
 /// @return         A description of the region at `physAddr`
@@ -40,10 +34,20 @@ extern const char* get_iomem_region_description( const void* physAddr ) ;
 extern bool read_iomem() ;
 
 
-/// Print a summary of `/proc/iomem` printing the number of bytes used
-/// in each region.
+/// Print a sorted summary of `/proc/iomem` listing the number of bytes in each
+/// region.
 ///
 /// ````
-/// Example
+/// Summary of /proc/iomem
+/// ahci                                         8,192
+/// Video ROM                                   32,768
+/// ACPI Tables                                 65,536
+/// System ROM                                  65,536
+/// e1000                                      131,072
+/// Kernel data                              2,184,448
+/// Kernel code                             16,784,908
+/// Reserved                                20,357,120
+/// System RAM                           2,096,520,436
+/// Unmapped memory                281,470,711,262,208
 /// ````
 extern void summarize_iomem() ;

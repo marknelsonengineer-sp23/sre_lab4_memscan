@@ -15,6 +15,21 @@
 ///        82000000-823fffff : vboxguest
 /// ````
 ///
+/// Here's a sample summary
+/// ````
+/// Summary of /proc/iomem
+/// ahci                                         8,192
+/// Video ROM                                   32,768
+/// ACPI Tables                                 65,536
+/// System ROM                                  65,536
+/// e1000                                      131,072
+/// Kernel data                              2,184,448
+/// Kernel code                             16,784,908
+/// Reserved                                20,357,120
+/// System RAM                           2,096,520,436
+/// Unmapped memory                281,470,711,262,208
+/// ````
+///
 /// @file   iomem.c
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,13 +48,13 @@
 /// The file to read from `/proc`
 #define IOMEM_FILE "/proc/iomem"
 
-/// The longest allowed length from #IOMEM_FILE
+/// The longest allowed line length from #IOMEM_FILE
 #define MAX_LINE_LENGTH 1024
 
 /// Typedef of #Iomem_region
 typedef struct Iomem_region Iomem_region_t ;
 
-/// Hold the iomem data structure as a linked list
+/// Hold each iomem region as elements in a linked list
 struct Iomem_region {
                    /// The starting physical address of this memory region.
                    /// This will **_NOT_** be a valid pointer as it's a physical address.
@@ -53,7 +68,7 @@ struct Iomem_region {
 } ;
 
 
-/// The head pointer to the iomem linked list
+/// The head pointer to the iomem region linked list
 ///
 /// Unlike many linked lists... this is __always__ set
 Iomem_region_t iomem_head = { 0, NULL, UNMAPPED_MEMORY_DESCRIPTION } ;
@@ -70,7 +85,7 @@ void* getEnd( Iomem_region_t* region ) {
 }
 
 
-/// Recursively zero out and free the linked list
+/// Recursively zero out and free the iomem region linked list
 ///
 /// @param region The region to zero out and free
 void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursion): Recursion is authorized
@@ -83,7 +98,7 @@ void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursio
 }
 
 
-/// Reset the iomem data structure
+/// Reset the iomem region linked list
 void reset_iomem() {
    // Recursively zero out the linked list
    if( iomem_head.next != NULL ) {
@@ -124,6 +139,21 @@ bool validate_iomem() {
    }
 
    return true;
+}
+
+
+/// Print all of the iomem regions.
+///
+/// Assumes a 48-bit physical address bus size (6 bytes or 12 characters wide).
+void print_iomem_regions() {
+   Iomem_region_t* current = &iomem_head ;
+
+   while( current != NULL ) {
+      void* end = getEnd( current ) ;
+
+      printf( "%012zx - %012zx  %s\n", (size_t) current->start, (size_t) end, current->description ) ;
+      current = current->next ;
+   }
 }
 
 
@@ -274,7 +304,7 @@ bool add_iomem_region( const void* start, const void* end, const char* descripti
    } else {
       /// - Anything else should return an error (it's an overlapping region)
       #ifndef DEBUG
-         print_iomem() ;
+         print_iomem_regions() ;
          FATAL_ERROR( "requested region overlaps and is not valid" );
       #endif
       return false ;
@@ -286,18 +316,6 @@ bool add_iomem_region( const void* start, const void* end, const char* descripti
 
    return true ;
 } // add_iomem_region
-
-
-void print_iomem() {
-   Iomem_region_t* current = &iomem_head ;
-
-   while( current != NULL ) {
-      void* end = getEnd( current ) ;
-
-      printf( "%012zx - %012zx  %s\n", (size_t) current->start, (size_t) end, current->description ) ;
-      current = current->next ;
-   }
-}
 
 
 bool read_iomem() {
@@ -367,23 +385,76 @@ bool read_iomem() {
 } // read_iomem
 
 
-/// Typedef of #Iomem_type
-typedef struct Iomem_type Iomem_type_t ;
+/// Typedef of #Iomem_summary
+typedef struct Iomem_summary Iomem_summary_t ;
 
 
-/// Hold a summary (sizes) of iomem regions in a linked list
-struct Iomem_type {
-   /// The number of bytes in this type of region.
-   size_t        size;
-   /// Pointer to the next type.
-   Iomem_type_t* next;
+/// Hold a summary (sum of region sizes) of iomem regions in a linked list
+struct Iomem_summary {
+   /// The total number of bytes for all of the regions with this `description`.
+   size_t           size;
+   /// Pointer to the next summary.
+   Iomem_summary_t* next;
    /// The name/description of this memory region
-   char          description[ MAX_IOMEM_DESCRIPTION ];
+   char             description[ MAX_IOMEM_DESCRIPTION ];
 } ;
 
 
-/// The head pointer to the iomem type linked list
-Iomem_type_t* iomem_type_head = NULL ;
+/// The head pointer to the iomem summery linked list
+Iomem_summary_t* iomem_summary_head = NULL ;
+
+
+/// Print the linked list of iomem summaries
+void print_iomem_summary() {
+   Iomem_summary_t* type = iomem_summary_head;
+
+   while( type != NULL ) {
+      printf( "%-28s  %'20zu\n", type->description, type->size ) ;
+      type = type->next ;
+   }
+}
+
+
+/// Sort the linked list of #Iomem_summary_t under #iomem_summary_head
+///
+/// Implementation of a bubble sort of a linked list
+///
+/// @return `true` if successful.  `false` if there was a problem.
+bool sort_iomem_summary() {
+   bool swapped;
+   do {
+      swapped = false;
+
+      Iomem_summary_t* type = iomem_summary_head ;
+      Iomem_summary_t* prev = NULL ;
+
+      while( type != NULL && type->next != NULL ) {  // While there are at least 2 types...
+         // printf( "head=[%p]  prev=[%p]  type=[%p, %zu]  type->next=[%p, %zu]  type->next->next=[%p]\n", iomem_type_head, prev, type, type->size, type->next, type->next->size, type->next->next ) ;
+         if( type->size > type->next->size ) {  // Swap the two types...
+            swapped = true;
+            if( prev == NULL ) {  // Swap involves the head...
+               // printf( "Swap head\n" );
+               Iomem_summary_t* temp = iomem_summary_head->next->next;
+               iomem_summary_head = type->next;
+               iomem_summary_head->next = type;
+               type->next = temp;
+               type = iomem_summary_head;
+            } else {
+               // printf( "Swap interior" );
+               Iomem_summary_t* temp = type->next->next;
+               prev->next = type->next;
+               prev->next->next = type;
+               type->next = temp;
+               type = prev->next;
+            }
+         }
+         prev = type;
+         type = type->next;
+      }
+   } while( swapped ) ;  // If we swapped two rows, then keep sorting
+
+   return true ;
+} // sort_iomem
 
 
 void summarize_iomem() {
@@ -392,7 +463,7 @@ void summarize_iomem() {
    Iomem_region_t* region = &iomem_head;
 
    while( region != NULL ) {
-      Iomem_type_t* type = iomem_type_head;
+      Iomem_summary_t* type = iomem_summary_head;
       while( type != NULL ) {
          if( strncmp( region->description, type->description, MAX_IOMEM_DESCRIPTION ) == 0 ) {
             type->size += getEnd( region ) - region->start + 1 ;
@@ -402,21 +473,17 @@ void summarize_iomem() {
       }
 
       if( type == NULL ) {  // If we got to the end of the list without a hit, then add an entry
-         Iomem_type_t* newType = malloc( sizeof( Iomem_type_t ) ) ;
+         Iomem_summary_t* newType = malloc( sizeof( Iomem_summary_t ) ) ;
+         /// @todo Properly free this linked list.  Right now it's not an issue because the program exits after it's printed.  Still, it's rookie and should be fixed.
          strncpy( newType->description, region->description, MAX_IOMEM_DESCRIPTION ) ;
          newType->size = getEnd( region ) - region->start + 1 ;
-         newType->next = iomem_type_head ;  // Add newType to the front of the list
-         iomem_type_head = newType ;
+         newType->next = iomem_summary_head ;  // Add newType to the front of the list
+         iomem_summary_head = newType ;
       }
 
       region = region->next;
    }
 
-   // Print the summary (unsorted)
-   Iomem_type_t* type = iomem_type_head;
-
-   while( type != NULL ) {
-      printf( "%-28s  %'20zu\n", type->description, type->size ) ;
-      type = type->next ;
-   }
+   sort_iomem_summary() ;
+   print_iomem_summary() ;
 } // summarize_iomem
