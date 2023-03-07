@@ -14,13 +14,14 @@ TARGET = memscan
 
 all:  $(TARGET) lint doc
 
-CC     = gcc
-CFLAGS = -Wall -Wextra $(DEBUG_FLAGS) -std=c17
-LINTER = clang-tidy --quiet
-MAKE   = make
+CC        = gcc
+CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17
+LINT      = clang-tidy
+LINTFLAGS = --quiet
+MAKE      = make
 
 debug: DEBUG_FLAGS = -g -DDEBUG
-debug: clean $(TARGET)
+debug: $(TARGET)
 
 export FULL_VERSION = $(shell .doxygen/update_version.py)
 
@@ -36,7 +37,7 @@ $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ)
 
 lint: $(TARGET)
-	$(LINTER) $(SRC) --
+	$(LINT) $(LINTFLAGS) $(SRC) --
 	cd tests && $(MAKE) lint
 
 doc: $(TARGET)
@@ -48,7 +49,7 @@ doc: $(TARGET)
 publish: doc
 	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan
 
-test: $(TARGET)
+test: debug
 	cd tests && $(MAKE) test
 
 clean:

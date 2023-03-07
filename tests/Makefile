@@ -14,12 +14,13 @@ TARGET = boost_tests
 
 all:  $(TARGET) lint
 
-CC     = g++
-CFLAGS = -Wall -Wextra $(DEBUG_FLAGS)
-LINTER = clang-tidy --quiet
+CXX       = g++
+CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS)
+LINT      = clang-tidy
+LINTFLAGS = --quiet
 
 debug: DEBUG_FLAGS = -g -DDEBUG
-debug: clean $(TARGET)
+debug: $(TARGET)
 
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)
@@ -27,15 +28,15 @@ TEST_OBJS = $(filter-out ../memscan.o, $(wildcard ../*.o))
 
 test_iomap.o: ../colors.h
 %.o: %.c
-	$(CC) $(CFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 
 $(TARGET): $(OBJ) $(TEST_OBJS)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) $(TEST_OBJS) -lboost_system -lboost_thread -lboost_unit_test_framework
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST_OBJS) -lboost_system -lboost_thread -lboost_unit_test_framework
 
 lint: $(TARGET)
-	$(LINTER) $(SRC) --
+	$(LINT) $(LINTFLAGS) $(SRC) --
 
-test: $(TARGET)
+test: debug
 	./$(TARGET)
 
 clean:
