@@ -5,6 +5,7 @@
       <w>fprintf</w>
       <w>fseek</w>
       <w>getopt</w>
+      <w>iomem</w>
       <w>memscan</w>
       <w>memscan's</w>
       <w>mprotect</w>
