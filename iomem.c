@@ -23,10 +23,10 @@
 #include <stddef.h>  // For NULL
 #include <stdio.h>   // For printf()
 #include <stdlib.h>  // For malloc() free()
-#include <string.h>  // For strncpy() memset()
+#include <string.h>  // For strncpy() memset() strlen()
 
-#include "config.h"
-#include "iomem.h"
+#include "config.h"  // For FATAL_ERROR()
+#include "iomem.h"   // Just cuz
 
 
 /// The file to read from `/proc`
@@ -59,7 +59,8 @@ Iomem_region_t iomem_head = { 0, NULL, UNMAPPED_MEMORY_DESCRIPTION } ;
 
 
 /// Recursively zero out and free the linked list
-/// @param region
+///
+/// @param region The region to zero out and free
 void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursion): Recursion is authorized
    if( region->next != NULL ) {
       free_iomem_region( region->next ) ;
@@ -80,7 +81,7 @@ void reset_iomem() {
    // Set the head pointer to its initial values
    iomem_head.start = 0 ;
    iomem_head.next = NULL ;
-   strcpy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION ) ;
+   strncpy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
 }
 
 
@@ -90,6 +91,7 @@ void reset_iomem() {
 ///   - The list can not be empty
 ///   - The first start address must be 0
 ///   - Every region must monotonically increase
+///   - No duplicate regions
 ///
 /// @return `true` if the structure is valid.  `false` if it's not.
 bool validate_iomem() {
@@ -97,15 +99,15 @@ bool validate_iomem() {
       return false ;
    }
 
-   void* cumulative_start = 0 ;
+   void* monotonic_address = 0 ;
 
    Iomem_region_t* current = &iomem_head;
 
    while( current != NULL ) {
-      if( cumulative_start != 0 && current->start <= cumulative_start ) {
+      if( monotonic_address != 0 && current->start <= monotonic_address ) {
          return false ;
       }
-      cumulative_start = current->start ;
+      monotonic_address = current->start ;
       current = current->next;
    }
 
@@ -129,24 +131,42 @@ const char* get_iomem_region_description( const void* physAddr ) {
 /// @param start The starting physical address of the new region (inclusive).
 ///              It may overlap with an existing region.
 /// @param end   The ending physical address of the new region.  It must be
-///              within an existing region.  `end` may not be `NULL`.
+///              within an existing region.  `end` may not be `NULL` and must be
+///              `> start`.
 /// @param description The description of a region (up to #MAX_IOMEM_DESCRIPTION
 ///                    bytes).  The description may not be `NULL` or empty.
-void add_iomem_region( const void* start, const void* end, const char* description ) {
+/// @return `true` if the region was added successfully.  `false` if something bad happened.
+bool add_iomem_region( const void* start, const void* end, const char* description ) {
    if( !validate_iomem() ) {
       FATAL_ERROR( "invalid iomem structure" ) ;
    }
 
    if( end == NULL ) {
-      FATAL_ERROR( "end can not be null" ) ;
+      #ifndef DEBUG
+         FATAL_ERROR( "end can not be null" ) ;
+      #endif
+      return false ;
+   }
+
+   if( end <= start ) {
+      #ifndef DEBUG
+         FATAL_ERROR( "end must be > start" ) ;
+      #endif
+      return false ;
    }
 
    if( description == NULL ) {
-      FATAL_ERROR( "invalid iomem description" ) ;
+      #ifndef DEBUG
+         FATAL_ERROR( "invalid iomem description" ) ;
+      #endif
+      return false ;
    }
 
    if( strlen( description ) == 0 ) {
-      FATAL_ERROR( "description can not be empty" ) ;
+      #ifndef DEBUG
+         FATAL_ERROR( "description can not be empty" ) ;
+      #endif
+      return false ;
    }
 
    // Find the start...
@@ -241,14 +261,19 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
       current->next = middleRegion ;
    } else {
       /// - Anything else should return an error (it's an overlapping region)
-      print_iomem() ;
-      FATAL_ERROR( "requested region overlaps and is not valid" );
+      #ifndef DEBUG
+         print_iomem() ;
+         FATAL_ERROR( "requested region overlaps and is not valid" );
+      #endif
+      return false ;
    }
 
    if( !validate_iomem() ) {
       FATAL_ERROR( "iomem is not valid before add" ) ;
    }
-}
+
+   return true ;
+} // add_iomem_region
 
 
 void print_iomem() {

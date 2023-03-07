@@ -18,7 +18,17 @@ Contribute to MemScan
       accept that as I'd like to focus on writing a tradational command-line
       progam in C.  Bare-bones tests will tell us if someting works or doesn't
       but not _why_.
+    - If DEBUG is set, then you cam return `false` for testable errors.
 - Use #FATAL_ERROR to print a message and `exit( EXIT_FAILURE )`.
+
+````
+   if( strlen( description ) == 0 ) {
+      #ifndef DEBUG
+         FATAL_ERROR( "description can not be empty" ) ;
+      #endif
+      return false ;
+   }
+````
 
 ### Toolchain
 - MemScan is written in C.

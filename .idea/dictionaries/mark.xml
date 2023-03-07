@@ -2,6 +2,9 @@
   <dictionary name="mark">
     <words>
       <w>ecute</w>
+      <w>fdffffff</w>
+      <w>ffff</w>
+      <w>fffff</w>
       <w>fprintf</w>
       <w>fseek</w>
       <w>getopt</w>
@@ -12,6 +15,8 @@
       <w>pagefile</w>
       <w>preprocesor</w>
       <w>strtok</w>
+      <w>vboxguest</w>
+      <w>vmwgfx</w>
     </words>
   </dictionary>
 </component>
