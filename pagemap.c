@@ -29,10 +29,11 @@
 #include <stdint.h>       // For uint64_t
 #include <stdio.h>        // For fopen() fprintf()
 #include <stdlib.h>       // For exit() EXIT_FAILURE
-#include <unistd.h>       // For sysconf()
 #include <sys/syscall.h>  // Definition of SYS_* constants
+#include <unistd.h>       // For sysconf()
 
 #include "config.h"  // For getProgramName()
+#include "iomem.h"   // For get_iomem_region_description()
 #include "pagemap.h" // Just cuz
 
 
@@ -46,16 +47,9 @@
 
 /// Get the `bitPosition` bit from `value`
 ///
-/// Return `1` if the bit is set and `0` if it's not in the same datatype as `value`
-#define GET_BIT( value, bitPosition ) ((value) & ( (uint64_t) 1 << (bitPosition))) >> (bitPosition)
-
-
-/// Get the Page Frame Number
-///
-/// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
-///
-/// Per `pagemap.txt`:  `Bits 0-54  page frame number (PFN) if present`
-#define GET_PFN( pageMapData ) ((pageMapData) & 0x7FFFFFFFFFFFFF)  // Bits 0-54
+/// Return `1` if the bit is set and `0` if it's not.
+/// The return datatype is the same datatype as `value`
+#define GET_BIT( value, bitPosition ) (((value) >> (bitPosition)) & 1)
 
 
 /// A static file descriptor to PAGEMAP_FILE (or -1 if it hasn't been set yet)
@@ -65,16 +59,25 @@
 static int pagemap_fd = -1 ;
 
 
-size_t getPageSizeInBytes() {
+inline size_t getPageSizeInBytes() {
    return sysconf( _SC_PAGESIZE ) ;
 }
 
 
-unsigned char getPageSizeInBits() {
+inline unsigned char getPageSizeInBits() {
    /// The pagesize must be a power of 2 (this is what allows us to access the
    /// interior of a page).  This function finds out which bit (which power of 2)
-   /// it is.  Use FFS to find the first bit that's set @see https://en.wikipedia.org/wiki/Find_first_set
-   return (unsigned char) __builtin_ffsl( getPageSizeInBytes() ) - 1 ;
+   /// it is.  FFS is meant to be used with signed numbers (not what we want), so
+   /// we will use CLZ which counts leading zeros.
+   ///
+   /// @see https://en.wikipedia.org/wiki/Find_first_set
+   /// @see https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+   ///
+   /// - Start with the size of an address in bits
+   /// - Subtract the number of leading 0s
+   /// - Subtract one more to get the index of the first bit
+
+   return ( sizeof( size_t ) << 3 ) - __builtin_clzl( getPageSizeInBytes() - 1 ) ;
 }
 
 
@@ -83,7 +86,13 @@ unsigned char getPageSizeInBits() {
 /// @param pAddr The address to analyze (usually the starting address of a
 ///              page frame, but it doesn't have to be.
 void doPagemap( void* pAddr ) {  /// @todo consider renaming to `vaddr`
+// printf( "%p\n", pAddr ) ;
+
    struct PhysicalPage page = {} ;
+
+   /// @todo Rename to pagemap_offset
+   /// @todo Reconsider the datatype
+   long pagefile_offset = (long) ((size_t) pAddr / getPageSizeInBytes() * PAGEMAP_ENTRY ) ;
 
    if( pagemap_fd < 0 ) {
       pagemap_fd = open( PAGEMAP_FILE, O_RDONLY ) ;
@@ -92,98 +101,32 @@ void doPagemap( void* pAddr ) {  /// @todo consider renaming to `vaddr`
       }
    }
 
-   FILE* pagefile = fopen( PAGEMAP_FILE, "rb" );
-
-   if( !pagefile ){
-      FATAL_ERROR( "Unable to open [%s]", PAGEMAP_FILE );
-   }
-
-   // Code courtesy of http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
-   // Shift by pagefile_offset number of bytes
-   // and multiply by the size of an address (the size of an entry in pagemap file)
-   long pagefile_offset = (long) ((size_t) pAddr / getPageSizeInBytes() * PAGEMAP_ENTRY) ;
-   // printf( "Vaddr: 0x%p, Page_size: %zd, Entry_size: %d\n", pAddr, getPageSizeInBytes(), PAGEMAP_ENTRY ) ;
-   // printf( "Reading %s at 0x%" PRIu64 "\n", PAGEMAP_FILE, pagefile_offset );
-   int status = fseek( pagefile, pagefile_offset, SEEK_SET );
-   if(status) {
-      printf( "Failed to %s\n", "fseek()" );
-   }
-
-   unsigned char c_buf[PAGEMAP_ENTRY] ;
-
-   for( int i = 0; i < PAGEMAP_ENTRY ; i++) {
-      int j = getc( pagefile );
-      if( j == EOF ) {
-         FATAL_ERROR( "failed to getc() - End of file" );
-      }
-//      if(is_bigendian())
-//         c_buf[i] = c;
-//      else
-      c_buf[ PAGEMAP_ENTRY - i - 1 ] = j ;
-//      printf("[%d]0x%x ", i, c);
-   }
-
-   uint64_t read_val = 0;
-
-   for( int i = 0 ; i < PAGEMAP_ENTRY ; i++ ) {
-      //printf("%d ",c_buf[i]);
-      read_val = (read_val << 8) + c_buf[i] ;   /// @NOLINT(readability-magic-numbers): 8 bits per byte is a valid magic number
-   }
-
-
-   /*
-   size_t pagefile_offset2 = ((size_t) pAddr / getPageSizeInBytes() * PAGEMAP_ENTRY) ;
-   size_t result = lseek64( pagemap_fd, pagefile_offset2, SEEK_SET ) ;
-   if( result != pagefile_offset2 ) {
-      printf( "Failed to lseek64 to position %lx in [%s]\n", pagefile_offset2, PAGEMAP_FILE );
-   }
-
-   result = read( pagemap_fd, &page.pfn, sizeof( page.pfn ) );
-   if( result != sizeof( page.pfn ) ) {
-      printf( "failed to read the PFN [%zd]\n", result );
-   }
-*/
-
-
    size_t nread = 0 ;
    uint64_t data;
-   uintptr_t vpn = (size_t) pAddr / sysconf(_SC_PAGE_SIZE) ;
 
+   page.valid = true ;
    while( nread < sizeof(data) ) {
-      ssize_t ret = pread(pagemap_fd, ((uint8_t*) &data) + nread, sizeof(data) - nread,
-                          vpn * sizeof( data  ) + nread );  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
+      ssize_t ret = pread(pagemap_fd, ((uint8_t*) &data) + nread, PAGEMAP_ENTRY - nread,
+                          pagefile_offset + nread );  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
       nread += ret;
       if (ret <= 0) {
-         FATAL_ERROR( "Unable to read [%s]", PAGEMAP_FILE );
+         page.valid = false ;
+         printf( "Unable to read[%s] for [%p]\n", PAGEMAP_FILE, pAddr ) ;
       }
    }
 
-   page.pfn = data & (((uint64_t)1 << 55) - 1);  /// @NOLINT( readability-magic-numbers )
-   page.swapped = (data >> 62) & 1 ;  /// @NOLINT( readability-magic-numbers )
-   page.present = (data >> 63) & 1 ;  /// @NOLINT( readability-magic-numbers )
-
-
-
-
-
-   printf( "Result: 0x%" PRIx64 "   0x%" PRIx64 "\n", read_val, page.pfn ) ;
-
-   if( GET_BIT( read_val, 63 ) ) {
-      printf( "PFN: 0x%llx\n", (unsigned long long) GET_PFN( read_val ));
-   } else {
-      printf( "Page not present\n" );
+   if( page.valid ) {
+      page.pfn = (void*) ( data & 0x7FFFFFFFFFFFFF );  /// @NOLINT( readability-magic-numbers, performance-no-int-to-ptr )
+      page.swapped = GET_BIT( data, 62 );
+      page.present = GET_BIT( data, 63 );
    }
 
-   if( GET_BIT( read_val, 62 ) ) {
-      printf( "Page swapped\n" );
-   } else {
-      printf( "Page not swapped\n" );
-   }
-
-   int iRetVal = fclose( pagefile ) ;
-   if( iRetVal != 0 ) {
-      FATAL_ERROR( "Unable to close [%s]", PAGEMAP_FILE );
-   }
+   printf( "pAddr: %p  ", pAddr ) ;
+   printf( "pfn: 0x%p  ", page.pfn ) ;
+   printf( "Swapped: %d  ", page.swapped ) ;
+   printf( "Present: %d  ", page.present ) ;
+   printf( "Region: %s  ", get_iomem_region_description( (void*) page.pfn ) ) ;
+   printf( "\n" ) ;
 }
 
 
