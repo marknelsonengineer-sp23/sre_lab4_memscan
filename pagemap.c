@@ -24,16 +24,13 @@
 #define _XOPEN_SOURCE 700
 
 
-#include <fcntl.h>     // For open() O_RDONLY
-#include <inttypes.h>  // For PRIu64
-#include <stdint.h>    // For uint64_t
-#include <stdio.h>     // For fopen() fprintf()
-#include <stdlib.h>    // For exit() EXIT_FAILURE
-//#include <sys/types.h>
-#include <unistd.h>    // For sysconf()
-
-#include <sys/syscall.h>      /* Definition of SYS_* constants */
-//#include <unistd.h>
+#include <fcntl.h>        // For open() O_RDONLY
+#include <inttypes.h>     // For PRIu64
+#include <stdint.h>       // For uint64_t
+#include <stdio.h>        // For fopen() fprintf()
+#include <stdlib.h>       // For exit() EXIT_FAILURE
+#include <unistd.h>       // For sysconf()
+#include <sys/syscall.h>  // Definition of SYS_* constants
 
 #include "config.h"  // For getProgramName()
 #include "pagemap.h" // Just cuz
@@ -67,7 +64,7 @@ static int pagemap_fd = -1 ;
 
 
 size_t getPageSizeInBytes() {
-   return sysconf(_SC_PAGESIZE) ;
+   return sysconf( _SC_PAGESIZE ) ;
 }
 
 

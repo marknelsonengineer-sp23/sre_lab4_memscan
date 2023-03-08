@@ -18,6 +18,7 @@
 
 #include "config.h"  // Just cuz
 #include "iomem.h"   // For summarize_iomem()
+#include "pagemap.h" // For getPageSizeInBytes()
 #include "version.h" // For FULL_VERSION
 
 
@@ -144,7 +145,8 @@ void processOptions( int argc, char* argv[] ) {
          case 'v':
             printf( "memscan version %s ", FULL_VERSION ) ;
             printf( "running on a %zu-bit ", sizeof( void* ) << 3 ) ;
-            printf( "%s Endian system\n", getEndianness() == BIG ? "Big" : "Little" ) ;
+            printf( "%s Endian system ", getEndianness() == BIG ? "Big" : "Little" ) ;
+            printf( "with %'zu-byte page size\n", getPageSizeInBytes() ) ;
             printf( "Copyright (C) 2023 Mark Nelson\n") ;
             printf( "Written by Mark Nelson\n" );
             exit( EXIT_SUCCESS ) ;

@@ -28,9 +28,9 @@ struct PhysicalPage {
 } ;
 
 
-/// Get the size of a page in bytes.  Must not be less than 1.
+/// Get the size of a memory page in bytes.  Must not be less than 1.
 ///
-/// @return The size of a page in bytes
+/// @return The size of a memory page in bytes
 extern size_t getPageSizeInBytes() ;
 
 extern void doPagemap( void* pAddr ) ;
