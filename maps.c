@@ -56,6 +56,7 @@ struct MapEntry {
    char* sDevice;        ///< String pointer to the device name
    char* sInode;         ///< String pointer to the iNode number
    char* sPath;          ///< String pointer to the path (may be NULL)
+   bool  include;        ///< `true` if the entry should be processed.  `false` if it should be excluded.
 } ;
 
 
@@ -111,6 +112,16 @@ void readMaps() {
          ) ;
 		}
 
+      map[numMaps].include = true ;
+      // Skip excluded paths
+      if( map[numMaps].sPath != NULL ) {
+         for( size_t j = 0 ; ExcludePaths[j][0] != '\0' ; j++ ) {
+            if( strcmp( map[numMaps].sPath, ExcludePaths[j] ) == 0 ) {
+               map[numMaps].include = false ;
+            }
+         }
+      }
+
       #ifdef DEBUG
          printf( "DEBUG:  " ) ;
          printf( "numMaps[%zu]  ",       numMaps );
@@ -123,6 +134,7 @@ void readMaps() {
          printf( "sDevice=[%s]  ",       map[numMaps].sDevice ) ;
          printf( "sInode=[%s]  ",        map[numMaps].sInode ) ;
          printf( "sPath=[%s]  ",         map[numMaps].sPath ) ;
+         printf( "include=[%d]  ",       map[numMaps].include ) ;
          printf( "\n" ) ;
       #endif
 
@@ -158,13 +170,9 @@ void scanMaps() {
       }
 
       // Skip excluded paths
-      if( map[i].sPath != NULL ) {
-      	for( size_t j = 0 ; ExcludePaths[j][0] != '\0' ; j++ ) {
-         	if( strcmp( map[i].sPath, ExcludePaths[j] ) == 0 ) {
-            	printf( ANSI_COLOR_RED "%s excluded" ANSI_COLOR_RESET, map[i].sPath );
-            	goto finishRegion;
-         	}
-      	}
+      if( !map[i].include ) {
+         printf( ANSI_COLOR_RED "%s excluded" ANSI_COLOR_RESET, map[i].sPath );
+         goto finishRegion;
       }
 
       for( void* scanThisAddress = map[i].pAddressStart ; scanThisAddress < map[i].pAddressEnd ; scanThisAddress++ ) {
