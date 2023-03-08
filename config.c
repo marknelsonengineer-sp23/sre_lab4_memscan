@@ -36,6 +36,15 @@
 /// Buffer to hold the program name
 char programName[ MAX_PROGRAM_NAME ] = {};
 
+enum Endian getEndianness() {
+   int i = 1;
+
+   if( *(char *)&i == 1 ) {  // little endian if true
+      return LITTLE ;
+   }
+   return BIG ;
+}
+
 
 void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "Usage: memscan [OPTION]\n" ) ;
@@ -133,7 +142,9 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case 'v':
-            printf( "memscan version %s\n", FULL_VERSION ) ;
+            printf( "memscan version %s ", FULL_VERSION ) ;
+            printf( "running on a %zu-bit ", sizeof( void* ) << 3 ) ;
+            printf( "%s Endian system\n", getEndianness() == BIG ? "Big" : "Little" ) ;
             printf( "Copyright (C) 2023 Mark Nelson\n") ;
             printf( "Written by Mark Nelson\n" );
             exit( EXIT_SUCCESS ) ;

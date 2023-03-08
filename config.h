@@ -46,6 +46,19 @@ extern bool setProgramName( char* newProgramName ) ;
 /// @return The program's name
 extern char* getProgramName() ;
 
+/// Enumeration for how computers hold multi-byte values
+enum Endian { ENDIAN_UNKNOWN=-1  ///< If the endianness is unknown
+             ,LITTLE             ///< For little endian machines
+             ,BIG                ///< For big endian machines
+} ;
+
+/// Return the endianness of the current computer
+///
+/// @see https://en.wikipedia.org/wiki/Endianness
+///
+/// @return #LITTLE for Little Endian machines.  #BIG for Big Endian machines.
+extern enum Endian getEndianness() ;
+
 
 extern bool openFileWithBlockIO       ;  ///< `true` if `--block` is set
 extern bool openFileWithStreamIO      ;  ///< `true` if `--stream` is set
