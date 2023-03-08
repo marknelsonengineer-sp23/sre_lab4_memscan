@@ -37,7 +37,7 @@
 /// The list ends with an empty value.
 ///
 /// @see https://lwn.net/Articles/615809/
-char* ExcludePaths[] = { "[vvar]", "" };
+char* ExcludePaths[] = { "[vvar]", "/usr/lib/locale/locale-archive", "" };
 
 
 /// Holds the original (and some processed data) from each map entry
