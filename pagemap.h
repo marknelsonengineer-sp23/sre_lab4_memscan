@@ -33,7 +33,16 @@ struct PhysicalPage {
 /// @return The size of a memory page in bytes
 extern size_t getPageSizeInBytes() ;
 
+
+/// Get the size of a memory page in bits.  If the page size is 4,096 then
+/// this would return 12.
+///
+/// @return The size of a memory page in bits
+extern unsigned char getPageSizeInBits() ;
+
+
 extern void doPagemap( void* pAddr ) ;
 
-/// Close any open resources
+
+/// Close any open pagemap resources
 extern void closePagemap() ;

@@ -43,6 +43,7 @@
 /// each pagemap entry is 8 bytes long
 #define PAGEMAP_ENTRY 8
 
+
 /// Get the `bitPosition` bit from `value`
 ///
 /// Return `1` if the bit is set and `0` if it's not in the same datatype as `value`
@@ -56,6 +57,7 @@
 /// Per `pagemap.txt`:  `Bits 0-54  page frame number (PFN) if present`
 #define GET_PFN( pageMapData ) ((pageMapData) & 0x7FFFFFFFFFFFFF)  // Bits 0-54
 
+
 /// A static file descriptor to PAGEMAP_FILE (or -1 if it hasn't been set yet)
 ///
 /// The static file descriptor allows us to efficiently keep `pagemap` open.
@@ -65,6 +67,14 @@ static int pagemap_fd = -1 ;
 
 size_t getPageSizeInBytes() {
    return sysconf( _SC_PAGESIZE ) ;
+}
+
+
+unsigned char getPageSizeInBits() {
+   /// The pagesize must be a power of 2 (this is what allows us to access the
+   /// interior of a page).  This function finds out which bit (which power of 2)
+   /// it is.  Use FFS to find the first bit that's set @see https://en.wikipedia.org/wiki/Find_first_set
+   return (unsigned char) __builtin_ffsl( getPageSizeInBytes() ) - 1 ;
 }
 
 
