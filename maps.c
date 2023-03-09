@@ -46,17 +46,19 @@ struct MapEntry {
                                    ///  All of the string pointers in this
                                    ///  struct will point to strings in this
                                    ///  buffer after they've been tokenized
-   char* sAddressStart;  ///< String pointer to the start of the address range
-   char* sAddressEnd;    ///< String pointer to the end of the address range
-   void* pAddressStart;  ///< Pointer to the start of the memory mapped region
-   void* pAddressEnd;    ///< Pointer to the byte just *after* the end of
-                         ///  the memory mapped region
-   char* sPermissions;   ///< String pointer to the permissions
-   char* sOffset;        ///< String pointer to the offset
-   char* sDevice;        ///< String pointer to the device name
-   char* sInode;         ///< String pointer to the iNode number
-   char* sPath;          ///< String pointer to the path (may be NULL)
-   bool  include;        ///< `true` if the entry should be processed.  `false` if it should be excluded.
+   char*  sAddressStart;  ///< String pointer to the start of the address range
+   char*  sAddressEnd;    ///< String pointer to the end of the address range
+   void*  pAddressStart;  ///< Pointer to the start of the memory mapped region
+   void*  pAddressEnd;    ///< Pointer to the byte just *after* the end of
+                          ///  the memory mapped region
+   char*  sPermissions;   ///< String pointer to the permissions
+   char*  sOffset;        ///< String pointer to the offset
+   char*  sDevice;        ///< String pointer to the device name
+   char*  sInode;         ///< String pointer to the iNode number
+   char*  sPath;          ///< String pointer to the path (may be NULL)
+   bool   include;        ///< `true` if the entry should be processed.  `false` if it should be excluded.
+   size_t numPages;       ///< The number of pageInfo records allocated
+   struct PageInfo* pages;   ///< Pointer to a #PageInfo array
 } ;
 
 
@@ -112,6 +114,8 @@ void readMaps() {
          ) ;
 		}
 
+      map[numMaps].numPages = ( map[numMaps].pAddressEnd - map[numMaps].pAddressStart ) >> getPageSizeInBits() ;
+
       map[numMaps].include = true ;
       // Skip excluded paths
       if( map[numMaps].sPath != NULL ) {
@@ -135,8 +139,23 @@ void readMaps() {
          printf( "sInode=[%s]  ",        map[numMaps].sInode ) ;
          printf( "sPath=[%s]  ",         map[numMaps].sPath ) ;
          printf( "include=[%d]  ",       map[numMaps].include ) ;
+         printf( "numPages=[%zu]  ",     map[numMaps].numPages ) ;
          printf( "\n" ) ;
       #endif
+
+      /// @todo insert optional scanner here
+
+      if( map[numMaps].include && map[numMaps].sPermissions[0] == 'r' ) {
+         map[numMaps].pages = malloc( sizeof( struct PageInfo ) * map[numMaps].numPages ) ;
+         if( map[numMaps].pages == NULL ) {
+            printf( ANSI_COLOR_RED "%s: unable to allocate memory for map entry [%zu]\n" ANSI_COLOR_RESET, getProgramName(), numMaps ) ;
+         } else {
+            for( size_t j = 0 ; j < map[numMaps].numPages ; j++ ) {
+               // printf( "%p\n", map[numMaps].pAddressStart + (j << getPageSizeInBits() ) ) ;
+               map[numMaps].pages[j] = getPageInfo( map[numMaps].pAddressStart + (j << getPageSizeInBits() ) ) ;
+            }
+         }
+      }
 
       numMaps++;
       pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file );
@@ -183,7 +202,7 @@ void scanMaps() {
          numBytesScanned++ ;
       }
 
-      // Print the results
+      // Print the results  /// @todo Refactor into it's own function
       printf( "Number of bytes read %'10d  Count of 0x%02x is %'7d",
            numBytesScanned
           ,CHAR_TO_SCAN_FOR
@@ -196,10 +215,11 @@ void scanMaps() {
       }
       printf( "\n" ) ;
 
-      size_t numPages = ( map[i].pAddressEnd - map[i].pAddressStart ) / getPageSizeInBytes() ;
-
-      for( size_t i = 0 ; i < numPages ; i++ ) {
-         doPagemap( map[i].pAddressStart + i * getPageSizeInBytes() ) ;
+      if( map[i].include && map[i].sPermissions[0] == 'r' ) {
+         for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
+            printPageInfo( &map[i].pages[j] ) ;
+            /// @todo think about generalizing this to avoid duplicating the .include and read permission checks
+         }
       }
    } // for()
 } // scanMaps()

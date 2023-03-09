@@ -83,7 +83,7 @@ inline unsigned char getPageSizeInBits() {
 }
 
 
-void getPageInfo( void* vAddr ) {
+struct PageInfo getPageInfo( void* vAddr ) {
    /// @NOLINTBEGIN( performance-no-int-to-ptr ):  This function mixes `void*` and `size_t`.  C normally warns about this, but in this case, it's OK.
 // printf( "%p\n", vAddr ) ;
 
@@ -135,11 +135,13 @@ void getPageInfo( void* vAddr ) {
       page.present = GET_BIT( pagemap_data, 63 );
    }
 
-   printPageInfo( &page ) ;
+   // printPageInfo( &page ) ;
+   return( page ) ;
 }  // getPageInfo    /// @NOLINTEND( performance-no-int-to-ptr )
 
 
 void printPageInfo( const struct PageInfo* page ) {
+   /// @todo Get into colorizing this output
    assert( page != NULL );
 
    if( ! page->valid ) {
@@ -147,7 +149,11 @@ void printPageInfo( const struct PageInfo* page ) {
    }
 
    printf( "pAddr: %p  ", page->virtualAddress ) ;
-   printf( "Swapped: %d  ", page->swapped ) ;
+   if( !page->present && !page->swapped ) {
+      printf( "page not present\n" ) ;
+      return ;
+   }
+   printf( "swapped: %d  ", page->swapped ) ;
    printf( "soft-dirty: %d  ", page->soft_dirty ) ;
    printf( "exclusive: %d  ", page->exclusive ) ;
    printf( "file-mapped: %d  ", page->file_mapped ) ;

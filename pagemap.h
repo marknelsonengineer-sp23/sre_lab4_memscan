@@ -56,7 +56,8 @@ extern unsigned char getPageSizeInBits() ;
 ///
 /// @param vAddr The address to analyze (usually the starting address of a
 ///              page frame, but it doesn't have to be).
-extern void getPageInfo( void* vAddr ) ;
+/// @return The #PageInfo structure for `vAddr`
+extern struct PageInfo getPageInfo( void* vAddr ) ;
 
 
 /// Print a #PageInfo record
