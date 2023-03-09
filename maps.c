@@ -175,6 +175,7 @@ void scanMaps() {
          goto finishRegion;
       }
 
+      // Do the scan
       for( void* scanThisAddress = map[i].pAddressStart ; scanThisAddress < map[i].pAddressEnd ; scanThisAddress++ ) {
          if( *(char*)scanThisAddress == CHAR_TO_SCAN_FOR ) {
             numBytesFound++ ;
@@ -182,11 +183,13 @@ void scanMaps() {
          numBytesScanned++ ;
       }
 
+      // Print the results
       printf( "Number of bytes read %'10d  Count of 0x%02x is %'7d",
            numBytesScanned
           ,CHAR_TO_SCAN_FOR
           ,numBytesFound ) ;
 
+      // Print the path
       finishRegion:
       if( printPath ) {
          printf( "  %s", map[i].sPath != NULL ? map[i].sPath : "" ) ;
