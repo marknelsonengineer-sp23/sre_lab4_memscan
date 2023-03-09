@@ -84,6 +84,7 @@ inline unsigned char getPageSizeInBits() {
 
 
 void getPageInfo( void* vAddr ) {
+   /// @NOLINTBEGIN( performance-no-int-to-ptr ):  This function mixes `void*` and `size_t`.  C normally warns about this, but in this case, it's OK.
 // printf( "%p\n", vAddr ) ;
 
    struct PageInfo page = {} ;
@@ -121,14 +122,21 @@ void getPageInfo( void* vAddr ) {
          page.swap_type = pagemap_data & 0b000011111 ; // Bits 0-4
          page.swap_offset = (void*) ( ( pagemap_data & 0x007FFFFFFFFFFFC0 ) >> 5 ) ; // Bits 5-54 >> 5 bits
       } else {
-         page.pfn = (void*) ( pagemap_data & 0x7FFFFFFFFFFFFF );  /// @NOLINT( performance-no-int-to-ptr ):  This is OK, we are mixing `void*` and `size_t` and C is fussing about it.
+         page.pfn = (void*) ( pagemap_data & 0x7FFFFFFFFFFFFF );  // Bits 0-54
       }
 
+      page.soft_dirty = GET_BIT( pagemap_data, 55 );
+      page.exclusive = GET_BIT( pagemap_data, 56 );
+      assert( GET_BIT( pagemap_data, 57 ) == 0 );
+      assert( GET_BIT( pagemap_data, 58 ) == 0 );
+      assert( GET_BIT( pagemap_data, 59 ) == 0 );
+      assert( GET_BIT( pagemap_data, 60 ) == 0 );
+      page.file_mapped = GET_BIT( pagemap_data, 61 );
       page.present = GET_BIT( pagemap_data, 63 );
    }
 
    printPageInfo( &page ) ;
-}
+}  // getPageInfo    /// @NOLINTEND( performance-no-int-to-ptr )
 
 
 void printPageInfo( const struct PageInfo* page ) {
@@ -140,6 +148,9 @@ void printPageInfo( const struct PageInfo* page ) {
 
    printf( "pAddr: %p  ", page->virtualAddress ) ;
    printf( "Swapped: %d  ", page->swapped ) ;
+   printf( "soft-dirty: %d  ", page->soft_dirty ) ;
+   printf( "exclusive: %d  ", page->exclusive ) ;
+   printf( "file-mapped: %d  ", page->file_mapped ) ;
    if( page->swapped ) {
       printf( "swap_type: %u  ", page->swap_type ) ;
       printf( "swap_offset: 0x%p  ", page->swap_offset ) ;
