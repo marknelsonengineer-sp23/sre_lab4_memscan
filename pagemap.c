@@ -6,6 +6,8 @@
 ///
 /// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
+/// @see https://www.kernel.org/doc/html/latest/admin-guide/mm/pagemap.html?highlight=pagemap
+/// @see https://docs.huihoo.com/doxygen/linux/kernel/3.7/swap_8h_source.html
 ///
 /// @NOLINTBEGIN( readability-magic-numbers ):  Due to the nature of this module, we will allow magic numbers
 ///
@@ -113,8 +115,15 @@ void getPageInfo( void* vAddr ) {
    }
 
    if( page.valid ) {
-      page.pfn = (void*) ( pagemap_data & 0x7FFFFFFFFFFFFF );  /// @NOLINT( performance-no-int-to-ptr ):  This is OK, we are mixing `void*` and `size_t` and C is fussing about it.
       page.swapped = GET_BIT( pagemap_data, 62 );
+
+      if( page.swapped ) {
+         page.swap_type = pagemap_data & 0b000011111 ; // Bits 0-4
+         page.swap_offset = (void*) ( ( pagemap_data & 0x007FFFFFFFFFFFC0 ) >> 5 ) ; // Bits 5-54 >> 5 bits
+      } else {
+         page.pfn = (void*) ( pagemap_data & 0x7FFFFFFFFFFFFF );  /// @NOLINT( performance-no-int-to-ptr ):  This is OK, we are mixing `void*` and `size_t` and C is fussing about it.
+      }
+
       page.present = GET_BIT( pagemap_data, 63 );
    }
 
@@ -130,10 +139,15 @@ void printPageInfo( const struct PageInfo* page ) {
    }
 
    printf( "pAddr: %p  ", page->virtualAddress ) ;
-   printf( "pfn: 0x%p  ", page->pfn ) ;
    printf( "Swapped: %d  ", page->swapped ) ;
-   printf( "Present: %d  ", page->present ) ;
-   printf( "Region: %s  ", get_iomem_region_description( (void*) page->pfn ) ) ;
+   if( page->swapped ) {
+      printf( "swap_type: %u  ", page->swap_type ) ;
+      printf( "swap_offset: 0x%p  ", page->swap_offset ) ;
+   } else {
+      printf( "pfn: 0x%p  ", page->pfn ) ;
+      printf( "Present: %d  ", page->present ) ;
+      printf( "Region: %s  ", get_iomem_region_description( (void*) page->pfn ) ) ;
+   }
    printf( "\n" ) ;
 }
 
