@@ -28,14 +28,23 @@ int main( int argc, char* argv[] ) {
 
    read_iomem() ;
 
-   if( iomemSummary ) {
+   if( iomemSummary ) {      // Process --iomem
       summarize_iomem() ;
       exit( EXIT_SUCCESS ) ;
    }
 
+   /// @todo Process --block
+   /// @todo Process --stream
+   /// @todo Process --mmap
+   /// @todo Process --malloc and --fill
+   /// @todo Process --shared
+   /// @todo Process --threads
+
    readMaps() ;
 
-   scanMaps() ;
+   scanMaps() ;  /// @todo Process --scan_byte, --histogram and --shannon
+
+   // printMaps() ;
 
    closePagemap() ;
 

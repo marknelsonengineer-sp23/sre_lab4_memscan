@@ -52,18 +52,32 @@ void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "       memscan -i|--iomem\n" ) ;
    PRINT_USAGE( outStream, "\n" ) ;
    PRINT_USAGE( outStream, "The options below may be used to select memscan's operation\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "PRE-SCAN OPTIONS\n" ) ;
    PRINT_USAGE( outStream, "  -b, --block=FILE         open FILE using block I/O before the memscan\n" ) ;
    PRINT_USAGE( outStream, "      --stream=FILE        open FILE using stream I/O before the memscan\n" ) ;
    PRINT_USAGE( outStream, "      --mmap=FILE          open FILE using memory mapped I/O before the memscan\n" ) ;
    PRINT_USAGE( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
    PRINT_USAGE( outStream, "                           child memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -i, --iomem              print a summary of /proc/iomem\n" ) ;
    PRINT_USAGE( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
-   PRINT_USAGE( outStream, "      --path               print the path (if available in the memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -p, --phys               include physical addresses (w/ flags) in the memscan\n" ) ;
+   PRINT_USAGE( outStream, "      --fill               fill malloc'd memory with data\n" ) ;
    PRINT_USAGE( outStream, "  -s, --shared=NUM[K|M|G]  create a shared memory region of NUM bytes before\n" ) ;
    PRINT_USAGE( outStream, "                           the memscan\n" ) ;
    PRINT_USAGE( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "SCAN OPTIONS\n" ) ;
+   PRINT_USAGE( outStream, "      --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)\n" ) ;
+   PRINT_USAGE( outStream, "                           or c3 (the x86 RET instruction) by default\n" ) ;
+   PRINT_USAGE( outStream, "      --histogram          scan memory and generate a histogram of byte values\n" ) ;
+   PRINT_USAGE( outStream, "      --shannon            compute Shannon Entropy for each mmap region\n" ) ;
+   PRINT_USAGE( outStream, "                           and physical page\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "OUTPUT OPTIONS\n" ) ;
+   PRINT_USAGE( outStream, "  -i, --iomem              print a summary of /proc/iomem\n" ) ;
+   PRINT_USAGE( outStream, "      --path               print the path (if available in the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -p, --phys               include physical addresses (w/ flags) in the memscan\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "PROGRAM OPTIONS\n" ) ;
    PRINT_USAGE( outStream, "  -h, --help               display this help and exit\n" ) ;
    PRINT_USAGE( outStream, "  -v, --version            output version information and exit\n" ) ;
 }
@@ -72,36 +86,48 @@ void printUsage( FILE* outStream ) {
 /// Define the long command line options for memscan and map them to
 /// #SINGLE_OPTION_STRING
 static struct option long_options[] = {
-   { "block",   required_argument, 0, 'b' },
-   { "stream",  required_argument, 0, '0' },
-   { "mmap",    required_argument, 0, '1' },
-   { "fork",    no_argument,       0, 'f' },
-   { "iomem",   no_argument,       0, 'i' },
-   { "malloc",  required_argument, 0, 'm' },
-   { "path",    no_argument,       0, '2' },
-   { "phys",    no_argument,       0, 'p' },
-   { "shared",  required_argument, 0, 's' },
-   { "threads", required_argument, 0, 't' },
-   { "help",    no_argument,       0, 'h' },
-   { "version", no_argument,       0, 'v' },
+   // PRE-SCAN OPTIONS
+   { "block",     required_argument, 0, 'b' },
+   { "stream",    required_argument, 0, '0' },
+   { "mmap",      required_argument, 0, '1' },
+   { "fork",      no_argument,       0, 'f' },
+   { "malloc",    required_argument, 0, 'm' },
+   { "fill",      no_argument      , 0, '2' },
+   { "shared",    required_argument, 0, 's' },
+   { "threads",   required_argument, 0, 't' },
+   // SCAN OPTIONS
+   { "scan_byte", optional_argument, 0, '3' },
+   { "histogram", no_argument,       0, '4' },
+   { "shannon",   no_argument,       0, '5' },
+   // OUTPUT OPTIONS
+   { "iomem",     no_argument,       0, 'i' },
+   { "path",      no_argument,       0, '6' },
+   { "phys",      no_argument,       0, 'p' },
+   // PROGRAM OPTIONS
+   { "help",      no_argument,       0, 'h' },
+   { "version",   no_argument,       0, 'v' },
    { 0, 0, 0, 0 }
 };
 
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:fim:ps:t:hv" ;
+const char SINGLE_OPTION_STRING[] = "b:fm:s:t:iphv" ;
 
 
 bool openFileWithBlockIO       = 0 ;
 bool openFileWithStreamIO      = 0 ;
 bool openFileWithMapIO         = 0 ;
 bool forkProcess               = 0 ;
-bool iomemSummary              = 0 ;
 bool mallocMemory              = 0 ;
-bool printPath                 = 0 ;
-bool includePhysicalMemoryInfo = 0 ;
+bool fillMallocMemory          = 0 ;
 bool createSharedMemory        = 0 ;
 bool createThreads             = 0 ;
+bool scanForByte               = 0 ;
+bool scanForHistogram          = 0 ;
+bool scanForShannon            = 0 ;
+bool iomemSummary              = 0 ;
+bool printPath                 = 0 ;
+bool includePhysicalMemoryInfo = 0 ;
 
 char blockPath[ FILENAME_MAX ]   = {} ;
 char streamPath [ FILENAME_MAX ] = {} ;
@@ -110,6 +136,8 @@ char mmapPath [ FILENAME_MAX ]   = {} ;
 size_t mallocSize = 0 ;
 size_t sharedSize = 0 ;
 size_t numThreads = 0 ;
+
+unsigned char byteToScanFor = 0xC3 ;  ///< x86 `RET` instruction (near)
 
 
 void processOptions( int argc, char* argv[] ) {

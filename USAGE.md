@@ -5,18 +5,32 @@ Usage: memscan [OPTION]
        memscan -i|--iomem
 
 The options below may be used to select memscan's operation
+
+PRE-SCAN OPTIONS
   -b, --block=FILE         open FILE using block I/O before the memscan
       --stream=FILE        open FILE using stream I/O before the memscan
       --mmap=FILE          open FILE using memory mapped I/O before the memscan
   -f, --fork               fork a process and display the combined parent and
                            child memscan
-  -i, --iomem              print a summary of /proc/iomem
   -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan
-      --path               print the path (if available in the memscan
-  -p, --phys               include physical addresses (w/ flags) in the memscan
+      --fill               fill malloc'd memory with data
   -s, --shared=NUM[K|M|G]  create a shared memory region of NUM bytes before
                            the memscan
   -t, --threads=NUM        create NUM threads before the memscan
+
+SCAN OPTIONS
+      --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)
+                           or c3 (the x86 RET instruction) by default
+      --histogram          scan memory and generate a histogram of byte values
+      --shannon            compute Shannon Entropy for each mmap region
+                           and physical page
+
+OUTPUT OPTIONS
+  -i, --iomem              print a summary of /proc/iomem
+      --path               print the path (if available in the memscan
+  -p, --phys               include physical addresses (w/ flags) in the memscan
+
+PROGRAM OPTIONS
   -h, --help               display this help and exit
   -v, --version            output version information and exit
 
