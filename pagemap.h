@@ -13,10 +13,14 @@
 
 #pragma once
 
-/// Hold all of the information about the physical page
+/// Hold information about a physical page
+///
+/// Page data comes from several sources, including `pagemap`,
+/// `kpagecount`, `kpageflags` and `iomem`.
 ///
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
-struct PhysicalPage {
+struct PageInfo {
+   void*  virtualAddress;           ///< The virtual address that this structure represents
    bool   valid;                    ///< `true` if the data was successfully read and decoded from #PAGEMAP_FILE
    void*  pfn;                      ///< Page Frame Number (if present)
    bool   soft_dirty_bit;           ///< pte is soft-dirty (see [Documentation/vm/soft-dirty.txt](https://www.kernel.org/doc/Documentation/vm/soft-dirty.txt))
@@ -35,14 +39,24 @@ struct PhysicalPage {
 extern size_t getPageSizeInBytes() ;
 
 
-/// Get the size of a memory page in bits.  If the page size is 4,096 then
-/// this would return 12.
+/// Get the size of a memory page in bits.  If the page size is `4,096` then
+/// this would return `12`.
 ///
 /// @return The size of a memory page in bits
 extern unsigned char getPageSizeInBits() ;
 
 
-extern void doPagemap( void* pAddr ) ;
+/// Populate a #PageInfo record for a virtual address
+///
+/// @param vAddr The address to analyze (usually the starting address of a
+///              page frame, but it doesn't have to be).
+extern void getPageInfo( void* vAddr ) ;
+
+
+/// Print a #PageInfo record
+///
+/// @param page The page to print
+extern void printPageInfo( const struct PageInfo* page ) ;
 
 
 /// Close any open pagemap resources
