@@ -63,9 +63,10 @@ extern bool openFileWithBlockIO       ;  ///< `true` if `--block` is set
 extern bool openFileWithStreamIO      ;  ///< `true` if `--stream` is set
 extern bool openFileWithMapIO         ;  ///< `true` if `--mmap` is set
 extern bool forkProcess               ;  ///< `true` if `--fork` is set
-extern bool mallocMemory              ;  ///< `true` if `--malloc` is set
-extern bool fillMallocMemory          ;  ///< `true` if `--fill` is set
-extern bool createSharedMemory        ;  ///< `true` if `--shared` is set
+extern bool allocateLocalMemory       ;  ///< `true` if `--local` is set
+extern bool allocateMallocMemory      ;  ///< `true` if `--malloc` is set
+extern bool allocateSharedMemory      ;  ///< `true` if `--shared` is set
+extern bool fillAllocatedMemory       ;  ///< `true` if `--fill` is set
 extern bool createThreads             ;  ///< `true` if `--threads` is set
 extern bool scanForByte               ;  ///< `true` if `--scan_byte` is set
 extern bool scanForHistogram          ;  ///< `true` if `--histogram` is set
@@ -78,6 +79,7 @@ extern char blockPath[ FILENAME_MAX ] ;    ///< The path to the file specified b
 extern char streamPath [ FILENAME_MAX ] ;  ///< The path to the file specified by `--stream`
 extern char mmapPath [ FILENAME_MAX ] ;    ///< the path to the file specified by `--mmap`
 
+extern size_t localSize ;   ///< The number of bytes specified by `--local`
 extern size_t mallocSize ;  ///< The number of bytes specified by `--malloc`
 extern size_t sharedSize ;  ///< The number of bytes specified by `--shared`
 extern size_t numThreads ;  ///< The number of threads specified by `--threads`

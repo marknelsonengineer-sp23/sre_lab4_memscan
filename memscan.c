@@ -36,8 +36,7 @@ int main( int argc, char* argv[] ) {
    /// @todo Process --block
    /// @todo Process --stream
    /// @todo Process --mmap
-   /// @todo Process --malloc and --fill
-   /// @todo Process --shared
+   /// @todo Process --local, --malloc, --shared and --fill
    /// @todo Process --threads
 
    readMaps() ;

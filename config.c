@@ -59,10 +59,13 @@ void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "      --mmap=FILE          open FILE using memory mapped I/O before the memscan\n" ) ;
    PRINT_USAGE( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
    PRINT_USAGE( outStream, "                           child memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
+   PRINT_USAGE( outStream, "                           memscan\n" ) ;
    PRINT_USAGE( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
-   PRINT_USAGE( outStream, "      --fill               fill malloc'd memory with data\n" ) ;
-   PRINT_USAGE( outStream, "  -s, --shared=NUM[K|M|G]  create a shared memory region of NUM bytes before\n" ) ;
-   PRINT_USAGE( outStream, "                           the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -s, --shared=NUM[K|M|G]  allocate NUM bytes of shared memory before the\n" ) ;
+   PRINT_USAGE( outStream, "                           memscan\n" ) ;
+   PRINT_USAGE( outStream, "      --fill               fill the local, malloc'd and/or shared memory\n" ) ;
+   PRINT_USAGE( outStream, "                           with data before the memscan\n" ) ;
    PRINT_USAGE( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
    PRINT_USAGE( outStream, "\n" ) ;
    PRINT_USAGE( outStream, "SCAN OPTIONS\n" ) ;
@@ -91,9 +94,10 @@ static struct option long_options[] = {
    { "stream",    required_argument, 0, '0' },
    { "mmap",      required_argument, 0, '1' },
    { "fork",      no_argument,       0, 'f' },
+   { "local",     required_argument, 0, 'l' },
    { "malloc",    required_argument, 0, 'm' },
-   { "fill",      no_argument      , 0, '2' },
    { "shared",    required_argument, 0, 's' },
+   { "fill",      no_argument      , 0, '2' },
    { "threads",   required_argument, 0, 't' },
    // SCAN OPTIONS
    { "scan_byte", optional_argument, 0, '3' },
@@ -111,16 +115,17 @@ static struct option long_options[] = {
 
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:fm:s:t:iphv" ;
+const char SINGLE_OPTION_STRING[] = "b:fl:m:s:t:iphv" ;
 
 
 bool openFileWithBlockIO       = 0 ;
 bool openFileWithStreamIO      = 0 ;
 bool openFileWithMapIO         = 0 ;
 bool forkProcess               = 0 ;
-bool mallocMemory              = 0 ;
-bool fillMallocMemory          = 0 ;
-bool createSharedMemory        = 0 ;
+bool allocateLocalMemory       = 0 ;
+bool allocateMallocMemory      = 0 ;
+bool allocateSharedMemory      = 0 ;
+bool fillAllocatedMemory       = 0 ;
 bool createThreads             = 0 ;
 bool scanForByte               = 0 ;
 bool scanForHistogram          = 0 ;
@@ -133,6 +138,7 @@ char blockPath[ FILENAME_MAX ]   = {} ;
 char streamPath [ FILENAME_MAX ] = {} ;
 char mmapPath [ FILENAME_MAX ]   = {} ;
 
+size_t localSize  = 0 ;
 size_t mallocSize = 0 ;
 size_t sharedSize = 0 ;
 size_t numThreads = 0 ;
