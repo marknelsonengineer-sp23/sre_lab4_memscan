@@ -77,8 +77,8 @@ void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "\n" ) ;
    PRINT_USAGE( outStream, "OUTPUT OPTIONS\n" ) ;
    PRINT_USAGE( outStream, "  -i, --iomem              print a summary of /proc/iomem\n" ) ;
-   PRINT_USAGE( outStream, "      --path               print the path (if available in the memscan\n" ) ;
-   PRINT_USAGE( outStream, "  -p, --phys               include physical addresses (w/ flags) in the memscan\n" ) ;
+   PRINT_USAGE( outStream, "      --path               print the path (if available) in the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -p, --phys               print physical page numbers w/ flags in the memscan\n" ) ;
    PRINT_USAGE( outStream, "\n" ) ;
    PRINT_USAGE( outStream, "PROGRAM OPTIONS\n" ) ;
    PRINT_USAGE( outStream, "  -h, --help               display this help and exit\n" ) ;

@@ -30,8 +30,8 @@ SCAN OPTIONS
 
 OUTPUT OPTIONS
   -i, --iomem              print a summary of /proc/iomem
-      --path               print the path (if available in the memscan
-  -p, --phys               include physical addresses (w/ flags) in the memscan
+      --path               print the path (if available) in the memscan
+  -p, --phys               print physical page numbers w/ flags in the memscan
 
 PROGRAM OPTIONS
   -h, --help               display this help and exit
