@@ -61,8 +61,33 @@ void setPageflags( struct PageInfo* page ) {
       pageflag_data = 0 ;
    }
 
-
-
+   page->locked      = GET_BIT( pageflag_data,  0 ) ;
+   page->error       = GET_BIT( pageflag_data,  1 ) ;
+   page->referenced  = GET_BIT( pageflag_data,  2 ) ;
+   page->uptodate    = GET_BIT( pageflag_data,  3 ) ;
+   page->dirty       = GET_BIT( pageflag_data,  4 ) ;
+   page->lru         = GET_BIT( pageflag_data,  5 ) ;
+   page->active      = GET_BIT( pageflag_data,  6 ) ;
+   page->slab        = GET_BIT( pageflag_data,  7 ) ;
+   page->writeback   = GET_BIT( pageflag_data,  8 ) ;
+   page->reclaim     = GET_BIT( pageflag_data,  9 ) ;
+   page->buddy       = GET_BIT( pageflag_data, 10 ) ;
+   page->mmap        = GET_BIT( pageflag_data, 11 ) ;
+   page->anon        = GET_BIT( pageflag_data, 12 ) ;
+   page->swapcache   = GET_BIT( pageflag_data, 13 ) ;
+   page->swapbacked  = GET_BIT( pageflag_data, 14 ) ;
+   page->comp_head   = GET_BIT( pageflag_data, 15 ) ;
+   page->comp_tail   = GET_BIT( pageflag_data, 16 ) ;
+   page->huge        = GET_BIT( pageflag_data, 17 ) ;
+   page->unevictable = GET_BIT( pageflag_data, 18 ) ;
+   page->hwpoison    = GET_BIT( pageflag_data, 19 ) ;
+   page->nopage      = GET_BIT( pageflag_data, 20 ) ;
+   page->ksm         = GET_BIT( pageflag_data, 21 ) ;
+   page->thp         = GET_BIT( pageflag_data, 22 ) ;
+   page->balloon     = GET_BIT( pageflag_data, 23 ) ;
+   page->zero_page   = GET_BIT( pageflag_data, 24 ) ;
+   page->idle        = GET_BIT( pageflag_data, 25 ) ;
+   page->pgtable     = GET_BIT( pageflag_data, 26 ) ;
 } // setPageflags
 
 void closePageflags() {

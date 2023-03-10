@@ -159,6 +159,33 @@ void printPageInfo( const struct PageInfo* page ) {
       printf( "Region: %s  ", get_iomem_region_description( (void*) page->pfn ) ) ;
    }
    printf( "page_count: %" PRIu64 "  ", page->page_count ) ;
+   printf( "locked: %d  ", page->locked ) ;
+   printf( "error: %d  ", page->error ) ;
+   printf( "referenced: %d  ", page->referenced ) ;
+   printf( "uptodate: %d  ", page->uptodate ) ;
+   printf( "dirty: %d  ", page->dirty ) ;
+   printf( "lru: %d  ", page->lru ) ;
+   printf( "active: %d  ", page->active ) ;
+   printf( "slab: %d  ", page->slab ) ;
+   printf( "writeback: %d  ", page->writeback ) ;
+   printf( "reclaim: %d  ", page->reclaim ) ;
+   printf( "buddy: %d  ", page->buddy ) ;
+   printf( "mmap: %d  ", page->mmap ) ;
+   printf( "anon: %d  ", page->anon ) ;
+   printf( "swapcache: %d  ", page->swapcache ) ;
+   printf( "swapbacked: %d  ", page->swapbacked ) ;
+   printf( "comp_head: %d  ", page->comp_head ) ;
+   printf( "comp_tail: %d  ", page->comp_tail ) ;
+   printf( "huge: %d  ", page->huge ) ;
+   printf( "unevictable: %d  ", page->unevictable ) ;
+   printf( "hwpoison: %d  ", page->hwpoison ) ;
+   printf( "nopage: %d  ", page->nopage ) ;
+   printf( "ksm: %d  ", page->ksm ) ;
+   printf( "thp: %d  ", page->thp ) ;
+   printf( "balloon: %d  ", page->balloon ) ;
+   printf( "zero_page: %d  ", page->zero_page ) ;
+   printf( "idle: %d  ", page->idle ) ;
+   printf( "pgtable: %d  ", page->pgtable ) ;
    printf( "\n" ) ;
 }
 
