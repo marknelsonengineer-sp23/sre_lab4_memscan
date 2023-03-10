@@ -191,7 +191,7 @@ void processOptions( int argc, char* argv[] ) {
             exit( EXIT_SUCCESS ) ;
             break ;
 
-         case '2':
+         case '6':
             printPath = true ;
             break;
 
