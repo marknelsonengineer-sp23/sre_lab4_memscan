@@ -73,3 +73,7 @@ Contribute to MemScan
 - Run `make lint`
 - Run `make clean` and then `make test`
 - Run `make doc` and then `make publish`
+- Scrub all `@todo`s
+- Scrub GitHub issues
+- Tag the release in Git
+- 
