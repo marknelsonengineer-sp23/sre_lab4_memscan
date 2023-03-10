@@ -33,6 +33,7 @@ int main( int argc, char* argv[] ) {
       exit( EXIT_SUCCESS ) ;
    }
 
+   /// Anything that changes #MEMORY_MAP_FILE should be done before calling readMaps()
    /// @todo Process --block
    /// @todo Process --stream
    /// @todo Process --mmap
@@ -41,9 +42,14 @@ int main( int argc, char* argv[] ) {
 
    readMaps() ;
 
+   /// Anything that changes the physical pagemap information such as scanning
+   /// or waiting, should be done before calling readPagemapInfo()
+
    scanMaps() ;  /// @todo Process --scan_byte, --histogram and --shannon
 
-   // printMaps() ;
+   readPagemapInfo() ;  // Process --phys
+
+   printMaps() ;
 
    closePagemap() ;
 

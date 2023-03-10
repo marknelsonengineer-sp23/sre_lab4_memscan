@@ -21,6 +21,8 @@
 #include "pagemap.h" // For getPageSizeInBytes()
 #include "version.h" // For FULL_VERSION
 
+/// The x86 `RET` machine instruction (for both 32- and 64-bit machines)
+#define X86_RET_INSTRUCTION 0xC3
 
 /// Print a line to outStream.  Ensure the print command was successful.
 ///
@@ -143,7 +145,7 @@ size_t mallocSize = 0 ;
 size_t sharedSize = 0 ;
 size_t numThreads = 0 ;
 
-unsigned char byteToScanFor = 0xC3 ;  ///< x86 `RET` instruction (near)
+unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
 
 
 void processOptions( int argc, char* argv[] ) {
@@ -172,6 +174,15 @@ void processOptions( int argc, char* argv[] ) {
       }
 
       switch ( optionChar ) {
+         case 'p':
+            includePhysicalMemoryInfo = true ;
+            break ;
+
+         case '3':
+            /// @todo Need to parse for the =HEX and set byteToScanFor
+            scanForByte = true ;
+            break ;
+
          case 'i':
             iomemSummary = true ;
             break ;

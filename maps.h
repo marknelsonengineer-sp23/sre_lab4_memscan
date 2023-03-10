@@ -16,7 +16,13 @@
 /// [1]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
 extern void readMaps() ;
 
-/// This is the workhorse of this program... Scan all readable memory
-/// regions, counting the number of bytes scanned and the number of
-/// times #CHAR_TO_SCAN_FOR appears in the region...
+/// This is the workhorse of this program:  Scan all readable memory
+/// regions
 extern void scanMaps() ;
+
+/// Read data from `pagemap` `xxx` and `yyy` and get information
+/// about the physical pages referenced by `maps`
+extern void readPagemapInfo() ;
+
+/// Print the map, results of the scan and physical page info
+extern void printMaps() ;

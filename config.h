@@ -84,8 +84,9 @@ extern size_t mallocSize ;  ///< The number of bytes specified by `--malloc`
 extern size_t sharedSize ;  ///< The number of bytes specified by `--shared`
 extern size_t numThreads ;  ///< The number of threads specified by `--threads`
 
-extern unsigned char byteToScanFor ;  ///< The byte to scan for
-
+                                      /// The byte to scan for.
+extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
+                                      ///< (near) instruction
 
 
 /// Print an error message to `stderr` (along with the program name) and then
