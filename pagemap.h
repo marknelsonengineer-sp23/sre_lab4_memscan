@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include <stdint.h>       // For uint8_t
+#include <stdint.h>  // For uint8_t
 
 /// Hold information about a physical page
 ///
