@@ -21,7 +21,6 @@
 /// @NOLINTNEXTLINE(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp): This is a legitimate use of a reserved identifier
 #define _XOPEN_SOURCE 700
 
-
 #include <assert.h>       // For assert()
 #include <fcntl.h>        // For open() O_RDONLY
 #include <inttypes.h>     // For PRIu64
@@ -29,10 +28,11 @@
 #include <stdio.h>        // For printf()
 #include <stdlib.h>       // For exit() EXIT_FAILURE
 #include <sys/syscall.h>  // Definition of SYS_* constants
-#include <unistd.h>       // For sysconf()
+#include <unistd.h>       // For sysconf() close()
 
 #include "config.h"       // For getProgramName()
 #include "iomem.h"        // For get_iomem_region_description()
+#include "pagecount.h"    // For getPagecount() closePagecount()
 #include "pagemap.h"      // Just cuz
 
 
@@ -110,7 +110,7 @@ struct PageInfo getPageInfo( void* vAddr ) {
                       ,((uint8_t*) &pagemap_data)  // Destination buffer
                       ,PAGEMAP_ENTRY               // Bytes to read
                       ,pagemap_offset );           // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
-   if (ret != 8) {
+   if( ret != PAGEMAP_ENTRY ) {
       page.valid = false ;
       printf( "Unable to read[%s] for [%p]\n", PAGEMAP_FILE, vAddr ) ;
    }
@@ -133,9 +133,9 @@ struct PageInfo getPageInfo( void* vAddr ) {
       assert( GET_BIT( pagemap_data, 60 ) == 0 );
       page.file_mapped = GET_BIT( pagemap_data, 61 );
       page.present = GET_BIT( pagemap_data, 63 );
+      page.page_count = getPagecount( page.pfn ) ;
    }
 
-   // printPageInfo( &page ) ;
    return( page ) ;
 }  // getPageInfo    /// @NOLINTEND( performance-no-int-to-ptr )
 
@@ -165,6 +165,7 @@ void printPageInfo( const struct PageInfo* page ) {
       printf( "Present: %d  ", page->present ) ;
       printf( "Region: %s  ", get_iomem_region_description( (void*) page->pfn ) ) ;
    }
+   printf( "page_count: %" PRIu64 "  ", page->page_count ) ;
    printf( "\n" ) ;
 }
 
@@ -179,6 +180,8 @@ void closePagemap() {
          FATAL_ERROR( "Unable to close [%s]", PAGEMAP_FILE );
       }
    }
+
+   closePagecount() ;
 }
 
 /// NOLINTEND( readability-magic-numbers )
