@@ -105,3 +105,12 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
    exit( EXIT_FAILURE ); }        \
    /* NOLINTEND(cert-err33-c) */  \
    (void)0
+
+
+/// Get the `bitPosition` bit from `value`
+///
+/// @param value       The source value
+/// @param bitPosition The bit number to get.  `0` for the least significant bit.
+/// @return Return `1` if the bit is set and `0` if it's not.
+///         The return datatype is the same datatype as `value`.
+#define GET_BIT( value, bitPosition ) (((value) >> (bitPosition)) & 1)

@@ -45,15 +45,6 @@
 #define PAGEMAP_ENTRY 8
 
 
-/// Get the `bitPosition` bit from `value`
-///
-/// @param value       The source value
-/// @param bitPosition The bit number to get.  `0` for the least significant bit.
-/// @return Return `1` if the bit is set and `0` if it's not.
-///         The return datatype is the same datatype as `value`.
-#define GET_BIT( value, bitPosition ) (((value) >> (bitPosition)) & 1)
-
-
 /// A static file descriptor to #PAGEMAP_FILE (or `-1` if it hasn't been set yet)
 ///
 /// The static file descriptor allows us to efficiently keep #PAGEMAP_FILE open.
