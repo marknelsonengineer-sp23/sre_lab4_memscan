@@ -12,10 +12,13 @@ PRE-SCAN OPTIONS
       --mmap=FILE          open FILE using memory mapped I/O before the memscan
   -f, --fork               fork a process and display the combined parent and
                            child memscan
+  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the
+                           memscan
   -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan
-      --fill               fill malloc'd memory with data
-  -s, --shared=NUM[K|M|G]  create a shared memory region of NUM bytes before
-                           the memscan
+  -s, --shared=NUM[K|M|G]  allocate NUM bytes of shared memory before the
+                           memscan
+      --fill               fill the local, malloc'd and/or shared memory
+                           with data before the memscan
   -t, --threads=NUM        create NUM threads before the memscan
 
 SCAN OPTIONS
