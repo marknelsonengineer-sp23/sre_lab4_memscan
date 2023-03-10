@@ -37,7 +37,6 @@ static int pagecount_fd = -1 ;
 
 
 uint64_t getPagecount( void* pfn ) {
-
    off_t pagecount_offset = (long) ((size_t) pfn * sizeof( uint64_t ) ) ;
 
    if( pagecount_fd < 0 ) {
