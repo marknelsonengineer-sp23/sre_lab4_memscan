@@ -26,8 +26,6 @@
 
 /// Print a line to outStream.  Ensure the print command was successful.
 ///
-/// @todo Print an appropriate message for the user
-///
 /// @param outStream The output stream (usually `stderr` or `stdout`) to print to
 #define PRINT_USAGE( outStream, ... )              \
    if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
