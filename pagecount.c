@@ -25,7 +25,7 @@
 #define PAGECOUNT_FILE "/proc/kpagecount"
 
 /// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt),
-/// each pagemap entry is `8` bytes long
+/// each pagecount entry is `8` bytes long
 #define PAGECOUNT_ENTRY 8
 
 
@@ -67,7 +67,7 @@ uint64_t getPagecount( void* pfn ) {
 
 
 void closePagecount() {
-   /// Pagemap holds some files open (like #pagemap_fd) in static variables.
+   /// Pagecount holds some files open (like #pagecount_fd) in static variables.
    /// Close the files properly.
    if( pagecount_fd != -1 ) {
       int closeStatus = close( pagecount_fd ) ;
@@ -76,4 +76,4 @@ void closePagecount() {
          FATAL_ERROR( "Unable to close [%s]", PAGECOUNT_FILE );
       }
    }
-} // closePagemap
+} // closePagecount
