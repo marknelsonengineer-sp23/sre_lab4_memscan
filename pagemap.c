@@ -33,6 +33,7 @@
 #include "config.h"       // For getProgramName()
 #include "iomem.h"        // For get_iomem_region_description()
 #include "pagecount.h"    // For getPagecount() closePagecount()
+#include "pageflags.h"    // For setPageflags() closePageflags()
 #include "pagemap.h"      // Just cuz
 
 
@@ -134,6 +135,7 @@ struct PageInfo getPageInfo( void* vAddr ) {
       page.file_mapped = GET_BIT( pagemap_data, 61 );
       page.present = GET_BIT( pagemap_data, 63 );
       page.page_count = getPagecount( page.pfn ) ;
+      setPageflags( &page ) ;
    }
 
    return( page ) ;
@@ -182,6 +184,7 @@ void closePagemap() {
    }
 
    closePagecount() ;
+   closePageflags() ;
 }
 
 /// NOLINTEND( readability-magic-numbers )

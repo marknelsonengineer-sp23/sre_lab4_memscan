@@ -10,10 +10,15 @@
       <w>fseek</w>
       <w>getopt</w>
       <w>iomem</w>
+      <w>kpagecount</w>
+      <w>kpageflags</w>
       <w>memscan</w>
       <w>memscan's</w>
       <w>mprotect</w>
+      <w>pagecount</w>
       <w>pagefile</w>
+      <w>pageflag</w>
+      <w>pageflags</w>
       <w>preprocesor</w>
       <w>strtok</w>
       <w>vboxguest</w>
