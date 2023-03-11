@@ -30,8 +30,8 @@ struct PageInfo {
    void*    pfn;             ///< The Page Frame Number (if present).  Valid when `!swapped`.
    uint8_t  swap_type;       ///< A 5-bit index into a table of swapfiles.  Valid when `swapped`.
    void*    swap_offset;     ///< A 50-bit index into a swapfile.  Valid when `swapped`.
-   bool     soft_dirty;      ///< pte is soft-dirty (see [Documentation/vm/soft-dirty.txt](https://www.kernel.org/doc/Documentation/vm/soft-dirty.txt))
-   bool     exclusive;       ///< Page exclusively mapped (since 4.2)
+   bool     soft_dirty;      ///< PTE is soft-dirty (see [Documentation/vm/soft-dirty.txt](https://www.kernel.org/doc/Documentation/vm/soft-dirty.txt))
+   bool     exclusive;       ///< Page exclusively mapped
    bool     file_mapped;     ///< `true` if the page is `file_mapped`.  Pages are either mapped to a file (file_mapped) or not (anonymously mapped).  See https://stackoverflow.com/questions/13024087/what-are-memory-mapped-page-and-anonymous-page
    bool     swapped;         ///< `true` if the page is swapped
    bool     present;         ///< `true` if the page is present
@@ -57,7 +57,7 @@ struct PageInfo {
    bool     unevictable;     ///< From `/proc/kpageflags`.  The page is in the unevictable (non-)LRU list It is somehow pinned and not a candidate for LRU page reclaims, e.g. ramfs pages, shmctl(SHM_LOCK) and mlock() memory segments.
    bool     hwpoison;        ///< From `/proc/kpageflags`.  Hardware detected memory corruption on this page: don’t touch the data!
    bool     nopage;          ///< From `/proc/kpageflags`.  No page frame exists at the requested address.
-   bool     ksm;             ///< From `/proc/kpageflags`.  Identical memory pages dynamically shared between one or more processes.
+   bool     ksm;             ///< From `/proc/kpageflags`.  Kernel Samepage Merging:  Identical memory pages dynamically shared between one or more processes.
    bool     thp;             ///< From `/proc/kpageflags`.  Contiguous pages which construct transparent hugepages.
    bool     balloon;         ///< From `/proc/kpageflags`.  Balloon compaction page
    bool     zero_page;       ///< From `/proc/kpageflags`.  Zero page for pfn_zero or huge_zero page.
@@ -67,6 +67,10 @@ struct PageInfo {
 
 
 /// Get the size of a memory page in bytes.  Must not be less than 1.
+///
+///   - x86 CPUs normally support 4K and 2M (1G if architecturally supported) page sizes
+///   - ia64 supports page sizes of 4K, 8K, 64K, 256K, 1M, 4M, 16M, 256M
+///   - ppc64 supports 4K and 16M
 ///
 /// @return The size of a memory page in bytes
 extern size_t getPageSizeInBytes() ;
@@ -99,3 +103,8 @@ extern void printPageInfo( const struct PageInfo* page ) ;
 
 /// Close any open pagemap resources
 extern void closePagemap() ;
+
+/// Print the key to printPageInfo()
+///
+/// @param outStream The output stream (usually `stderr` or `stdout`) to print to
+extern void printKey( FILE* outStream ) ;

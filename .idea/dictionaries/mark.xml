@@ -9,20 +9,41 @@
       <w>fprintf</w>
       <w>fseek</w>
       <w>getopt</w>
+      <w>httt</w>
+      <w>hugepages</w>
+      <w>hwpoison</w>
       <w>iomem</w>
+      <w>iphkv</w>
+      <w>iphv</w>
       <w>kpagecount</w>
       <w>kpageflags</w>
+      <w>malloc'd</w>
       <w>memscan</w>
       <w>memscan's</w>
+      <w>mlock</w>
       <w>mprotect</w>
+      <w>nopage</w>
       <w>pagecount</w>
       <w>pagefile</w>
       <w>pageflag</w>
       <w>pageflags</w>
+      <w>pageout</w>
+      <w>pgtable</w>
       <w>preprocesor</w>
+      <w>ramfs</w>
+      <w>samepage</w>
+      <w>shmctl</w>
+      <w>slqb</w>
+      <w>slub</w>
+      <w>strstr</w>
       <w>strtok</w>
+      <w>swapbacked</w>
+      <w>swapcache</w>
+      <w>swapfiles</w>
+      <w>unevictable</w>
       <w>vboxguest</w>
       <w>vmwgfx</w>
+      <w>writeback</w>
     </words>
   </dictionary>
 </component>

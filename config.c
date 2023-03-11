@@ -24,16 +24,6 @@
 /// The x86 `RET` machine instruction (for both 32- and 64-bit machines)
 #define X86_RET_INSTRUCTION 0xC3
 
-/// Print a line to outStream.  Ensure the print command was successful.
-///
-/// @param outStream The output stream (usually `stderr` or `stdout`) to print to
-#define PRINT_USAGE( outStream, ... )              \
-   if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
-      exit( EXIT_FAILURE );                        \
-   }                                               \
-   (void)0
-
-
 /// Buffer to hold the program name
 char programName[ MAX_PROGRAM_NAME ] = {} ;
 
@@ -90,6 +80,7 @@ void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "\n" ) ;
    PRINT_USAGE( outStream, "PROGRAM OPTIONS\n" ) ;
    PRINT_USAGE( outStream, "  -h, --help               display this help and exit\n" ) ;
+   PRINT_USAGE( outStream, "  -k, --key                display key to the --phys flags\n" ) ;
    PRINT_USAGE( outStream, "  -v, --version            output version information and exit\n" ) ;
 }
 
@@ -117,13 +108,14 @@ static struct option long_options[] = {
    { "phys",      no_argument,       0, 'p' },
    // PROGRAM OPTIONS
    { "help",      no_argument,       0, 'h' },
+   { "key",       no_argument,       0, 'k' },
    { "version",   no_argument,       0, 'v' },
    { 0, 0, 0, 0 }
 };
 
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:fl:m:s:t:iphv" ;
+const char SINGLE_OPTION_STRING[] = "b:fl:m:s:t:iphkv" ;
 
 
 bool openFileWithBlockIO       = 0 ;
@@ -205,6 +197,11 @@ void processOptions( int argc, char* argv[] ) {
 
          case 'h':
             printUsage( stdout ) ;
+            exit( EXIT_SUCCESS ) ;
+            break ;
+
+         case 'k':
+            printKey( stdout ) ;
             exit( EXIT_SUCCESS ) ;
             break ;
 

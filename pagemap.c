@@ -30,6 +30,7 @@
 #include <sys/syscall.h>  // Definition of SYS_* constants
 #include <unistd.h>       // For sysconf() close()
 
+#include "colors.h"       // For ANSI_COLOR_...
 #include "config.h"       // For getProgramName()
 #include "iomem.h"        // For get_iomem_region_description()
 #include "pagecount.h"    // For getPagecount() closePagecount()
@@ -134,58 +135,68 @@ struct PageInfo getPageInfo( void* vAddr ) {
 
 
 void printPageInfo( const struct PageInfo* page ) {
-   /// @todo Get into colorizing this output
    assert( page != NULL );
 
-   if( ! page->valid ) {
-      printf( "Virtual address [%p] was not read by pagemap\n", page->virtualAddress ) ;
+   printf( ANSI_COLOR_GREEN "    %p  " ANSI_COLOR_RESET, page->virtualAddress ) ;
+
+   if( !page->valid ) {
+      printf( ANSI_COLOR_RED " virtual address was not read by pagemap" ANSI_COLOR_RESET ) ;
    }
 
-   printf( "pAddr: %p  ", page->virtualAddress ) ;
    if( !page->present && !page->swapped ) {
-      printf( "page not present\n" ) ;
-      return ;
+      printf( ANSI_COLOR_RED " page not present" ANSI_COLOR_RESET ) ;
    }
-   printf( "swapped: %d  ", page->swapped ) ;
-   printf( "soft-dirty: %d  ", page->soft_dirty ) ;
-   printf( "exclusive: %d  ", page->exclusive ) ;
-   printf( "file-mapped: %d  ", page->file_mapped ) ;
+
    if( page->swapped ) {
-      printf( "swap_type: %u  ", page->swap_type ) ;
-      printf( "swap_offset: 0x%p  ", page->swap_offset ) ;
-   } else {
-      printf( "pfn: 0x%p  ", page->pfn ) ;
-      printf( "Present: %d  ", page->present ) ;
-      printf( "Region: %s  ", get_iomem_region_description( (void*) page->pfn ) ) ;
+      printf( ANSI_COLOR_RED " swapped: " ANSI_COLOR_RESET );
+      printf( "type: %u  ", page->swap_type );
+      printf( "offset: 0x%p  ", page->swap_offset );
    }
-   printf( "page_count: %" PRIu64 "  ", page->page_count ) ;
-   printf( "locked: %d  ", page->locked ) ;
-   printf( "error: %d  ", page->error ) ;
-   printf( "referenced: %d  ", page->referenced ) ;
-   printf( "uptodate: %d  ", page->uptodate ) ;
-   printf( "dirty: %d  ", page->dirty ) ;
-   printf( "lru: %d  ", page->lru ) ;
-   printf( "active: %d  ", page->active ) ;
-   printf( "slab: %d  ", page->slab ) ;
-   printf( "writeback: %d  ", page->writeback ) ;
-   printf( "reclaim: %d  ", page->reclaim ) ;
-   printf( "buddy: %d  ", page->buddy ) ;
-   printf( "mmap: %d  ", page->mmap ) ;
-   printf( "anon: %d  ", page->anon ) ;
-   printf( "swapcache: %d  ", page->swapcache ) ;
-   printf( "swapbacked: %d  ", page->swapbacked ) ;
-   printf( "comp_head: %d  ", page->comp_head ) ;
-   printf( "comp_tail: %d  ", page->comp_tail ) ;
-   printf( "huge: %d  ", page->huge ) ;
-   printf( "unevictable: %d  ", page->unevictable ) ;
-   printf( "hwpoison: %d  ", page->hwpoison ) ;
-   printf( "nopage: %d  ", page->nopage ) ;
-   printf( "ksm: %d  ", page->ksm ) ;
-   printf( "thp: %d  ", page->thp ) ;
-   printf( "balloon: %d  ", page->balloon ) ;
-   printf( "zero_page: %d  ", page->zero_page ) ;
-   printf( "idle: %d  ", page->idle ) ;
-   printf( "pgtable: %d  ", page->pgtable ) ;
+
+   if( page->present && !page->swapped ) {
+      printf( " pfn: " ANSI_COLOR_GREEN "0x%07zu " ANSI_COLOR_RESET, (size_t) page->pfn ) ;
+      printf( "#:%3" PRIu64 " ", page->page_count ) ;
+      printf( " Flags: " ) ;
+      printf( ANSI_COLOR_YELLOW   "%s" ANSI_COLOR_RESET, page->soft_dirty  ? "S-D" : "   " ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->exclusive   ? 'X' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->file_mapped ? 'F' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%s" ANSI_COLOR_RESET, page->ksm         ? "KSM" : "   " ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->zero_page   ? '0' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->locked      ? 'L' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->slab        ? 'S' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->writeback   ? 'W' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->buddy       ? 'B' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->idle        ? 'I' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->pgtable     ? 'P' : ' ' ) ;
+      printf( "\\" ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->huge        ? 'H' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->thp         ? 'T' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->comp_head   ? '<' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->comp_tail   ? '>' : ' ' ) ;
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->balloon     ? 'B' : ' ' ) ;
+
+      printf( " IO:" ) ;
+      printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->error       ? '!' : ' ' ) ;
+      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->uptodate    ? 'U' : ' ' ) ;
+      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->dirty       ? 'D' : ' ' ) ;
+
+      printf( "LRU:" ) ;
+      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->lru         ? 'L' : ' ' ) ;
+      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->active      ? 'A' : ' ' ) ;
+      printf( ANSI_COLOR_MAGENTA  "%c" ANSI_COLOR_RESET, page->unevictable ? 'U' : ' ' ) ;
+      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->referenced  ? 'R' : ' ' ) ;
+      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->reclaim     ? 'R' : ' ' ) ;
+      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->mmap        ? 'M' : ' ' ) ;
+      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->anon        ? 'A' : ' ' ) ;
+      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->swapcache   ? 'C' : ' ' ) ;
+      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->swapbacked  ? 'B' : ' ' ) ;
+
+      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->nopage      ? 'N' : ' ' ) ;
+      printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->hwpoison    ? '!' : ' ' ) ;
+
+      printf( " %s", get_iomem_region_description( (void*) page->pfn ) ) ;
+   }
+
    printf( "\n" ) ;
 }
 
@@ -203,6 +214,58 @@ void closePagemap() {
 
    closePagecount() ;
    closePageflags() ;
+}
+
+
+void printKey( FILE* outStream ) {
+   PRINT_USAGE( outStream, "Key for --phys option\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "Each line starts with the virtual address for each page.\n" ) ;
+   PRINT_USAGE( outStream, "If the page is swapped, it will print swapped with the type and offset.\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "pfn: Page Frame Number.  Essentially, the physical page.\n" ) ;
+   PRINT_USAGE( outStream, "#:   the number of times each page is mapped\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "Flags:\n" ) ;
+   PRINT_USAGE( outStream, "S-D: page is soft-dirty (it's been written to recently)\n" ) ;
+   PRINT_USAGE( outStream, "X:   page exclusively mapped\n" ) ;
+   PRINT_USAGE( outStream, "F:   page is file mapped and not anonymously mapped\n" ) ;
+   PRINT_USAGE( outStream, "KSM: kernel samepage merging: Identical memory pages are dynamically shared\n" ) ;
+   PRINT_USAGE( outStream, "     between processes\n" ) ;
+   PRINT_USAGE( outStream, "0:   zero page for pfn_zero or huge_zero page\n" ) ;
+   PRINT_USAGE( outStream, "L:   locked for exclusive access, e.g. by undergoing read/write IO\n" ) ;
+   PRINT_USAGE( outStream, "S:   page is managed by the SLAB/SLOB/SLUB/SLQB kernel memory allocator\n" ) ;
+   PRINT_USAGE( outStream, "W:   writeback: page is being synced to disk\n" ) ;
+   PRINT_USAGE( outStream, "B:   a free memory block managed by the buddy system allocator\n" ) ;
+   PRINT_USAGE( outStream, "I:   idle: The page has not been accessed since it was marked idle\n" ) ;
+   PRINT_USAGE( outStream, "P:   the page is in use as a page table\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "\\    the end of regular flags and the start of huge page flags\n" ) ;
+   PRINT_USAGE( outStream, "H:   huge TLB page\n" ) ;
+   PRINT_USAGE( outStream, "T:   transparent huge page:  Contiguous pages that form a huge allocation\n" ) ;
+   PRINT_USAGE( outStream, "<:   the head of a contiguous block of pages\n" ) ;
+   PRINT_USAGE( outStream, ">:   the tail of a contiguous block of pages\n" ) ;
+   PRINT_USAGE( outStream, "B:   page is tagged for balloon compaction\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "IO:  I/O flags\n" ) ;
+   PRINT_USAGE( outStream, "!:   IO error occurred\n" ) ;
+   PRINT_USAGE( outStream, "U:   page has up-to-date data for file backed page\n" ) ;
+   PRINT_USAGE( outStream, "D:   page page has been written to and contains new data\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "LRU: least recently used flags\n" ) ;
+   PRINT_USAGE( outStream, "L:   page is in one of the LRU lists\n" ) ;
+   PRINT_USAGE( outStream, "A:   active: page is in the active LRU list\n" ) ;
+   PRINT_USAGE( outStream, "U:   unevictable: It is pinned and not a candidate for reclamation\n" ) ;
+   PRINT_USAGE( outStream, "R:   referenced: page has been referenced since last LRU list enqueue/requeue\n" ) ;
+   PRINT_USAGE( outStream, "R:   reclaim: page will be reclaimed soon after its pageout IO completed\n" ) ;
+   PRINT_USAGE( outStream, "M:   memory mapped page\n" ) ;
+   PRINT_USAGE( outStream, "A:   anonymous: memory mapped page that is not part of a file\n" ) ;
+   PRINT_USAGE( outStream, "C:   swapCache: page is mapped to swap space, i.e. has an associated swap entry\n" ) ;
+   PRINT_USAGE( outStream, "B:   swapBacked: page is backed by swap/RAM\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "Rarely seen flags\n" ) ;
+   PRINT_USAGE( outStream, "N:   no page frame exists at the requested address\n" ) ;
+   PRINT_USAGE( outStream, "!:   hardware detected memory corruption: Don't touch this page\n" ) ;
 }
 
 /// NOLINTEND( readability-magic-numbers )

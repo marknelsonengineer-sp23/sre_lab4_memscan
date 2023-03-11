@@ -39,6 +39,7 @@ OUTPUT OPTIONS
 
 PROGRAM OPTIONS
   -h, --help               display this help and exit
+  -k, --key                display key to the --phys flags
   -v, --version            output version information and exit
 
 ````
