@@ -23,6 +23,7 @@
       <w>mlock</w>
       <w>mprotect</w>
       <w>nopage</w>
+      <w>optarg</w>
       <w>pagecount</w>
       <w>pagefile</w>
       <w>pageflag</w>
@@ -37,6 +38,7 @@
       <w>slub</w>
       <w>strstr</w>
       <w>strtok</w>
+      <w>strtol</w>
       <w>swapbacked</w>
       <w>swapcache</w>
       <w>swapfiles</w>
