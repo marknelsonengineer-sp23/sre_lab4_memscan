@@ -46,4 +46,21 @@ BOOST_AUTO_TEST_CASE( test_getEndianness ) {
 #endif
 }
 
+BOOST_AUTO_TEST_CASE( test_GET_BIT ) {
+   BOOST_CHECK(  GET_BIT( 0b0001, 0) ) ;
+   BOOST_CHECK( !GET_BIT( 0b1110, 0) ) ;
+
+   BOOST_CHECK(  GET_BIT( 0b0010, 1) ) ;
+   BOOST_CHECK( !GET_BIT( 0b1101, 1) ) ;
+
+   BOOST_CHECK(  GET_BIT( 0b0100, 2) ) ;
+   BOOST_CHECK( !GET_BIT( 0b1011, 2) ) ;
+
+   BOOST_CHECK(  GET_BIT( 0b1000, 3) ) ;
+   BOOST_CHECK( !GET_BIT( 0b0111, 3) ) ;
+
+   BOOST_CHECK(  GET_BIT( 0x8000000000000000, 63) ) ;
+   BOOST_CHECK( !GET_BIT( 0x7fffffffffffffff, 63) ) ;
+}
+
 BOOST_AUTO_TEST_SUITE_END()
