@@ -34,11 +34,9 @@ void printUsage( FILE* outStream ) ;
 
 /// Set the program name
 ///
-/// @todo Copy into a buffer and do some parameter checking
-///
 /// @param newProgramName The new program name
 /// @return `true` if successful.  `false` if unsuccessful.
-extern bool setProgramName( char* newProgramName ) ;
+extern bool setProgramName( const char* newProgramName ) ;
 
 
 /// Get the program name

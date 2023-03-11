@@ -15,7 +15,7 @@ TARGET = memscan
 all:  $(TARGET) lint doc
 
 CC        = gcc
-CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17
+CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\"
 LINT      = clang-tidy
 LINTFLAGS = --quiet
 MAKE      = make

@@ -19,13 +19,11 @@
 #include "config.h"  // Just cuz
 #include "iomem.h"   // For summarize_iomem()
 #include "pagemap.h" // For getPageSizeInBytes()
+#include "trim.h"    // For trim()
 #include "version.h" // For FULL_VERSION
 
 /// The x86 `RET` machine instruction (for both 32- and 64-bit machines)
 #define X86_RET_INSTRUCTION 0xC3
-
-/// Buffer to hold the program name
-char programName[ MAX_PROGRAM_NAME ] = {} ;
 
 
 struct IncludePattern* patternHead = NULL ;
@@ -152,7 +150,9 @@ void processOptions( int argc, char* argv[] ) {
       exit( EXIT_FAILURE );
    }
 
-   setProgramName( argv[0] ) ;
+   if( strlen( getProgramName() ) == 0 ) {
+      setProgramName( argv[0] ) ;
+   }
 
    /// Set locale so numbers we can print localized numbers i.e. `1,024`.
    char* sRetVal;
@@ -186,7 +186,7 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case 'v':
-            printf( "memscan version %s ", FULL_VERSION ) ;
+            printf( "%s version %s ", getProgramName(), FULL_VERSION ) ;
             printf( "running on a %zu-bit ", sizeof( void* ) << 3 ) ;
             printf( "%s Endian system ", getEndianness() == BIG ? "Big" : "Little" ) ;
             printf( "with %'zu-byte page size\n", getPageSizeInBytes() ) ;
@@ -236,19 +236,30 @@ void processOptions( int argc, char* argv[] ) {
    }
 } // processOptions
 
+/// Buffer to hold the program name
+#ifdef TARGET
+   char programName[ MAX_PROGRAM_NAME ] = TARGET ;
+#else
+   char programName[ MAX_PROGRAM_NAME ] = {} ;
+#endif
 
-bool setProgramName( char* newProgramName ) {
+bool setProgramName( const char* newProgramName ) {
    if( newProgramName == NULL ) {
       /// @todo Print an appropriate error message
       return false ;
    }
 
-   if( strlen( newProgramName ) == 0 ) {
+   char trialProgramName[ MAX_PROGRAM_NAME ] = {} ;
+   strncpy( trialProgramName, newProgramName, MAX_PROGRAM_NAME ) ;
+
+   trim( trialProgramName ) ;
+
+   if( strlen( trialProgramName ) == 0 ) {
       /// @todo Print an appropriate error message
       return false ;
    }
 
-   strncpy( programName, newProgramName, MAX_PROGRAM_NAME );
+   strncpy( programName, trialProgramName, MAX_PROGRAM_NAME );
 
    return true;
 } // setProgramName
