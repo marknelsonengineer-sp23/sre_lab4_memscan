@@ -38,4 +38,12 @@ BOOST_AUTO_TEST_CASE( test_ProgramName ) {
    BOOST_CHECK_EQUAL( getProgramName(), "Chili" ) ;
 }
 
+BOOST_AUTO_TEST_CASE( test_getEndianness ) {
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+   BOOST_CHECK_EQUAL( getEndianness(), LITTLE ) ;
+#else
+   BOOST_CHECK_EQUAL( getEndianness(), BIG ) ;
+#endif
+}
+
 BOOST_AUTO_TEST_SUITE_END()
