@@ -10,7 +10,7 @@
 
 #include <stdio.h>   // For printf() fprintf() fopen() and FILE
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
-#include <string.h>  // For strtok() strcmp() and memset()
+#include <string.h>  // For strtok() strcmp() strstr() memset()
 
 #include "colors.h"  // For ANSI colors i.e. #ANSI_COLOR_RED
 #include "config.h"  // For FATAL_ERROR and other configuration options
@@ -116,7 +116,40 @@ void readMaps() {
       map[numMaps].numBytes = map[numMaps].pAddressEnd - map[numMaps].pAddressStart ;
       map[numMaps].numPages = map[numMaps].numBytes >> getPageSizeInBits() ;
 
-      map[numMaps].include = true ;
+      if( patternHead == NULL ) {  /// If PATTERN is not specified, then include all mapped regions
+         map[numMaps].include = true ;
+      } else {  /// If PATTERN is specified, then only include regions that include PATTERN
+         map[numMaps].include = false ;
+
+         if( map[numMaps].sPath != NULL) {
+            struct IncludePattern* current = patternHead ;
+            while( current != NULL ) {
+               if( strstr( map[numMaps].sPath, current->pattern ) != NULL ) {
+                  map[numMaps].include = true ;
+                  break ;
+               }
+
+               // Compare pattern with 'r' 'w' and 'x' permissions
+               if( strlen( current->pattern ) == 1 ) {
+                  if( current->pattern[0] == 'r' && map[numMaps].sPermissions[0] == 'r' ) {
+                     map[numMaps].include = true ;
+                     break ;
+                  }
+                  if( current->pattern[0] == 'w' && map[numMaps].sPermissions[1] == 'w' ) {
+                     map[numMaps].include = true ;
+                     break ;
+                  }
+                  if( current->pattern[0] == 'x' && map[numMaps].sPermissions[2] == 'x' ) {
+                     map[numMaps].include = true ;
+                     break ;
+                  }
+               }
+
+               current = current->next ;
+            }
+         }
+      }
+
       // Skip excluded paths
       if( map[numMaps].sPath != NULL ) {
          for( size_t j = 0 ; ExcludePaths[j][0] != '\0' ; j++ ) {
@@ -201,6 +234,11 @@ void readPagemapInfo() {
 
 void printMaps() {
    for( size_t i = 0 ; i < numMaps ; i++ ) {
+      // If we are filtering on patterns, and it's not included, then skip the line.
+      if( patternHead != NULL && !map[i].include ) {
+         continue ;
+      }
+
       printf( "%2zu: %p - %p  %s  ",
                i
               ,map[i].pAddressStart

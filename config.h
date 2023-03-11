@@ -114,3 +114,15 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
 /// @return Return `1` if the bit is set and `0` if it's not.
 ///         The return datatype is the same datatype as `value`.
 #define GET_BIT( value, bitPosition ) (((value) >> (bitPosition)) & 1)
+
+
+/// Linked list of patterns to match against when processing map regions
+struct IncludePattern {
+                                     ///  Search for this pattern.
+   char*                  pattern ;  ///< Search MapEntry.sPath for pattern and include the region if there's a hit.
+                                     ///< Search patterns `r` `w` and `x` will match on MapEntry.sPermissions.
+   struct IncludePattern* next ;     ///< The next #IncludePattern in the linked list or `NULL` for the end of the list.
+} ;
+
+/// The head pointer to a list of region patterns
+extern struct IncludePattern* patternHead ;

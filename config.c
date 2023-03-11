@@ -14,7 +14,7 @@
 #include <stddef.h>  // For NULL
 #include <stdio.h>   // For printf()
 #include <stdlib.h>  // For exit() EXIT_SUCCESS EXIT_FAILURE
-#include <string.h>  // For strlen() & strncpy()
+#include <string.h>  // For strlen() strncpy()
 
 #include "config.h"  // Just cuz
 #include "iomem.h"   // For summarize_iomem()
@@ -35,7 +35,11 @@
 
 
 /// Buffer to hold the program name
-char programName[ MAX_PROGRAM_NAME ] = {};
+char programName[ MAX_PROGRAM_NAME ] = {} ;
+
+
+struct IncludePattern* patternHead = NULL ;
+
 
 enum Endian getEndianness() {
    int i = 1;
@@ -48,8 +52,12 @@ enum Endian getEndianness() {
 
 
 void printUsage( FILE* outStream ) {
-   PRINT_USAGE( outStream, "Usage: memscan [OPTION]\n" ) ;
+   PRINT_USAGE( outStream, "Usage: memscan [OPTION]... [PATTERN]... \n" ) ;
    PRINT_USAGE( outStream, "       memscan -i|--iomem\n" ) ;
+   PRINT_USAGE( outStream, "\n" ) ;
+   PRINT_USAGE( outStream, "  When PATTERN is present, only process sections with a path that includes PATTERN\n" ) ;
+   PRINT_USAGE( outStream, "  If PATTERN is 'r' 'w' or 'x' then include sections with that permission\n" ) ;
+   PRINT_USAGE( outStream, "  When PATTERN is not present, process all sections\n" ) ;
    PRINT_USAGE( outStream, "\n" ) ;
    PRINT_USAGE( outStream, "The options below may be used to select memscan's operation\n" ) ;
    PRINT_USAGE( outStream, "\n" ) ;
@@ -211,12 +219,25 @@ void processOptions( int argc, char* argv[] ) {
       }
    }
 
-   if (optind < argc) {
-      PRINT_USAGE( stderr, "%s: Unknown additional arguments.  Exiting.\n", programName ) ;
-      printUsage( stderr ) ;
-      exit( EXIT_FAILURE ) ;
+   while (optind < argc) {
+      /// @todo I am not `free`ing this memory and I should be
+      struct IncludePattern* newPattern = malloc( sizeof ( struct IncludePattern ) ) ;
+      if( newPattern == NULL ) {
+         FATAL_ERROR( "unable to allocate memory for newPattern") ;
+      }
+      newPattern->pattern = malloc( strlen( argv[optind] ) ) ;
+      if( newPattern->pattern == NULL ) {
+         FATAL_ERROR( "unable to allocate memory for pattern") ;
+      }
+      strncpy( newPattern->pattern, argv[optind], strlen( argv[optind] ) ) ;
+
+      // Insert newPattern to the linked list
+      newPattern->next = patternHead ;
+      patternHead = newPattern ;
+
+      optind += 1 ;
    }
-}
+} // processOptions
 
 
 bool setProgramName( char* newProgramName ) {
@@ -233,7 +254,7 @@ bool setProgramName( char* newProgramName ) {
    strncpy( programName, newProgramName, MAX_PROGRAM_NAME );
 
    return true;
-}
+} // setProgramName
 
 
 char* getProgramName() {

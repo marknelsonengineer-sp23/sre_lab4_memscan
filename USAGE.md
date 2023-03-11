@@ -1,8 +1,12 @@
 Usage
 =====
 ````
-Usage: memscan [OPTION]
+Usage: memscan [OPTION]... [PATTERN]... 
        memscan -i|--iomem
+
+  When PATTERN is present, only process sections with a path that includes PATTERN
+  If PATTERN is 'r' 'w' or 'x' then include sections with that permission
+  When PATTERN is not present, process all sections
 
 The options below may be used to select memscan's operation
 
