@@ -194,7 +194,7 @@ void printPageInfo( const struct PageInfo* page ) {
       printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->nopage      ? 'N' : ' ' ) ;
       printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->hwpoison    ? '!' : ' ' ) ;
 
-      printf( " %s", get_iomem_region_description( (void*) page->pfn ) ) ;
+      printf( "  %s", get_iomem_region_description( (void*) page->pfn ) ) ;
    }
 
    printf( "\n" ) ;
