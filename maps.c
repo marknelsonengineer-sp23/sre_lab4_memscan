@@ -266,7 +266,7 @@ void printMaps() {
 
       // Print the path
       if( printPath ) {
-         printf( "%s", map[i].sPath != NULL ? map[i].sPath : "" ) ;
+         printf( ANSI_COLOR_BRIGHT_WHITE "%s" ANSI_COLOR_RESET, map[i].sPath != NULL ? map[i].sPath : "" ) ;
       }
 
       finishRegion:
