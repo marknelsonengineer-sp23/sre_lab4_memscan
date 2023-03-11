@@ -4,10 +4,13 @@
 //
 /// Process command line parameters and hold configuration for memscan
 ///
+/// @see https://linux.die.net/man/3/getopt_long
+///
 /// @file   config.c
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <errno.h>   // For errno
 #include <getopt.h>  // For getopt_long() struct option
 #include <limits.h>  // For PATH_MAX
 #include <locale.h>  // For set_locale() LC_NUMERIC
@@ -22,7 +25,8 @@
 #include "trim.h"    // For trim()
 #include "version.h" // For FULL_VERSION
 
-/// The x86 `RET` machine instruction (for both 32- and 64-bit machines)
+/// The x86 `RET` machine instruction (for both 32- and 64-bit machines) which
+/// is the default value for the `--scan_byte` option
 #define X86_RET_INSTRUCTION 0xC3
 
 
@@ -85,6 +89,8 @@ void printUsage( FILE* outStream ) {
 
 /// Define the long command line options for memscan and map them to
 /// #SINGLE_OPTION_STRING
+///
+/// @see https://linux.die.net/man/3/getopt_long
 static struct option long_options[] = {
    // PRE-SCAN OPTIONS
    { "block",     required_argument, 0, 'b' },
@@ -177,8 +183,36 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case '3':
-            /// @todo Need to parse for the =HEX and set byteToScanFor
             scanForByte = true ;
+            if( optarg != NULL ) {
+               int base = 10 ;  /// @NOLINT(readability-magic-numbers):  Base 10 is a legit magic number
+               trim( optarg ) ;
+               if( optarg[0] == '0' && optarg[1] == 'x' ) {
+                  base = 16 ;  // NOLINT(readability-magic-numbers)
+                  optarg += 2 ;  // Skip the '0x'
+               }
+               if( optarg[0] == '0' && optarg[1] == 'b' ) {
+                  base = 2 ;
+                  optarg += 2 ; // Skip the '0b'
+               }
+               errno = 0 ;
+               char* strtolRemainder = NULL ;
+               long trialValue = strtol( optarg, &strtolRemainder, base ) ;
+               // printf( "trialValue=%ld  strtolRemainder=%p [%s]  errno=%d\n", trialValue, strtolRemainder, strtolRemainder, errno ) ;
+
+               // If there's an error or excess characters...
+               if( errno != 0 || strlen( strtolRemainder ) > 0 ) {
+                  FATAL_ERROR( "Illegal format for --scan_byte=HEX" ) ;
+                  break ;
+               }
+
+               if( trialValue < 0 || trialValue > 255 ) {  // NOLINT(readability-magic-numbers)
+                  FATAL_ERROR( "--scan_byte=HEX is out of range" ) ;
+                  break ;
+               }
+
+               byteToScanFor = trialValue ;
+            } // if( optarg != NULL )
             break ;
 
          case 'i':
