@@ -28,7 +28,6 @@ PRE-SCAN OPTIONS
 SCAN OPTIONS
       --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)
                            or c3 (the x86 RET instruction) by default
-      --histogram          scan memory and generate a histogram of byte values
       --shannon            compute Shannon Entropy for each mmap region
                            and physical page
 

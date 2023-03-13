@@ -36,7 +36,8 @@
 #include "pagecount.h"    // For getPagecount() closePagecount()
 #include "pageflags.h"    // For setPageflags() closePageflags()
 #include "pagemap.h"      // Just cuz
-
+#include "shannon.h"      // For computeShannonEntropy() getShannonClassification()
+#include "version.h"      // For STRINGIFY_VALUE()
 
 /// The `pagemap` file we intend to read from `/proc`
 #define PAGEMAP_FILE "/proc/self/pagemap"
@@ -194,7 +195,13 @@ void printPageInfo( const struct PageInfo* page ) {
       printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->nopage      ? 'N' : ' ' ) ;
       printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->hwpoison    ? '!' : ' ' ) ;
 
-      printf( "  %s", get_iomem_region_description( (void*) page->pfn ) ) ;
+      printf( ANSI_COLOR_BRIGHT_CYAN "  %s " ANSI_COLOR_RESET, get_iomem_region_description( (void*) page->pfn ) ) ;
+
+      if( scanForShannon ) {
+         double entropy = computeShannonEntropy( page->virtualAddress, getPageSizeInBytes() ) ;
+         printf( "H: %5.3lf ", entropy ) ;
+         printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( entropy ) ) ;
+      }
    }
 
    printf( "\n" ) ;

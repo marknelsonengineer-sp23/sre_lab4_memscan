@@ -67,7 +67,6 @@ extern bool allocateSharedMemory      ;  ///< `true` if `--shared` is set
 extern bool fillAllocatedMemory       ;  ///< `true` if `--fill` is set
 extern bool createThreads             ;  ///< `true` if `--threads` is set
 extern bool scanForByte               ;  ///< `true` if `--scan_byte` is set
-extern bool scanForHistogram          ;  ///< `true` if `--histogram` is set
 extern bool scanForShannon            ;  ///< `true` if `--shannon` is set
 extern bool iomemSummary              ;  ///< `true` if `--iomem` is set
 extern bool printPath                 ;  ///< `true` if `--path` is set

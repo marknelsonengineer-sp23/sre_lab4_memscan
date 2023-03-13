@@ -16,6 +16,7 @@ all:  $(TARGET) lint doc
 
 CC        = gcc
 CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\"
+LDLIBS    = -lm
 LINT      = clang-tidy
 LINTFLAGS = --quiet
 MAKE      = make
@@ -36,7 +37,7 @@ memscan.o: maps.h config.h
 	$(CC) $(CFLAGS) -c $<
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ)
+	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $(OBJ)
 
 lint: $(TARGET)
 	$(LINT) $(LINTFLAGS) $(SRC) --

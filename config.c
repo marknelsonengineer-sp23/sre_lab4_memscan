@@ -71,7 +71,6 @@ void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "SCAN OPTIONS\n" ) ;
    PRINT_USAGE( outStream, "      --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)\n" ) ;
    PRINT_USAGE( outStream, "                           or c3 (the x86 RET instruction) by default\n" ) ;
-   PRINT_USAGE( outStream, "      --histogram          scan memory and generate a histogram of byte values\n" ) ;
    PRINT_USAGE( outStream, "      --shannon            compute Shannon Entropy for each mmap region\n" ) ;
    PRINT_USAGE( outStream, "                           and physical page\n" ) ;
    PRINT_USAGE( outStream, "\n" ) ;
@@ -104,11 +103,10 @@ static struct option long_options[] = {
    { "threads",   required_argument, 0, 't' },
    // SCAN OPTIONS
    { "scan_byte", optional_argument, 0, '3' },
-   { "histogram", no_argument,       0, '4' },
-   { "shannon",   no_argument,       0, '5' },
+   { "shannon",   no_argument,       0, '4' },
    // OUTPUT OPTIONS
    { "iomem",     no_argument,       0, 'i' },
-   { "path",      no_argument,       0, '6' },
+   { "path",      no_argument,       0, '5' },
    { "phys",      no_argument,       0, 'p' },
    // PROGRAM OPTIONS
    { "help",      no_argument,       0, 'h' },
@@ -132,7 +130,6 @@ bool allocateSharedMemory      = 0 ;
 bool fillAllocatedMemory       = 0 ;
 bool createThreads             = 0 ;
 bool scanForByte               = 0 ;
-bool scanForHistogram          = 0 ;
 bool scanForShannon            = 0 ;
 bool iomemSummary              = 0 ;
 bool printPath                 = 0 ;
@@ -184,6 +181,10 @@ void processOptions( int argc, char* argv[] ) {
 
          case '3':
             scanForByte = true ;
+            if( scanForShannon ) {
+               FATAL_ERROR( "can not simultaneously scan for Shannon Entropy and for byte") ;
+            }
+
             if( optarg != NULL ) {
                int base = 10 ;  /// @NOLINT(readability-magic-numbers):  Base 10 is a legit magic number
                trim( optarg ) ;
@@ -215,6 +216,13 @@ void processOptions( int argc, char* argv[] ) {
             } // if( optarg != NULL )
             break ;
 
+         case '4':
+            scanForShannon = true ;
+            if( scanForByte ) {
+               FATAL_ERROR( "can not simultaneously scan for Shannon Entropy and for byte") ;
+            }
+            break ;
+
          case 'i':
             iomemSummary = true ;
             break ;
@@ -239,7 +247,7 @@ void processOptions( int argc, char* argv[] ) {
             exit( EXIT_SUCCESS ) ;
             break ;
 
-         case '6':
+         case '5':
             printPath = true ;
             break;
 
@@ -270,12 +278,14 @@ void processOptions( int argc, char* argv[] ) {
    }
 } // processOptions
 
+
 /// Buffer to hold the program name
 #ifdef TARGET
    char programName[ MAX_PROGRAM_NAME ] = TARGET ;
 #else
    char programName[ MAX_PROGRAM_NAME ] = {} ;
 #endif
+
 
 bool setProgramName( const char* newProgramName ) {
    if( newProgramName == NULL ) {

@@ -15,7 +15,9 @@
 #include "colors.h"  // For ANSI colors i.e. #ANSI_COLOR_RED
 #include "config.h"  // For FATAL_ERROR and other configuration options
 #include "maps.h"    // Just cuz
-#include "pagemap.h"
+#include "pagemap.h" // For PageInfo getPageInfo() printPageInfo() getPageSizeInBits()
+#include "shannon.h" // For scanForShannon()
+#include "version.h" // For STRINGIFY_VALUE()
 
 
 /// The `maps` file we intend to read from `/proc`
@@ -58,6 +60,7 @@ struct MapEntry {
    size_t numPages;         ///< The number of #PageInfo records allocated for this region
    struct PageInfo* pages;  ///< Pointer to a #PageInfo array
    size_t numBytesFound;    ///< Number of #byteToScanFor bytes found in this region when #scanForByte is set
+   double shannonEntropy;   ///< Shannon Entropy of the region when #scanForShannon is set
 } ;
 
 
@@ -200,13 +203,18 @@ void scanMaps() {
       }
 
       // Do the --scan_byte scan
-      for( void* scanThisAddress = map[i].pAddressStart ; scanThisAddress < map[i].pAddressEnd ; scanThisAddress++ ) {
-         if( scanForByte ) {
+      if( scanForByte ) {
+         for( void* scanThisAddress = map[i].pAddressStart ; scanThisAddress < map[i].pAddressEnd ; scanThisAddress++ ) {
             if( *(unsigned char*)scanThisAddress == byteToScanFor ) {
                map[i].numBytesFound++ ;
             }
-         } // if( scanForByte )
-      } // for( each address )
+         } // for( each address )
+      } // if( scanForByte )
+
+      if( scanForShannon ) {
+            map[i].shannonEntropy = computeShannonEntropy( map[i].pAddressStart, map[i].numBytes ) ;
+      } // if( scanForShannon )
+
    } // for()
 } // scanMaps()
 
@@ -258,10 +266,15 @@ void printMaps() {
       }
 
       if( scanForByte ) {
-         printf( "Scanned %'10zu bytes; found %'7zu 0x%02x bytes  ",
+         printf( "%'10zu bytes; found %'7zu 0x%02x bytes  ",
                   map[i].numBytes
                  ,map[i].numBytesFound
                  ,byteToScanFor ) ;
+      }
+
+      if( scanForShannon ) {
+         printf( "H: %5.3lf ", map[i].shannonEntropy ) ;
+         printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( map[i].shannonEntropy ) ) ;
       }
 
       // Print the path
