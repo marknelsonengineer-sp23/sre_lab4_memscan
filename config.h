@@ -114,6 +114,22 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
    (void)0
 
 
+/// Print a warning message to `stderr` (along with the program name).
+///
+/// @NOLINTBEGIN(cert-err33-c): No need to check the return value of `fprintf`
+///
+/// @param msg The message to print out.  When printed, it will begin
+///            with `progName: `.
+#define WARNING( msg, ... ) {     \
+   fprintf(                       \
+      stderr                      \
+     ,"%s: " msg ".\n"            \
+     ,getProgramName()            \
+     ,##__VA_ARGS__ ) ;  }        \
+   /* NOLINTEND(cert-err33-c) */  \
+   (void)0
+
+
 /// Get the `bitPosition` bit from `value`
 ///
 /// @param value       The source value
