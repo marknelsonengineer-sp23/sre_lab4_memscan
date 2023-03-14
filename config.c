@@ -10,6 +10,7 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <assert.h>  // For assert()
 #include <errno.h>   // For errno
 #include <getopt.h>  // For getopt_long() struct option
 #include <limits.h>  // For PATH_MAX
@@ -115,7 +116,6 @@ static struct option long_options[] = {
    { 0, 0, 0, 0 }
 };
 
-
 /// Define the single character option string
 const char SINGLE_OPTION_STRING[] = "b:fl:m:s:t:iphkv" ;
 
@@ -175,6 +175,36 @@ void processOptions( int argc, char* argv[] ) {
       }
 
       switch ( optionChar ) {
+         case 'b':
+            assert( optarg != NULL ) ;
+            openFileWithBlockIO = true ;
+            strncpy( blockPath, optarg, sizeof( blockPath ) ) ;
+            trim( blockPath ) ;
+            if( strlen( blockPath ) == 0 ) {
+               FATAL_ERROR( "--block must have a filename" ) ;
+            }
+            break ;
+
+         case '0':
+            assert( optarg != NULL ) ;
+            openFileWithStreamIO = true ;
+            strncpy( streamPath, optarg, sizeof( streamPath ) ) ;
+            trim( streamPath ) ;
+            if( strlen( streamPath ) == 0 ) {
+               FATAL_ERROR( "--stream must have a filename" ) ;
+            }
+            break ;
+
+         case '1':
+            assert( optarg != NULL ) ;
+            openFileWithMapIO = true ;
+            strncpy( mmapPath, optarg, sizeof( mmapPath ) ) ;
+            trim( mmapPath ) ;
+            if( strlen( mmapPath ) == 0 ) {
+               FATAL_ERROR( "--mmap must have a filename" ) ;
+            }
+            break ;
+
          case 'p':
             includePhysicalMemoryInfo = true ;
             break ;

@@ -12,6 +12,7 @@
 #include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
 
 #include "config.h"   // For processOptions()
+#include "files.h"    // For openPreScanFiles() readPreScanFiles() closePreScanFiles()
 #include "iomem.h"    // For read_iomem()
 #include "maps.h"     // For readEntries() scanEntries()
 #include "memscan.h"  // Just cuz
@@ -25,6 +26,8 @@
 /// @return The program's return code
 int main( int argc, char* argv[] ) {
    processOptions( argc, argv ) ;
+
+   openPreScanFiles() ;
 
    read_iomem() ;
 
@@ -51,6 +54,7 @@ int main( int argc, char* argv[] ) {
 
    printMaps() ;
 
+   closePreScanFiles() ;
    closePagemap() ;
 
    return EXIT_SUCCESS ;
