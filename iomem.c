@@ -43,6 +43,7 @@
 #include "config.h"  // For FATAL_ERROR()
 #include "iomem.h"   // Just cuz
 #include "trim.h"    // For trim_edges()
+#include "version.h" // For STRINGIFY_VALUE()
 
 
 /// The file to read from `/proc`
@@ -409,7 +410,9 @@ void print_iomem_summary() {
    Iomem_summary_t* type = iomem_summary_head;
 
    while( type != NULL ) {
-      printf( "%-28s  %'20zu\n", type->description, type->size ) ;
+      printf( "%-" STRINGIFY_VALUE( MAX_IOMEM_DESCRIPTION ) "s  ", type->description ) ;
+      printf( "%'20zu", type->size ) ;
+      printf( "\n" ) ;
       type = type->next ;
    }
 }
