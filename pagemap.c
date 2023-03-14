@@ -27,6 +27,7 @@
 #include <stdint.h>       // For uint64_t
 #include <stdio.h>        // For printf()
 #include <stdlib.h>       // For exit() EXIT_FAILURE
+#include <string.h>       // For memset()
 #include <sys/syscall.h>  // Definition of SYS_* constants
 #include <unistd.h>       // For sysconf() close()
 
@@ -82,7 +83,14 @@ struct PageInfo getPageInfo( void* vAddr ) {
 // printf( "%p\n", vAddr ) ;
 
    struct PageInfo page = {} ;
+   memset( &page, 0, sizeof( page ) ) ;
+
    page.virtualAddress = vAddr ;
+
+   /// Scan for Shannon entropy before reading `pagemap`, `pageflags` and `pagecount`
+   if( scanForShannon ) {
+      page.shannon = computeShannonEntropy( page.virtualAddress, getPageSizeInBytes() ) ;
+   }
 
    off_t pagemap_offset = (long) ((size_t) vAddr / getPageSizeInBytes() * PAGEMAP_ENTRY ) ;
 
@@ -198,9 +206,8 @@ void printPageInfo( const struct PageInfo* page ) {
       printf( ANSI_COLOR_BRIGHT_CYAN "  %s " ANSI_COLOR_RESET, get_iomem_region_description( (void*) page->pfn ) ) ;
 
       if( scanForShannon ) {
-         double entropy = computeShannonEntropy( page->virtualAddress, getPageSizeInBytes() ) ;
-         printf( "H: %5.3lf ", entropy ) ;
-         printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( entropy ) ) ;
+         printf( "H: %5.3lf ", page->shannon ) ;
+         printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( page->shannon ) ) ;
       }
    }
 

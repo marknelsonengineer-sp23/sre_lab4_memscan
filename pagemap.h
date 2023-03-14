@@ -63,6 +63,7 @@ struct PageInfo {
    bool     zero_page;       ///< From `/proc/kpageflags`.  Zero page for pfn_zero or huge_zero page.
    bool     idle;            ///< From `/proc/kpageflags`.  The page has not been accessed since it was marked idle (see Idle Page Tracking).
    bool     pgtable;         ///< From `/proc/kpageflags`.  The page is in use as a page table.
+   double   shannon;         ///< The Shannon Entropy of the page when `--shannon` is set.
 } ;
 
 
