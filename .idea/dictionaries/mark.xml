@@ -5,8 +5,10 @@
       <w>ahci</w>
       <w>asctime</w>
       <w>atexit</w>
+      <w>authorname</w>
       <w>btowc</w>
       <w>calloc</w>
+      <w>creatordate</w>
       <w>cxxflags</w>
       <w>dtors</w>
       <w>ecute</w>
@@ -19,6 +21,7 @@
       <w>fgetpos</w>
       <w>fgets</w>
       <w>fgetwc</w>
+      <w>fpreprocessed</w>
       <w>fprintf</w>
       <w>fputc</w>
       <w>fputwc</w>
@@ -30,6 +33,7 @@
       <w>ftell</w>
       <w>fwprintf</w>
       <w>fwscanf</w>
+      <w>gdiplus</w>
       <w>getc</w>
       <w>getopt</w>
       <w>getwc</w>
@@ -47,6 +51,7 @@
       <w>ldlibs</w>
       <w>lintflags</w>
       <w>malloc'd</w>
+      <w>marknelsonengineer</w>
       <w>mbrtoc</w>
       <w>mbsrtowcs</w>
       <w>mbstowcs</w>
@@ -68,6 +73,7 @@
       <w>putwc</w>
       <w>ramfs</w>
       <w>realloc</w>
+      <w>refname</w>
       <w>rtomb</w>
       <w>samepage</w>
       <w>setvbuf</w>
