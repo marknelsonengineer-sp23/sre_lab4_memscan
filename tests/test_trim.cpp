@@ -15,20 +15,20 @@ extern "C" {
    #include "../trim.h"
 }
 
-using namespace std;
+using namespace std ;
 
 /// Size of the test string buffer
 #define STRING_BUFFER_SIZE 1024
 
 /// Allocate a character buffer for testing
-char buffer[ STRING_BUFFER_SIZE ];
+char buffer[ STRING_BUFFER_SIZE ] ;
 
 /// Clear the buffer and then set it
 ///
 /// @param newContents Set the buffer to this string
 void clearAndSetBuffer( const char newContents[] ) {
-   memset( buffer, 'X', sizeof( buffer ) );  // Fill it full of X's
-   strncpy( buffer, newContents, sizeof( buffer ) );
+   memset( buffer, 'X', sizeof( buffer ) ) ;  // Fill it full of X's
+   strncpy( buffer, newContents, sizeof( buffer ) ) ;
 }
 
 
@@ -46,9 +46,9 @@ enum CharClass {
    ,END         ///< The character is the null terminator `'\0'`
 };
 
-extern "C" CharClass classifyChar( char inChar );
+extern "C" CharClass classifyChar( char inChar ) ;
 
-extern "C" char* shift_left( char* string_base, size_t current_position, size_t distance );
+extern "C" char* shift_left( char* string_base, size_t current_position, size_t distance ) ;
 
 /* ***************************************************************************/
 
