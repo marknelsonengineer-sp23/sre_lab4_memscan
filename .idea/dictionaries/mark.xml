@@ -1,23 +1,56 @@
 <component name="ProjectDictionaryState">
   <dictionary name="mark">
     <words>
+      <w>abcdefghijklmnopqrstuvwxyz</w>
       <w>ahci</w>
+      <w>asctime</w>
+      <w>atexit</w>
+      <w>btowc</w>
+      <w>calloc</w>
+      <w>cxxflags</w>
+      <w>dtors</w>
       <w>ecute</w>
+      <w>fclose</w>
       <w>fdffffff</w>
       <w>ffff</w>
       <w>fffff</w>
+      <w>fflush</w>
+      <w>fgetc</w>
+      <w>fgetpos</w>
+      <w>fgets</w>
+      <w>fgetwc</w>
       <w>fprintf</w>
+      <w>fputc</w>
+      <w>fputwc</w>
+      <w>fputws</w>
+      <w>freopen</w>
+      <w>fscanf</w>
       <w>fseek</w>
+      <w>fsetpos</w>
+      <w>ftell</w>
+      <w>fwprintf</w>
+      <w>fwscanf</w>
+      <w>getc</w>
       <w>getopt</w>
+      <w>getwc</w>
+      <w>getwchar</w>
+      <w>gmtime</w>
       <w>httt</w>
       <w>hugepages</w>
       <w>hwpoison</w>
+      <w>iomap</w>
       <w>iomem</w>
       <w>iphkv</w>
       <w>iphv</w>
       <w>kpagecount</w>
       <w>kpageflags</w>
+      <w>ldlibs</w>
+      <w>lintflags</w>
       <w>malloc'd</w>
+      <w>mbrtoc</w>
+      <w>mbsrtowcs</w>
+      <w>mbstowcs</w>
+      <w>memchr</w>
       <w>memscan</w>
       <w>memscan's</w>
       <w>mlock</w>
@@ -31,21 +64,85 @@
       <w>pageout</w>
       <w>pgtable</w>
       <w>preprocesor</w>
+      <w>putc</w>
+      <w>putwc</w>
       <w>ramfs</w>
+      <w>realloc</w>
+      <w>rtomb</w>
       <w>samepage</w>
+      <w>setvbuf</w>
       <w>shmctl</w>
       <w>slqb</w>
       <w>slub</w>
+      <w>sscanf</w>
+      <w>strchr</w>
+      <w>strftime</w>
+      <w>strpbrk</w>
+      <w>strrchr</w>
       <w>strstr</w>
+      <w>strtod</w>
+      <w>strtof</w>
+      <w>strtoimax</w>
       <w>strtok</w>
       <w>strtol</w>
+      <w>strtold</w>
+      <w>strtoll</w>
+      <w>strtoul</w>
+      <w>strtoull</w>
+      <w>strtoumax</w>
       <w>swapbacked</w>
       <w>swapcache</w>
       <w>swapfiles</w>
+      <w>swprintf</w>
+      <w>swscanf</w>
+      <w>thrd</w>
+      <w>timedlock</w>
+      <w>timedwait</w>
+      <w>tmpfile</w>
+      <w>tmpnam</w>
+      <w>trylock</w>
       <w>unevictable</w>
+      <w>ungetc</w>
+      <w>ungetwc</w>
       <w>vboxguest</w>
+      <w>vfprintf</w>
+      <w>vfscanf</w>
+      <w>vfwprintf</w>
+      <w>vfwscanf</w>
       <w>vmwgfx</w>
+      <w>vprintf</w>
+      <w>vscanf</w>
+      <w>vsnprintf</w>
+      <w>vsprintf</w>
+      <w>vsscanf</w>
+      <w>vswprintf</w>
+      <w>vswscanf</w>
+      <w>vwprintf</w>
+      <w>vwscanf</w>
+      <w>wcrtomb</w>
+      <w>wcschr</w>
+      <w>wcsftime</w>
+      <w>wcspbrk</w>
+      <w>wcsrchr</w>
+      <w>wcsrtombs</w>
+      <w>wcsstr</w>
+      <w>wcstod</w>
+      <w>wcstof</w>
+      <w>wcstoimax</w>
+      <w>wcstok</w>
+      <w>wcstol</w>
+      <w>wcstold</w>
+      <w>wcstoll</w>
+      <w>wcstombs</w>
+      <w>wcstoul</w>
+      <w>wcstoull</w>
+      <w>wcstoumax</w>
+      <w>wcsxfrm</w>
+      <w>wctob</w>
+      <w>wmemchr</w>
+      <w>wprintf</w>
       <w>writeback</w>
+      <w>wscanf</w>
     </words>
   </dictionary>
 </component>
