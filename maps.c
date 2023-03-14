@@ -127,11 +127,6 @@ void readMaps() {
          if( map[numMaps].sPath != NULL) {
             struct IncludePattern* current = patternHead ;
             while( current != NULL ) {
-               if( strstr( map[numMaps].sPath, current->pattern ) != NULL ) {
-                  map[numMaps].include = true ;
-                  break ;
-               }
-
                // Compare pattern with 'r' 'w' and 'x' permissions
                if( strlen( current->pattern ) == 1 ) {
                   if( current->pattern[0] == 'r' && map[numMaps].sPermissions[0] == 'r' ) {
@@ -146,10 +141,21 @@ void readMaps() {
                      map[numMaps].include = true ;
                      break ;
                   }
+                  if(    current->pattern[0] == 'r'
+                      || current->pattern[0] == 'w'
+                      || current->pattern[0] == 'x' ) {
+                     break ;
+                  }
+               }
+
+               // If not `r`, `w` or `x`, then compare with `pattern`
+               if( strstr( map[numMaps].sPath, current->pattern ) != NULL ) {
+                  map[numMaps].include = true ;
+                  break ;
                }
 
                current = current->next ;
-            }
+            } // while( current != NULL )
          }
       }
 
@@ -182,7 +188,7 @@ void readMaps() {
 
       numMaps++;
       pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file );
-   } // while()
+   } // while( pRead != NULL )
 
    int iRetVal = fclose( file ) ;
    if( iRetVal != 0 ) {
