@@ -8,11 +8,7 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#define BOOST_TEST_MAIN  // in only one cpp file
-
-#include <boost/test/included/unit_test.hpp>  // include this to get main()
-
-#include <boost/test/tools/output_test_stream.hpp>
+#define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
 extern "C" {

@@ -33,7 +33,7 @@ test_iomap.o: ../colors.h
 	$(CXX) $(CXXFLAGS) -c $<
 
 $(TARGET): $(OBJ) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST_OBJS) -lboost_system -lboost_thread -lboost_unit_test_framework
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST_OBJS)
 
 lint: $(TARGET)
 	$(LINT) $(LINTFLAGS) $(SRC) --
