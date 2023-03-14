@@ -1,6 +1,16 @@
 Contribute to MemScan
 =====================
 
+### Setup the development environment
+- THIS SECTION IS INCOMPLETE AND NOT TESTED
+  - ...but it worked on Rasberian!
+- Install Boost ( # apt-get install libboost-all-dev )
+- Install clang-tidy ( # apt-get install clang-tidy )
+- Install doxygen ( # apt-get install doxygen )
+- Install python3-pip ( # pacman -S python-pip ) ( # apt-get install python3-pip )
+- Install GitPython ( # pip install GitPython )
+- Install GraphViz (for DOT)  ( # apt-get install graphviz )
+
 ### Handling errors & warnings
 - MemScan does not have a dedicated logger.
 - Messages and exceptions should be pre-pended with #getProgramName and sent 
@@ -76,4 +86,3 @@ Contribute to MemScan
 - Scrub all `@todo`s
 - Scrub GitHub issues
 - Tag the release in Git
-- 
