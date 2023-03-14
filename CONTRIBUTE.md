@@ -15,10 +15,10 @@ Contribute to MemScan
     or comment and return `false`.  These can be caught and tested by Boost tests.
     - Using this technique gives me a works/doesn't work test, but we loose
       fidelity in that we don't get a reason code or message.  I'm willing to
-      accept that as I'd like to focus on writing a tradational command-line
-      progam in C.  Bare-bones tests will tell us if someting works or doesn't
+      accept that as I'd like to focus on writing a traditional command-line
+      program in C.  Bare-bones tests will tell us if something works or doesn't
       but not _why_.
-    - If TESTING is set, then you cam return `false` for testable errors.
+    - If TESTING is set, then you can return `false` for testable errors.
 - Use #FATAL_ERROR to print a message and `exit( EXIT_FAILURE )`.
 
 ````
