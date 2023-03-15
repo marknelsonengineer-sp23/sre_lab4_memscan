@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include <assert.h>   // For assert()
 #include <limits.h>   // For PATH_MAX
 #include <stdbool.h>  // For bool
 #include <stdio.h>    // For FILE stderr fprintf()
@@ -91,11 +92,32 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
 
 /// Print `...` to `outStream`.
 ///
+/// @NOLINTBEGIN(cert-err33-c): No need to check the return value of `fprintf`
+///
 /// @param outStream The output stream is usually `stderr` or `stdout`
-#define PRINT( outStream, ... )                    \
-   if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
-      exit( EXIT_FAILURE );                        \
-   }                                               \
+#define PRINT( outStream, ... )         \
+   fprintf( outStream, __VA_ARGS__ ) ;  \
+   /* NOLINTEND(cert-err33-c) */        \
+   (void)0
+
+
+#define ASSERT( condition ) \
+   assert( condition ) ;
+
+
+/// Print a warning message to `stderr` (along with the program name).
+///
+/// @NOLINTBEGIN(cert-err33-c): No need to check the return value of `fprintf`
+///
+/// @param msg The message to print out.  When printed, it will begin
+///            with `progName: `.
+#define WARNING( msg, ... ) {     \
+   fprintf(                       \
+      stderr                      \
+     ,"%s: " msg ".\n"            \
+     ,getProgramName()            \
+     ,##__VA_ARGS__ ) ;  }        \
+   /* NOLINTEND(cert-err33-c) */  \
    (void)0
 
 
@@ -113,22 +135,6 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
      ,getProgramName()            \
      ,##__VA_ARGS__ ) ;           \
    exit( EXIT_FAILURE ); }        \
-   /* NOLINTEND(cert-err33-c) */  \
-   (void)0
-
-
-/// Print a warning message to `stderr` (along with the program name).
-///
-/// @NOLINTBEGIN(cert-err33-c): No need to check the return value of `fprintf`
-///
-/// @param msg The message to print out.  When printed, it will begin
-///            with `progName: `.
-#define WARNING( msg, ... ) {     \
-   fprintf(                       \
-      stderr                      \
-     ,"%s: " msg ".\n"            \
-     ,getProgramName()            \
-     ,##__VA_ARGS__ ) ;  }        \
    /* NOLINTEND(cert-err33-c) */  \
    (void)0
 

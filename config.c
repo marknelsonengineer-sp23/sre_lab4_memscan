@@ -10,7 +10,6 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <assert.h>  // For assert()
 #include <errno.h>   // For errno
 #include <getopt.h>  // For getopt_long() struct option
 #include <limits.h>  // For PATH_MAX
@@ -171,7 +170,7 @@ unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
 /// @param optarg The input string (this must be modifiable)
 /// @return The number or a fatal error
 size_t getOptargNumericValue( char* optarg ) {
-   assert( optarg != NULL ) ;
+   ASSERT( optarg != NULL ) ;
    trim( optarg ) ;
    size_t result = 0 ;
    char* strtolRemainder = NULL ;
@@ -242,7 +241,7 @@ void processOptions( int argc, char* argv[] ) {
 
       switch ( optionChar ) {
          case 'b':
-            assert( optarg != NULL ) ;
+            ASSERT( optarg != NULL ) ;
             openFileWithBlockIO = true ;
             strncpy( blockPath, optarg, sizeof( blockPath ) ) ;
             trim( blockPath ) ;
@@ -252,7 +251,7 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case '0':
-            assert( optarg != NULL ) ;
+            ASSERT( optarg != NULL ) ;
             openFileWithStreamIO = true ;
             strncpy( streamPath, optarg, sizeof( streamPath ) ) ;
             trim( streamPath ) ;
@@ -262,7 +261,7 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case '1':
-            assert( optarg != NULL ) ;
+            ASSERT( optarg != NULL ) ;
             openFileWithMapIO = true ;
             strncpy( mmapPath, optarg, sizeof( mmapPath ) ) ;
             trim( mmapPath ) ;

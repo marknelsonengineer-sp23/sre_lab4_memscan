@@ -11,10 +11,10 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <assert.h>  // For assert()
 #include <math.h>    // For log2
 #include <string.h>  // For memset()
 
+#include "config.h"  // For ASSERT()
 #include "shannon.h"
 
 double computeShannonEntropy( const void* buffer, const size_t length ) {
@@ -87,7 +87,7 @@ static struct Classification classification[] = {
 #define MAX_SHANNON_ENTROPY 8.0
 
 char* getShannonClassification( const double entropy ) {
-   assert( entropy <= MAX_SHANNON_ENTROPY ) ;
+   ASSERT( entropy <= MAX_SHANNON_ENTROPY ) ;
 
    size_t current = 0 ;
 

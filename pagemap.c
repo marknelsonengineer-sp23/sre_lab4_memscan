@@ -21,7 +21,6 @@
 /// @NOLINTNEXTLINE(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp): This is a legitimate use of a reserved identifier
 #define _XOPEN_SOURCE 700
 
-#include <assert.h>       // For assert()
 #include <fcntl.h>        // For open() O_RDONLY
 #include <inttypes.h>     // For PRIu64
 #include <stdint.h>       // For uint64_t
@@ -129,10 +128,10 @@ struct PageInfo getPageInfo( void* vAddr ) {
 
       page.soft_dirty = GET_BIT( pagemap_data, 55 );
       page.exclusive = GET_BIT( pagemap_data, 56 );
-      assert( GET_BIT( pagemap_data, 57 ) == 0 );
-      assert( GET_BIT( pagemap_data, 58 ) == 0 );
-      assert( GET_BIT( pagemap_data, 59 ) == 0 );
-      assert( GET_BIT( pagemap_data, 60 ) == 0 );
+      ASSERT( GET_BIT( pagemap_data, 57 ) == 0 );
+      ASSERT( GET_BIT( pagemap_data, 58 ) == 0 );
+      ASSERT( GET_BIT( pagemap_data, 59 ) == 0 );
+      ASSERT( GET_BIT( pagemap_data, 60 ) == 0 );
       page.file_mapped = GET_BIT( pagemap_data, 61 );
       page.present = GET_BIT( pagemap_data, 63 );
       page.page_count = getPagecount( page.pfn ) ;
@@ -144,7 +143,7 @@ struct PageInfo getPageInfo( void* vAddr ) {
 
 
 void printPageInfo( const struct PageInfo* page ) {
-   assert( page != NULL );
+   ASSERT( page != NULL );
 
    printf( ANSI_COLOR_GREEN "    %p  " ANSI_COLOR_RESET, page->virtualAddress ) ;
 

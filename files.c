@@ -8,7 +8,6 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <assert.h>    // For assert()
 #include <fcntl.h>     // For open() and O_RDONLY
 #include <stdio.h>     // For FILE* fopen() fclose()
 #include <string.h>    // For strlen()
@@ -101,8 +100,8 @@ void readPreScanFiles() {
    }
 
    if( openFileWithBlockIO ) {
-      assert( block_fd >= 0 ) ;
-      assert( strlen( blockPath ) > 0 ) ;
+      ASSERT( block_fd >= 0 ) ;
+      ASSERT( strlen( blockPath ) > 0 ) ;
 
       off_t   numRead = 0 ;  // Number of bytes read
       ssize_t result ;       // The result of the read operation
@@ -119,8 +118,8 @@ void readPreScanFiles() {
    } // openFileWithBlockIO
 
    if( openFileWithStreamIO ) {
-      assert( stream_fd != NULL ) ;
-      assert( strlen( streamPath ) > 0 ) ;
+      ASSERT( stream_fd != NULL ) ;
+      ASSERT( strlen( streamPath ) > 0 ) ;
 
       size_t numRead = 0 ;  // Number of bytes read
       size_t result ;       // The result of the read operation
@@ -138,10 +137,10 @@ void readPreScanFiles() {
    } // openFileWithStreamIO
 
    if( openFileWithMapIO ) {
-      assert( mmap_fd >= 0 ) ;
-      assert( mmapBuffer != NULL ) ;
-      assert( mmapFileStat.st_size > 0 ) ;
-      assert( strlen( mmapPath ) > 0 ) ;
+      ASSERT( mmap_fd >= 0 ) ;
+      ASSERT( mmapBuffer != NULL ) ;
+      ASSERT( mmapFileStat.st_size > 0 ) ;
+      ASSERT( strlen( mmapPath ) > 0 ) ;
 
       for( off_t i = 0 ; i < mmapFileStat.st_size ; i++ ) {
          unsigned char readByte = *(unsigned char*)(mmapBuffer+i) ;
