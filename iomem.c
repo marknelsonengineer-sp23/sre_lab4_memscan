@@ -178,39 +178,12 @@ const char* get_iomem_region_description( const void* physAddr ) {
 ///              `> start`.
 /// @param description The description of a region (up to #MAX_IOMEM_DESCRIPTION
 ///                    bytes).  The description may not be `NULL` or empty.
-/// @return `true` if the region was added successfully.  `false` if something bad happened.
-bool add_iomem_region( const void* start, const void* end, const char* description ) {
-   if( !validate_iomem() ) {
-      FATAL_ERROR( "invalid iomem structure" ) ;
-   }
-
-   if( end == NULL ) {
-      #ifndef TESTING
-         FATAL_ERROR( "end can not be null" ) ;
-      #endif
-      return false ;
-   }
-
-   if( end <= start ) {
-      #ifndef TESTING
-         FATAL_ERROR( "end must be > start" ) ;
-      #endif
-      return false ;
-   }
-
-   if( description == NULL ) {
-      #ifndef TESTING
-         FATAL_ERROR( "invalid iomem description" ) ;
-      #endif
-      return false ;
-   }
-
-   if( strlen( description ) == 0 ) {
-      #ifndef TESTING
-         FATAL_ERROR( "description can not be empty" ) ;
-      #endif
-      return false ;
-   }
+void add_iomem_region( const void* start, const void* end, const char* description ) {
+   ASSERT( validate_iomem() ) ;
+   ASSERT( end != NULL ) ;
+   ASSERT( end > start ) ;
+   ASSERT( description != NULL ) ;
+   ASSERT( strlen( description ) != 0 ) ;
 
    // Find the start...
    Iomem_region_t* current = &iomem_head ;
@@ -306,16 +279,11 @@ bool add_iomem_region( const void* start, const void* end, const char* descripti
       /// - Anything else should return an error (it's an overlapping region)
       #ifndef TESTING
          print_iomem_regions() ;
-         FATAL_ERROR( "requested region overlaps and is not valid" );
       #endif
-      return false ;
+      FATAL_ERROR( "requested region overlaps and is not valid" );
    }
 
-   if( !validate_iomem() ) {
-      FATAL_ERROR( "iomem is not valid before add" ) ;
-   }
-
-   return true ;
+   ASSERT( validate_iomem() ) ;
 } // add_iomem_region
 
 
