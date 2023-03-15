@@ -52,7 +52,7 @@ doc: $(TARGET)
 publish: doc
 	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan
 
-test: $(TARGET)
+test: $(OBJ)
 	cd tests && $(MAKE) test
 
 clean:

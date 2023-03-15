@@ -15,6 +15,9 @@
 #include <stdio.h>    // For FILE stderr fprintf()
 #include <stdlib.h>   // For exit()
 
+#ifdef TESTING
+   #include "tests/boost_test_util.h"  // For throwException()
+#endif
 
 /// Process command line options
 ///
@@ -101,13 +104,6 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
    (void)0
 
 
-/// Abort the program if `condition` is `false`.
-///
-/// @param condition An expression of scalar type
-#define ASSERT( condition )  \
-   assert( condition ) ;
-
-
 /// Print a warning message to `stderr` (along with the program name).
 ///
 /// @NOLINTBEGIN(cert-err33-c): No need to check the return value of `fprintf`
@@ -124,6 +120,18 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
    (void)0
 
 
+/// Abort the program if `condition` is `false`.
+///
+/// @param condition An expression of scalar type
+#ifdef TESTING
+   #define ASSERT( condition )                \
+      if( !(condition) ) { throwException() ; }
+#else
+   #define ASSERT( condition )                \
+      assert( condition ) ;
+#endif
+
+
 /// Print an error message to `stderr` (along with the program name) and then
 /// exit with a failure status.
 ///
@@ -131,15 +139,20 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
 ///
 /// @param msg The message to print out.  When printed, it will begin
 ///            with `progName: ` and end with `.  Exiting.`.
-#define FATAL_ERROR( msg, ... ) { \
-   fprintf(                       \
-      stderr                      \
-     ,"%s: " msg ".  Exiting.\n"  \
-     ,getProgramName()            \
-     ,##__VA_ARGS__ ) ;           \
-   exit( EXIT_FAILURE ); }        \
-   /* NOLINTEND(cert-err33-c) */  \
-   (void)0
+#ifdef TESTING
+   #define FATAL_ERROR( msg, ... )   \
+   throwException()
+#else
+   #define FATAL_ERROR( msg, ... )   \
+      fprintf(                       \
+         stderr                      \
+        ,"%s: " msg ".  Exiting.\n"  \
+        ,getProgramName()            \
+        ,##__VA_ARGS__ ) ;           \
+      exit( EXIT_FAILURE );          \
+      /* NOLINTEND(cert-err33-c) */  \
+      (void)0
+#endif
 
 
 /// Get the `bitPosition` bit from `value`

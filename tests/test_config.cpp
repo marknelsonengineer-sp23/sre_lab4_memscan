@@ -63,4 +63,23 @@ BOOST_AUTO_TEST_CASE( test_GET_BIT ) {
    BOOST_CHECK( !GET_BIT( 0x7fffffffffffffff, 63 ) ) ;
 } // test_GET_BIT
 
+
+/* ****************************************************************************
+   White Box Test Declarations
+
+   These declarations may contain duplicate code or code that needs to be in
+   sync with the code under test.  Because it's white box tests, it's on the
+   tester to ensure the code is in sync.                                     */
+
+extern "C" size_t getOptargNumericValue( char* optarg ) ;
+
+/* ***************************************************************************/
+
+
+BOOST_AUTO_TEST_CASE( test_getOptargNumericValue ) {
+   { char buff[10] = "100" ;   BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 100 ) ; }
+   { char buff[10] = "-100" ;  BOOST_CHECK_THROW( getOptargNumericValue( buff ), std::exception ) ; }
+   { char buff[10] = "100X" ;  BOOST_CHECK_THROW( getOptargNumericValue( buff ), std::exception ) ; }
+} // test_getOptargNumericValue
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -915,6 +915,8 @@ INPUT                  = .
 INPUT                 += .doxygen/stats.py
 INPUT                 += .doxygen/update_usage.py
 INPUT                 += .doxygen/update_version.py
+INPUT                 += tests/boost_test_util.h
+INPUT                 += tests/boost_test_util.cpp
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

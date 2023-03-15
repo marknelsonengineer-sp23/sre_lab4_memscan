@@ -11,34 +11,45 @@ Contribute to MemScan
 - Install GitPython ( # pip install GitPython )
 - Install GraphViz (for DOT)  ( # apt-get install graphviz )
 
-### Handling errors & warnings
+### Handling errors & warnings in a testing framework
 - MemScan does not have a dedicated logger.
 - Messages and exceptions should be pre-pended with #getProgramName and sent 
   to `stderr`.
-- We need to instrument programs to make them easily to test.  This is easier
-  with C++ programs that have `try`/`catch` blocks and exceptions.
-- Use `assert()` for things that should never happen and we don't really want 
-  to validate or test for (there are probably not many of these).
-- Most functions should return `bool`
-  - Successful functions should operate silently and return `true`.
-  - Warnings, `validation` and errors should have a commented out `printf()` 
-    or comment and return `false`.  These can be caught and tested by Boost tests.
-    - Using this technique gives me a works/doesn't work test, but we loose
-      fidelity in that we don't get a reason code or message.  I'm willing to
-      accept that as I'd like to focus on writing a traditional command-line
-      program in C.  Bare-bones tests will tell us if something works or doesn't
-      but not _why_.
-    - If TESTING is set, then you can return `false` for testable errors.
-- Use #FATAL_ERROR to print a message and `exit( EXIT_FAILURE )`.
+- Instrument programs to make them easily to test.  This is easier with C++ 
+  programs that have `try`/`catch` blocks and exceptions.  As a C program, 
+  we have created three tools for our instrumentation:
+  - `PRINT( outStream, ... )`:  Print a message
+  - `WARNING( msg, ... )`:  Print a formatted warning message
+  - `ASSERT( condition )`:  Assert a condition.  Call `exit()` when the 
+     condition is not `true`
+  - `FATAL_ERROR( msg, ... )`:  Print a message and call `exit()`
+    
+- Use ASSERT() for things that should never happen.
+- Use FATAL_ERROR() for things that may happen and we want to tell the user
+  why the program is ending.
+- Functions may return `bool` if local logic needs to check the results.  In
+  most cases, however, functions should call FATAL_ERROR().
+- Successful functions should operate silently.
 
-````
-   if( description == NULL ) {
-      #ifndef TESTING
-         FATAL_ERROR( "invalid iomem description" ) ;
-      #endif
-      return false ;
-   }
-````
+Memscan uses FATAL_ERROR() and ASSERT() for error checking.  Normally,
+these functions will call `exit()`, however when `TESTING` is defined,
+they will call throwException() so [BOOST_CHECK_THROW] can catch it.
+
+Furthermore, when an unexpected call to FATAL_ERROR() or ASSERT() happens,
+the [Boost Test] framework can catch the exception rather than immediately
+`exit()`.
+
+This utility function is a unique hybrid of C and C++ -- as C does not support
+exceptions.
+
+[Boost Test]:  https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html
+[BOOST_CHECK_THROW]: https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/boost_test/utf_reference/testing_tool_ref/assertion_boost_level_throw.html
+
+Using this technique gives me a works/doesn't work test, but we loose
+fidelity in that we don't get a reason code or message.  I'm willing to
+accept that as I'd like to focus on writing a traditional command-line
+program in C.  Bare-bones tests will tell us if something works or doesn't
+but not _why_.
 
 ### Toolchain
 - MemScan is written in C.
