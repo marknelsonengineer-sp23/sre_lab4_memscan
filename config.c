@@ -128,7 +128,7 @@ bool openFileWithMapIO         = 0 ;
 bool readFileContents          = 0 ;
 bool forkProcess               = 0 ;
 bool allocateLocalMemory       = 0 ;
-bool allocateMallocMemory      = 0 ;
+bool allocateHeapMemory        = 0 ;
 bool allocateSharedMemory      = 0 ;
 bool fillAllocatedMemory       = 0 ;
 bool createThreads             = 0 ;
@@ -149,6 +149,69 @@ size_t numThreads = 0 ;
 
 unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
 
+
+/// Get a number from a string (with units)
+///
+/// Memscan has options like:  `--local=NUM[K|M|G]`.  This function parses
+/// NUM with the units.  The following units are allowed:
+///
+/// | Unit |              Scale |
+/// |:----:|-------------------:|
+/// |   k  |              1,000 |
+/// |   K  |              1,024 |
+/// |   m  |          1,000,000 |
+/// |   M  |        1024 * 1024 |
+/// |   g  |      1,000,000,000 |
+/// |   G  | 1024 * 1024 * 1024 |
+///
+/// @see https://en.wikipedia.org/wiki/Binary_prefix
+///
+/// @NOLINTBEGIN(readability-magic-numbers): Magic numbers are allowed in this function
+///
+/// @param optarg The input string (this must be modifiable)
+/// @return The number or a fatal error
+size_t getOptargNumericValue( char* optarg ) {
+   assert( optarg != NULL ) ;
+   trim( optarg ) ;
+   size_t result = 0 ;
+   char* strtolRemainder = NULL ;
+
+   if( optarg[0] == '-' ) {
+      FATAL_ERROR( "negative number not allowed here" ) ;
+   }
+
+   result = strtol( optarg, &strtolRemainder, 10 ) ;
+   // printf( "result=%ld  strtolRemainder=%p [%s]  errno=%d\n", result, strtolRemainder, strtolRemainder, errno ) ;
+
+   // If there's an error or excess characters...
+   if( errno != 0 ) {
+      FATAL_ERROR( "illegal numeric option" ) ;
+   }
+
+   // If there's an error or excess characters...
+   if( strlen( strtolRemainder ) > 0 ) {
+      if( strcmp( strtolRemainder, "k" ) == 0 ) {
+         result = result * 1000 ;
+      } else if( strcmp( strtolRemainder, "K" ) == 0 ) {
+         result = result * 1024 ;
+      } else if( strcmp( strtolRemainder, "m" ) == 0 ) {
+         result = result * 1000 * 1000 ;
+      } else if( strcmp( strtolRemainder, "M" ) == 0 ) {
+         result = result * 1024 * 1024 ;
+      } else if( strcmp( strtolRemainder, "g" ) == 0 ) {
+         result = result * 1000 * 1000 * 1000 ;
+      } else if( strcmp( strtolRemainder, "G" ) == 0 ) {
+         result = result * 1024 * 1024 * 1024 ;
+      } else {
+         FATAL_ERROR( "illegal numeric option" ) ;
+      }
+   }
+
+   /// @todo Build unit tests for all of this
+   // printf( "result=%ld\n", result ) ;
+   return result ;
+} // getOptargNumericValue
+// @NOLINTEND(readability-magic-numbers)
 
 void processOptions( int argc, char* argv[] ) {
    if( argc < 1 ) {
@@ -212,6 +275,33 @@ void processOptions( int argc, char* argv[] ) {
             readFileContents = true ;
             break ;
 
+         case 'l':
+            localSize = getOptargNumericValue( optarg ) ;
+            if( localSize > 0 ) {
+               allocateLocalMemory = true ;
+            } else {
+               FATAL_ERROR( "--local has illegal number" ) ;
+            }
+            break ;
+
+         case 'm':
+            mallocSize = getOptargNumericValue( optarg ) ;
+            if( mallocSize > 0 ) {
+               allocateHeapMemory = true ;
+            } else {
+               FATAL_ERROR( "--malloc has illegal number" ) ;
+            }
+            break ;
+
+         case 's':
+            sharedSize = getOptargNumericValue( optarg ) ;
+            if( sharedSize > 0 ) {
+               allocateSharedMemory = true;
+            } else {
+               FATAL_ERROR( "--shared has illegal number" ) ;
+            }
+            break ;
+
          case 'p':
             includePhysicalMemoryInfo = true ;
             break ;
@@ -223,15 +313,15 @@ void processOptions( int argc, char* argv[] ) {
             }
 
             if( optarg != NULL ) {
-               int base = 10 ;  /// @NOLINT(readability-magic-numbers):  Base 10 is a legit magic number
+               int base = 10 ;   /// @NOLINT(readability-magic-numbers):  Base 10 is a legit magic number
                trim( optarg ) ;
                if( optarg[0] == '0' && optarg[1] == 'x' ) {
-                  base = 16 ;  // NOLINT(readability-magic-numbers)
+                  base = 16 ;    // NOLINT(readability-magic-numbers)
                   optarg += 2 ;  // Skip the '0x'
                }
                if( optarg[0] == '0' && optarg[1] == 'b' ) {
                   base = 2 ;
-                  optarg += 2 ; // Skip the '0b'
+                  optarg += 2 ;  // Skip the '0b'
                }
                errno = 0 ;
                char* strtolRemainder = NULL ;

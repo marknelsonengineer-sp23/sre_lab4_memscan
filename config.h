@@ -65,7 +65,7 @@ extern bool openFileWithMapIO         ;  ///< `true` if `--mmap` is set
 extern bool readFileContents          ;  ///< `true` if `--read` is set
 extern bool forkProcess               ;  ///< `true` if `--fork` is set
 extern bool allocateLocalMemory       ;  ///< `true` if `--local` is set
-extern bool allocateMallocMemory      ;  ///< `true` if `--malloc` is set
+extern bool allocateHeapMemory        ;  ///< `true` if `--malloc` is set
 extern bool allocateSharedMemory      ;  ///< `true` if `--shared` is set
 extern bool fillAllocatedMemory       ;  ///< `true` if `--fill` is set
 extern bool createThreads             ;  ///< `true` if `--threads` is set
