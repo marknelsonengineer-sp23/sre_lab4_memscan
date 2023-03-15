@@ -14,6 +14,7 @@ PRE-SCAN OPTIONS
   -b, --block=FILE         open FILE using block I/O before the memscan
       --stream=FILE        open FILE using stream I/O before the memscan
       --mmap=FILE          open FILE using memory mapped I/O before the memscan
+  -r, --read               read the contents of the files
   -f, --fork               fork a process and display the combined parent and
                            child memscan
   -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the

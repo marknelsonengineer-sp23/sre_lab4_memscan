@@ -30,6 +30,7 @@ int main( int argc, char* argv[] ) {
    openPreScanFiles() ;
 
    read_iomem() ;
+   readPreScanFiles() ;
 
    if( iomemSummary ) {      // Process --iomem
       summarize_iomem() ;

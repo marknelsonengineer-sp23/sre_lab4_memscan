@@ -8,17 +8,26 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <assert.h>    // For assert()
 #include <fcntl.h>     // For open() and O_RDONLY
 #include <stdio.h>     // For FILE* fopen() fclose()
+#include <string.h>    // For strlen()
 #include <sys/mman.h>  // For mmap(), munmap(), PROT_READ, PROT_PRIVATE
 #include <sys/stat.h>  // For stat() and struct stat
 #include <unistd.h>    // For close()
 
 #include "config.h"    // For FATAL_ERROR
 #include "files.h"     // Just cuz
+#include "pagemap.h"   // For getPageSizeInBytes()
 
-/// File descriptor for block files: `--block`
+/// File stat structure for the block file:  `--block`
+struct stat blockFileStat ;
+
+/// File descriptor for the block file: `--block`
 static int block_fd = -1 ;
+
+/// File stat structure for the stream file: `--stream`
+struct stat streamFileStat ;
 
 /// File descriptor for stream files: `--stream`
 static FILE* stream_fd = NULL ;
@@ -34,8 +43,7 @@ void* mmapBuffer = NULL ;
 
 void openPreScanFiles() {
    if( openFileWithBlockIO ) {
-      struct stat fileStat ;
-      int rVal = stat( blockPath, &fileStat ) ;
+      int rVal = stat( blockPath, &blockFileStat ) ;
       if( rVal != 0 ) {
          FATAL_ERROR( "unable to find --block=[%s]", blockPath ) ;
       }
@@ -44,11 +52,10 @@ void openPreScanFiles() {
       if( block_fd <= -1 ) {
          FATAL_ERROR( "unable to open --block=[%s]", blockPath ) ;
       }
-   }
+   } // openFileWithBlockIO
 
    if( openFileWithStreamIO ) {
-      struct stat fileStat ;
-      int rVal = stat( streamPath, &fileStat ) ;
+      int rVal = stat( streamPath, &streamFileStat ) ;
       if( rVal != 0 ) {
          FATAL_ERROR( "unable to find --stream=[%s]", streamPath ) ;
       }
@@ -57,7 +64,7 @@ void openPreScanFiles() {
       if( stream_fd == NULL ) {
          FATAL_ERROR( "unable to open --stream=[%s]", streamPath ) ;
       }
-   }
+   } // openFileWithStreamIO
 
    if( openFileWithMapIO ) {
       int rVal = stat( mmapPath, &mmapFileStat ) ;
@@ -74,13 +81,80 @@ void openPreScanFiles() {
       if( mmapBuffer == MAP_FAILED ) {
          FATAL_ERROR( "unable to map file --mmap=[%s]", mmapPath ) ;
       }
-   }
+   } // openFileWithMapIO
 } // openPreScanFiles
 
 
 void readPreScanFiles() {
+   /// If not #readFileContents then immediately exit
+   if( !readFileContents ) {
+      return ;
+   }
 
-}
+   /// `--block` and `--stream` files will be read into a buffer that's 4
+   /// times getPageSizeInBytes().
+   size_t fileBufferSize = getPageSizeInBytes() * 4 ;
+
+   void* fileBuffer = malloc( fileBufferSize ) ;
+   if( fileBuffer == NULL ) {
+      FATAL_ERROR( "unable to allocate memory for a file buffer" ) ;
+   }
+
+   if( openFileWithBlockIO ) {
+      assert( block_fd >= 0 ) ;
+      assert( strlen( blockPath ) > 0 ) ;
+
+      off_t   numRead = 0 ;  // Number of bytes read
+      ssize_t result ;       // The result of the read operation
+
+      while( numRead < blockFileStat.st_size ) {
+         /// Reading with `read()` is not thread safe
+         result = read( block_fd, fileBuffer, fileBufferSize) ;
+         if( result < 0 ) {
+            FATAL_ERROR( "unable to read --buffer[%s]", blockPath ) ;
+         }
+         numRead += result ;
+         // printf( "Read %ld bytes from block device\n", result ) ;
+      }
+   } // openFileWithBlockIO
+
+   if( openFileWithStreamIO ) {
+      assert( stream_fd != NULL ) ;
+      assert( strlen( streamPath ) > 0 ) ;
+
+      size_t numRead = 0 ;  // Number of bytes read
+      size_t result ;       // The result of the read operation
+
+      // printf( "size of stream file=[%ld]\n", streamFileStat.st_size ) ;
+      while( !feof( stream_fd ) && numRead <= ONE_MEGABYTE ) {  /// `--stream` files will read the first 1M of data
+         /// Reading with `fread()` is not thread safe
+         result = fread( fileBuffer, 1, fileBufferSize, stream_fd ) ;
+         if( result <= 0 ) {
+            FATAL_ERROR( "unable to read --stream[%s]", streamPath ) ;
+         }
+         numRead += result ;
+         // printf( "Read %ld bytes from stream device\n", result ) ;
+      }
+   } // openFileWithStreamIO
+
+   if( openFileWithMapIO ) {
+      assert( mmap_fd >= 0 ) ;
+      assert( mmapBuffer != NULL ) ;
+      assert( mmapFileStat.st_size > 0 ) ;
+      assert( strlen( mmapPath ) > 0 ) ;
+
+      for( off_t i = 0 ; i < mmapFileStat.st_size ; i++ ) {
+         unsigned char readByte = *(unsigned char*)(mmapBuffer+i) ;
+         (void)readByte ;  // Get away from the unused variable warning
+      }
+   } // openFileWithStreamIO
+
+   if( fileBuffer != NULL ) {
+      free( fileBuffer ) ;
+      fileBuffer = NULL ;
+   }
+
+} // readPreScanFiles
 
 
 void closePreScanFiles() {

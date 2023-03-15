@@ -30,7 +30,9 @@ extern void processOptions( int argc, char* argv[] );
 void printUsage( FILE* outStream ) ;
 
 
-#define MAX_PROGRAM_NAME 32  ///< The maximum size of the program name
+#define MAX_PROGRAM_NAME  32  ///< The maximum size of the program name
+
+#define ONE_MEGABYTE 1048576  ///< One megabyte of something
 
 /// Set the program name
 ///
@@ -60,6 +62,7 @@ extern enum Endian getEndianness() ;
 extern bool openFileWithBlockIO       ;  ///< `true` if `--block` is set
 extern bool openFileWithStreamIO      ;  ///< `true` if `--stream` is set
 extern bool openFileWithMapIO         ;  ///< `true` if `--mmap` is set
+extern bool readFileContents          ;  ///< `true` if `--read` is set
 extern bool forkProcess               ;  ///< `true` if `--fork` is set
 extern bool allocateLocalMemory       ;  ///< `true` if `--local` is set
 extern bool allocateMallocMemory      ;  ///< `true` if `--malloc` is set

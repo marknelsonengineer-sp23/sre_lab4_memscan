@@ -58,6 +58,7 @@ void printUsage( FILE* outStream ) {
    PRINT_USAGE( outStream, "  -b, --block=FILE         open FILE using block I/O before the memscan\n" ) ;
    PRINT_USAGE( outStream, "      --stream=FILE        open FILE using stream I/O before the memscan\n" ) ;
    PRINT_USAGE( outStream, "      --mmap=FILE          open FILE using memory mapped I/O before the memscan\n" ) ;
+   PRINT_USAGE( outStream, "  -r, --read               read the contents of the files\n" ) ;
    PRINT_USAGE( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
    PRINT_USAGE( outStream, "                           child memscan\n" ) ;
    PRINT_USAGE( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
@@ -96,6 +97,7 @@ static struct option long_options[] = {
    { "block",     required_argument, 0, 'b' },
    { "stream",    required_argument, 0, '0' },
    { "mmap",      required_argument, 0, '1' },
+   { "read",      no_argument,       0, 'r' },
    { "fork",      no_argument,       0, 'f' },
    { "local",     required_argument, 0, 'l' },
    { "malloc",    required_argument, 0, 'm' },
@@ -117,12 +119,13 @@ static struct option long_options[] = {
 };
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:fl:m:s:t:iphkv" ;
+const char SINGLE_OPTION_STRING[] = "b:rfl:m:s:t:iphkv" ;
 
 
 bool openFileWithBlockIO       = 0 ;
 bool openFileWithStreamIO      = 0 ;
 bool openFileWithMapIO         = 0 ;
+bool readFileContents          = 0 ;
 bool forkProcess               = 0 ;
 bool allocateLocalMemory       = 0 ;
 bool allocateMallocMemory      = 0 ;
@@ -203,6 +206,10 @@ void processOptions( int argc, char* argv[] ) {
             if( strlen( mmapPath ) == 0 ) {
                FATAL_ERROR( "--mmap must have a filename" ) ;
             }
+            break ;
+
+         case 'r':
+            readFileContents = true ;
             break ;
 
          case 'p':

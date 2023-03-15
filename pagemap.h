@@ -4,8 +4,9 @@
 //
 /// Get more information about a virtual address
 ///
-/// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
+/// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
+/// @see https://stackoverflow.com/questions/5748492/is-there-any-api-for-determining-the-physical-address-from-virtual-address-in-li/45128487#45128487
 ///
 /// @file   pagemap.h
 /// @author Mark Nelson <marknels@hawaii.edu>

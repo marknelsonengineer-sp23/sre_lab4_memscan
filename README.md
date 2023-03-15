@@ -77,6 +77,19 @@ Memscan uses the following `Makefile` targets:
 | `make lint`  | Use clang-tidy to do static analysis on the source code    |
 
 
+#### Memscan 2.0
+Memscan 1.0 is an assignment for my Software Reverse Engineering class.
+Memscan 2.0 is my own project designed to explore some of the details of modern
+memory management in Linux.  Memscan 2.0 has _**a lot**_ more options than
+earlier versions.
+
+Notes:
+  - Have the file readers, like `--block`, `--stream` and `--mmap` read files
+    with known or unique entropy values and then try to find them in memory.
+  - The file readers, `--block` and `--stream` read into a malloc`d buffer
+    that's 4x the size of a physical page.  This way, you're guaranteed to
+    see a few pages with the unique entropy.
+
 #### Toolchain
 This project is the product of a tremendous amount of R&D and would not be possible without the following world-class tools:
 
