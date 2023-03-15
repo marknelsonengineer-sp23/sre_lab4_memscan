@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE( test_getShannonClassification ) {
    BOOST_CHECK_EQUAL( getShannonClassification( 7.500       ), "Encrypted/compressed" ) ;
    BOOST_CHECK_EQUAL( getShannonClassification( 7.900       ), "Random" ) ;
    BOOST_CHECK_EQUAL( getShannonClassification( 8.000       ), "Random" ) ;
-   // BOOST_CHECK_THROW( getShannonClassification( 8.001 ) ) ;  // @todo Catch assert() failures... to get into a whole new world of testing
+   BOOST_CHECK_THROW( getShannonClassification( 8.001 ), std::exception ) ;
 } // test_getShannonClassification
 
 BOOST_AUTO_TEST_SUITE_END()

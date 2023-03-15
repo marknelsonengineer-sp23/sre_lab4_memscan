@@ -22,7 +22,7 @@
 #define VERSION_PATCH    0
 
 /// Monotonic counter that tracks the number of compilations
-#define VERSION_BUILD 6293
+#define VERSION_BUILD 6317
 
 #ifndef STRINGIFY_VALUE
 /// C preprocesor trick that converts values into strings at compile time
