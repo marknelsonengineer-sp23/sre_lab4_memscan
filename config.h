@@ -89,10 +89,10 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
                                       ///< (near) instruction
 
 
-/// Print a line to outStream.  Ensure the print command was successful.
+/// Print `...` to `outStream`.
 ///
-/// @param outStream The output stream (usually `stderr` or `stdout`) to print to
-#define PRINT_USAGE( outStream, ... )              \
+/// @param outStream The output stream is usually `stderr` or `stdout`
+#define PRINT( outStream, ... )                    \
    if( fprintf( outStream, __VA_ARGS__ ) <= 0 ) {  \
       exit( EXIT_FAILURE );                        \
    }                                               \
