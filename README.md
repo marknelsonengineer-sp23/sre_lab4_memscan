@@ -79,7 +79,7 @@ Memscan uses the following `Makefile` targets:
 
 #### Memscan 2.0
 Memscan 1.0 is an assignment for my Software Reverse Engineering class.
-Memscan 2.0 is my own project designed to explore some of the details of modern
+Memscan 2.0 is my own project designed to explore some details of modern
 memory management in Linux.  Memscan 2.0 has _**a lot**_ more options than
 earlier versions.
 
