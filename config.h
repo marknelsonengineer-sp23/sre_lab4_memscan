@@ -101,7 +101,10 @@ extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
    (void)0
 
 
-#define ASSERT( condition ) \
+/// Abort the program if `condition` is `false`.
+///
+/// @param condition An expression of scalar type
+#define ASSERT( condition )  \
    assert( condition ) ;
 
 
