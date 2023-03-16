@@ -66,9 +66,9 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "                           memscan\n" ) ;
    PRINT( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
    PRINT( outStream, "      --numMalloc=NUM      number of malloc'd allocations\n" ) ;
-   PRINT( outStream, "  -s, --shared=NUM[K|M|G]  allocate NUM bytes of shared memory before the\n" ) ;
+   PRINT( outStream, "      --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the\n" ) ;
    PRINT( outStream, "                           memscan\n" ) ;
-   PRINT( outStream, "      --fill               fill the local, malloc'd and/or shared memory\n" ) ;
+   PRINT( outStream, "      --fill               fill the local, malloc'd and/or mapped memory\n" ) ;
    PRINT( outStream, "                           with data before the memscan\n" ) ;
    PRINT( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
    PRINT( outStream, "\n" ) ;
@@ -104,7 +104,7 @@ static struct option long_options[] = {
    { "local",     required_argument, 0, 'l' },
    { "malloc",    required_argument, 0, 'm' },
    { "numMalloc", required_argument, 0, '6' },
-   { "shared",    required_argument, 0, 's' },
+   { "map_mem",   required_argument, 0, '7' },
    { "fill",      no_argument      , 0, '2' },
    { "threads",   required_argument, 0, 't' },
    // SCAN OPTIONS
@@ -122,7 +122,7 @@ static struct option long_options[] = {
 };
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:rfl:m:s:t:iphkv" ;
+const char SINGLE_OPTION_STRING[] = "b:rfl:m:t:iphkv" ;
 
 
 bool openFileWithBlockIO       = 0 ;
@@ -132,7 +132,7 @@ bool readFileContents          = 0 ;
 bool forkProcess               = 0 ;
 bool allocateLocalMemory       = 0 ;
 bool allocateHeapMemory        = 0 ;
-bool allocateSharedMemory      = 0 ;
+bool allocateMappedMemory      = 0 ;
 bool fillAllocatedMemory       = 0 ;
 bool createThreads             = 0 ;
 bool scanForByte               = 0 ;
@@ -148,7 +148,7 @@ char mapFilePath [ FILENAME_MAX ] = {} ;
 size_t localSize  = 0 ;
 size_t mallocSize = 0 ;
 size_t numMallocs = 1 ;  // By default, malloc will allocate 1 region
-size_t sharedSize = 0 ;
+size_t mappedSize = 0 ;
 size_t numThreads = 0 ;
 
 unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
@@ -306,12 +306,12 @@ void processOptions( int argc, char* argv[] ) {
             }
             break ;
 
-         case 's':
-            sharedSize = getOptargNumericValue( optarg ) ;
-            if( sharedSize > 0 ) {
-               allocateSharedMemory = true;
+         case '7':
+            mappedSize = getOptargNumericValue( optarg ) ;
+            if( mappedSize > 0 ) {
+               allocateMappedMemory = true;
             } else {
-               FATAL_ERROR( "--shared has illegal number" ) ;
+               FATAL_ERROR( "--map_mem has illegal number" ) ;
             }
             break ;
 

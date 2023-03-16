@@ -95,6 +95,7 @@ earlier versions.
   - `--malloc` can be used with `--numMalloc` to explore the difference between
     one large malloc and many small ones.  Note that `DEFAULT_MMAP_THRESHOLD`
     is 131,072 bytes.  See [Malloc Internals] and [mallopt].
+  - memscan does not explore System V shared memory segments.
 
 [Malloc Internals]: https://sourceware.org/glibc/wiki/MallocInternals
 [mallopt]: https://man7.org/linux/man-pages/man3/mallopt.3.html

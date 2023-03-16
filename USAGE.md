@@ -21,9 +21,9 @@ PRE-SCAN OPTIONS
                            memscan
   -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan
       --numMalloc=NUM      number of malloc'd allocations
-  -s, --shared=NUM[K|M|G]  allocate NUM bytes of shared memory before the
+      --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the
                            memscan
-      --fill               fill the local, malloc'd and/or shared memory
+      --fill               fill the local, malloc'd and/or mapped memory
                            with data before the memscan
   -t, --threads=NUM        create NUM threads before the memscan
 

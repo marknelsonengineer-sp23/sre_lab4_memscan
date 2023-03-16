@@ -69,7 +69,7 @@ extern bool readFileContents          ;  ///< `true` if `--read` is set
 extern bool forkProcess               ;  ///< `true` if `--fork` is set
 extern bool allocateLocalMemory       ;  ///< `true` if `--local` is set
 extern bool allocateHeapMemory        ;  ///< `true` if `--malloc` is set
-extern bool allocateSharedMemory      ;  ///< `true` if `--shared` is set
+extern bool allocateMappedMemory      ;  ///< `true` if `--map_mem` is set
 extern bool fillAllocatedMemory       ;  ///< `true` if `--fill` is set
 extern bool createThreads             ;  ///< `true` if `--threads` is set
 extern bool scanForByte               ;  ///< `true` if `--scan_byte` is set
@@ -85,7 +85,7 @@ extern char mapFilePath[ FILENAME_MAX ] ; ///< the path to the file specified by
 extern size_t localSize ;   ///< The number of bytes specified by `--local`
 extern size_t mallocSize ;  ///< The number of bytes specified by `--malloc`
 extern size_t numMallocs ;  ///< The number of `malloc ( mallocSize )` allocations specified by `--numMalloc`
-extern size_t sharedSize ;  ///< The number of bytes specified by `--shared`
+extern size_t mappedSize ;  ///< The number of bytes specified by `--map_mem`
 extern size_t numThreads ;  ///< The number of threads specified by `--threads`
 
                                       /// The byte to scan for.

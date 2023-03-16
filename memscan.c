@@ -43,7 +43,7 @@ int main( int argc, char* argv[] ) {
    /// @todo Process --block
    /// @todo Process --stream
    /// @todo Process --map_file
-   /// @todo Process --local, --malloc, --shared and --fill
+   /// @todo Process --local, --malloc, --mem_map and --fill
    /// @todo Process --threads
 
    readMaps() ;

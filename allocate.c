@@ -2,7 +2,7 @@
 //         University of Hawaii, College of Engineering
 //         sre_lab4_memscan - EE 205 - Spr 2023
 //
-/// Allocate memory for `--local`, `--malloc` and `--shared` options
+/// Allocate memory for `--local`, `--malloc` and `--mem_map` options
 ///
 /// @file   allocate.c
 /// @author Mark Nelson <marknels@hawaii.edu>
