@@ -11,7 +11,7 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <math.h>    // For log2
+#include <math.h>    // For log2()
 #include <string.h>  // For memset()
 
 #include "config.h"  // For ASSERT()
