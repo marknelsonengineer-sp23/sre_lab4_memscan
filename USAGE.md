@@ -20,6 +20,7 @@ PRE-SCAN OPTIONS
   -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the
                            memscan
   -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan
+      --numMalloc=NUM      number of malloc'd allocations
   -s, --shared=NUM[K|M|G]  allocate NUM bytes of shared memory before the
                            memscan
       --fill               fill the local, malloc'd and/or shared memory

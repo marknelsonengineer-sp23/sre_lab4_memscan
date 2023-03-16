@@ -9,25 +9,31 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <stdint.h>     // For uint64_t
-#include <stdlib.h>     // For malloc() free()
-#include <x86intrin.h>  // For _rdtsc()
+#include <stdlib.h>     // For malloc() calloc() free()
 
 #include "allocate.h"   // Just cuz
 #include "config.h"     // For FATAL_ERROR
 
 
-/// Pointer to the heap's memory allocation:  `--malloc`
-static void* heapAllocation = NULL ;
+/// Maintain an array[`--numMalloc`] of pointers to heap allocations`--malloc`
+static void** heapAllocations = NULL ;
 
 void allocatePreScanMemory() {
    if( allocateHeapMemory ) {
-      ASSERT( heapAllocation == NULL ) ;
+      ASSERT( heapAllocations == NULL ) ;
       ASSERT( mallocSize > 0 ) ;
+      ASSERT( numMallocs >= 1 ) ;
 
-      heapAllocation = malloc( mallocSize ) ;
+      heapAllocations = calloc( numMallocs, sizeof( void* ) ) ;
+      if( heapAllocations == NULL ) {
+         FATAL_ERROR( "unable to allocate malloc array during --malloc" ) ;
+      }
 
-      if( heapAllocation == NULL ) {
-         FATAL_ERROR( "unable to allocate memory during --malloc" ) ;
+      for( size_t i = 0 ; i < numMallocs ; i++ ) {
+         heapAllocations[i] = malloc( mallocSize ) ;
+         if( heapAllocations[i] == NULL ) {
+            FATAL_ERROR( "unable to allocate memory during --malloc" ) ;
+         }
       }
    }
 } // allocatePreScanMemory
@@ -36,19 +42,20 @@ void allocatePreScanMemory() {
 /// This constant has a Shannon entropy of 3.000.
 /// When `--malloc`, `--fill`, and `--shannon` are used together, this will fill
 /// memory regions and is detectable when we analyze for Shannon entropy.
+//
+/// The constant needs to consist of 8 unique bytes.
 #define SHANNON_CONSTANT_FOR_HEAP 0x1122334455667788
 
 
 void fillPreScanMemory() {
    if( allocateHeapMemory ) {
+      ASSERT( heapAllocations != NULL ) ;
       ASSERT( mallocSize > 0 ) ;
-      ASSERT( heapAllocation != NULL ) ;
+      ASSERT( numMallocs >= 1 ) ;
 
-      for( size_t i = 0 ; i < mallocSize ; i += sizeof( uint64_t ) ) {
-         if( scanForShannon ) {
-            *(uint64_t*)(heapAllocation + i) = SHANNON_CONSTANT_FOR_HEAP ;
-         } else {
-            *(uint64_t*)(heapAllocation + i) = _rdtsc() ;
+      for( size_t i = 0 ; i < numMallocs ; i++ ) {
+         for( size_t j = 0 ; j < mallocSize ; j += sizeof( uint64_t ) ) {
+            *(uint64_t*)(heapAllocations[i] + j) = SHANNON_CONSTANT_FOR_HEAP ;
          }
       }
    }
@@ -57,9 +64,15 @@ void fillPreScanMemory() {
 
 void releasePreScanMemory() {
    if( allocateHeapMemory ) {
-      ASSERT( heapAllocation != NULL ) ;
+      ASSERT( heapAllocations != NULL ) ;
+      ASSERT( numMallocs >= 1 ) ;
 
-      free( heapAllocation ) ;
-      heapAllocation = NULL ;
+      for( size_t i = 0 ; i < numMallocs ; i++ ) {
+         free( heapAllocations[i] ) ;
+         heapAllocations[i] = NULL ;
+      }
+
+      free( heapAllocations ) ;
+      heapAllocations = NULL ;
    }
 } // releasePreScanMemory

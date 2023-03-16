@@ -96,6 +96,8 @@
       <w>makeindex</w>
       <w>makevar</w>
       <w>malloc'd</w>
+      <w>mallocs</w>
+      <w>mallopt</w>
       <w>marknelsonengineer</w>
       <w>mbrtoc</w>
       <w>mbsrtowcs</w>
@@ -133,6 +135,7 @@
       <w>predef</w>
       <w>preprocesor</w>
       <w>priv</w>
+      <w>prog</w>
       <w>programlisting</w>
       <w>propget</w>
       <w>propput</w>

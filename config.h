@@ -84,6 +84,7 @@ extern char mmapPath [ FILENAME_MAX ] ;    ///< the path to the file specified b
 
 extern size_t localSize ;   ///< The number of bytes specified by `--local`
 extern size_t mallocSize ;  ///< The number of bytes specified by `--malloc`
+extern size_t numMallocs ;  ///< The number of `malloc ( mallocSize )` allocations specified by `--numMalloc`
 extern size_t sharedSize ;  ///< The number of bytes specified by `--shared`
 extern size_t numThreads ;  ///< The number of threads specified by `--threads`
 

@@ -77,7 +77,7 @@ Memscan uses the following `Makefile` targets:
 | `make lint`  | Use clang-tidy to do static analysis on the source code    |
 
 
-#### Memscan 2.0
+# Memscan 2.0
 Memscan 1.0 is an assignment for my Software Reverse Engineering class.
 Memscan 2.0 is my own project designed to explore some details of modern
 memory management in Linux.  Memscan 2.0 has _**a lot**_ more options than
@@ -89,14 +89,18 @@ Notes:
   - The file readers, `--block` and `--stream` read into a malloc`d buffer
     that's 4x the size of a physical page.  This way, you're guaranteed to
     see a few pages with the unique entropy.
-  - Normally, `--fill` will use a random or monotonic counter from an efficient
-    source like [RDTSC].
-  - When `--malloc`, `--fill`, and `--shannon` are used, then a special 
-    constant (with a Shannon entropy of 3.000) will fill memory.  This will be 
-    reported.
-  - 
+  - When `--malloc` and `--fill` are used, a special constant, 
+    #SHANNON_CONSTANT_FOR_HEAP (with a Shannon entropy of 3.000) will fill 
+    memory.  This can be searched for with `--shannon` or `--scan_byte=11`.
+  - `--malloc` can be used with `--numMalloc` to explore the difference between
+    one large malloc and many small ones.  Note that `DEFAULT_MMAP_THRESHOLD`
+    is 131,072 bytes.  See [Malloc Internals] and [mallopt].
 
-#### Toolchain
+[Malloc Internals]: https://sourceware.org/glibc/wiki/MallocInternals
+[mallopt]: https://man7.org/linux/man-pages/man3/mallopt.3.html
+
+
+# Toolchain
 This project is the product of a tremendous amount of R&D and would not be possible without the following world-class tools:
 
 | Tool           | Website                    |                                  Logo                                                                                  |

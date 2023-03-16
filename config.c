@@ -65,6 +65,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
    PRINT( outStream, "                           memscan\n" ) ;
    PRINT( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
+   PRINT( outStream, "      --numMalloc=NUM      number of malloc'd allocations\n" ) ;
    PRINT( outStream, "  -s, --shared=NUM[K|M|G]  allocate NUM bytes of shared memory before the\n" ) ;
    PRINT( outStream, "                           memscan\n" ) ;
    PRINT( outStream, "      --fill               fill the local, malloc'd and/or shared memory\n" ) ;
@@ -102,6 +103,7 @@ static struct option long_options[] = {
    { "fork",      no_argument,       0, 'f' },
    { "local",     required_argument, 0, 'l' },
    { "malloc",    required_argument, 0, 'm' },
+   { "numMalloc", required_argument, 0, '6' },
    { "shared",    required_argument, 0, 's' },
    { "fill",      no_argument      , 0, '2' },
    { "threads",   required_argument, 0, 't' },
@@ -145,6 +147,7 @@ char mmapPath [ FILENAME_MAX ]   = {} ;
 
 size_t localSize  = 0 ;
 size_t mallocSize = 0 ;
+size_t numMallocs = 1 ;  // By default, malloc will allocate 1 region
 size_t sharedSize = 0 ;
 size_t numThreads = 0 ;
 
@@ -293,6 +296,13 @@ void processOptions( int argc, char* argv[] ) {
                allocateHeapMemory = true ;
             } else {
                FATAL_ERROR( "--malloc has illegal number" ) ;
+            }
+            break ;
+
+         case '6':
+            numMallocs = getOptargNumericValue( optarg ) ;
+            if( numMallocs <= 0 ) {
+               FATAL_ERROR( "--numMalloc has illegal number" ) ;
             }
             break ;
 
