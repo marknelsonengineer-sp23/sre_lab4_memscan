@@ -41,8 +41,7 @@ void printUsage( FILE* outStream ) ;
 /// Set the program name
 ///
 /// @param newProgramName The new program name
-/// @return `true` if successful.  `false` if unsuccessful.
-extern bool setProgramName( const char* newProgramName ) ;
+extern void setProgramName( const char* newProgramName ) ;
 
 
 /// Get the program name

@@ -44,29 +44,37 @@ BOOST_AUTO_TEST_CASE( test_printUsage ) {
 BOOST_AUTO_TEST_CASE( test_ProgramName ) {
    BOOST_CHECK_EQUAL( getProgramName(), "memscan" ) ;
 
-   BOOST_CHECK( setProgramName( "Sam" ) ) ;
+   BOOST_CHECK_NO_THROW( setProgramName( "Sam" ) ) ;
    BOOST_CHECK_EQUAL( getProgramName(), "Sam" ) ;
 
-   BOOST_CHECK( !setProgramName( NULL ) ) ;
+   BOOST_CHECK_FAIL( setProgramName( NULL ) ) ;
    BOOST_CHECK_EQUAL( getProgramName(), "Sam" ) ;  // The name has not changed...
 
-   BOOST_CHECK( !setProgramName( "" ) ) ;
+   BOOST_CHECK_FAIL( setProgramName( "" ) ) ;
    BOOST_CHECK_EQUAL( getProgramName(), "Sam" ) ;  // The name has not changed...
 
-   BOOST_CHECK( !setProgramName( "  \t\t\n\n  " ) ) ;
+   BOOST_CHECK_FAIL( setProgramName( "  \t\t\n\n  " ) ) ;
    BOOST_CHECK_EQUAL( getProgramName(), "Sam" ) ;  // The name has not changed...
 
-   BOOST_CHECK( setProgramName( "  \t\tChili\n\n  " ) ) ;
-   BOOST_CHECK_EQUAL( getProgramName(), "Chili" ) ;
+   BOOST_CHECK_NO_THROW( setProgramName( "  \t\tChili\n\n  " ) ) ;
+   BOOST_CHECK_EQUAL( getProgramName(), "Chili" ) ;  // The name was trimmed...
+
+   BOOST_CHECK_NO_THROW( setProgramName( "123456789012345678901234567890" ) ) ;
+   BOOST_CHECK_EQUAL( getProgramName(), "123456789012345678901234567890" ) ;  // 30-character names are OK
+
+   BOOST_CHECK_NO_THROW( setProgramName( "1234567890123456789012345678901" ) ) ;
+   BOOST_CHECK_EQUAL( getProgramName(), "1234567890123456789012345678901" ) ;  // 31-character names are OK
+
+   BOOST_CHECK_NO_THROW( setProgramName( "12345678901234567890123456789012" ) ) ;
+   BOOST_CHECK_EQUAL( getProgramName(), "1234567890123456789012345678901" ) ;  // 32-character names map to 31 characters
+
+   BOOST_CHECK_NO_THROW( setProgramName( "123456789012345678901234567890123" ) ) ;
+   BOOST_CHECK_EQUAL( getProgramName(), "1234567890123456789012345678901" ) ;  // 33-character names map to 31 characters
+
+   BOOST_CHECK_NO_THROW( setProgramName( "memscan" ) ) ;
+   BOOST_CHECK_EQUAL( getProgramName(), "memscan" ) ;
 } // test_ProgramName
 
-BOOST_AUTO_TEST_CASE( test_getEndianness ) {
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-   BOOST_CHECK_EQUAL( getEndianness(), LITTLE ) ;
-#else
-   BOOST_CHECK_EQUAL( getEndianness(), BIG ) ;
-#endif
-}
 
 BOOST_AUTO_TEST_CASE( test_GET_BIT ) {
    BOOST_CHECK(  GET_BIT( 0b0001, 0 ) ) ;

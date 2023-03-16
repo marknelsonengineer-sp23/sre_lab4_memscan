@@ -416,28 +416,20 @@ void processOptions( int argc, char* argv[] ) {
 #endif
 
 
-bool setProgramName( const char* newProgramName ) {
-   if( newProgramName == NULL ) {
-      /// @todo Print an appropriate error message
-      return false ;
-   }
+void setProgramName( const char* newProgramName ) {
+   ASSERT( newProgramName != NULL ) ;
 
    char trialProgramName[ MAX_PROGRAM_NAME ] = {} ;
    strncpy( trialProgramName, newProgramName, MAX_PROGRAM_NAME ) ;
 
    trim( trialProgramName ) ;
 
-   if( strlen( trialProgramName ) == 0 ) {
-      /// @todo Print an appropriate error message
-      return false ;
-   }
+   ASSERT( strlen( trialProgramName ) != 0 ) ;
 
-   strncpy( programName, trialProgramName, MAX_PROGRAM_NAME );
-
-   return true;
+   strncpy( programName, trialProgramName, MAX_PROGRAM_NAME - 1 ) ;
 } // setProgramName
 
 
 char* getProgramName() {
-   return programName;
+   return programName ;
 }
