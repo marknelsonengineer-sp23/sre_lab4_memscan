@@ -7,9 +7,9 @@ We live in an ocean of illegal addresses dotted with islands of legal
 addresses.  Let's explore every grain of sand on our islands.
 
 #### Links
-The project's home page (hosted by GitHub) is [here](https://github.com/marknelsonengineer-sp23/sre_lab4_memscan)
+The project's home page (hosted by GitHub) is:  https://github.com/marknelsonengineer-sp23/sre_lab4_memscan
 
-The source code documentation (hosted by UH) is [here](https://www2.hawaii.edu/~marknels/sre/memscan)
+The source code documentation (hosted by UH) is:  https://www2.hawaii.edu/~marknels/sre/memscan
 
 #### The Lab
 This lab looks easy at first, but (hopefully) proves to be quite challenging.
@@ -89,6 +89,12 @@ Notes:
   - The file readers, `--block` and `--stream` read into a malloc`d buffer
     that's 4x the size of a physical page.  This way, you're guaranteed to
     see a few pages with the unique entropy.
+  - Normally, `--fill` will use a random or monotonic counter from an efficient
+    source like [RDTSC].
+  - When `--malloc`, `--fill`, and `--shannon` are used, then a special 
+    constant (with a Shannon entropy of 3.000) will fill memory.  This will be 
+    reported.
+  - 
 
 #### Toolchain
 This project is the product of a tremendous amount of R&D and would not be possible without the following world-class tools:
@@ -164,3 +170,5 @@ To that end, your program does not have to match the output perfectly... here ar
   - Ideally, you should print a reason you are skipping a region, but you don't have to do that either.
   - You can print the end of the region as the actual end (as I do) or the end that you get from the `maps` file.
   - The columns don't have to line up perfectly
+
+[RDTSC]: https://en.wikipedia.org/wiki/Time_Stamp_Counter
