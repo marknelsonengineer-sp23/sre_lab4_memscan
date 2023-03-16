@@ -13,6 +13,8 @@
 #include <boost/test/included/unit_test.hpp>  // include this to get main()
 #include <boost/test/unit_test.hpp>
 
+#include <stdio.h>  // For fopen() fclose()
+
 #include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
 
 extern "C" {
@@ -20,6 +22,24 @@ extern "C" {
 }
 
 BOOST_AUTO_TEST_SUITE( test_config )
+
+BOOST_AUTO_TEST_CASE( test_getEndianness ) {
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        BOOST_CHECK_EQUAL( getEndianness(), LITTLE ) ;
+#else
+        BOOST_CHECK_EQUAL( getEndianness(), BIG ) ;
+#endif
+}
+
+
+BOOST_AUTO_TEST_CASE( test_printUsage ) {
+   FILE* dev_null = fopen( "/dev/null", "w" ) ;
+   BOOST_CHECK( dev_null != NULL ) ;
+   BOOST_CHECK_FAIL( printUsage( NULL ) ) ;
+   BOOST_CHECK_NO_THROW( printUsage( dev_null ) ) ;
+   fclose( dev_null ) ;
+}
+
 
 BOOST_AUTO_TEST_CASE( test_ProgramName ) {
    BOOST_CHECK_EQUAL( getProgramName(), "memscan" ) ;

@@ -44,6 +44,8 @@ enum Endian getEndianness() {
 
 
 void printUsage( FILE* outStream ) {
+   ASSERT( outStream != NULL ) ;
+
    PRINT( outStream, "Usage: memscan [OPTION]... [PATTERN]... \n" ) ;
    PRINT( outStream, "       memscan -i|--iomem\n" ) ;
    PRINT( outStream, "\n" ) ;
@@ -211,6 +213,7 @@ size_t getOptargNumericValue( char* optarg ) {
    return result ;
 } // getOptargNumericValue
 // @NOLINTEND(readability-magic-numbers)
+
 
 void processOptions( int argc, char* argv[] ) {
    if( argc < 1 ) {
