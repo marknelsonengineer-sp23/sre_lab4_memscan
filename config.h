@@ -64,7 +64,7 @@ extern enum Endian getEndianness() ;
 
 extern bool openFileWithBlockIO       ;  ///< `true` if `--block` is set
 extern bool openFileWithStreamIO      ;  ///< `true` if `--stream` is set
-extern bool openFileWithMapIO         ;  ///< `true` if `--mmap` is set
+extern bool openFileWithMapIO         ;  ///< `true` if `--map_file` is set
 extern bool readFileContents          ;  ///< `true` if `--read` is set
 extern bool forkProcess               ;  ///< `true` if `--fork` is set
 extern bool allocateLocalMemory       ;  ///< `true` if `--local` is set
@@ -78,9 +78,9 @@ extern bool iomemSummary              ;  ///< `true` if `--iomem` is set
 extern bool printPath                 ;  ///< `true` if `--path` is set
 extern bool includePhysicalMemoryInfo ;  ///< `true` if `--phys` is set
 
-extern char blockPath[ FILENAME_MAX ] ;    ///< The path to the file specified by `--block`
-extern char streamPath [ FILENAME_MAX ] ;  ///< The path to the file specified by `--stream`
-extern char mmapPath [ FILENAME_MAX ] ;    ///< the path to the file specified by `--mmap`
+extern char blockPath[ FILENAME_MAX ]   ; ///< The path to the file specified by `--block`
+extern char streamPath[ FILENAME_MAX ]  ; ///< The path to the file specified by `--stream`
+extern char mapFilePath[ FILENAME_MAX ] ; ///< the path to the file specified by `--map_file`
 
 extern size_t localSize ;   ///< The number of bytes specified by `--local`
 extern size_t mallocSize ;  ///< The number of bytes specified by `--malloc`

@@ -83,8 +83,8 @@ Memscan 2.0 is my own project designed to explore some details of modern
 memory management in Linux.  Memscan 2.0 has _**a lot**_ more options than
 earlier versions.
 
-Notes:
-  - Have the file readers, like `--block`, `--stream` and `--mmap` read files
+## Notes
+  - Have the file readers, like `--block`, `--stream` and `--map_file` read files
     with known or unique entropy values and then try to find them in memory.
   - The file readers, `--block` and `--stream` read into a malloc`d buffer
     that's 4x the size of a physical page.  This way, you're guaranteed to

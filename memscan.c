@@ -42,7 +42,7 @@ int main( int argc, char* argv[] ) {
    /// Anything that changes #MEMORY_MAP_FILE should be done before calling readMaps()
    /// @todo Process --block
    /// @todo Process --stream
-   /// @todo Process --mmap
+   /// @todo Process --map_file
    /// @todo Process --local, --malloc, --shared and --fill
    /// @todo Process --threads
 

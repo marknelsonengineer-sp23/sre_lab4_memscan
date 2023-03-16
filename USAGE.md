@@ -13,7 +13,7 @@ The options below may be used to select memscan's operation
 PRE-SCAN OPTIONS
   -b, --block=FILE         open FILE using block I/O before the memscan
       --stream=FILE        open FILE using stream I/O before the memscan
-      --mmap=FILE          open FILE using memory mapped I/O before the memscan
+      --map_file=FILE      open FILE using memory mapped I/O before the memscan
   -r, --read               read the contents of the files
   -f, --fork               fork a process and display the combined parent and
                            child memscan
@@ -30,7 +30,7 @@ PRE-SCAN OPTIONS
 SCAN OPTIONS
       --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)
                            or c3 (the x86 RET instruction) by default
-      --shannon            compute Shannon Entropy for each mmap region
+      --shannon            compute Shannon Entropy for each mapped region
                            and physical page
 
 OUTPUT OPTIONS

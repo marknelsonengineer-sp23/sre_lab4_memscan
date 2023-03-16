@@ -2,7 +2,7 @@
 //         University of Hawaii, College of Engineering
 //         sre_lab4_memscan - EE 205 - Spr 2023
 //
-/// Process File I/O pre-scan options: `--block`, `--stream` and `--mmap`
+/// Process File I/O pre-scan options: `--block`, `--stream` and `--map_file`
 ///
 /// @file   files.c
 /// @author Mark Nelson <marknels@hawaii.edu>
@@ -31,13 +31,13 @@ struct stat streamFileStat ;
 /// File descriptor for stream files: `--stream`
 static FILE* stream_fd = NULL ;
 
-/// File stat structure for the memory mapped file: `--mmap`
+/// File stat structure for the memory mapped file: `--map_file`
 struct stat mmapFileStat ;
 
-/// File descriptor for the memory mapped file: `--mmap`
+/// File descriptor for the memory mapped file: `--map_file`
 static int mmap_fd = -1 ;
 
-/// Buffer to the memory mapped file:  `--mmap`
+/// Buffer to the memory mapped file:  `--map_file`
 void* mmapBuffer = NULL ;
 
 void openPreScanFiles() {
@@ -66,19 +66,19 @@ void openPreScanFiles() {
    } // openFileWithStreamIO
 
    if( openFileWithMapIO ) {
-      int rVal = stat( mmapPath, &mmapFileStat ) ;
+      int rVal = stat( mapFilePath, &mmapFileStat ) ;
       if( rVal != 0 ) {
-         FATAL_ERROR( "unable to find --mmap=[%s]", mmapPath ) ;
+         FATAL_ERROR( "unable to find --map_file=[%s]", mapFilePath ) ;
       }
 
-      mmap_fd = open( mmapPath,  O_RDONLY ) ;
+      mmap_fd = open( mapFilePath,  O_RDONLY ) ;
       if( mmap_fd <= -1 ) {
-         FATAL_ERROR( "unable to open --mmap=[%s]", mmapPath ) ;
+         FATAL_ERROR( "unable to open --map_file=[%s]", mapFilePath ) ;
       }
 
       mmapBuffer = mmap( NULL, mmapFileStat.st_size, PROT_READ, MAP_PRIVATE, mmap_fd, 0 );
       if( mmapBuffer == MAP_FAILED ) {
-         FATAL_ERROR( "unable to map file --mmap=[%s]", mmapPath ) ;
+         FATAL_ERROR( "unable to map file --map_file=[%s]", mapFilePath ) ;
       }
    } // openFileWithMapIO
 } // openPreScanFiles
@@ -140,7 +140,7 @@ void readPreScanFiles() {
       ASSERT( mmap_fd >= 0 ) ;
       ASSERT( mmapBuffer != NULL ) ;
       ASSERT( mmapFileStat.st_size > 0 ) ;
-      ASSERT( strlen( mmapPath ) > 0 ) ;
+      ASSERT( strlen( mapFilePath ) > 0 ) ;
 
       for( off_t i = 0 ; i < mmapFileStat.st_size ; i++ ) {
          unsigned char readByte = *(unsigned char*)(mmapBuffer+i) ;
@@ -178,11 +178,11 @@ void closePreScanFiles() {
    if( openFileWithMapIO && mmap_fd >= 0 ) {
       iRet = munmap( mmapBuffer, mmapFileStat.st_size ) ;
       if( iRet != 0 ) {
-         WARNING( "munmap unexpectedly returned %d for --mmap=[%s]\n", iRet, mmapPath ) ;
+         WARNING( "munmap unexpectedly returned %d for --map_file=[%s]\n", iRet, mapFilePath ) ;
       }
       iRet = close( mmap_fd ) ;
       if( iRet != 0 ) {
-         WARNING( "close unexpectedly returned %d for --mmap=[%s]\n", iRet, mmapPath ) ;
+         WARNING( "close unexpectedly returned %d for --map_file=[%s]\n", iRet, mapFilePath ) ;
       }
       mmap_fd = -1 ;
       mmapBuffer = NULL ;

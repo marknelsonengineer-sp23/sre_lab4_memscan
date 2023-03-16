@@ -58,7 +58,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "PRE-SCAN OPTIONS\n" ) ;
    PRINT( outStream, "  -b, --block=FILE         open FILE using block I/O before the memscan\n" ) ;
    PRINT( outStream, "      --stream=FILE        open FILE using stream I/O before the memscan\n" ) ;
-   PRINT( outStream, "      --mmap=FILE          open FILE using memory mapped I/O before the memscan\n" ) ;
+   PRINT( outStream, "      --map_file=FILE      open FILE using memory mapped I/O before the memscan\n" ) ;
    PRINT( outStream, "  -r, --read               read the contents of the files\n" ) ;
    PRINT( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
    PRINT( outStream, "                           child memscan\n" ) ;
@@ -75,7 +75,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "SCAN OPTIONS\n" ) ;
    PRINT( outStream, "      --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)\n" ) ;
    PRINT( outStream, "                           or c3 (the x86 RET instruction) by default\n" ) ;
-   PRINT( outStream, "      --shannon            compute Shannon Entropy for each mmap region\n" ) ;
+   PRINT( outStream, "      --shannon            compute Shannon Entropy for each mapped region\n" ) ;
    PRINT( outStream, "                           and physical page\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "OUTPUT OPTIONS\n" ) ;
@@ -98,7 +98,7 @@ static struct option long_options[] = {
    // PRE-SCAN OPTIONS
    { "block",     required_argument, 0, 'b' },
    { "stream",    required_argument, 0, '0' },
-   { "mmap",      required_argument, 0, '1' },
+   { "map_file",  required_argument, 0, '1' },
    { "read",      no_argument,       0, 'r' },
    { "fork",      no_argument,       0, 'f' },
    { "local",     required_argument, 0, 'l' },
@@ -141,9 +141,9 @@ bool iomemSummary              = 0 ;
 bool printPath                 = 0 ;
 bool includePhysicalMemoryInfo = 0 ;
 
-char blockPath[ FILENAME_MAX ]   = {} ;
-char streamPath [ FILENAME_MAX ] = {} ;
-char mmapPath [ FILENAME_MAX ]   = {} ;
+char blockPath[ FILENAME_MAX ]    = {} ;
+char streamPath [ FILENAME_MAX ]  = {} ;
+char mapFilePath [ FILENAME_MAX ] = {} ;
 
 size_t localSize  = 0 ;
 size_t mallocSize = 0 ;
@@ -270,10 +270,10 @@ void processOptions( int argc, char* argv[] ) {
          case '1':
             ASSERT( optarg != NULL ) ;
             openFileWithMapIO = true ;
-            strncpy( mmapPath, optarg, sizeof( mmapPath ) ) ;
-            trim( mmapPath ) ;
-            if( strlen( mmapPath ) == 0 ) {
-               FATAL_ERROR( "--mmap must have a filename" ) ;
+            strncpy( mapFilePath, optarg, sizeof( mapFilePath ) ) ;
+            trim( mapFilePath ) ;
+            if( strlen( mapFilePath ) == 0 ) {
+               FATAL_ERROR( "--map_file must have a filename" ) ;
             }
             break ;
 
