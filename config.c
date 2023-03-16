@@ -151,7 +151,7 @@ size_t numThreads = 0 ;
 unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
 
 
-/// Get a number from a string (with units)
+/// Get a positive number from a string (with units)
 ///
 /// Memscan has options like:  `--local=NUM[K|M|G]`.  This function parses
 /// NUM with the units.  The following units are allowed:
@@ -181,6 +181,8 @@ size_t getOptargNumericValue( char* optarg ) {
       FATAL_ERROR( "negative number not allowed here" ) ;
    }
 
+   ASSERT( strlen( optarg ) > 0 ) ;
+
    result = strtol( optarg, &strtolRemainder, 10 ) ;
    // printf( "result=%ld  strtolRemainder=%p [%s]  errno=%d\n", result, strtolRemainder, strtolRemainder, errno ) ;
 
@@ -208,7 +210,6 @@ size_t getOptargNumericValue( char* optarg ) {
       }
    }
 
-   /// @todo Build unit tests for all of this
    // printf( "result=%ld\n", result ) ;
    return result ;
 } // getOptargNumericValue

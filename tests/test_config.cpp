@@ -116,9 +116,98 @@ extern "C" size_t getOptargNumericValue( char* optarg ) ;
 
 
 BOOST_AUTO_TEST_CASE( test_getOptargNumericValue ) {
-   { char buff[10] = "100" ;   BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 100 ) ; }
+   BOOST_CHECK_FAIL( getOptargNumericValue( NULL ) ) ;
+
+   // Test regular numbers
+   { char buff[10] =   "0"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] = "  0"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] =   "1"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1 ) ; }
+   { char buff[10] = "  1 " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1 ) ; }
+   { char buff[10] =  "10"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10 ) ; }
+   { char buff[10] = " 10 " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10 ) ; }
+   { char buff[10] = "100"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 100 ) ; }
+
+   // Test k unit
+   { char buff[10] =   "0k"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] = "  0k " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] =   "1k"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1000 ) ; }
+   { char buff[10] = "  1k " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1000 ) ; }
+   { char buff[10] =  "10k"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10000 ) ; }
+   { char buff[10] = " 10k " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10000 ) ; }
+   { char buff[10] = "100k"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 100000 ) ; }
+
+   // Test K unit
+   { char buff[10] =   "0K"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] = "  0K " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] =   "1K"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1024 ) ; }
+   { char buff[10] = "  1K " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1024 ) ; }
+   { char buff[10] =  "10K"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10240 ) ; }
+   { char buff[10] = " 10K " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10240 ) ; }
+   { char buff[10] = "100K"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 102400 ) ; }
+
+   // Test m unit
+   { char buff[10] =   "0m"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] = "  0m " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] =   "1m"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1000000 ) ; }
+   { char buff[10] = "  1m " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1000000 ) ; }
+   { char buff[10] =  "10m"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10000000 ) ; }
+   { char buff[10] = " 10m " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10000000 ) ; }
+   { char buff[10] = "100m"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 100000000 ) ; }
+
+   // Test M unit
+   { char buff[10] =   "0M"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] = "  0M " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] =   "1M"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1048576 ) ; }
+   { char buff[10] = "  1M " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1048576 ) ; }
+   { char buff[10] =  "10M"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10485760 ) ; }
+   { char buff[10] = " 10M " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10485760 ) ; }
+   { char buff[10] = "100M"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 104857600 ) ; }
+
+   // Test g unit
+   { char buff[10] =   "0g"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] = "  0g " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] =   "1g"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1000000000 ) ; }
+   { char buff[10] = "  1g " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1000000000 ) ; }
+   { char buff[10] =  "10g"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10000000000 ) ; }
+   { char buff[10] = " 10g " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10000000000 ) ; }
+   { char buff[10] = "100g"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 100000000000 ) ; }
+
+   // Test G unit
+   { char buff[10] =   "0G"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] = "  0G " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 0 ) ; }
+   { char buff[10] =   "1G"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1073741824 ) ; }
+   { char buff[10] = "  1G " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 1073741824 ) ; }
+   { char buff[10] =  "10G"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10737418240 ) ; }
+   { char buff[10] = " 10G " ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 10737418240 ) ; }
+   { char buff[10] = "100G"  ;  BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 107374182400 ) ; }
+
+   // Test negative numbers
+   { char buff[10] =   "-0" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "  -0" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] =   "-1" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "  -1" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] =  "-10" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = " -10" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
    { char buff[10] = "-100" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
-   { char buff[10] = "100X" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+
+   // Test improper units
+   { char buff[10] =   "0a"  ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "  0b " ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] =   "1c"  ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "  1d " ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] =  "10e"  ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = " 10f " ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "100h"  ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+
+   // Other bad things
+   { char buff[10] = "0x00"  ;   BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "1.0 " ;    BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "" ;        BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = " " ;       BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "  " ;      BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "Blob" ;    BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "  Bx  " ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+
 } // test_getOptargNumericValue
 
 BOOST_AUTO_TEST_SUITE_END()
