@@ -8,12 +8,25 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <stdlib.h>    // For malloc() free()
 #include "allocate.h"  // Just cuz
 #include "config.h"    // For FATAL_ERROR
 
 
-void allocatePreScanMemory() {
+/// Pointer to the heap's memory allocation:  `--malloc`
+static void* heapAllocation = NULL ;
 
+void allocatePreScanMemory() {
+   if( allocateHeapMemory ) {
+      ASSERT( heapAllocation == NULL ) ;
+      ASSERT( mallocSize > 0 ) ;
+
+      heapAllocation = malloc( mallocSize ) ;
+
+      if( heapAllocation == NULL ) {
+         FATAL_ERROR( "unable to allocate memory during --malloc" ) ;
+      }
+   }
 }
 
 
@@ -23,5 +36,10 @@ void fillPreScanMemory() {
 
 
 void releasePreScanMemory() {
+   if( allocateHeapMemory ) {
+      ASSERT( heapAllocation != NULL ) ;
 
+      free( heapAllocation ) ;
+      heapAllocation = NULL ;
+   }
 }
