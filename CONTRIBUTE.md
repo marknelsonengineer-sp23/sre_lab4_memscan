@@ -25,7 +25,7 @@ Contribute to MemScan
   - `FATAL_ERROR( msg, ... )`:  Print a message and call `exit()`
     
 - Use ASSERT() for things that should never happen.
-- Use FATAL_ERROR() for things that may happen and we want to tell the user
+- Use FATAL_ERROR() for things that may happen and we need to tell the user
   why the program is ending.
 - Functions may return `bool` if local logic needs to check the results.  In
   most cases, however, functions should call FATAL_ERROR().
@@ -42,9 +42,6 @@ the [Boost Test] framework can catch the exception rather than immediately
 This utility function is a unique hybrid of C and C++ -- as C does not support
 exceptions.
 
-[Boost Test]:  https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html
-[BOOST_CHECK_THROW]: https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/boost_test/utf_reference/testing_tool_ref/assertion_boost_level_throw.html
-
 Using this technique gives me a works/doesn't work test, but we loose
 fidelity in that we don't get a reason code or message.  I'm willing to
 accept that as I'd like to focus on writing a traditional command-line
@@ -54,20 +51,18 @@ but not _why_.
 ### Toolchain
 - MemScan is written in C.
   - It's compiled with [gcc](https://gcc.gnu.org).
-  - Use `make tidy` to lint the program: [clang-tidy](https://releases.llvm.org/13.0.0/tools/clang/tools/extra/docs/clang-tidy/) 
-    as a linter.
-  - Use `make doc` to build documentation:  [Doxygen](https://www.doxygen.nl) 
-    for documentation.
-  - Use `make publish` to publish the documentation to [UHUnix](https://www2.hawaii.edu/~marknels/sre/memscan/index.html).
-  - It uses [Makefile](https://www.gnu.org/software/make/manual/make.html) 
-    for its build.
-  - It uses [GitHub](https://github.com/marknelsonengineer-sp23/sre_lab4_memscan) 
-    for version control.
+  - Use `make tidy` to lint the program.  [clang-tidy] is the linter.
+  - Use `make doc` to build documentation:  [Doxygen] is used to produce it.
+  - Use `make publish` to publish the documentation to [UHUnix].
+  - It uses [Makefile] for its build.
+  - It uses [GitHub] for version control.
   - All of the above should run clean and without warnings.
-- MemScan uses [Boost unit tests](https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html) which are written in C++.
-- MemScan is a Linux-based, user-mode command-line program.
-- To get the most out of MemScan, it should be run as `root` or with the 
-  `CAP_SYS_ADMIN` capability.  See https://www.kernel.org/doc/Documentation/vm/pagemap.txt
+- MemScan uses [Boost Test] written in C++.  Use `make clean` and 
+  `make test` to test the application.
+- MemScan is a Linux-based, user-mode command-line program that needs to run
+  with root-level privileges.
+  - To get the most out of MemScan, it should be run as `root` or with the 
+    `CAP_SYS_ADMIN` capability.  See https://www.kernel.org/doc/Documentation/vm/pagemap.txt
 - MemScan was written in CLion, using `Makefile` based build.  Note:  CLion 
   usually uses a CMake based build.
   
@@ -80,7 +75,7 @@ but not _why_.
 - File names and the functions that are in them represent the names of the
   files they are processing.  Ie. `iomem`, `maps`, `pagemap`, et. al..
 - Function names start with lowercase letters.
-- I'm not using [Hungarian notation](https://en.wikipedia.org/wiki/Hungarian_notation)
+- I'm not using [Hungarian notation]
   in this project.
 - Structures start with uppercase.
 
@@ -88,7 +83,9 @@ but not _why_.
 - Fully document "published" functions in `.h` files.  Leave internal 
   documentation in the `.c` files.
 - If there's a code-block that's longer than a page, I'll usually comment the 
-  `}` with an indication of what it's closing.  Ex. `} // validate()` 
+  `}` with an indication of what it's closing.  Ex. `} // validate()`
+- Markdown files should use [references] and avoid embedding URLs in the
+  narrative.
 
 ### Release Procedures
 - Run `make lint`
@@ -97,3 +94,13 @@ but not _why_.
 - Scrub all `@todo`s
 - Scrub GitHub issues
 - Tag the release in Git
+
+[Hungarian notation]: https://en.wikipedia.org/wiki/Hungarian_notation
+[clang-tidy]: https://releases.llvm.org/13.0.0/tools/clang/tools/extra/docs/clang-tidy/
+[Doxygen]: https://www.doxygen.nl
+[UHUnix]: https://www2.hawaii.edu/~marknels/sre/memscan/index.html
+[Makefile]: https://www.gnu.org/software/make/manual/make.html
+[GitHub]: https://github.com/marknelsonengineer-sp23/sre_lab4_memscan
+[Boost Test]: https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html
+[BOOST_CHECK_THROW]: https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/boost_test/utf_reference/testing_tool_ref/assertion_boost_level_throw.html
+[references]: https://www.doxygen.nl/manual/markdown.html#md_reflinks
