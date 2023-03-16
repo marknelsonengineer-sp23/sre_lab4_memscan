@@ -305,6 +305,10 @@ void processOptions( int argc, char* argv[] ) {
             }
             break ;
 
+         case '2':
+            fillAllocatedMemory = true ;
+            break ;
+
          case 'p':
             includePhysicalMemoryInfo = true ;
             break ;

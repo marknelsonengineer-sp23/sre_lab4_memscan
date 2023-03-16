@@ -124,6 +124,7 @@
       <w>pagefile</w>
       <w>pageflag</w>
       <w>pageflags</w>
+      <w>pagemap</w>
       <w>pageout</w>
       <w>paramdoc</w>
       <w>perlmod</w>
