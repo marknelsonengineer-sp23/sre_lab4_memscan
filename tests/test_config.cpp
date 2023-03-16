@@ -89,6 +89,15 @@ BOOST_AUTO_TEST_CASE( test_GET_BIT ) {
    BOOST_CHECK(  GET_BIT( 0b1000, 3 ) ) ;
    BOOST_CHECK( !GET_BIT( 0b0111, 3 ) ) ;
 
+   BOOST_CHECK(  GET_BIT( 0x1000000000000000, 60 ) ) ;
+   BOOST_CHECK( !GET_BIT( 0xefffffffffffffff, 60 ) ) ;
+
+   BOOST_CHECK(  GET_BIT( 0x2000000000000000, 61 ) ) ;
+   BOOST_CHECK( !GET_BIT( 0xdfffffffffffffff, 61 ) ) ;
+
+   BOOST_CHECK(  GET_BIT( 0x4000000000000000, 62 ) ) ;
+   BOOST_CHECK( !GET_BIT( 0xbfffffffffffffff, 62 ) ) ;
+
    BOOST_CHECK(  GET_BIT( 0x8000000000000000, 63 ) ) ;
    BOOST_CHECK( !GET_BIT( 0x7fffffffffffffff, 63 ) ) ;
 } // test_GET_BIT
