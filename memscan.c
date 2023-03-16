@@ -2,7 +2,7 @@
 //   University of Hawaii, College of Engineering
 //   Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
 //
-/// Basic memory scanner
+/// A memory scanner:  memscan's `main()`
 ///
 /// @file   memscan.c
 /// @author Mark Nelson <marknels@hawaii.edu>
@@ -19,7 +19,7 @@
 #include "pagemap.h"  // For closePagemap()
 
 
-/// A basic memory scanner
+/// A memory scanner:  memscan's `main()`
 ///
 /// @param argc The number of arguments passed to `memscan`
 /// @param argv An array of arguments passed to `memscan`

@@ -2,7 +2,7 @@
 //   University of Hawaii, College of Engineering
 //   Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
 //
-/// Basic memory scanner
+/// A memory scanner:  memscan's `main()`
 ///
 /// @file   memscan.h
 /// @author Mark Nelson <marknels@hawaii.edu>
