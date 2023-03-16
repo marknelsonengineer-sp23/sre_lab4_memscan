@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE( test_printUsage ) {
    BOOST_CHECK( dev_null != NULL ) ;
    BOOST_CHECK_FAIL( printUsage( NULL ) ) ;
    BOOST_CHECK_NO_THROW( printUsage( dev_null ) ) ;
-   fclose( dev_null ) ;
+   fclose( dev_null ) ;  // NOLINT(cert-err33-c): No need to check the return value of fclose()
 }
 
 
