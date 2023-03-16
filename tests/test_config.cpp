@@ -13,6 +13,8 @@
 #include <boost/test/included/unit_test.hpp>  // include this to get main()
 #include <boost/test/unit_test.hpp>
 
+#include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
+
 extern "C" {
    #include "../config.h"
 }
@@ -78,8 +80,8 @@ extern "C" size_t getOptargNumericValue( char* optarg ) ;
 
 BOOST_AUTO_TEST_CASE( test_getOptargNumericValue ) {
    { char buff[10] = "100" ;   BOOST_CHECK_EQUAL( getOptargNumericValue( buff ), 100 ) ; }
-   { char buff[10] = "-100" ;  BOOST_CHECK_THROW( getOptargNumericValue( buff ), std::exception ) ; }
-   { char buff[10] = "100X" ;  BOOST_CHECK_THROW( getOptargNumericValue( buff ), std::exception ) ; }
+   { char buff[10] = "-100" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
+   { char buff[10] = "100X" ;  BOOST_CHECK_FAIL( getOptargNumericValue( buff ) ) ; }
 } // test_getOptargNumericValue
 
 BOOST_AUTO_TEST_SUITE_END()

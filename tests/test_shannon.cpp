@@ -13,6 +13,8 @@
 
 #include <stdlib.h>  // For rand() srand()
 
+#include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
+
 extern "C" {
    #include "../shannon.h"
 }
@@ -61,7 +63,7 @@ BOOST_AUTO_TEST_CASE( test_getShannonClassification ) {
    BOOST_CHECK_EQUAL( getShannonClassification( 7.500       ), "Encrypted/compressed" ) ;
    BOOST_CHECK_EQUAL( getShannonClassification( 7.900       ), "Random" ) ;
    BOOST_CHECK_EQUAL( getShannonClassification( 8.000       ), "Random" ) ;
-   BOOST_CHECK_THROW( getShannonClassification( 8.001 ), std::exception ) ;
+   BOOST_CHECK_FAIL( getShannonClassification( 8.001 ) ) ;
 } // test_getShannonClassification
 
 BOOST_AUTO_TEST_SUITE_END()

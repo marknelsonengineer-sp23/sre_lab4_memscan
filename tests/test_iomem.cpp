@@ -11,6 +11,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
+
 extern "C" {
    #include "../iomem.h"
 }
@@ -158,10 +160,10 @@ BOOST_AUTO_TEST_CASE( test_iomem_add ) {
 
 BOOST_AUTO_TEST_CASE( test_iomem_add_bad ) {
    BOOST_CHECK( validate_iomem() ) ;
-   BOOST_CHECK_THROW( add_iomem_region( (void*) 0x000, (void*) 0x000, "test" ), std::exception ) ;
-   BOOST_CHECK_THROW( add_iomem_region( (void*) 0x001, (void*) 0x000, "test" ), std::exception ) ;
-   BOOST_CHECK_THROW( add_iomem_region( (void*) 0x000, (void*) 0x001, NULL ),   std::exception ) ;
-   BOOST_CHECK_THROW( add_iomem_region( (void*) 0x000, (void*) 0x001, "" ),     std::exception ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( (void*) 0x000, (void*) 0x000, "test" ) ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( (void*) 0x001, (void*) 0x000, "test" ) ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( (void*) 0x000, (void*) 0x001, NULL ) ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( (void*) 0x000, (void*) 0x001, "" ) ) ;
    // @TODO Add some 1 byte regions (they should fail)
 
    BOOST_CHECK( validate_iomem() ) ;
@@ -174,8 +176,8 @@ BOOST_AUTO_TEST_CASE( test_iomem_add_overlap ) {
    BOOST_CHECK_NO_THROW( add_iomem_region( (void*) 0x200, (void*) 0x2FF, "region 2 - new") ) ;
    BOOST_CHECK_NO_THROW( add_iomem_region( (void*) 0x300, (void*) 0x3FF, "region 3 - new") ) ;
 
-   BOOST_CHECK_THROW( add_iomem_region( (void*) 0x000, (void*) 0x100, "overlap 1 - bad"), std::exception ) ;
-   BOOST_CHECK_THROW( add_iomem_region( (void*) 0x0FF, (void*) 0x101, "overlap 2 - bad"), std::exception ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( (void*) 0x000, (void*) 0x100, "overlap 1 - bad") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( (void*) 0x0FF, (void*) 0x101, "overlap 2 - bad") ) ;
    // @TODO Add some more overlapping test cases someday
    BOOST_CHECK( validate_iomem() ) ;
 }

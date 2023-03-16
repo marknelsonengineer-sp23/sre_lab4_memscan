@@ -32,3 +32,15 @@
 #else
    extern void throwException() ;
 #endif
+
+
+/// Ensure `expression` fails (throws `std::exception`)
+///
+/// throwException() always throws `std::exception`.  This helper macro is
+/// simply a concise way to call `BOOST_CHECK_THROW( (expression), std::exception )`
+#ifdef __cplusplus
+   #define BOOST_CHECK_FAIL( expression ) \
+      BOOST_CHECK_THROW( (expression), std::exception ) ;
+#else
+   #define BOOST_CHECK_FAIL( expression ) ;
+#endif
