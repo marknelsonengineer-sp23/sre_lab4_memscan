@@ -58,3 +58,4 @@ test: $(OBJ)
 clean:
 	rm -f $(TARGET) *.o
 	cd tests && $(MAKE) clean
+	rm -f -r --preserve-root .doxygen/docs/html
