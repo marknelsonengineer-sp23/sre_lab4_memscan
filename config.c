@@ -228,6 +228,13 @@ void processOptions( int argc, char* argv[] ) {
             forkProcess = true ;
             break ;
 
+         case 't': {
+            size_t trialValue = stringToUnsignedLongLongWithBasePrefix( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            numThreads = (size_t) trialValue ;
+            }
+            break ;
+
          case 'l': {
             unsigned long long trialValue = stringToUnsignedLongLongWithScale( optarg ) ;
             ASSERT( trialValue <= SIZE_MAX ) ;
