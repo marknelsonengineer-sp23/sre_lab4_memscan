@@ -88,6 +88,7 @@ extern size_t numMallocs ;  ///< The number of `malloc ( mallocSize )` allocatio
 extern size_t mappedSize ;  ///< The number of bytes specified by `--map_mem`
 extern void*  mappedStart ; ///< The starting address of `--map_mem` specified by `--map_addr`
 extern size_t numThreads ;  ///< The number of threads specified by `--threads`
+extern unsigned int sleepSeconds ;  ///< The number of seconds specified by `--sleep`
 
                                       /// The byte to scan for.
 extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`

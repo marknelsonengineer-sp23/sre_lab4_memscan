@@ -12,7 +12,7 @@
 
 #include <errno.h>   // For errno
 #include <getopt.h>  // For getopt_long() struct option
-#include <limits.h>  // For PATH_MAX
+#include <limits.h>  // For PATH_MAX UINT_MAX
 #include <locale.h>  // For set_locale() LC_NUMERIC
 #include <stddef.h>  // For NULL
 #include <stdio.h>   // For printf()
@@ -74,6 +74,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "      --fill               fill the local, malloc'd and/or mapped memory\n" ) ;
    PRINT( outStream, "                           with data before the memscan\n" ) ;
    PRINT( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
+   PRINT( outStream, "      --sleep=SECONDS      pause the primary thread before scanning\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "SCAN OPTIONS\n" ) ;
    PRINT( outStream, "      --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)\n" ) ;
@@ -111,6 +112,7 @@ static struct option long_options[] = {
    { "map_addr",  required_argument, 0, '8' },
    { "fill",      no_argument      , 0, '2' },
    { "threads",   required_argument, 0, 't' },
+   { "sleep",     required_argument, 0, '9' },
    // SCAN OPTIONS
    { "scan_byte", optional_argument, 0, '3' },
    { "shannon",   no_argument,       0, '4' },
@@ -155,6 +157,7 @@ size_t numMallocs = 1 ;  // By default, malloc will allocate 1 region
 size_t mappedSize = 0 ;
 void*  mappedStart = NULL ;  // By default, the OS will select a start address
 size_t numThreads = 0 ;
+unsigned int sleepSeconds = 0 ;  // By default, don't sleep
 
 unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
 
@@ -265,6 +268,13 @@ void processOptions( int argc, char* argv[] ) {
 
          case 'p':
             includePhysicalMemoryInfo = true ;
+            break ;
+
+         case '9': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithScale( optarg ) ;
+            ASSERT( trialValue <= UINT_MAX ) ;
+            sleepSeconds = (unsigned int) trialValue ;
+            }
             break ;
 
          case '3':

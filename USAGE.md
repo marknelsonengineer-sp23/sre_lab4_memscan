@@ -28,6 +28,7 @@ PRE-SCAN OPTIONS
       --fill               fill the local, malloc'd and/or mapped memory
                            with data before the memscan
   -t, --threads=NUM        create NUM threads before the memscan
+      --sleep=SECONDS      pause the primary thread before scanning
 
 SCAN OPTIONS
       --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)

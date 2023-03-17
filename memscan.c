@@ -8,8 +8,9 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>   // For printf() fprintf()
-#include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
+#include <stdio.h>    // For printf() fprintf()
+#include <stdlib.h>   // For EXIT_SUCCESS and EXIT_FAILURE
+#include <unistd.h>   // For sleep()
 
 #include "allocate.h" // For allocatePreScanMemory(), et. al.
 #include "config.h"   // For processOptions()
@@ -27,24 +28,19 @@
 /// @return The program's return code
 int main( int argc, char* argv[] ) {
    // Initialize the program
-   processOptions( argc, argv ) ;
-   read_iomem() ;  // Bring in the physical memory allocation from `iomem`
+   processOptions( argc, argv ) ;  // Process --help, --key, --version
+   read_iomem() ;              // Bring in the physical memory allocation from `iomem`
 
-   if( iomemSummary ) {      // Process --iomem
+   if( iomemSummary ) {        // Process --iomem
       summarize_iomem() ;
       exit( EXIT_SUCCESS ) ;
    }
 
    // Do pre-scan operations
-   openPreScanFiles() ;
-   allocatePreScanMemory() ;
+   openPreScanFiles() ;        // Process --block, --stream, --map_file
+   allocatePreScanMemory() ;   // Process --malloc, --numMalloc, --map_mem, --map_addr
 
    /// Anything that changes #MEMORY_MAP_FILE should be done before calling readMaps()
-   /// @todo Process --block
-   /// @todo Process --stream
-   /// @todo Process --map_file
-   /// @todo Process --local, --malloc, --mem_map and --fill
-   /// @todo Process --threads
 
    readMaps() ;
 
@@ -52,16 +48,20 @@ int main( int argc, char* argv[] ) {
    /// or waiting, should be done before calling readPagemapInfo()
 
    if( readFileContents ) {
-      readPreScanFiles() ;
+      readPreScanFiles() ;     // Process --read
    }
 
    if( fillAllocatedMemory ) {
-      fillPreScanMemory() ;
+      fillPreScanMemory() ;    // Process --fill
    }
 
-   scanMaps() ;  /// @todo Process --scan_byte, --histogram and --shannon
+   if( sleepSeconds > 0 ) {
+      sleep( sleepSeconds ) ;  // Process --sleep
+   }
 
-   readPagemapInfo() ;  // Process --phys
+   scanMaps() ;                // Process --scan_byte, --shannon
+
+   readPagemapInfo() ;         // Process --phys
 
    printMaps() ;
 

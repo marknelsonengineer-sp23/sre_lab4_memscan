@@ -96,9 +96,12 @@ earlier versions.
     one large malloc and many small ones.  Note that `DEFAULT_MMAP_THRESHOLD`
     is 131,072 bytes.  See [Malloc Internals] and [mallopt].
   - memscan does not explore System V shared memory segments.
+  - `--sleep` is intended to explore swapping and paging.  It can be used in 
+    conjunction with tools like [stressapptest] to induce memscan to swap pages to disk.
 
 [Malloc Internals]: https://sourceware.org/glibc/wiki/MallocInternals
 [mallopt]: https://man7.org/linux/man-pages/man3/mallopt.3.html
+[stressapptest]: https://github.com/stressapptest/stressapptest
 
 
 # Toolchain
