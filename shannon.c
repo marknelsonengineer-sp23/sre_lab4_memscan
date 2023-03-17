@@ -71,7 +71,7 @@ static struct Classification classification[] = {
          { 0.000, "No entropy" }
         ,{ 0.001, "Very low entropy" }
         ,{ 1.001, "Unknown" }
-        ,{ 3.000, "Heap (filled)" }
+        ,{ 3.000, "SHANNON CONSTANT" }
         ,{ 3.001, "Unknown" }
         ,{ 3.010, "English text in UNICODE" }
         ,{ 3.411, "Unknown" }

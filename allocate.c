@@ -51,18 +51,33 @@ void allocatePreScanMemory() {
       ASSERT( mappedAllocation == NULL ) ;
       ASSERT( mappedSize > 0 ) ;
 
-      mappedAllocation = mmap( (void*) 0x550000000000          // addr
-//      mappedAllocation = mmap( NULL         // addr
-                              ,mappedSize     // length
-                              ,PROT_READ      // protection
-                              |PROT_WRITE
-                              ,MAP_PRIVATE    // flags
-//                            ,MAP_SHARED     // flags
-                              |MAP_FIXED_NOREPLACE
-                              |MAP_ANONYMOUS
-                              ,-1             // file descriptor
-                              ,0              // offset
-                              ) ;
+      if( mappedStart == NULL ) {
+         mappedAllocation = mmap( NULL           // addr
+                                 ,mappedSize     // length
+                                 ,PROT_READ      // protection
+                                 |PROT_WRITE
+                                 ,MAP_PRIVATE    // flags
+//                               ,MAP_SHARED     // flags
+                                 |MAP_ANONYMOUS
+                                 ,-1             // file descriptor
+                                 ,0              // offset
+         ) ;
+      } else {
+         mappedAllocation = mmap( mappedStart    // addr
+                                 ,mappedSize     // length
+                                 ,PROT_READ      // protection
+                                 |PROT_WRITE
+                                 ,MAP_PRIVATE    // flags
+//                               ,MAP_SHARED     // flags
+                                 |MAP_FIXED_NOREPLACE
+                                 |MAP_ANONYMOUS
+                                 ,-1             // file descriptor
+                                 ,0              // offset
+         ) ;
+      }
+
+      // printf( "mappedStart=%p  mappedAllocation=%p\n", mappedStart, mappedAllocation ) ;
+
       if( mappedAllocation == MAP_FAILED ) {
          FATAL_ERROR( "unable to allocate memory during --map_mem" ) ;
       }
@@ -118,7 +133,13 @@ void releasePreScanMemory() {
 
    if( allocateMappedMemory ) {
       ASSERT( mappedAllocation != NULL ) ;
-      free( mappedAllocation ) ;
+
+      int i = munmap( mappedAllocation, mappedSize ) ;
+      if( i != 0 ) {
+         WARNING( "munmap failed" ) ;
+      }
+
       mappedAllocation = NULL ;
+
    } // allocateMappedMemory
 } // releasePreScanMemory

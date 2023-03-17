@@ -86,6 +86,7 @@ extern size_t localSize ;   ///< The number of bytes specified by `--local`
 extern size_t mallocSize ;  ///< The number of bytes specified by `--malloc`
 extern size_t numMallocs ;  ///< The number of `malloc ( mallocSize )` allocations specified by `--numMalloc`
 extern size_t mappedSize ;  ///< The number of bytes specified by `--map_mem`
+extern void*  mappedStart ; ///< The starting address of `--map_mem` specified by `--map_addr`
 extern size_t numThreads ;  ///< The number of threads specified by `--threads`
 
                                       /// The byte to scan for.

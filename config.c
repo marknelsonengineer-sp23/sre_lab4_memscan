@@ -20,6 +20,7 @@
 #include <string.h>  // For strlen() strncpy()
 
 #include "config.h"  // Just cuz
+#include "convert.h" // For stringToUnsignedLongLongWithScale() stringToUnsignedLongLongWithBasePrefix()
 #include "iomem.h"   // For summarize_iomem()
 #include "pagemap.h" // For getPageSizeInBytes()
 #include "trim.h"    // For trim()
@@ -68,6 +69,8 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "      --numMalloc=NUM      number of malloc'd allocations\n" ) ;
    PRINT( outStream, "      --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the\n" ) ;
    PRINT( outStream, "                           memscan\n" ) ;
+   PRINT( outStream, "      --map_addr=ADDR      the starting address of the memory map\n" ) ;
+   PRINT( outStream, "                           by default, the OS will select an address\n" ) ;
    PRINT( outStream, "      --fill               fill the local, malloc'd and/or mapped memory\n" ) ;
    PRINT( outStream, "                           with data before the memscan\n" ) ;
    PRINT( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
@@ -105,6 +108,7 @@ static struct option long_options[] = {
    { "malloc",    required_argument, 0, 'm' },
    { "numMalloc", required_argument, 0, '6' },
    { "map_mem",   required_argument, 0, '7' },
+   { "map_addr",  required_argument, 0, '8' },
    { "fill",      no_argument      , 0, '2' },
    { "threads",   required_argument, 0, 't' },
    // SCAN OPTIONS
@@ -149,74 +153,10 @@ size_t localSize  = 0 ;
 size_t mallocSize = 0 ;
 size_t numMallocs = 1 ;  // By default, malloc will allocate 1 region
 size_t mappedSize = 0 ;
+void*  mappedStart = NULL ;  // By default, the OS will select a start address
 size_t numThreads = 0 ;
 
 unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
-
-
-/// Get a positive number from a string (with units)
-///
-/// Memscan has options like:  `--local=NUM[K|M|G]`.  This function parses
-/// NUM with the units.  The following units are allowed:
-///
-/// | Unit |              Scale |
-/// |:----:|-------------------:|
-/// |   k  |              1,000 |
-/// |   K  |              1,024 |
-/// |   m  |          1,000,000 |
-/// |   M  |        1024 * 1024 |
-/// |   g  |      1,000,000,000 |
-/// |   G  | 1024 * 1024 * 1024 |
-///
-/// @see https://en.wikipedia.org/wiki/Binary_prefix
-///
-/// @NOLINTBEGIN(readability-magic-numbers): Magic numbers are allowed in this function
-///
-/// @param optarg The input string (this must be modifiable)
-/// @return The number or a fatal error
-size_t getOptargNumericValue( char* optarg ) {
-   ASSERT( optarg != NULL ) ;
-   trim( optarg ) ;
-   size_t result = 0 ;
-   char* strtolRemainder = NULL ;
-
-   if( optarg[0] == '-' ) {
-      FATAL_ERROR( "negative number not allowed here" ) ;
-   }
-
-   ASSERT( strlen( optarg ) > 0 ) ;
-
-   result = strtol( optarg, &strtolRemainder, 10 ) ;
-   // printf( "result=%ld  strtolRemainder=%p [%s]  errno=%d\n", result, strtolRemainder, strtolRemainder, errno ) ;
-
-   // If there's an error or excess characters...
-   if( errno != 0 ) {
-      FATAL_ERROR( "illegal numeric option" ) ;
-   }
-
-   // If there's an error or excess characters...
-   if( strlen( strtolRemainder ) > 0 ) {
-      if( strcmp( strtolRemainder, "k" ) == 0 ) {
-         result = result * 1000 ;
-      } else if( strcmp( strtolRemainder, "K" ) == 0 ) {
-         result = result * 1024 ;
-      } else if( strcmp( strtolRemainder, "m" ) == 0 ) {
-         result = result * 1000 * 1000 ;
-      } else if( strcmp( strtolRemainder, "M" ) == 0 ) {
-         result = result * 1024 * 1024 ;
-      } else if( strcmp( strtolRemainder, "g" ) == 0 ) {
-         result = result * 1000 * 1000 * 1000 ;
-      } else if( strcmp( strtolRemainder, "G" ) == 0 ) {
-         result = result * 1024 * 1024 * 1024 ;
-      } else {
-         FATAL_ERROR( "illegal numeric option" ) ;
-      }
-   }
-
-   // printf( "result=%ld\n", result ) ;
-   return result ;
-} // getOptargNumericValue
-// @NOLINTEND(readability-magic-numbers)
 
 
 void processOptions( int argc, char* argv[] ) {
@@ -281,37 +221,41 @@ void processOptions( int argc, char* argv[] ) {
             readFileContents = true ;
             break ;
 
-         case 'l':
-            localSize = getOptargNumericValue( optarg ) ;
-            if( localSize > 0 ) {
-               allocateLocalMemory = true ;
-            } else {
-               FATAL_ERROR( "--local has illegal number" ) ;
+         case 'l': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithScale( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            localSize = (size_t) trialValue ;
+            allocateLocalMemory = true ;
             }
             break ;
 
-         case 'm':
-            mallocSize = getOptargNumericValue( optarg ) ;
-            if( mallocSize > 0 ) {
-               allocateHeapMemory = true ;
-            } else {
-               FATAL_ERROR( "--malloc has illegal number" ) ;
+         case 'm': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithScale( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            mallocSize = (size_t) trialValue ;
+            allocateHeapMemory = true ;
             }
             break ;
 
-         case '6':
-            numMallocs = getOptargNumericValue( optarg ) ;
-            if( numMallocs <= 0 ) {
-               FATAL_ERROR( "--numMalloc has illegal number" ) ;
+         case '6': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            numMallocs = (size_t) trialValue ;
             }
             break ;
 
-         case '7':
-            mappedSize = getOptargNumericValue( optarg ) ;
-            if( mappedSize > 0 ) {
-               allocateMappedMemory = true;
-            } else {
-               FATAL_ERROR( "--map_mem has illegal number" ) ;
+         case '7': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithScale( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            mappedSize = (size_t) trialValue ;
+            allocateMappedMemory = true ;
+            }
+            break ;
+
+         case '8': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            mappedStart = (void*) trialValue ;  /// @NOLINT(performance-no-int-to-ptr): integer to void* is intended
             }
             break ;
 
@@ -387,6 +331,7 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case 'k':
+            /// @todo Colorize the `--key` output
             printKey( stdout ) ;
             exit( EXIT_SUCCESS ) ;
             break ;

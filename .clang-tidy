@@ -56,7 +56,7 @@ CheckOptions:
   - key:             google-readability-function-size.StatementThreshold
     value:           '800'
   - key:             readability-function-cognitive-complexity.Threshold
-    value:           '100'
+    value:           '140'
 UseColor:        true
 ...
 

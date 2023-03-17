@@ -23,6 +23,8 @@ PRE-SCAN OPTIONS
       --numMalloc=NUM      number of malloc'd allocations
       --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the
                            memscan
+      --map_addr=ADDR      the starting address of the memory map
+                           by default, the OS will select an address
       --fill               fill the local, malloc'd and/or mapped memory
                            with data before the memscan
   -t, --threads=NUM        create NUM threads before the memscan

@@ -30,3 +30,5 @@ Thumbs.db
 # Ignore CLion files
 # .idea
 
+# Ignore gdb files
+.gdb_history
