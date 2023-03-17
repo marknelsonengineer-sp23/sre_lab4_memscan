@@ -90,7 +90,7 @@ earlier versions.
     that's 4x the size of a physical page.  This way, you're guaranteed to
     see a few pages with the unique entropy.
   - When `--malloc` and `--fill` are used, a special constant, 
-    #SHANNON_CONSTANT_FOR_HEAP (with a Shannon entropy of 3.000) will fill 
+    #SHANNON_CONSTANT_FOR_ALLOCATIONS (with a Shannon entropy of 3.000) will fill 
     memory.  This can be searched for with `--shannon` or `--scan_byte=11`.
   - `--malloc` can be used with `--numMalloc` to explore the difference between
     one large malloc and many small ones.  Note that `DEFAULT_MMAP_THRESHOLD`
