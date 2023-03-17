@@ -224,6 +224,10 @@ void processOptions( int argc, char* argv[] ) {
             readFileContents = true ;
             break ;
 
+         case 'f':
+            forkProcess = true ;
+            break ;
+
          case 'l': {
             unsigned long long trialValue = stringToUnsignedLongLongWithScale( optarg ) ;
             ASSERT( trialValue <= SIZE_MAX ) ;
