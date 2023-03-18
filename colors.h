@@ -13,6 +13,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#define ANSI_COLOR_RESET   "\x1b[0m"    ///< The ANSI sequence to reset the colors
+
 #define ANSI_COLOR_RED     "\x1b[31m"   ///< The ANSI sequence for making the foreground color red
 #define ANSI_COLOR_GREEN   "\x1b[32m"   ///< The ANSI sequence for making the foreground color green
 #define ANSI_COLOR_YELLOW  "\x1b[33m"   ///< The ANSI sequence for making the foreground color yellow
@@ -20,7 +22,6 @@
 #define ANSI_COLOR_MAGENTA "\x1b[35m"   ///< The ANSI sequence for making the foreground color magenta
 #define ANSI_COLOR_CYAN    "\x1b[36m"   ///< The ANSI sequence for making the foreground color cyan
 #define ANSI_COLOR_WHITE   "\x1b[37m"   ///< The ANSI sequence for making the foreground color white
-#define ANSI_COLOR_RESET   "\x1b[0m"    ///< The ANSI sequence to reset the colors
 
 #define ANSI_COLOR_BRIGHT_RED     "\x1b[91m"   ///< The ANSI sequence for making the foreground color red (high intensity)
 #define ANSI_COLOR_BRIGHT_GREEN   "\x1b[92m"   ///< The ANSI sequence for making the foreground color green (high intensity)

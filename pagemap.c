@@ -205,8 +205,10 @@ void printPageInfo( const struct PageInfo* page ) {
       printf( ANSI_COLOR_BRIGHT_CYAN "  %s " ANSI_COLOR_RESET, get_iomem_region_description( (void*) page->pfn ) ) ;
 
       if( scanForShannon ) {
+         printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
          printf( "H: %5.3lf ", page->shannon ) ;
          printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( page->shannon ) ) ;
+         printf( ANSI_COLOR_RESET ) ;
       }
    }
 

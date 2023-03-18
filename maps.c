@@ -253,12 +253,21 @@ void printMaps() {
          continue ;
       }
 
-      printf( "%2zu: %p - %p  %s  ",
-               i
-              ,map[i].pAddressStart
-              ,map[i].pAddressEnd - 1
-              ,map[i].sPermissions
-      ) ;
+      printf( ANSI_COLOR_CYAN "%2zu: " ANSI_COLOR_RESET, i ) ;
+      printf( "%p - %p ", map[i].pAddressStart, map[i].pAddressEnd - 1 ) ;
+      printf( ANSI_COLOR_BRIGHT_GREEN "%c" ANSI_COLOR_RESET, map[i].sPermissions[0] ) ;
+      if( map[i].sPermissions[1] == 'w' ) {
+         printf( ANSI_COLOR_MAGENTA "%c" ANSI_COLOR_RESET, map[i].sPermissions[1] ) ;
+      } else {
+         printf( "%c", map[i].sPermissions[1] ) ;
+      }
+      if( map[i].sPermissions[2] == 'x' ) {
+         printf( ANSI_COLOR_RED "%c" ANSI_COLOR_RESET, map[i].sPermissions[2] ) ;
+      } else {
+         printf( "%c", map[i].sPermissions[2] ) ;
+      }
+      printf( "%c", map[i].sPermissions[3] ) ;
+      printf( ANSI_COLOR_CYAN "%'10zu " ANSI_COLOR_RESET, map[i].numBytes ) ;
 
       if( map[i].sPermissions[0] != 'r' ) {
          printf( ANSI_COLOR_RED "read permission not set on %s" ANSI_COLOR_RESET, map[i].sPath );
@@ -272,15 +281,18 @@ void printMaps() {
       }
 
       if( scanForByte ) {
-         printf( "%'10zu bytes; found %'7zu 0x%02x bytes  ",
-                  map[i].numBytes
-                 ,map[i].numBytesFound
-                 ,byteToScanFor ) ;
+         printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
+         printf( "w/ %'7zu ", map[i].numBytesFound ) ;
+         printf( "0x%02x ", byteToScanFor ) ;
+         printf( " bytes " ) ;
+         printf( ANSI_COLOR_RESET ) ;
       }
 
       if( scanForShannon ) {
+         printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
          printf( "H: %5.3lf ", map[i].shannonEntropy ) ;
          printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( map[i].shannonEntropy ) ) ;
+         printf( ANSI_COLOR_RESET ) ;
       }
 
       // Print the path
