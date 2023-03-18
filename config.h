@@ -62,20 +62,21 @@ enum Endian { ENDIAN_UNKNOWN=-1  ///< If the endianness is unknown
 /// @return #LITTLE for Little Endian machines.  #BIG for Big Endian machines.
 extern enum Endian getEndianness() ;
 
-extern bool openFileWithBlockIO       ;  ///< `true` if `--block` is set
-extern bool openFileWithStreamIO      ;  ///< `true` if `--stream` is set
-extern bool openFileWithMapIO         ;  ///< `true` if `--map_file` is set
-extern bool readFileContents          ;  ///< `true` if `--read` is set
-extern bool forkProcess               ;  ///< `true` if `--fork` is set
-extern bool allocateLocalMemory       ;  ///< `true` if `--local` is set
-extern bool allocateHeapMemory        ;  ///< `true` if `--malloc` is set
-extern bool allocateMappedMemory      ;  ///< `true` if `--map_mem` is set
-extern bool fillAllocatedMemory       ;  ///< `true` if `--fill` is set
-extern bool scanForByte               ;  ///< `true` if `--scan_byte` is set
-extern bool scanForShannon            ;  ///< `true` if `--shannon` is set
-extern bool iomemSummary              ;  ///< `true` if `--iomem` is set
-extern bool printPath                 ;  ///< `true` if `--path` is set
-extern bool includePhysicalMemoryInfo ;  ///< `true` if `--phys` is set
+extern bool openFileWithBlockIO        ;  ///< `true` if `--block` is set
+extern bool openFileWithStreamIO       ;  ///< `true` if `--stream` is set
+extern bool openFileWithMapIO          ;  ///< `true` if `--map_file` is set
+extern bool readFileContents           ;  ///< `true` if `--read` is set
+extern bool forkProcess                ;  ///< `true` if `--fork` is set
+extern bool allocateLocalMemory        ;  ///< `true` if `--local` is set
+extern bool allocateHeapMemory         ;  ///< `true` if `--malloc` is set
+extern bool allocateMappedMemory       ;  ///< `true` if `--map_mem` is set
+extern bool fillAllocatedMemory        ;  ///< `true` if `--fill` is set
+extern bool scanForByte                ;  ///< `true` if `--scan_byte` is set
+extern bool scanForShannon             ;  ///< `true` if `--shannon` is set
+extern bool iomemSummary               ;  ///< `true` if `--iomem` is set
+extern bool printPath                  ;  ///< `true` if `--path` is set
+extern bool includePhysicalPageSummary ;  ///< `true` if `--phys` is set
+extern bool includePhysicalPageNumber  ;  ///< `true` if `--pfn` is set
 
 extern char blockPath[ FILENAME_MAX ]   ; ///< The path to the file specified by `--block`
 extern char streamPath[ FILENAME_MAX ]  ; ///< The path to the file specified by `--stream`

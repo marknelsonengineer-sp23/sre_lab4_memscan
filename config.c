@@ -85,7 +85,8 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "OUTPUT OPTIONS\n" ) ;
    PRINT( outStream, "  -i, --iomem              print a summary of /proc/iomem\n" ) ;
    PRINT( outStream, "      --path               print the path (if available) in the memscan\n" ) ;
-   PRINT( outStream, "  -p, --phys               print physical page numbers w/ flags in the memscan\n" ) ;
+   PRINT( outStream, "  -p, --phys               print a summary of the physical pages w/ flags\n" ) ;
+   PRINT( outStream, "  -P  --pfn                print each physical page number w/ flags\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "PROGRAM OPTIONS\n" ) ;
    PRINT( outStream, "  -h, --help               display this help and exit\n" ) ;
@@ -120,6 +121,7 @@ static struct option long_options[] = {
    { "iomem",     no_argument,       0, 'i' },
    { "path",      no_argument,       0, '5' },
    { "phys",      no_argument,       0, 'p' },
+   { "pfn",       no_argument,       0, 'P' },
    // PROGRAM OPTIONS
    { "help",      no_argument,       0, 'h' },
    { "key",       no_argument,       0, 'k' },
@@ -128,23 +130,24 @@ static struct option long_options[] = {
 };
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:rfl:m:t:iphkv" ;
+const char SINGLE_OPTION_STRING[] = "b:rfl:m:t:ipPhkv" ;
 
 
-bool openFileWithBlockIO       = 0 ;
-bool openFileWithStreamIO      = 0 ;
-bool openFileWithMapIO         = 0 ;
-bool readFileContents          = 0 ;
-bool forkProcess               = 0 ;
-bool allocateLocalMemory       = 0 ;
-bool allocateHeapMemory        = 0 ;
-bool allocateMappedMemory      = 0 ;
-bool fillAllocatedMemory       = 0 ;
-bool scanForByte               = 0 ;
-bool scanForShannon            = 0 ;
-bool iomemSummary              = 0 ;
-bool printPath                 = 0 ;
-bool includePhysicalMemoryInfo = 0 ;
+bool openFileWithBlockIO        = 0 ;
+bool openFileWithStreamIO       = 0 ;
+bool openFileWithMapIO          = 0 ;
+bool readFileContents           = 0 ;
+bool forkProcess                = 0 ;
+bool allocateLocalMemory        = 0 ;
+bool allocateHeapMemory         = 0 ;
+bool allocateMappedMemory       = 0 ;
+bool fillAllocatedMemory        = 0 ;
+bool scanForByte                = 0 ;
+bool scanForShannon             = 0 ;
+bool iomemSummary               = 0 ;
+bool printPath                  = 0 ;
+bool includePhysicalPageSummary = 0 ;
+bool includePhysicalPageNumber  = 0 ;
 
 char blockPath[ FILENAME_MAX ]    = {} ;
 char streamPath [ FILENAME_MAX ]  = {} ;
@@ -277,7 +280,11 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case 'p':
-            includePhysicalMemoryInfo = true ;
+            includePhysicalPageSummary = true ;
+            break ;
+
+         case 'P':
+            includePhysicalPageNumber = true ;
             break ;
 
          case '9': {

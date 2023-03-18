@@ -226,7 +226,7 @@ void scanMaps() {
 
 
 void readPagemapInfo() {
-   if( !includePhysicalMemoryInfo ) {  // Process --phys
+   if( !includePhysicalPageNumber ) {  // Process --pfn
       return ;
    }
 
@@ -303,7 +303,7 @@ void printMaps() {
       finishRegion:
       printf( "\n" ) ;
 
-      if( includePhysicalMemoryInfo ) {
+      if( includePhysicalPageNumber ) {
          // Print the physical page information
          if( map[i].include && map[i].sPermissions[0] == 'r' ) {
             for( size_t j = 0 ; j < map[i].numPages ; j++ ) {

@@ -39,7 +39,8 @@ SCAN OPTIONS
 OUTPUT OPTIONS
   -i, --iomem              print a summary of /proc/iomem
       --path               print the path (if available) in the memscan
-  -p, --phys               print physical page numbers w/ flags in the memscan
+  -p, --phys               print a summary of the physical pages w/ flags
+  -P  --pfn                print each physical page number w/ flags
 
 PROGRAM OPTIONS
   -h, --help               display this help and exit
