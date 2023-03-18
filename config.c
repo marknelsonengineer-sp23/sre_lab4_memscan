@@ -301,17 +301,10 @@ void processOptions( int argc, char* argv[] ) {
                byteToScanFor = (unsigned char) trialValue;
             }
             scanForByte = true;
-
-            if( scanForShannon ) {
-               FATAL_ERROR( "can not simultaneously scan for Shannon Entropy and for byte") ;
-            }
             break ;
 
          case '4':
             scanForShannon = true ;
-            if( scanForByte ) {
-               FATAL_ERROR( "can not simultaneously scan for Shannon Entropy and for byte") ;
-            }
             break ;
 
          case 'i':

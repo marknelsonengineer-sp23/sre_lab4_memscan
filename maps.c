@@ -282,9 +282,8 @@ void printMaps() {
 
       if( scanForByte ) {
          printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
-         printf( "w/ %'7zu ", map[i].numBytesFound ) ;
+         printf( "w/ %'7zu of ", map[i].numBytesFound ) ;
          printf( "0x%02x ", byteToScanFor ) ;
-         printf( " bytes " ) ;
          printf( ANSI_COLOR_RESET ) ;
       }
 
