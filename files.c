@@ -9,11 +9,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <fcntl.h>     // For open() and O_RDONLY
-#include <stdio.h>     // For FILE* fopen() fclose()
+#include <stdio.h>     // For FILE* fopen() fclose() rewind()
 #include <string.h>    // For strlen()
 #include <sys/mman.h>  // For mmap(), munmap(), PROT_READ, PROT_PRIVATE
 #include <sys/stat.h>  // For stat() and struct stat
-#include <unistd.h>    // For close()
+#include <unistd.h>    // For close() lseek()
 
 #include "config.h"    // For FATAL_ERROR
 #include "files.h"     // Just cuz
@@ -106,14 +106,22 @@ void readPreScanFiles() {
       off_t   numRead = 0 ;  // Number of bytes read
       ssize_t result ;       // The result of the read operation
 
-      while( numRead < blockFileStat.st_size ) {
-         /// Reading with `read()` is not thread safe
+      do {
+         /// Reading with `read()` is not thread safe, but we are not
+         /// using this data, so it's OK.  The loop is designed to
+         /// terminate when the read gets to the end of the file
+         /// and then reset the file pointer.
          result = read( block_fd, fileBuffer, fileBufferSize) ;
          if( result < 0 ) {
-            FATAL_ERROR( "unable to read --buffer[%s]", blockPath ) ;
+            WARNING( "unable to read --buffer[%s]", blockPath ) ;
+            continue ;
          }
          numRead += result ;
-         // printf( "Read %ld bytes from block device\n", result ) ;
+         // printf( "--block:  numRead=%ld  result=%ld\n", numRead, result ) ;
+      } while( result > 0 && numRead < blockFileStat.st_size ) ;
+      off_t rVal = lseek( block_fd, 0, SEEK_SET ) ;
+      if( rVal < 0 ) {
+         WARNING( "lseek failed in --buffer" ) ;
       }
    } // openFileWithBlockIO
 
@@ -125,15 +133,20 @@ void readPreScanFiles() {
       size_t result ;       // The result of the read operation
 
       // printf( "size of stream file=[%ld]\n", streamFileStat.st_size ) ;
-      while( !feof( stream_fd ) && numRead <= ONE_MEGABYTE ) {  /// `--stream` files will read the first 1M of data
-         /// Reading with `fread()` is not thread safe
+      do {
+         /// Reading with `fread()` is not thread safe, but we are not
+         /// using this data, so it's OK.  The loop is designed to
+         /// terminate when the read gets to the end of the file
+         /// and then reset the file pointer.
          result = fread( fileBuffer, 1, fileBufferSize, stream_fd ) ;
          if( result <= 0 ) {
-            FATAL_ERROR( "unable to read --stream[%s]", streamPath ) ;
+            WARNING( "unable to read --stream[%s]", streamPath ) ;
+            continue ;
          }
          numRead += result ;
          // printf( "Read %ld bytes from stream device\n", result ) ;
-      }
+      } while( !feof( stream_fd ) && numRead <= ONE_MEGABYTE ) ;  /// `--stream` files will read the first 1M of data
+      rewind( stream_fd ) ;
    } // openFileWithStreamIO
 
    if( openFileWithMapIO ) {
