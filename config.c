@@ -295,41 +295,18 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case '3':
-            scanForByte = true ;
+            if( optarg != NULL ) {
+               unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( optarg );
+               ASSERT( trialValue <= UCHAR_MAX );
+               byteToScanFor = (unsigned char) trialValue;
+            }
+            scanForByte = true;
+
             if( scanForShannon ) {
                FATAL_ERROR( "can not simultaneously scan for Shannon Entropy and for byte") ;
             }
-
-            if( optarg != NULL ) {
-               int base = 10 ;   /// @NOLINT(readability-magic-numbers):  Base 10 is a legit magic number
-               trim( optarg ) ;
-               if( optarg[0] == '0' && optarg[1] == 'x' ) {
-                  base = 16 ;    // NOLINT(readability-magic-numbers)
-                  optarg += 2 ;  // Skip the '0x'
-               }
-               if( optarg[0] == '0' && optarg[1] == 'b' ) {
-                  base = 2 ;
-                  optarg += 2 ;  // Skip the '0b'
-               }
-               errno = 0 ;
-               char* strtolRemainder = NULL ;
-               long trialValue = strtol( optarg, &strtolRemainder, base ) ;
-               // printf( "trialValue=%ld  strtolRemainder=%p [%s]  errno=%d\n", trialValue, strtolRemainder, strtolRemainder, errno ) ;
-
-               // If there's an error or excess characters...
-               if( errno != 0 || strlen( strtolRemainder ) > 0 ) {
-                  FATAL_ERROR( "Illegal format for --scan_byte=HEX" ) ;
-                  break ;
-               }
-
-               if( trialValue < 0 || trialValue > 255 ) {  // NOLINT(readability-magic-numbers)
-                  FATAL_ERROR( "--scan_byte=HEX is out of range" ) ;
-                  break ;
-               }
-
-               byteToScanFor = trialValue ;
-            } // if( optarg != NULL )
             break ;
+
 
          case '4':
             scanForShannon = true ;
