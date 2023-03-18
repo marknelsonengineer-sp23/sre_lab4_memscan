@@ -307,7 +307,6 @@ void processOptions( int argc, char* argv[] ) {
             }
             break ;
 
-
          case '4':
             scanForShannon = true ;
             if( scanForByte ) {
