@@ -19,6 +19,7 @@
 #include "maps.h"     // For readEntries() scanEntries()
 #include "memscan.h"  // Just cuz
 #include "pagemap.h"  // For closePagemap()
+#include "threads.h"  // For createThreads()
 
 
 /// A memory scanner:  memscan's `main()`
@@ -42,22 +43,26 @@ int main( int argc, char* argv[] ) {
 
    /// Anything that changes #MEMORY_MAP_FILE should be done before calling readMaps()
 
-   readMaps() ;
-
    /// Anything that changes the physical pagemap information such as scanning
    /// or waiting, should be done before calling readPagemapInfo()
 
-   if( readFileContents ) {
-      readPreScanFiles() ;     // Process --read
-   }
+   if( numThreads == 0 ) {
+      if( readFileContents ) {
+         readPreScanFiles() ;  // Process --read
+      }
 
-   if( fillAllocatedMemory ) {
-      fillPreScanMemory() ;    // Process --fill
+      if( fillAllocatedMemory ) {
+         fillPreScanMemory() ; // Process --fill
+      }
+   } else {
+      createThreads() ;        // Process --threads (which will do --read and --fill)
    }
 
    if( sleepSeconds > 0 ) {
       sleep( sleepSeconds ) ;  // Process --sleep
    }
+
+   readMaps() ;
 
    scanMaps() ;                // Process --scan_byte, --shannon
 
@@ -65,6 +70,7 @@ int main( int argc, char* argv[] ) {
 
    printMaps() ;
 
+   closeThreads() ;
    releasePreScanMemory() ;
    closePreScanFiles() ;
    closePagemap() ;

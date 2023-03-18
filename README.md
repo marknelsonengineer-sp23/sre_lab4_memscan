@@ -98,6 +98,15 @@ earlier versions.
   - memscan does not explore System V shared memory segments.
   - `--sleep` is intended to explore swapping and paging.  It can be used in 
     conjunction with tools like [stressapptest] to induce memscan to swap pages to disk.
+  - `--threads`... there are a lot of ways to explore threading... more than
+    can be expressed with command line options.  A thorough exploration
+    of threads will probably require some modification of memscan source.
+    - If `--threads` is > 0, then create that many threads.
+      - Each worker thread will read the contents of files and write to 
+        allocated memory blocks.
+      - `main()` will not read files or write to allocate memory blocks
+    - `main()` will shutdown the threads just before memscan exits
+    - Our implementation uses Posix (pthreads) not C11 threads
 
 [Malloc Internals]: https://sourceware.org/glibc/wiki/MallocInternals
 [mallopt]: https://man7.org/linux/man-pages/man3/mallopt.3.html

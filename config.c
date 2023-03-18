@@ -140,7 +140,6 @@ bool allocateLocalMemory       = 0 ;
 bool allocateHeapMemory        = 0 ;
 bool allocateMappedMemory      = 0 ;
 bool fillAllocatedMemory       = 0 ;
-bool createThreads             = 0 ;
 bool scanForByte               = 0 ;
 bool scanForShannon            = 0 ;
 bool iomemSummary              = 0 ;
