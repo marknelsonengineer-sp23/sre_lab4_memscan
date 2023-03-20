@@ -26,7 +26,7 @@
 #include <stdint.h>       // For uint64_t
 #include <stdio.h>        // For printf()
 #include <stdlib.h>       // For exit() EXIT_FAILURE
-#include <string.h>       // For memset()
+#include <string.h>       // For memset() strncmp()
 #include <sys/syscall.h>  // Definition of SYS_* constants
 #include <unistd.h>       // For sysconf() close()
 
@@ -142,78 +142,236 @@ struct PageInfo getPageInfo( void* vAddr ) {
 }  // getPageInfo    /// @NOLINTEND( performance-no-int-to-ptr )
 
 
-void printPageInfo( const struct PageInfo* page ) {
+/// Print the virtual address starting address for both `--pfn` and `--phys`
+///
+/// @param page The page to print
+void printVirtualAddressStart( const struct PageInfo* page ) {
+   ASSERT( page != NULL ) ;
+
+   printf( ANSI_COLOR_GREEN "    %p - " ANSI_COLOR_RESET, page->virtualAddress ) ;
+}
+
+
+/// Print the generic information about a page
+///
+/// @param page The page to print
+void printPageFlags( const struct PageInfo* page ) {
+   printf( "Flags: " ) ;
+   printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->soft_dirty  ? '*' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->exclusive   ? 'X' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->file_mapped ? 'F' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%s" ANSI_COLOR_RESET, page->ksm         ? "KSM" : "   " ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->zero_page   ? '0' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->locked      ? 'L' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->slab        ? 'S' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->writeback   ? 'W' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->buddy       ? 'B' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->idle        ? 'I' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->pgtable     ? 'P' : ' ' ) ;
+   printf( "\\" ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->huge        ? 'H' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->thp         ? 'T' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->comp_head   ? '<' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->comp_tail   ? '>' : ' ' ) ;
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->balloon     ? 'B' : ' ' ) ;
+
+   printf( " IO:" ) ;
+   printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->error       ? '!' : ' ' ) ;
+   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->uptodate    ? 'U' : ' ' ) ;
+   printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->dirty       ? 'D' : ' ' ) ;
+
+   printf( "LRU:" ) ;
+   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->lru         ? 'L' : ' ' ) ;
+   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->active      ? 'A' : ' ' ) ;
+   printf( ANSI_COLOR_MAGENTA  "%c" ANSI_COLOR_RESET, page->unevictable ? 'U' : ' ' ) ;
+   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->referenced  ? 'R' : ' ' ) ;
+   printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->reclaim     ? 'R' : ' ' ) ;
+   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->mmap        ? 'M' : ' ' ) ;
+   printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->anon        ? 'A' : ' ' ) ;
+   printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->swapcache   ? 'C' : ' ' ) ;
+   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->swapbacked  ? 'B' : ' ' ) ;
+
+   printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->nopage      ? 'N' : ' ' ) ;
+   printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->hwpoison    ? '!' : ' ' ) ;
+
+   printf( ANSI_COLOR_BRIGHT_CYAN "  %s " ANSI_COLOR_RESET, get_iomem_region_description( (void*) page->pfn ) ) ;
+
+   if( scanForShannon ) {
+      printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
+      printf( "H: %5.3lf ", page->shannon ) ;
+      printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( page->shannon ) ) ;
+      printf( ANSI_COLOR_RESET ) ;
+   }
+} // printPageFlags
+
+
+/// Print the latter half of the virtual address or PFN and any
+/// message that's not a flag
+///
+/// @param page The page to print
+/// @return `true` if flags should be printed.  `false` if flags should not
+///         be printed.
+bool printPageContext( const struct PageInfo* page ) {
    ASSERT( page != NULL );
 
-   printf( ANSI_COLOR_GREEN "    %p  " ANSI_COLOR_RESET, page->virtualAddress ) ;
+   if( includePhysicalPageSummary ) {
+      /// @todo Optimize this a bit, so we don't have to call getPageSizeInBytes() every time... Maybe make it a global/inline
+      printf( ANSI_COLOR_GREEN "%p " ANSI_COLOR_RESET, page->virtualAddress + getPageSizeInBytes() - 1 ) ;
+   }
 
    if( !page->valid ) {
-      printf( ANSI_COLOR_RED " virtual address was not read by pagemap" ANSI_COLOR_RESET ) ;
+      printf( ANSI_COLOR_RED "virtual address was not read by pagemap" ANSI_COLOR_RESET ) ;
+      return false ;
    }
 
    if( !page->present && !page->swapped ) {
-      printf( ANSI_COLOR_RED " page not present" ANSI_COLOR_RESET ) ;
+      printf( ANSI_COLOR_RED "page not present" ANSI_COLOR_RESET ) ;
+      return false ;
    }
 
    if( page->swapped ) {
-      printf( ANSI_COLOR_RED " swapped: " ANSI_COLOR_RESET );
+      printf( ANSI_COLOR_RED "swapped: " ANSI_COLOR_RESET );
       printf( "type: %u  ", page->swap_type );
       printf( "offset: 0x%p  ", page->swap_offset );
+      return false ;
    }
 
-   if( page->present && !page->swapped ) {
-      printf( " pfn: " ANSI_COLOR_GREEN "0x%07zu " ANSI_COLOR_RESET, (size_t) page->pfn ) ;
+   if( includePhysicalPageNumber && page->present && !page->swapped ) {
+      printf( "pfn: " ANSI_COLOR_GREEN "0x%07zu " ANSI_COLOR_RESET, (size_t) page->pfn ) ;
       printf( "#:%3" PRIu64 " ", page->page_count ) ;
-      printf( " Flags: " ) ;
-      printf( ANSI_COLOR_YELLOW   "%s" ANSI_COLOR_RESET, page->soft_dirty  ? "S-D" : "   " ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->exclusive   ? 'X' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->file_mapped ? 'F' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%s" ANSI_COLOR_RESET, page->ksm         ? "KSM" : "   " ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->zero_page   ? '0' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->locked      ? 'L' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->slab        ? 'S' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->writeback   ? 'W' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->buddy       ? 'B' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->idle        ? 'I' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->pgtable     ? 'P' : ' ' ) ;
-      printf( "\\" ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->huge        ? 'H' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->thp         ? 'T' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->comp_head   ? '<' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->comp_tail   ? '>' : ' ' ) ;
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->balloon     ? 'B' : ' ' ) ;
+   }
 
-      printf( " IO:" ) ;
-      printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->error       ? '!' : ' ' ) ;
-      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->uptodate    ? 'U' : ' ' ) ;
-      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->dirty       ? 'D' : ' ' ) ;
+   return true ;
+} // printPageContext
 
-      printf( "LRU:" ) ;
-      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->lru         ? 'L' : ' ' ) ;
-      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->active      ? 'A' : ' ' ) ;
-      printf( ANSI_COLOR_MAGENTA  "%c" ANSI_COLOR_RESET, page->unevictable ? 'U' : ' ' ) ;
-      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->referenced  ? 'R' : ' ' ) ;
-      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->reclaim     ? 'R' : ' ' ) ;
-      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->mmap        ? 'M' : ' ' ) ;
-      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->anon        ? 'A' : ' ' ) ;
-      printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->swapcache   ? 'C' : ' ' ) ;
-      printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->swapbacked  ? 'B' : ' ' ) ;
 
-      printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->nopage      ? 'N' : ' ' ) ;
-      printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->hwpoison    ? '!' : ' ' ) ;
+void printFullPhysicalPage( const struct PageInfo* page ) {
+   ASSERT( page != NULL );
 
-      printf( ANSI_COLOR_BRIGHT_CYAN "  %s " ANSI_COLOR_RESET, get_iomem_region_description( (void*) page->pfn ) ) ;
-
-      if( scanForShannon ) {
-         printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
-         printf( "H: %5.3lf ", page->shannon ) ;
-         printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( page->shannon ) ) ;
-         printf( ANSI_COLOR_RESET ) ;
-      }
+   printVirtualAddressStart( page ) ;
+   if( printPageContext( page ) ) {
+      printPageFlags( page ) ;
    }
 
    printf( "\n" ) ;
-}
+} // printFullPhysicalPage
+
+
+/// The potential result of comparing two physical pages
+enum PageCompare {
+    SAME_PAGE_SAME_FLAGS            ///< The same page and the same flags
+   ,SAME_PAGE_DIFFERENT_FLAGS       ///< The same page and different flags
+   ,DIFFERENT_PAGE_SAME_FLAGS       ///< A different page (probably the next page) and the same flags
+   ,DIFFERENT_PAGE_DIFFERENT_FLAGS  ///< A different page (probably the next page) and different flags
+} ;
+
+
+/// Compare two pages
+///
+/// Right now, this is just used for `--phys` to summarize / combine identical
+/// into one row.  In the future, this can be used to compare a parent's
+/// physical page map with a child processes' physical page map.
+///
+/// @param left The first page to compare
+/// @param right The second page to compare
+/// @return Look at both the flags (metadata) and the virtual page address to
+///         report how the pages are similar or different
+enum PageCompare comparePages( const struct PageInfo* left, const struct PageInfo* right ) {
+   ASSERT( left != NULL ) ;
+   ASSERT( right != NULL ) ;
+
+   bool same = true ;
+
+   // @todo this code is not working right
+   // If !present & !swapped, then ignore the other flags
+   if(    !left->present
+       && !right->present
+       && !left->swapped
+       && !right->swapped ) {
+      same = true ;
+      goto Done ;
+   }
+
+   if( left->valid       != right->valid )       { same = false ; goto Done ; }
+   if( left->swap_type   != right->swap_type )   { same = false ; goto Done ; }
+   if( left->swap_offset != right->swap_offset ) { same = false ; goto Done ; }
+   if( left->soft_dirty  != right->soft_dirty )  { same = false ; goto Done ; }
+   if( left->exclusive   != right->exclusive )   { same = false ; goto Done ; }
+   if( left->file_mapped != right->file_mapped ) { same = false ; goto Done ; }
+   if( left->swapped     != right->swapped )     { same = false ; goto Done ; }
+   if( left->present     != right->present )     { same = false ; goto Done ; }
+   if( left->locked      != right->locked )      { same = false ; goto Done ; }
+   if( left->error       != right->error )       { same = false ; goto Done ; }
+   if( left->referenced  != right->referenced )  { same = false ; goto Done ; }
+   if( left->uptodate    != right->uptodate )    { same = false ; goto Done ; }
+   if( left->lru         != right->lru )         { same = false ; goto Done ; }
+   if( left->active      != right->active )      { same = false ; goto Done ; }
+   if( left->slab        != right->slab )        { same = false ; goto Done ; }
+   if( left->writeback   != right->writeback )   { same = false ; goto Done ; }
+   if( left->reclaim     != right->reclaim )     { same = false ; goto Done ; }
+   if( left->buddy       != right->buddy )       { same = false ; goto Done ; }
+   if( left->mmap        != right->mmap )        { same = false ; goto Done ; }
+   if( left->anon        != right->anon )        { same = false ; goto Done ; }
+   if( left->swapcache   != right->swapcache )   { same = false ; goto Done ; }
+   if( left->swapbacked  != right->swapbacked )  { same = false ; goto Done ; }
+   if( left->comp_head   != right->comp_head )   { same = false ; goto Done ; }
+   if( left->comp_tail   != right->comp_tail )   { same = false ; goto Done ; }
+   if( left->huge        != right->huge )        { same = false ; goto Done ; }
+   if( left->unevictable != right->unevictable ) { same = false ; goto Done ; }
+   if( left->hwpoison    != right->hwpoison )    { same = false ; goto Done ; }
+   if( left->nopage      != right->nopage )      { same = false ; goto Done ; }
+   if( left->ksm         != right->ksm )         { same = false ; goto Done ; }
+   if( left->thp         != right->thp )         { same = false ; goto Done ; }
+   if( left->balloon     != right->balloon )     { same = false ; goto Done ; }
+   if( left->zero_page   != right->zero_page )   { same = false ; goto Done ; }
+   if( left->idle        != right->idle )        { same = false ; goto Done ; }
+   if( left->pgtable     != right->pgtable )     { same = false ; goto Done ; }
+
+   // Make sure PFN Regions are the same
+   if( strncmp( get_iomem_region_description( left->pfn )
+               ,get_iomem_region_description( right->pfn )
+               ,MAX_IOMEM_DESCRIPTION ) != 0 ) { same = false ; goto Done ; }
+
+   Done:
+   if( same ) {
+      if( left->virtualAddress == right->virtualAddress ) {
+         return SAME_PAGE_SAME_FLAGS ;
+      }
+      return DIFFERENT_PAGE_SAME_FLAGS ;
+   } else {
+      if( left->virtualAddress == right->virtualAddress ) {
+         return SAME_PAGE_DIFFERENT_FLAGS ;
+      }
+      return DIFFERENT_PAGE_DIFFERENT_FLAGS ;
+   }
+} // comparePages
+
+
+void printPageSummary( const struct PageInfo page[], const size_t numPages ) {
+   ASSERT( numPages > 0 ) ;
+
+   printVirtualAddressStart( &page[0] ) ;
+
+   for( size_t i = 0 ; i < numPages-1 ; i++ ) {
+      if( comparePages( &page[i], &page[i+1] ) == DIFFERENT_PAGE_SAME_FLAGS ) {
+         continue ;
+      }
+
+      if( printPageContext( &page[i] ) ) {
+         printPageFlags( &page[i] ) ;
+      }
+
+      printf( "\n" ) ;
+
+      printVirtualAddressStart( &page[i+1] ) ;
+   }
+
+   // Print the last page
+   if( printPageContext( &page[numPages-1] ) ) {
+      printPageFlags( &page[numPages-1] ) ;
+   }
+   printf( "\n" ) ;
+} // printPageSummary
 
 
 void closePagemap() {
@@ -242,7 +400,7 @@ void printKey( FILE* outStream ) {
    PRINT( outStream, "#:   the number of times each page is mapped\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "Flags:\n" ) ;
-   PRINT( outStream, "S-D: page is soft-dirty (it's been written to recently)\n" ) ;
+   PRINT( outStream, "*:   page is soft-dirty (it's been written to recently)\n" ) ;
    PRINT( outStream, "X:   page exclusively mapped\n" ) ;
    PRINT( outStream, "F:   page is file mapped and not anonymously mapped\n" ) ;
    PRINT( outStream, "KSM: kernel samepage merging: Identical memory pages are dynamically shared\n" ) ;
@@ -281,6 +439,6 @@ void printKey( FILE* outStream ) {
    PRINT( outStream, "Rarely seen flags\n" ) ;
    PRINT( outStream, "N:   no page frame exists at the requested address\n" ) ;
    PRINT( outStream, "!:   hardware detected memory corruption: Don't touch this page\n" ) ;
-}
+} // printKey
 
 /// NOLINTEND( readability-magic-numbers )

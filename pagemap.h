@@ -95,18 +95,25 @@ extern unsigned char getPageSizeInBits() ;
 extern struct PageInfo getPageInfo( void* vAddr ) ;
 
 
-/// Print a #PageInfo record
+/// Print a #PageInfo record with the Page Frame Number
 ///
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
 ///
 /// @param page The page to print
-extern void printPageInfo( const struct PageInfo* page ) ;
+extern void printFullPhysicalPage( const struct PageInfo* page ) ;
+
+
+/// Print a summary of de-duplicated #PageInfo records without the Page Frame Number
+///
+/// @param page     An array of pages to print
+/// @param numPages The number of elements in the page array
+extern void printPageSummary( const struct PageInfo page[], const size_t numPages ) ;
 
 
 /// Close any open pagemap resources
 extern void closePagemap() ;
 
-/// Print the key to printPageInfo()
+/// Print the key to `--pfn` and `--phys` physical page flags
 ///
 /// @param outStream The output stream (usually `stderr` or `stdout`) to print to
 extern void printKey( FILE* outStream ) ;

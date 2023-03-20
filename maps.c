@@ -15,7 +15,7 @@
 #include "colors.h"  // For ANSI colors i.e. #ANSI_COLOR_RED
 #include "config.h"  // For FATAL_ERROR and other configuration options
 #include "maps.h"    // Just cuz
-#include "pagemap.h" // For PageInfo getPageInfo() printPageInfo() getPageSizeInBits()
+#include "pagemap.h" // For PageInfo getPageInfo() printFullPhysicalPage() getPageSizeInBits()
 #include "shannon.h" // For scanForShannon()
 #include "version.h" // For STRINGIFY_VALUE()
 
@@ -226,7 +226,7 @@ void scanMaps() {
 
 
 void readPagemapInfo() {
-   if( !includePhysicalPageNumber ) {  // Process --pfn
+   if( !includePhysicalPageNumber && !includePhysicalPageSummary ) {  // Process --pfn --phys
       return ;
    }
 
@@ -306,11 +306,19 @@ void printMaps() {
          // Print the physical page information
          if( map[i].include && map[i].sPermissions[0] == 'r' ) {
             for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
-               printPageInfo( &map[i].pages[j] ) ;
+               printFullPhysicalPage( &map[i].pages[j] ) ;
                /// @todo think about generalizing this to avoid duplicating the .include and read permission checks
             } // for( each page )
          } // if( read permission )
       } // if( includePhysicalMemoryInfo )
+
+      if( includePhysicalPageSummary ) {
+         // Print the physical page information
+         if( map[i].include && map[i].sPermissions[0] == 'r' ) {
+            printPageSummary( map[i].pages, map[i].numPages ) ;
+         } // if( read permission )
+      } // if( includePhysicalMemoryInfo )
+
    } // for( each map )
 } // printMaps
 
