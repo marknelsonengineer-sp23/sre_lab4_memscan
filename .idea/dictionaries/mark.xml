@@ -2,6 +2,8 @@
   <dictionary name="mark">
     <words>
       <w>abcdefghijklmnopqrstuvwxyz</w>
+      <w>abfff</w>
+      <w>adfff</w>
       <w>ahci</w>
       <w>allexternals</w>
       <w>amsmath</w>
@@ -66,6 +68,7 @@
       <w>getwchar</w>
       <w>gmtime</w>
       <w>gtags</w>
+      <w>hawaiʻi</w>
       <w>headerfile</w>
       <w>hidecallergraph</w>
       <w>hidecallgraph</w>
@@ -80,6 +83,7 @@
       <w>intlimits</w>
       <w>iomap</w>
       <w>iomem</w>
+      <w>iomem's</w>
       <w>iphkv</w>
       <w>iphv</w>
       <w>jsdelivr</w>
@@ -114,6 +118,7 @@
       <w>mycompany</w>
       <w>myfile</w>
       <w>myline</w>
+      <w>mānoa</w>
       <w>nath</w>
       <w>newcommand</w>
       <w>noenv</w>
@@ -132,6 +137,7 @@
       <w>paramdoc</w>
       <w>perlmod</w>
       <w>pgtable</w>
+      <w>phkv</w>
       <w>plainnat</w>
       <w>predef</w>
       <w>preprocesor</w>

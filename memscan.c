@@ -30,6 +30,9 @@
 int main( int argc, char* argv[] ) {
    // Initialize the program
    processOptions( argc, argv ) ;  // Process --help, --key, --version
+
+   checkCapabilities() ;       // Ensure memscan is running with `CAP_SYS_ADMIN`
+
    read_iomem() ;              // Bring in the physical memory allocation from `iomem`
 
    if( iomemSummary ) {        // Process --iomem

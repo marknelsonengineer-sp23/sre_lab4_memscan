@@ -391,10 +391,22 @@ void closePagemap() {
 
 
 void printKey( FILE* outStream ) {
-   PRINT( outStream, "Key for --phys option\n" ) ;
+   PRINT( outStream, "memscan --phys will output physical pages like this:\n" ) ;
    PRINT( outStream, "\n" ) ;
-   PRINT( outStream, "Each line starts with the virtual address for each page.\n" ) ;
-   PRINT( outStream, "If the page is swapped, it will print swapped with the type and offset.\n" ) ;
+   PRINT( outStream, "0x55a5be863000 - 0x55a5be864fff page not present\n" ) ;
+   PRINT( outStream, "0x55a5be865000 - 0x55a5be8abfff Flags: *X           \\      IO: U LRU:L    MA B    System RAM\n" ) ;
+   PRINT( outStream, "0x55a5be8ac000 - 0x55a5be8adfff Flags: *X           \\      IO: U LRU: A   MA B    System RAM\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "memscan --pfn will output physical pages like this:\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "0x7ffca078e000 - pfn: 0x0279672 #:  1 Flags: *X           \\      IO: U LRU:L    MA B    System RAM H: 0.564 Very low entropy\n" ) ;
+   PRINT( outStream, "0x7ffca078f000 - pfn: 0x0214113 #:  1 Flags: *X           \\      IO: U LRU:L    MA B    System RAM H: 3.082 English text in UNICODE\n" ) ;
+   PRINT( outStream, "0x7ffca0790000 - pfn: 0x0118352 #:  1 Flags: *X           \\      IO: U LRU:L    MA B    System RAM H: 1.190 Unknown\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "Each line starts with the virtual address region of the physical page.\n" ) ;
+   PRINT( outStream, "It will report high-level messages like \"page not present\" or \"page swapped\".\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "pfn: Page Frame Number.  Essentially, the physical page.\n" ) ;
    PRINT( outStream, "#:   the number of times each page is mapped\n" ) ;

@@ -55,6 +55,14 @@ enum Endian { ENDIAN_UNKNOWN=-1  ///< If the endianness is unknown
              ,BIG                ///< For big endian machines
 } ;
 
+
+/// Ensure memscan is running with the `CAP_SYS_ADMIN` capability
+///
+/// Return silently if it has the `CAP_SYS_ADMIN` capability.
+/// Call FATAL_ERROR() if it does not have the `CAP_SYS_ADMIN` capability.
+void checkCapabilities() ;
+
+
 /// Return the endianness of the current computer
 ///
 /// @see https://en.wikipedia.org/wiki/Endianness

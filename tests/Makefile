@@ -16,6 +16,7 @@ all:  $(TARGET) lint
 
 CXX       = g++
 CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS)
+LDLIBS    = -lm -lcap
 LINT      = clang-tidy
 LINTFLAGS = --quiet
 
@@ -33,7 +34,7 @@ test_iomap.o: ../colors.h
 	$(CXX) $(CXXFLAGS) -c $<
 
 $(TARGET): $(OBJ) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(TEST_OBJS) $(LDLIBS)
 
 lint: $(TARGET)
 	$(LINT) $(LINTFLAGS) $(SRC) --

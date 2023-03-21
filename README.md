@@ -7,11 +7,103 @@ We live in an ocean of illegal addresses dotted with islands of legal
 addresses.  Let's explore every grain of sand on our islands.
 
 #### Links
-The project's home page (hosted by GitHub) is:  https://github.com/marknelsonengineer-sp23/sre_lab4_memscan
+The project's home page:  https://github.com/marknelsonengineer-sp23/sre_lab4_memscan  (hosted by GitHub)
 
-The source code documentation (hosted by UH) is:  https://www2.hawaii.edu/~marknels/sre/memscan
+The source code is documented at:  https://www2.hawaii.edu/~marknels/sre/memscan  (hosted by The University of Hawaiʻi at Mānoa)
 
-#### The Lab
+# Memscan 2
+Memscan 1 is an assignment for my Software Reverse Engineering class.
+Memscan 2 is my own project designed to explore the details of modern
+memory management in Linux.  Memscan 2 has _**a lot**_ more options than
+earlier versions (see [Usage](USAGE.md) and [Key](KEY.md)).
+
+Where memscan 1.0 reads from `/proc/self/maps` and reports information about 
+the virtual memory regions for the current process, memscan 2 extends that
+by reading from `/proc/self/pagemap`, `/proc/kpagecount`, `/proc/kpageflags`
+and `/proc/iomem` to render a more complete picture of memory.
+
+Since Linux 4.2 only processes with the `CAP_SYS_ADMIN` (aka `root` or `#`) 
+capability can retrieve data from `pagemap`.  This is because raw page 
+frame numbers can be exploited by malware.  Therefore,
+memscan must be run as `root` or as a process that has `CAP_SYS_ADMIN` 
+enabled.  There are ways to have Linux run memscan with this
+capability and there are other ways to add `CAP_SYS_ADMIN` to your user 
+(not recommended).  It's left to the reader to research these other methods
+as I just run it from a `$ sudo bash` process as root:  `# ./memscan --path`.
+
+[This](https://www.kernel.org/doc/Documentation/vm/pagemap.txt) is a good 
+place to start to learn about how memscan 2 gets its raw data.
+
+The simplest form of memscan can be run with no command line options and will
+generate:
+
+    # ./memscan
+    
+    0: 0x55ab28242000 - 0x55ab28243fff r--p     8,192
+    1: 0x55ab28244000 - 0x55ab2824afff r-xp    28,672
+    2: 0x55ab2824b000 - 0x55ab2824efff r--p    16,384
+    3: 0x55ab2824f000 - 0x55ab2824ffff r--p     4,096
+    4: 0x55ab28250000 - 0x55ab28250fff rw-p     4,096
+
+...which reports the valid virtual memory regions for `self` (the memscan process),
+their permissions and the size of the regions.
+
+A more interesting form of memscan...
+
+    # ./memscan --path --phys
+   
+    0: 0x55a5be854000 - 0x55a5be855fff r--p     8,192 /media/sf_Src/src-clion/sre_lab4_memscan/memscan
+       0x55a5be854000 - 0x55a5be855fff Flags: *XF          \      IO: U LRU:L  R M       System RAM 
+    1: 0x55a5be856000 - 0x55a5be85cfff r-xp    28,672 /media/sf_Src/src-clion/sre_lab4_memscan/memscan
+       0x55a5be856000 - 0x55a5be85cfff Flags: *XF          \      IO: U LRU:L  R M       System RAM 
+    2: 0x55a5be85d000 - 0x55a5be860fff r--p    16,384 /media/sf_Src/src-clion/sre_lab4_memscan/memscan
+       0x55a5be85d000 - 0x55a5be860fff Flags: *XF          \      IO: U LRU:L  R M       System RAM 
+    3: 0x55a5be861000 - 0x55a5be861fff r--p     4,096 /media/sf_Src/src-clion/sre_lab4_memscan/memscan
+       0x55a5be861000 - 0x55a5be861fff Flags: *X           \      IO: U LRU:L    MA B    System RAM 
+    4: 0x55a5be862000 - 0x55a5be862fff rw-p     4,096 /media/sf_Src/src-clion/sre_lab4_memscan/memscan
+       0x55a5be862000 - 0x55a5be862fff Flags: *X           \      IO: U LRU:L    MA B    System RAM 
+    5: 0x55a5be863000 - 0x55a5be8adfff rw-p   307,200 
+       0x55a5be863000 - 0x55a5be864fff page not present
+       0x55a5be865000 - 0x55a5be8abfff Flags: *X           \      IO: U LRU:L    MA B    System RAM 
+       0x55a5be8ac000 - 0x55a5be8adfff Flags: *X           \      IO: U LRU: A   MA B    System RAM 
+
+...which prints the path (if any) for the region, and a summary of the
+[page flags](KEY.md), including the iomem's name for the physical memory that holds the 
+pages (in this case, `System RAM`)
+
+## Usage Notes
+- Have the file readers, like `--block`, `--stream` and `--map_file`, read files
+  with known or unique entropy values and then try to find them in memory.
+  - The file readers, `--block` and `--stream` read into a malloc`d buffer
+    that's 4x the size of a physical page.  This way, you're guaranteed to
+    see a few pages with the unique entropy.
+- When `--malloc` and `--fill` are used, a special constant,
+  #SHANNON_CONSTANT_FOR_ALLOCATIONS (with a Shannon entropy of 3.000) will fill
+  memory.  This can be searched for with `--shannon` or `--scan_byte=11`.
+- `--malloc` can be used with `--numMalloc` to explore the difference between
+  one large malloc and many small ones.  Note that `DEFAULT_MMAP_THRESHOLD`
+  is 131,072 bytes.  See [Malloc Internals] and [mallopt].
+- memscan does not explore System V shared memory segments.
+- `--sleep` is intended to explore swapping and paging.  It can be used in
+  conjunction with tools like [stressapptest] to induce memscan to swap pages to disk.
+- `--threads`... there are a lot of ways to explore threading... more than
+  can be expressed with command line options.  A thorough exploration
+  of threads will probably require some modification of memscan source.
+    - If `--threads` is > 0, then create that many threads.
+        - Each worker thread will read the contents of files and write to
+          allocated memory blocks.
+        - `main()` will not read files or write to allocate memory blocks
+    - `main()` will shutdown the threads just before memscan exits
+    - Our implementation uses Posix (pthreads) not C11 threads
+      - See:  https://en.wikipedia.org/wiki/Pthreads
+      - See:  https://man7.org/linux/man-pages/man7/pthreads.7.html
+
+[Malloc Internals]: https://sourceware.org/glibc/wiki/MallocInternals
+[mallopt]: https://man7.org/linux/man-pages/man3/mallopt.3.html
+[stressapptest]: https://github.com/stressapptest/stressapptest
+
+
+# Memscan 1
 This lab looks easy at first, but (hopefully) proves to be quite challenging.
 
 As you know, user-processes run in "Virtual Memory" process space — a process space that is unique for each process.  
@@ -64,79 +156,13 @@ Notes:
 [2]: https://man7.org/linux/man-pages/man2/mmap.2.html
 
 
-#### Makefile
-Memscan uses the following `Makefile` targets:
+## The Assignment
 
-| Command      | Purpose                                                    |
-|--------------|------------------------------------------------------------|
-| `make`       | Compile your program                                       |
-| `make test`  | Compile your program and run it                            |
-| `make debug` | Compile your program with debug mode ( `DEBUG` is defined) |
-| `make clean` | Remove any compiler output                                 |
-| `make doc`   | Make a Doxygen website and push it to UH UNIX              |
-| `make lint`  | Use clang-tidy to do static analysis on the source code    |
-
-
-# Memscan 2.0
-Memscan 1.0 is an assignment for my Software Reverse Engineering class.
-Memscan 2.0 is my own project designed to explore some details of modern
-memory management in Linux.  Memscan 2.0 has _**a lot**_ more options than
-earlier versions.
-
-## Notes
-  - Have the file readers, like `--block`, `--stream` and `--map_file` read files
-    with known or unique entropy values and then try to find them in memory.
-  - The file readers, `--block` and `--stream` read into a malloc`d buffer
-    that's 4x the size of a physical page.  This way, you're guaranteed to
-    see a few pages with the unique entropy.
-  - When `--malloc` and `--fill` are used, a special constant, 
-    #SHANNON_CONSTANT_FOR_ALLOCATIONS (with a Shannon entropy of 3.000) will fill 
-    memory.  This can be searched for with `--shannon` or `--scan_byte=11`.
-  - `--malloc` can be used with `--numMalloc` to explore the difference between
-    one large malloc and many small ones.  Note that `DEFAULT_MMAP_THRESHOLD`
-    is 131,072 bytes.  See [Malloc Internals] and [mallopt].
-  - memscan does not explore System V shared memory segments.
-  - `--sleep` is intended to explore swapping and paging.  It can be used in 
-    conjunction with tools like [stressapptest] to induce memscan to swap pages to disk.
-  - `--threads`... there are a lot of ways to explore threading... more than
-    can be expressed with command line options.  A thorough exploration
-    of threads will probably require some modification of memscan source.
-    - If `--threads` is > 0, then create that many threads.
-      - Each worker thread will read the contents of files and write to 
-        allocated memory blocks.
-      - `main()` will not read files or write to allocate memory blocks
-    - `main()` will shutdown the threads just before memscan exits
-    - Our implementation uses Posix (pthreads) not C11 threads
-
-[Malloc Internals]: https://sourceware.org/glibc/wiki/MallocInternals
-[mallopt]: https://man7.org/linux/man-pages/man3/mallopt.3.html
-[stressapptest]: https://github.com/stressapptest/stressapptest
-
-
-# Toolchain
-This project is the product of a tremendous amount of R&D and would not be possible without the following world-class tools:
-
-| Tool           | Website                    |                                  Logo                                                                                  |
-|----------------|----------------------------|:----------------------------------------------------------------------------------------------------------------------:|
-| **gcc**        | https://gcc.gnu.org        |        <img src=".doxygen/images/logo_gcc.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="GCC"/>        |
-| **llvm/clang** | https://clang.llvm.org     |      <img src=".doxygen/images/logo_llvm.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="clang"/>       |
-| **Boost**      | https://boost.org          |      <img src=".doxygen/images/logo_boost.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Boost"/>      |
-| **Doxygen**    | https://doxygen.nl         |    <img src=".doxygen/images/logo_doxygen.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Doxygen"/>    |
-| **DOT**        | https://graphviz.org       |        <img src=".doxygen/images/logo_dot.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Dot"/>        |
-| **Git**        | https://git-scm.com        |        <img src=".doxygen/images/logo_git.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Git"/>        |
-| **GitHub**     | https://github.com         |     <img src=".doxygen/images/logo_github.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="GitHub"/>     |
-| **Linux**      | https://kernel.org         |      <img src=".doxygen/images/logo_linux.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Linux"/>      |
-| **ArchLinux**  | https://archlinux.org      |  <img src=".doxygen/images/logo_archlinux.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="ArchLinux"/>  |
-| **VirtualBox** | https://www.virtualbox.org | <img src=".doxygen/images/logo_virtualbox.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="VirtualBox"/> |
-
-
-# The Assignment
-
-You are to write a program from scratch.  Feel free to incorporate artifacts from other labs such as `.gitignore`, 
+You are to write a program from scratch.  Feel free to incorporate artifacts from other labs such as `.gitignore`,
 header blocks or a simple `Makefile`.  Your lab must include a Makefile, which must have (at least) the following targets:
-  - `make clean`
-  - `make`
-  - `make test`
+- `make clean`
+- `make`
+- `make test`
 
 You can name your program whatever you want and `$ make test` must run it.
 
@@ -173,19 +199,49 @@ Finally, scan each region and print the following information:
     22: 0x7fff39d42000 - 0x7fff39d43fff  r-xp  Number of bytes read      8,192  Count of 0x41 is      40
     23: 0xffffffffff600000 - 0xffffffffff600fff  --xp  read permission not set on [vsyscall]
 
-This program counts the number of `A`s in each region.  It doesn't matter what you do as long as you read every single 
+This program counts the number of `A`s in each region.  It doesn't matter what you do as long as you read every single
 byte you can read.
 
 Your program should compile clean (no warnings) and must not core dump when it runs.
 
 Note:  The goal of this program is to focus on 2 things:
-  - Parsing the `maps` file
-  - Scanning memory
+- Parsing the `maps` file
+- Scanning memory
 
 To that end, your program does not have to match the output perfectly... here are some exceptions:
-  - You don't have to use commas in your numbers, but if you wanted to try this:  `Number of bytes read %'10d`.
-  - Ideally, you should print a reason you are skipping a region, but you don't have to do that either.
-  - You can print the end of the region as the actual end (as I do) or the end that you get from the `maps` file.
-  - The columns don't have to line up perfectly
+- You don't have to use commas in your numbers, but if you wanted to try this:  `Number of bytes read %'10d`.
+- Ideally, you should print a reason you are skipping a region, but you don't have to do that either.
+- You can print the end of the region as the actual end (as I do) or the end that you get from the `maps` file.
+- The columns don't have to line up perfectly
 
 [RDTSC]: https://en.wikipedia.org/wiki/Time_Stamp_Counter
+
+
+# Makefile
+Memscan 2 uses the following `Makefile` targets:
+
+| Command      | Purpose                                                    |
+|--------------|------------------------------------------------------------|
+| `make`       | Compile your program                                       |
+| `make test`  | Compile your program and run it                            |
+| `make debug` | Compile your program with debug mode ( `DEBUG` is defined) |
+| `make clean` | Remove any compiler output                                 |
+| `make doc`   | Make a Doxygen website and push it to UH UNIX              |
+| `make lint`  | Use `clang-tidy` to do static analysis on the source code  |
+
+
+# Toolchain
+This project is the product of a tremendous amount of R&D and would not be possible without the following world-class tools:
+
+| Tool           | Website                    |                                                          Logo                                                          |
+|----------------|----------------------------|:----------------------------------------------------------------------------------------------------------------------:|
+| **gcc**        | https://gcc.gnu.org        |        <img src=".doxygen/images/logo_gcc.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="GCC"/>        |
+| **llvm/clang** | https://clang.llvm.org     |      <img src=".doxygen/images/logo_llvm.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="clang"/>       |
+| **Boost**      | https://boost.org          |      <img src=".doxygen/images/logo_boost.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Boost"/>      |
+| **Doxygen**    | https://doxygen.nl         |    <img src=".doxygen/images/logo_doxygen.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Doxygen"/>    |
+| **DOT**        | https://graphviz.org       |        <img src=".doxygen/images/logo_dot.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Dot"/>        |
+| **Git**        | https://git-scm.com        |        <img src=".doxygen/images/logo_git.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Git"/>        |
+| **GitHub**     | https://github.com         |     <img src=".doxygen/images/logo_github.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="GitHub"/>     |
+| **Linux**      | https://kernel.org         |      <img src=".doxygen/images/logo_linux.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Linux"/>      |
+| **ArchLinux**  | https://archlinux.org      |  <img src=".doxygen/images/logo_archlinux.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="ArchLinux"/>  |
+| **VirtualBox** | https://www.virtualbox.org | <img src=".doxygen/images/logo_virtualbox.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="VirtualBox"/> |

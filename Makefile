@@ -16,7 +16,7 @@ all:  $(TARGET) lint doc
 
 CC        = gcc
 CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\"
-LDLIBS    = -lm
+LDLIBS    = -lm -lcap
 LINT      = clang-tidy
 LINTFLAGS = --quiet
 MAKE      = make
@@ -46,6 +46,7 @@ lint: $(TARGET)
 doc: $(TARGET)
 	.doxygen/stats.py
 	.doxygen/update_usage.py
+	.doxygen/update_key.py
 	doxygen .doxygen/Doxyfile
 	rsync --recursive --mkpath --checksum --delete .doxygen/images .doxygen/docs/html/.doxygen
 

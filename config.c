@@ -18,6 +18,7 @@
 #include <stdio.h>   // For printf()
 #include <stdlib.h>  // For exit() EXIT_SUCCESS EXIT_FAILURE
 #include <string.h>  // For strlen() strncpy()
+#include <sys/capability.h>  // For cap_get_proc() cap_set_flag() cap_set_proc() cap_free()
 
 #include "config.h"  // Just cuz
 #include "convert.h" // For stringToUnsignedLongLongWithScale() stringToUnsignedLongLongWithBasePrefix()
@@ -370,6 +371,36 @@ void processOptions( int argc, char* argv[] ) {
 #else
    char programName[ MAX_PROGRAM_NAME ] = {} ;
 #endif
+
+
+void checkCapabilities() {
+   cap_t myCapabilities ;
+   const cap_value_t requiredCapabilitiesList[1] = { CAP_SYS_ADMIN } ;
+
+   if( !CAP_IS_SUPPORTED( CAP_SYS_ADMIN )) {
+      FATAL_ERROR( "system does not support CAP_SYS_ADMIN" ) ;
+   }
+
+   myCapabilities = cap_get_proc() ;
+   if( myCapabilities == NULL ) {
+      FATAL_ERROR( "unable to get the process' capabilities" ) ;
+   }
+
+   int rVal = cap_set_flag( myCapabilities, CAP_EFFECTIVE, 1, requiredCapabilitiesList, CAP_SET) ;
+   if( rVal != 0 ) {
+      FATAL_ERROR( "cap_set_flag did not set a capability" ) ;
+   }
+
+   rVal = cap_set_proc( myCapabilities ) ;
+   if( rVal != 0 ) {
+      FATAL_ERROR( "memscan requires CAP_SYS_ADMIN to run" ) ;
+   }
+
+   rVal = cap_free( myCapabilities ) ;
+   if( rVal != 0 ) {
+      FATAL_ERROR( "cap_free failed" ) ;
+   }
+}
 
 
 void setProgramName( const char* newProgramName ) {
