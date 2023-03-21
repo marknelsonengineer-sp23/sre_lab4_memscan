@@ -77,7 +77,7 @@ inline unsigned char getPageSizeInBits() {
 }
 
 
-struct PageInfo getPageInfo( void* vAddr ) {
+struct PageInfo getPageInfo( void* vAddr, bool okToRead ) {
    /// @NOLINTBEGIN( performance-no-int-to-ptr ):  This function mixes `void*` and `size_t`.  C normally warns about this, but in this case, it's OK.
 // printf( "%p\n", vAddr ) ;
 
@@ -87,7 +87,7 @@ struct PageInfo getPageInfo( void* vAddr ) {
    page.virtualAddress = vAddr ;
 
    /// Scan for Shannon entropy before reading `pagemap`, `pageflags` and `pagecount`
-   if( scanForShannon ) {
+   if( okToRead && scanForShannon ) {
       page.shannon = computeShannonEntropy( page.virtualAddress, getPageSizeInBytes() ) ;
    }
 

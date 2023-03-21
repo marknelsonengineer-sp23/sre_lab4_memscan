@@ -231,17 +231,17 @@ void readPagemapInfo() {
    }
 
    for( size_t i = 0 ; i < numMaps ; i++ ) {
-      if( map[i].include && map[i].sPermissions[0] == 'r' ) {
-         map[i].pages = malloc( sizeof( struct PageInfo ) * map[i].numPages ) ;
-         if( map[i].pages == NULL ) {
-            printf( ANSI_COLOR_RED "%s: unable to allocate memory for map entry [%zu]\n" ANSI_COLOR_RESET, getProgramName(), numMaps ) ;
-         } else {
-            for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
-               // printf( "%p\n", map[i].pAddressStart + (j << getPageSizeInBits() ) ) ;
-               map[i].pages[j] = getPageInfo( map[i].pAddressStart + (j << getPageSizeInBits() ) ) ;
-            } // for( each page )
-         } // if( pages was allocated )
-      } // if( included and readable )
+      bool okToRead = map[i].include && map[i].sPermissions[0] == 'r' ;
+
+      map[i].pages = malloc( sizeof( struct PageInfo ) * map[i].numPages ) ;
+      if( map[i].pages == NULL ) {
+         FATAL_ERROR( "unable to allocate memory for map entry [%zu]", i ) ;
+      }
+
+      for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
+         // printf( "%p\n", map[i].pAddressStart + (j << getPageSizeInBits() ) ) ;
+         map[i].pages[j] = getPageInfo( map[i].pAddressStart + (j << getPageSizeInBits() ), okToRead ) ;
+      } // for( each page )
    } // for( each map )
 } // readPagemapInfo
 
@@ -270,7 +270,7 @@ void printMaps() {
       printf( ANSI_COLOR_CYAN "%'10zu " ANSI_COLOR_RESET, map[i].numBytes ) ;
 
       if( map[i].sPermissions[0] != 'r' ) {
-         printf( ANSI_COLOR_RED "read permission not set on %s" ANSI_COLOR_RESET, map[i].sPath );
+         printf( ANSI_COLOR_RED "read permission not set" ANSI_COLOR_RESET );
          goto finishRegion;
       }
 
@@ -303,21 +303,14 @@ void printMaps() {
       printf( "\n" ) ;
 
       if( includePhysicalPageNumber ) {
-         // Print the physical page information
-         if( map[i].include && map[i].sPermissions[0] == 'r' ) {
-            for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
-               printFullPhysicalPage( &map[i].pages[j] ) ;
-               /// @todo think about generalizing this to avoid duplicating the .include and read permission checks
-            } // for( each page )
-         } // if( read permission )
-      } // if( includePhysicalMemoryInfo )
+         for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
+            printFullPhysicalPage( &map[i].pages[j] ) ;
+         }
+      }
 
       if( includePhysicalPageSummary ) {
-         // Print the physical page information
-         if( map[i].include && map[i].sPermissions[0] == 'r' ) {
-            printPageSummary( map[i].pages, map[i].numPages ) ;
-         } // if( read permission )
-      } // if( includePhysicalMemoryInfo )
+         printPageSummary( map[i].pages, map[i].numPages ) ;
+      }
 
    } // for( each map )
 } // printMaps

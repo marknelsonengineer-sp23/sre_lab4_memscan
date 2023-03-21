@@ -89,10 +89,12 @@ extern unsigned char getPageSizeInBits() ;
 ///
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
 ///
-/// @param vAddr The address to analyze (usually the starting address of a
-///              page frame, but it doesn't have to be).
+/// @param vAddr    The address to analyze (usually the starting address of a
+///                 page frame, but it doesn't have to be).
+/// @param okToRead `true` if the page can be read.  `false` if this should
+///                 just find flags
 /// @return The #PageInfo structure for `vAddr`
-extern struct PageInfo getPageInfo( void* vAddr ) ;
+extern struct PageInfo getPageInfo( void* vAddr, bool okToRead ) ;
 
 
 /// Print a #PageInfo record with the Page Frame Number
@@ -107,7 +109,9 @@ extern void printFullPhysicalPage( const struct PageInfo* page ) ;
 ///
 /// @param page     An array of pages to print
 /// @param numPages The number of elements in the page array
-extern void printPageSummary( const struct PageInfo page[], const size_t numPages ) ;
+extern void printPageSummary(
+        const struct PageInfo page[]
+       ,const size_t          numPages ) ;
 
 
 /// Close any open pagemap resources
