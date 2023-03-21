@@ -4,6 +4,8 @@
 //
 /// Program version and build tracker
 ///
+/// Use Semantic Versioning 2.0.0:  https://semver.org/
+///
 /// #VERSION_BUILD is modified by update_version.py
 ///
 /// @file    version.h
@@ -22,7 +24,7 @@
 #define VERSION_PATCH    0
 
 /// Monotonic counter that tracks the number of compilations
-#define VERSION_BUILD 7936
+#define VERSION_BUILD 7988
 
 #ifndef STRINGIFY_VALUE
 /// C preprocesor trick that converts values into strings at compile time
@@ -37,7 +39,7 @@
 #define FULL_VERSION     STRINGIFY_VALUE( VERSION_MAJOR ) \
                      "." STRINGIFY_VALUE( VERSION_MINOR ) \
                      "." STRINGIFY_VALUE( VERSION_PATCH ) \
-                     "." STRINGIFY_VALUE( VERSION_BUILD )
+                     "+" STRINGIFY_VALUE( VERSION_BUILD )
 
 /// The full version number as a wide string
 #define FULL_VERSION_W L"" FULL_VERSION

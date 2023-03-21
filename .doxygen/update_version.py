@@ -6,6 +6,8 @@
 #
 ## Increment the build number in `version.h`
 ##
+## /// Use Semantic Versioning 2.0.0:  https://semver.org/
+##
 ## Usage:  Update the `version.h` file
 ##
 ## @file   update_version.py
@@ -59,7 +61,7 @@ def extract_int(key: str, line: str) -> int:
 
 ## Get the full version number (as a string) from `version.h`
 ##
-## @return A string like `1.4.0.2202`
+## @return A string like `1.4.0+2202`
 def get_full_version() -> str:
 	global major_version
 	global minor_version
@@ -88,7 +90,7 @@ def get_full_version() -> str:
 	full_version = str(major_version)
 	full_version += "." + str(minor_version)
 	full_version += "." + str(patch_version)
-	full_version += "." + str(build_version)
+	full_version += "+" + str(build_version)
 
 	return full_version
 
