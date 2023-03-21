@@ -15,7 +15,7 @@
 #pragma once
 
 /// Increments with major functional changes
-#define VERSION_MAJOR    1
+#define VERSION_MAJOR    2
 
 /// Increments with minor functional changes and bugfixes
 #define VERSION_MINOR    0
@@ -24,7 +24,7 @@
 #define VERSION_PATCH    0
 
 /// Monotonic counter that tracks the number of compilations
-#define VERSION_BUILD 8094
+#define VERSION_BUILD 8097
 
 #ifndef STRINGIFY_VALUE
 /// C preprocesor trick that converts values into strings at compile time

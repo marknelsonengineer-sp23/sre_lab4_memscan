@@ -62,10 +62,10 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "      --stream=FILE        open FILE using stream I/O before the memscan\n" ) ;
    PRINT( outStream, "      --map_file=FILE      open FILE using memory mapped I/O before the memscan\n" ) ;
    PRINT( outStream, "  -r, --read               read the contents of the files\n" ) ;
-   PRINT( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
-   PRINT( outStream, "                           child memscan\n" ) ;
-   PRINT( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
-   PRINT( outStream, "                           memscan\n" ) ;
+// PRINT( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
+// PRINT( outStream, "                           child memscan\n" ) ;
+// PRINT( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
+// PRINT( outStream, "                           memscan\n" ) ;
    PRINT( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
    PRINT( outStream, "      --numMalloc=NUM      number of malloc'd allocations\n" ) ;
    PRINT( outStream, "      --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the\n" ) ;
