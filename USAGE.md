@@ -15,6 +15,9 @@ PRE-SCAN OPTIONS
       --stream=FILE        open FILE using stream I/O before the memscan
       --map_file=FILE      open FILE using memory mapped I/O before the memscan
   -r, --read               read the contents of the files
+  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the
+                           memscan
+      --numLocal=NUM       number of local allocations
   -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan
       --numMalloc=NUM      number of malloc'd allocations
       --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the

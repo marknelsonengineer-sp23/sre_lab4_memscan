@@ -64,8 +64,9 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "  -r, --read               read the contents of the files\n" ) ;
 // PRINT( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
 // PRINT( outStream, "                           child memscan\n" ) ;
-// PRINT( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
-// PRINT( outStream, "                           memscan\n" ) ;
+   PRINT( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
+   PRINT( outStream, "                           memscan\n" ) ;
+   PRINT( outStream, "      --numLocal=NUM       number of local allocations\n" ) ;
    PRINT( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
    PRINT( outStream, "      --numMalloc=NUM      number of malloc'd allocations\n" ) ;
    PRINT( outStream, "      --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the\n" ) ;
@@ -108,6 +109,7 @@ static struct option long_options[] = {
    { "read",      no_argument,       0, 'r' },
    { "fork",      no_argument,       0, 'f' },
    { "local",     required_argument, 0, 'l' },
+   { "numLocal",  required_argument, 0, 'L' },
    { "malloc",    required_argument, 0, 'm' },
    { "numMalloc", required_argument, 0, '6' },
    { "map_mem",   required_argument, 0, '7' },
@@ -155,8 +157,9 @@ char streamPath [ FILENAME_MAX ]  = {} ;
 char mapFilePath [ FILENAME_MAX ] = {} ;
 
 size_t localSize  = 0 ;
+size_t numLocals  = 1 ;  // By default, --local will allocate 1 region
 size_t mallocSize = 0 ;
-size_t numMallocs = 1 ;  // By default, malloc will allocate 1 region
+size_t numMallocs = 1 ;  // By default, --malloc will allocate 1 region
 size_t mappedSize = 0 ;
 void*  mappedStart = NULL ;  // By default, the OS will select a start address
 size_t numThreads = 0 ;
@@ -243,6 +246,13 @@ void processOptions( int argc, char* argv[] ) {
             ASSERT( trialValue <= SIZE_MAX ) ;
             localSize = (size_t) trialValue ;
             allocateLocalMemory = true ;
+            }
+            break ;
+
+         case 'L': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            numLocals = (size_t) trialValue ;
             }
             break ;
 

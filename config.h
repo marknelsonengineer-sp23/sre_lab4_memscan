@@ -91,6 +91,7 @@ extern char streamPath[ FILENAME_MAX ]  ; ///< The path to the file specified by
 extern char mapFilePath[ FILENAME_MAX ] ; ///< the path to the file specified by `--map_file`
 
 extern size_t localSize ;   ///< The number of bytes specified by `--local`
+extern size_t numLocals ;   ///< The number of recursive local allocations of `--localSize`
 extern size_t mallocSize ;  ///< The number of bytes specified by `--malloc`
 extern size_t numMallocs ;  ///< The number of `malloc ( mallocSize )` allocations specified by `--numMalloc`
 extern size_t mappedSize ;  ///< The number of bytes specified by `--map_mem`
