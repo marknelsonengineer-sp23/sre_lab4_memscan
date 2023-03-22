@@ -14,18 +14,28 @@ void* getBaseOfStack() {
    void* baseOfStack = NULL ;
 
    #ifdef __x86_64__
-   __asm__( "MOVQ %%RSP, %0 ;"
-            : "=r"(baseOfStack)  // output operands
+   __asm__ inline ( "MOVQ %%RSP, %0 ;"
+            : "=g"(baseOfStack)  // output operands
             :                    // input operands
             : ) ;                // clobbered registers
    #endif
 
    #ifdef __i386__
-   __asm__( "MOVL %%ESP, %0 ;"
-            : "=r"(baseOfStack)  // output operands
+   __asm__ inline ( "MOVL %%ESP, %0 ;"
+            : "=g"(baseOfStack)  // output operands
             :                    // input operands
             : ) ;                // clobbered registers
    #endif
 
    return baseOfStack ;
+}
+
+
+void allocateLocalStorage( const size_t newSize ) {
+   #ifdef __x86_64__
+   __asm__ inline ( "SUBQ %0, %%RSP ;"
+            :                    /* output operands     */
+            : "g" (newSize)      /* input operands      */
+            : ) ;                /* clobbered registers */
+   #endif
 }

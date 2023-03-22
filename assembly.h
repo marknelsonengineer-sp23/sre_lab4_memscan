@@ -14,13 +14,11 @@
 
 
 #ifdef __x86_64__
-/// Get the end of the stack frame for this thread -- which is where any new
+/// Get the end of the stack frame for this thread -- which is where new
 /// local variables would be allocated.
 ///
 /// This must be declared as a macro because `inline` is not always inlined
-/// and this **must** run in the context of the calling function.  It can't
-/// run in the context of its own function, which has a different stack
-/// frame.
+/// and this **must** run in the context of the calling function's stack frame.
 ///
 /// @param baseOfStack This **must** be a pointer (ideally, a `void*`) and
 ///                    the macro will put the base of the stack into this
@@ -48,8 +46,8 @@ __asm__ inline ( "MOVL %%ESP, %0 ;"                        \
    #pragma GCC error "Need inline assembly instructions for this architecture"
 #endif
 
-/// Getting the base of the stack should be the start of a dynamic
-/// local variable region.
+/// Get the end of the stack frame for this thread -- which is where new
+/// local variables would be allocated.
 ///
 /// This is mostly for testing and should not be used because it
 /// will return the base of the stack in its own stack frame rather
@@ -58,3 +56,43 @@ __asm__ inline ( "MOVL %%ESP, %0 ;"                        \
 ///
 /// @return A pointer to the next local variable
 extern void* getBaseOfStack() ;
+
+
+
+
+#ifdef __x86_64__
+/// Subtract `newSize` from the stack, thereby allocating that amount
+/// for local variables.
+///
+/// This must be declared as a macro because `inline` is not always inlined
+/// and this **must** run in the context of the calling function's stack frame.
+///
+/// @param newSize The number of bytes to allocate for local data
+#define ALLOCATE_LOCAL_STORAGE( newSize )                     \
+                                                              \
+   __asm__ inline ( "SUBQ %0, %%RSP ;"                        \
+               :                    /* output operands     */ \
+               : "g" (newSize)      /* input operands      */ \
+               : )                  /* clobbered registers */
+#endif
+
+#ifdef __i386__
+#define ALLOCATE_LOCAL_STORAGE( newSize )                     \
+                                                              \
+   __asm__ inline ( "SUBL %0, %%ESP ;"                        \
+               :                    /* output operands     */ \
+               : "g" (newSize)      /* input operands      */ \
+               : )                  /* clobbered registers */
+#endif
+
+
+/// Subtract `newSize` from the stack, thereby allocating that amount
+/// for local variables.
+///
+/// This is mostly for testing and should not be used because it
+/// will update the stack in its own stack frame rather
+/// than the calling function's stack frame (which is what we want).
+/// Use #ALLOCATE_LOCAL_STORAGE instead.
+///
+/// @param newSize The number of bytes to allocate for local data
+extern void allocateLocalStorage( const size_t newSize ) ;
