@@ -7,6 +7,7 @@
 /// @file   test_config.cpp
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
+/// @cond Suppress Doxygen warnings
 
 #define BOOST_TEST_MODULE memscan
 #define BOOST_TEST_DYN_LINK
@@ -103,3 +104,4 @@ BOOST_AUTO_TEST_CASE( test_GET_BIT ) {
 } // test_GET_BIT
 
 BOOST_AUTO_TEST_SUITE_END()
+/// @endcond
