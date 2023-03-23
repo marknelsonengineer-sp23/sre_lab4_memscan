@@ -87,6 +87,11 @@ but not _why_.
 - Markdown files should use [references] and avoid embedding URLs in the
   narrative.
 
+### Testing Notes
+A good stress-test of memscan is:
+
+    clear && ./memscan --block=/etc/passwd --stream=/etc/passwd --map_file=/etc/passwd --read --local=16384 --numLocal=500 --malloc=1M --numMalloc=4 --map_mem=13M --map_addr=0x555000000000 --fill --threads=10 --sleep=1 --scan_byte=0xc3 --shannon --path --phys
+
 ### Release Procedures
 - Run `make lint`
 - Run `make clean` and then `make test`

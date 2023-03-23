@@ -9,11 +9,12 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>        // @todo REMOVE REMOVE REMOVE
-
-#include <pthread.h>      // For pthread_create()
+#include <pthread.h>      // For pthread_mutex_t PTHREAD_MUTEX_INITIALIZER
+                          // pthread_mutex_lock() pthread_mutex_unlock()
+                          // pthread_t pthread_create()  pthread_join()
 #include <stdint.h>       // For uint64_t
 #include <stdlib.h>       // For malloc() calloc() free()
+#include <semaphore.h>    // For sem_t sem_init() sem_post() sem_wait()
 
 #include "assembly.h"     // For GET_BASE_OF_STACK() ALLOCATE_LOCAL_STORAGE()
 
@@ -26,6 +27,14 @@
 
 #include "allocate.h"     // Just cuz
 #include "config.h"       // For FATAL_ERROR
+
+
+/// This constant has a Shannon entropy of `3.000`.
+/// When `--malloc`, `--fill`, and `--shannon` are used together, this will fill
+/// memory regions and is detectable when we analyze for Shannon entropy.
+//
+/// The constant must contain 8 unique bytes.
+#define SHANNON_CONSTANT_FOR_ALLOCATIONS 0x1122334455667788
 
 
 /// Maintain an array[`--numMalloc`] of pointers to heap allocations for `--malloc`.
@@ -50,6 +59,10 @@ static void* mappedAllocation = NULL ;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 
+/// Semaphore to track when the local variables have been created ;
+sem_t localAllocationsReady ;
+
+
 /// Recursively allocate `--local` bytes of memory for `--numLocal` iterations
 /// and put them in the #localAllocations array.
 ///
@@ -57,29 +70,35 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 ///                                  allocations to make
 void allocateLocalMemory_recurse( const size_t remainingLocalAllocations ) {
    if( remainingLocalAllocations == 0 ) {
-      printf( "...waiting...\n" ) ;
+      // printf( "...waiting...\n" ) ;
+
+      sem_post( &localAllocationsReady );
 
       pthread_mutex_lock( &mutex );
 
-      printf( "Released!!!\n" ) ;
+      // printf( "Released!!!\n" ) ;
       return ;
    }
 
-   // Store the base of the stack in localAllocations array
-   GET_BASE_OF_STACK( localAllocations[remainingLocalAllocations - 1] ) ;
+   // Remember the base of the stack...
+   void* stackBase = NULL ;
+   GET_BASE_OF_STACK( stackBase ) ;
 
    /// Local memory allocations needed to be rounded up to `sizeof( uint64_t )`
+   /// for both stack alignment and to insert #SHANNON_CONSTANT_FOR_ALLOCATIONS
    ///   - `localSize` 0 through 8 should round to 8
    ///   - `localSize` 9 through 16 should round to 16
    ///   - `localSize`17 through 24 should round to 24
-
    int roundingCorrection = 7 - (localSize-1) % sizeof( uint64_t ) ;
 
    size_t roundedLocalSize = localSize + roundingCorrection ;
 
    ALLOCATE_LOCAL_STORAGE( roundedLocalSize ) ;
 
-   printf( "Allocate %zu bytes of local memory at %p\n", roundedLocalSize, localAllocations[remainingLocalAllocations - 1] ) ;
+   /// Save the start address of the local memory allocation in #localAllocations.
+   localAllocations[remainingLocalAllocations - 1] = stackBase - roundedLocalSize ;
+
+   // printf( "Allocate %zu bytes of local memory: %p - %p\n", roundedLocalSize, localAllocations[remainingLocalAllocations - 1], localAllocations[remainingLocalAllocations - 1] + localSize - 1 ) ;
 
    allocateLocalMemory_recurse( remainingLocalAllocations - 1 ) ;
 }
@@ -134,12 +153,21 @@ void allocatePreScanMemory() {
          localAllocations[i] = NULL ;
       }
 
+      // Lock the mutex and only unlock it when memscan is ready to quit
       pthread_mutex_lock( &mutex ) ;
+
+      // Use a semaphore to continue main() only after the local memory allocation
+      // is done
+      sem_init( &localAllocationsReady, 0, 0 );
 
       int rVal = pthread_create( &localAllocationThread, NULL, &localAllocationThreadStart, NULL ) ;
       if( rVal != 0 ) {
          FATAL_ERROR( "unable to create local allocator thread" ) ;
       }
+
+      // Wait until the local memory allocation is done
+      sem_wait( &localAllocationsReady ) ;
+
    } // allocateLocalMemory
 
    if( allocateMappedMemory ) {
@@ -180,14 +208,6 @@ void allocatePreScanMemory() {
 } // allocatePreScanMemory
 
 
-/// This constant has a Shannon entropy of `3.000`.
-/// When `--malloc`, `--fill`, and `--shannon` are used together, this will fill
-/// memory regions and is detectable when we analyze for Shannon entropy.
-//
-/// The constant must contain 8 unique bytes.
-#define SHANNON_CONSTANT_FOR_ALLOCATIONS 0x1122334455667788
-
-
 void fillPreScanMemory() {
    if( allocateHeapMemory ) {
       ASSERT( heapAllocations != NULL ) ;
@@ -206,15 +226,17 @@ void fillPreScanMemory() {
       ASSERT( localSize > 0 ) ;
       ASSERT( numLocals >= 1 ) ;
 
-//    for( size_t i = 0 ; i < numLocals ; i++ ) {
-      for( size_t i = 0 ; i < 1 ; i++ ) {
-//       for( size_t j = 0 ; j < localSize ; j += sizeof( uint64_t ) ) {
-         for( size_t j = 0 ; j < 1 ; j += sizeof( uint64_t ) ) {
-            printf( "x\n" ) ;
-//            *(uint64_t*)(localAllocations[i] + j) = SHANNON_CONSTANT_FOR_ALLOCATIONS ;
+      for( size_t i = 0 ; i < numLocals ; i++ ) {
+         // printf( "i=%zu  localAllocations[%zu]=%p - %p  localSize=%zu\n", i, i, localAllocations[i], localAllocations[i] + localSize - 1, localSize ) ;
+         if( localAllocations[i] == NULL ) {
+            // printf( "continue\n" ) ;  // This really should never happen
+            continue ;
+         }
+         for( size_t j = 0 ; j < localSize ; j += sizeof( uint64_t ) ) {
+            // printf( "i=%zu  j=%zu  localAllocations[i] + j=%p\n", i, j, (localAllocations[i] + j) ) ;
+            *(uint64_t*)(localAllocations[i] + j) = SHANNON_CONSTANT_FOR_ALLOCATIONS ;
          }
       }
-
    } // allocateLocalMemory
 
    if( allocateMappedMemory ) {
