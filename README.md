@@ -220,14 +220,14 @@ To that end, your program does not have to match the output perfectly... here ar
 # Makefile
 Memscan 2 uses the following `Makefile` targets:
 
-| Command      | Purpose                                                    |
-|--------------|------------------------------------------------------------|
-| `make`       | Compile your program                                       |
-| `make test`  | Compile your program and run it                            |
-| `make debug` | Compile your program with debug mode ( `DEBUG` is defined) |
-| `make clean` | Remove any compiler output                                 |
-| `make doc`   | Make a Doxygen website and push it to UH UNIX              |
-| `make lint`  | Use `clang-tidy` to do static analysis on the source code  |
+| Command      | Purpose                                                            |
+|--------------|--------------------------------------------------------------------|
+| `make`       | Compile your program                                               |
+| `make test`  | Compile your program and run it.  Run as `root` to pass all tests. |
+| `make debug` | Compile your program with debug mode ( `DEBUG` is defined)         |
+| `make clean` | Remove any compiler output                                         |
+| `make doc`   | Make a Doxygen website and push it to UH UNIX                      |
+| `make lint`  | Use `clang-tidy` to do static analysis on the source code          |
 
 
 # Toolchain
