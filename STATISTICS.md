@@ -4,11 +4,11 @@ Project Statistics
 | Type | Files | Lines | Bytes | Working Lines | Working Bytes |
 |------|------:|------:|------:|--------------:|--------------:|
 |.h Source|16|810|34,483|289|6,851|
-|.c Source|14|2,873|106,196|1,890|56,627|
+|.c Source|14|2,974|109,358|1,955|58,673|
 |Unit Tests|8|862|45,384|577|34,896|
 |Python|4|624|17,899|272|8,853|
 |HTML|1|35|756|n/a|n/a|
-|Markdown|6|486|29,771|n/a|n/a|
+|Markdown|6|489|29,937|n/a|n/a|
 |Images|12|n/a|2,204,566|n/a|n/a|
 |Other	Files|10|n/a|143,414|n/a|n/a|
 
@@ -20,7 +20,7 @@ Project Statistics
 
 ## Software Engineering Metrics
 
-Number of commits:  178
+Number of commits:  179
 
 Number of test cases:  19
 
@@ -31,4 +31,4 @@ Number of test assertions:  421
 |--------------------------------------|---------------------------|-------------------------|---------------------------|
 | ![GitHub code size	in	bytes](https://img.shields.io/github/languages/code-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub repo size](https://img.shields.io/github/repo-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub contributors](https://img.shields.io/github/contributors/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub last	commit](https://img.shields.io/github/last-commit/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub	issues](https://img.shields.io/github/issues-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub	closed issues](https://img.shields.io/github/issues-closed-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub forks](https://img.shields.io/github/forks/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub Repo	stars](https://img.shields.io/github/stars/marknelsonengineer-sp23/sre_lab4_memscan?style=social) |
 
-Automatically generated on Wed 22 Mar 2023 01:48:09 PM 
+Automatically generated on Wed 22 Mar 2023 05:15:03 PM 

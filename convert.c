@@ -86,7 +86,7 @@ unsigned long long stringToUnsignedLongLongWithBasePrefix( char* inString ) {
 
    // If there's an error or excess characters...
    if( errno != 0 || strlen( strtolRemainder ) > 0 ) {
-      FATAL_ERROR( "Illegal format for --scan_byte=HEX" ) ;
+      FATAL_ERROR( "Illegal format for NUM or ADDR (optional prefix 0x or 0b)" ) ;
    }
 
    return result ;

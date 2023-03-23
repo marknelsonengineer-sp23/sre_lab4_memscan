@@ -30,7 +30,7 @@ PRE-SCAN OPTIONS
       --sleep=SECONDS      pause the primary thread before scanning
 
 SCAN OPTIONS
-      --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)
+      --scan_byte[=NUM]    scan for NUM (a byte from 0x00 to 0xff)
                            or c3 (the x86 RET instruction) by default
       --shannon            compute Shannon Entropy for each mapped region
                            and physical page

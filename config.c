@@ -79,7 +79,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "      --sleep=SECONDS      pause the primary thread before scanning\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "SCAN OPTIONS\n" ) ;
-   PRINT( outStream, "      --scan_byte[=HEX]    scan for HEX (a byte from 00 to ff)\n" ) ;
+   PRINT( outStream, "      --scan_byte[=NUM]    scan for NUM (a byte from 0x00 to 0xff)\n" ) ;
    PRINT( outStream, "                           or c3 (the x86 RET instruction) by default\n" ) ;
    PRINT( outStream, "      --shannon            compute Shannon Entropy for each mapped region\n" ) ;
    PRINT( outStream, "                           and physical page\n" ) ;
