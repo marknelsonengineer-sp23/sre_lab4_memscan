@@ -12,9 +12,9 @@
 #include <pthread.h>      // For pthread_mutex_t PTHREAD_MUTEX_INITIALIZER
                           // pthread_mutex_lock() pthread_mutex_unlock()
                           // pthread_t pthread_create()  pthread_join()
+#include <semaphore.h>    // For sem_t sem_init() sem_post() sem_wait()
 #include <stdint.h>       // For uint64_t
 #include <stdlib.h>       // For malloc() calloc() free()
-#include <semaphore.h>    // For sem_t sem_init() sem_post() sem_wait()
 
 #include "assembly.h"     // For GET_BASE_OF_STACK() ALLOCATE_LOCAL_STORAGE()
 
@@ -68,6 +68,8 @@ sem_t localAllocationsReady ;
 ///
 /// @param remainingLocalAllocations The number of remaining `--numLocal`
 ///                                  allocations to make
+///
+/// @NOLINTNEXTLINE(misc-no-recursion):  Recursion is allowed here
 void allocateLocalMemory_recurse( const size_t remainingLocalAllocations ) {
    if( remainingLocalAllocations == 0 ) {
       // printf( "...waiting...\n" ) ;
@@ -89,7 +91,7 @@ void allocateLocalMemory_recurse( const size_t remainingLocalAllocations ) {
    ///   - `localSize` 0 through 8 should round to 8
    ///   - `localSize` 9 through 16 should round to 16
    ///   - `localSize`17 through 24 should round to 24
-   int roundingCorrection = 7 - (localSize-1) % sizeof( uint64_t ) ;
+   size_t roundingCorrection = (sizeof( uint64_t ) - 1) - (localSize-1) % sizeof( uint64_t ) ;
 
    size_t roundedLocalSize = localSize + roundingCorrection ;
 
