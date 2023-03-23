@@ -119,7 +119,6 @@ void allocatePreScanMemory() {
       }
    } // allocateHeapMemory
 
-
    if( allocateLocalMemory ) {
       ASSERT( localAllocations == NULL ) ;
       ASSERT( localSize > 0 ) ;
