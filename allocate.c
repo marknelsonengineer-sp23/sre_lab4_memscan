@@ -59,7 +59,7 @@ void allocateLocalMemory_recurse( const size_t remainingLocalAllocations ) {
    if( remainingLocalAllocations == 0 ) {
       printf( "...waiting...\n" ) ;
 
-      pthread_mutex_lock (&mutex);
+      pthread_mutex_lock( &mutex );
 
       printf( "Released!!!\n" ) ;
       return ;
@@ -135,7 +135,7 @@ void allocatePreScanMemory() {
          localAllocations[i] = NULL ;
       }
 
-      pthread_mutex_lock (&mutex) ;
+      pthread_mutex_lock( &mutex ) ;
 
       int rVal = pthread_create( &localAllocationThread, NULL, &localAllocationThreadStart, NULL ) ;
       if( rVal != 0 ) {
