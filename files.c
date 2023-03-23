@@ -139,10 +139,6 @@ void readPreScanFiles() {
          /// terminate when the read gets to the end of the file
          /// and then reset the file pointer.
          result = fread( fileBuffer, 1, fileBufferSize, stream_fd ) ;
-         if( result <= 0 ) {
-            WARNING( "unable to read --stream[%s]", streamPath ) ;
-            continue ;
-         }
          numRead += result ;
          // printf( "Read %ld bytes from stream device\n", result ) ;
       } while( !feof( stream_fd ) && numRead <= ONE_MEGABYTE ) ;  /// `--stream` files will read the first 1M of data
