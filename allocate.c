@@ -2,14 +2,20 @@
 //         University of Hawaii, College of Engineering
 //         sre_lab4_memscan - EE 205 - Spr 2023
 //
-/// Allocate memory for `--local`, `--malloc` and `--mem_map` options
+/// Allocate and optionally populate memory for `--local`, `--numLocal`,
+/// `--malloc`, `--numMalloc`, `--mem_map`, `--mapAddr` and `--fill`
 ///
 /// @file   allocate.c
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <stdio.h>        // @todo REMOVE REMOVE REMOVE
+
+#include <pthread.h>      // For pthread_create()
 #include <stdint.h>       // For uint64_t
 #include <stdlib.h>       // For malloc() calloc() free()
+
+#include "assembly.h"     // For GET_BASE_OF_STACK() ALLOCATE_LOCAL_STORAGE()
 
 /// Enable Linux-specific features in `mmap()`
 ///
@@ -25,8 +31,74 @@
 /// Maintain an array[`--numMalloc`] of pointers to heap allocations for `--malloc`.
 static void** heapAllocations = NULL ;
 
+/// Maintain an array[`--numLocal`] of pointers to local allocations for `--local`.
+static void** localAllocations = NULL ;
+
+/// The thread, starting in localAllocationThreadStart(), that holds the local
+/// allocations for `--local`.
+static pthread_t localAllocationThread = 0 ;
+
 /// Pointer to the `--map_mem` allocation
 static void* mappedAllocation = NULL ;
+
+/// Mutex to hold the local memory allocator thread until memscan is shutdown
+///   - The mutex is locked in allocatePreScanMemory()
+///   - It is held (synchronized) by the local allocation thread in
+///     allocateLocalMemory_recurse()
+///   - The mutex is unlocked in releasePreScanMemory(), which allows the
+///     thread to continue, unwind its recursive calls and end.
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+
+/// Recursively allocate `--local` bytes of memory for `--numLocal` iterations
+/// and put them in the #localAllocations array.
+///
+/// @param remainingLocalAllocations The number of remaining `--numLocal`
+///                                  allocations to make
+void allocateLocalMemory_recurse( const size_t remainingLocalAllocations ) {
+   if( remainingLocalAllocations == 0 ) {
+      printf( "...waiting...\n" ) ;
+
+      pthread_mutex_lock (&mutex);
+
+      printf( "Released!!!\n" ) ;
+      return ;
+   }
+
+   // Store the base of the stack in localAllocations array
+   GET_BASE_OF_STACK( localAllocations[remainingLocalAllocations - 1] ) ;
+
+   /// Local memory allocations needed to be rounded up to `sizeof( uint64_t )`
+   ///   - `localSize` 0 through 8 should round to 8
+   ///   - `localSize` 9 through 16 should round to 16
+   ///   - `localSize`17 through 24 should round to 24
+
+   int roundingCorrection = 7 - (localSize-1) % sizeof( uint64_t ) ;
+
+   size_t roundedLocalSize = localSize + roundingCorrection ;
+
+   ALLOCATE_LOCAL_STORAGE( roundedLocalSize ) ;
+
+   printf( "Allocate %zu bytes of local memory at %p\n", roundedLocalSize, localAllocations[remainingLocalAllocations - 1] ) ;
+
+   allocateLocalMemory_recurse( remainingLocalAllocations - 1 ) ;
+}
+
+
+/// The thread that creates and holds local memory allocations via
+/// allocateLocalMemory_recurse().  This thread is kept in
+/// #localAllocationThread.
+///
+/// @param arg Required by `pthread_create()` but not used by memscan
+/// @return Always `NULL`
+static void* localAllocationThreadStart( void *arg ) {
+   (void) arg ;  // Suppress warning about unused variable
+
+   allocateLocalMemory_recurse( numLocals ) ;
+
+   return NULL ;
+}
+
 
 void allocatePreScanMemory() {
    if( allocateHeapMemory ) {
@@ -46,6 +118,30 @@ void allocatePreScanMemory() {
          }
       }
    } // allocateHeapMemory
+
+
+   if( allocateLocalMemory ) {
+      ASSERT( localAllocations == NULL ) ;
+      ASSERT( localSize > 0 ) ;
+      ASSERT( numLocals >= 1 ) ;
+
+      localAllocations = calloc( numLocals, sizeof( void* ) ) ;
+      if( localAllocations == NULL ) {
+         FATAL_ERROR( "unable to allocate local array during --local" ) ;
+      }
+
+      // Initialize localAllocations to 0
+      for( size_t i = 0 ; i < numLocals ; i++ ) {
+         localAllocations[i] = NULL ;
+      }
+
+      pthread_mutex_lock (&mutex) ;
+
+      int rVal = pthread_create( &localAllocationThread, NULL, &localAllocationThreadStart, NULL ) ;
+      if( rVal != 0 ) {
+         FATAL_ERROR( "unable to create local allocator thread" ) ;
+      }
+   } // allocateLocalMemory
 
    if( allocateMappedMemory ) {
       ASSERT( mappedAllocation == NULL ) ;
@@ -106,6 +202,22 @@ void fillPreScanMemory() {
       }
    } // allocateHeapMemory
 
+   if( allocateLocalMemory ) {
+      ASSERT( localAllocations != NULL ) ;
+      ASSERT( localSize > 0 ) ;
+      ASSERT( numLocals >= 1 ) ;
+
+//    for( size_t i = 0 ; i < numLocals ; i++ ) {
+      for( size_t i = 0 ; i < 1 ; i++ ) {
+//       for( size_t j = 0 ; j < localSize ; j += sizeof( uint64_t ) ) {
+         for( size_t j = 0 ; j < 1 ; j += sizeof( uint64_t ) ) {
+            printf( "x\n" ) ;
+//            *(uint64_t*)(localAllocations[i] + j) = SHANNON_CONSTANT_FOR_ALLOCATIONS ;
+         }
+      }
+
+   } // allocateLocalMemory
+
    if( allocateMappedMemory ) {
       ASSERT( mappedAllocation != NULL ) ;
       ASSERT( mappedSize > 0 ) ;
@@ -130,6 +242,27 @@ void releasePreScanMemory() {
       free( heapAllocations ) ;
       heapAllocations = NULL ;
    } // allocateHeapMemory
+
+   if( allocateLocalMemory ) {
+      ASSERT( localAllocations != NULL ) ;
+      ASSERT( numLocals >= 1 ) ;
+      ASSERT( localAllocationThread != 0 ) ;
+
+      // Release local allocator thread
+      pthread_mutex_unlock (&mutex) ;
+      int result = pthread_join( localAllocationThread, NULL ) ;
+      if( result != 0 ) {
+         WARNING( "pthread_join returned %d", result ) ;
+      }
+
+      // Set localAllocations to NULL
+      for( size_t i = 0 ; i < numLocals ; i++ ) {
+         localAllocations[i] = NULL ;
+      }
+
+      free( localAllocations ) ;
+      localAllocations = NULL ;
+   } // allocateLocalMemory
 
    if( allocateMappedMemory ) {
       ASSERT( mappedAllocation != NULL ) ;
