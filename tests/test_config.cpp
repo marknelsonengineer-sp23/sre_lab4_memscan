@@ -26,12 +26,20 @@ extern "C" {
 
 BOOST_AUTO_TEST_SUITE( test_config )
 
+BOOST_AUTO_TEST_CASE( test_architecture ) {
+   // Make sure pointers are the same size as `size_t`
+   BOOST_CHECK_EQUAL( sizeof( void* ), sizeof( size_t ) ) ;
+
+   BOOST_CHECK_EQUAL( sizeof( ssize_t ), sizeof( size_t ) ) ;
+}
+
+
 BOOST_AUTO_TEST_CASE( test_getEndianness ) {
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-        BOOST_CHECK_EQUAL( getEndianness(), LITTLE ) ;
-#else
-        BOOST_CHECK_EQUAL( getEndianness(), BIG ) ;
-#endif
+   #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+      BOOST_CHECK_EQUAL( getEndianness(), LITTLE ) ;
+   #else
+      BOOST_CHECK_EQUAL( getEndianness(), BIG ) ;
+   #endif
 }
 
 
