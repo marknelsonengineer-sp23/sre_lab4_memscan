@@ -14,7 +14,9 @@
 #include <boost/test/included/unit_test.hpp>  // include this to get main()
 #include <boost/test/unit_test.hpp>
 
-#include <stdio.h>  // For fopen() fclose()
+#include <stddef.h>     // For size_t
+#include <stdio.h>      // For fopen() fclose()
+#include <sys/types.h>  // For ssize_t
 
 #include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
 

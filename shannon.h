@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include <stddef.h>  // For size_t
-
 /// The maximum length of a Shannon Entropy classification string
 #define MAX_SHANNON_CLASSIFICATION_LENGTH 24
 

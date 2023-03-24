@@ -16,7 +16,8 @@
 
 #include <stdbool.h>  // For bool
 #include <stddef.h>   // For size_t
-#include <stdint.h>   // For uint8_t
+#include <stdint.h>   // For uint8_t unit64_t
+#include <stdio.h>    // For FILE
 
 
 /// Hold information about a physical page

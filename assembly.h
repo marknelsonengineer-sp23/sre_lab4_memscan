@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <stddef.h>  // For NULL
+#include <stddef.h>  // For NULL size_t
 
 
 #ifdef __x86_64__

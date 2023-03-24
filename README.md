@@ -97,10 +97,13 @@ pages (in this case, `System RAM`)
     - Our implementation uses Posix (pthreads) not C11 threads
       - See:  https://en.wikipedia.org/wiki/Pthreads
       - See:  https://man7.org/linux/man-pages/man7/pthreads.7.html
+- If you're hunting for x86 instructions, check this site out for a
+  [list of one byte instructions] for x86.
 
 [Malloc Internals]: https://sourceware.org/glibc/wiki/MallocInternals
 [mallopt]: https://man7.org/linux/man-pages/man3/mallopt.3.html
 [stressapptest]: https://github.com/stressapptest/stressapptest
+[list of one byte instructions]: http://xxeo.com/single-byte-or-small-x86-opcodes
 
 
 # Memscan 1

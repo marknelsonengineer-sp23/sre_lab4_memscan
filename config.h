@@ -10,21 +10,29 @@
 #pragma once
 
 #include <assert.h>   // For assert()
-#include <limits.h>   // For PATH_MAX
 #include <stdbool.h>  // For bool
-#include <stdio.h>    // For FILE stderr fprintf()
+#include <stdio.h>    // For FILENAME_MAX FILE stderr fprintf()
 #include <stdlib.h>   // For exit()
 
 #ifdef TESTING
    #include "tests/boost_test_util.h"  // For throwException()
 #endif
 
+
 /// Process command line options
 ///
-/// @param argc The number of command line options (including the program name)
-/// @param argv A `NULL` terminated array of `char[]` containing the command
-///             line options
+/// @param argc The number of arguments passed to `memscan` (including the
+///             program name).  Always `>= 1`.
+/// @param argv A `NULL` terminated array of `char[]` arguments containing the
+///             command line options
 extern void processOptions( int argc, char* argv[] );
+
+
+/// Ensure memscan is running with the `CAP_SYS_ADMIN` capability
+///
+/// Return silently if it has the `CAP_SYS_ADMIN` capability.
+/// Call FATAL_ERROR() if it does not have the `CAP_SYS_ADMIN` capability.
+void checkCapabilities() ;
 
 
 /// Print memscan's usage
@@ -54,13 +62,6 @@ enum Endian { ENDIAN_UNKNOWN=-1  ///< If the endianness is unknown
              ,LITTLE             ///< For little endian machines
              ,BIG                ///< For big endian machines
 } ;
-
-
-/// Ensure memscan is running with the `CAP_SYS_ADMIN` capability
-///
-/// Return silently if it has the `CAP_SYS_ADMIN` capability.
-/// Call FATAL_ERROR() if it does not have the `CAP_SYS_ADMIN` capability.
-void checkCapabilities() ;
 
 
 /// Return the endianness of the current computer

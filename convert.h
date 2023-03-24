@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include <stddef.h> // For size_t
-
 /// Get an unsigned number from a string (with units)
 ///
 /// Memscan has options like:  `--local=NUM[K|M|G]`.  This function parses

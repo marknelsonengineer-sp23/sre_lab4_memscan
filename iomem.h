@@ -9,6 +9,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include <stdbool.h>  // For bool
+
+
 /// The longest allowed description in #IOMEM_FILE
 #define MAX_IOMEM_DESCRIPTION  64
 

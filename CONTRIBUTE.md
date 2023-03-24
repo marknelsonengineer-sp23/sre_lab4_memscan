@@ -97,6 +97,11 @@ A good stress-test of memscan is:
 - Run `make clean` and then `make test`
 - Run `make doc` and then `make publish`
 - Scrub all `@todo`s
+- Create `scratch.c`, then `#include` each `.h` file and ensure they are 
+  self-sufficient:
+  - Ensure they have the #includes to stand alone.  
+  - Ensure the functions they import are documented.
+  - Remove any unnecessary `#include`s.
 - Scrub GitHub issues
 - Tag the release in Git
 
