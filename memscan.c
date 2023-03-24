@@ -8,25 +8,26 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>    // For printf() fprintf()
-#include <stdlib.h>   // For EXIT_SUCCESS and EXIT_FAILURE
+#include <stdlib.h>   // For exit() EXIT_SUCCESS and EXIT_FAILURE
 #include <unistd.h>   // For sleep()
 
-#include "allocate.h" // For allocatePreScanMemory(), et. al.
-#include "config.h"   // For processOptions()
+#include "allocate.h" // For allocatePreScanMemory() fillPreScanMemory() releasePreScanMemory()
+#include "config.h"   // For processOptions() checkCapabilities()
 #include "files.h"    // For openPreScanFiles() readPreScanFiles() closePreScanFiles()
-#include "iomem.h"    // For read_iomem()
-#include "maps.h"     // For readEntries() scanEntries()
+#include "iomem.h"    // For read_iomem() summarize_iomem()
+#include "maps.h"     // For readMaps() scanMaps() readPagemapInfo() printMaps()
 #include "memscan.h"  // Just cuz
 #include "pagemap.h"  // For closePagemap()
-#include "threads.h"  // For createThreads()
+#include "threads.h"  // For createThreads() closeThreads()
 
 
 /// A memory scanner:  memscan's `main()`
 ///
-/// @param argc The number of arguments passed to `memscan`
-/// @param argv An array of arguments passed to `memscan`
-/// @return The program's return code
+/// @param argc The number of arguments passed to `memscan` (including the
+///             program name).  Always `>= 1`.
+/// @param argv A `NULL` terminated array of `char[]` arguments containing the
+///             command line options
+/// @return     The program's return code:  `EXIT_SUCCESS` or `EXIT_FAILURE`
 int main( int argc, char* argv[] ) {
    // Initialize the program
    processOptions( argc, argv ) ;  // Process --help, --key, --version
@@ -41,8 +42,9 @@ int main( int argc, char* argv[] ) {
    }
 
    // Do pre-scan operations
-   openPreScanFiles() ;        // Process --block, --stream, --map_file
-   allocatePreScanMemory() ;   // Process --malloc, --numMalloc, --map_mem, --map_addr
+   openPreScanFiles() ;        // Process --block, --stream, --map_file and --read
+   allocatePreScanMemory() ;   // Process --local, --numLocal, --malloc, --numMalloc,
+                               // --mem_map, --mapAddr and --fill
 
    /// Anything that changes #MEMORY_MAP_FILE should be done before calling readMaps()
 
@@ -69,7 +71,7 @@ int main( int argc, char* argv[] ) {
 
    scanMaps() ;                // Process --scan_byte, --shannon
 
-   readPagemapInfo() ;         // Process --phys
+   readPagemapInfo() ;         // Process --phys and --pfx
 
    printMaps() ;
 
