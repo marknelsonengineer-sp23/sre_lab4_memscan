@@ -287,7 +287,7 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
 } // add_iomem_region
 
 
-bool read_iomem() {
+void read_iomem() {
    reset_iomem() ;
 
    FILE* file = NULL ;  // File handle to #IOMEM_FILE
@@ -349,8 +349,6 @@ bool read_iomem() {
    if( iRetVal != 0 ) {
       FATAL_ERROR( "Unable to close [%s]", IOMEM_FILE ) ;
    }
-
-   return true ;
 } // read_iomem
 
 
@@ -391,7 +389,7 @@ void print_iomem_summary() {
 /// Implementation of a bubble sort of a linked list
 ///
 /// @return `true` if successful.  `false` if there was a problem.
-bool sort_iomem_summary() {
+void sort_iomem_summary() {
    bool swapped;
    do {
       swapped = false;
@@ -423,8 +421,6 @@ bool sort_iomem_summary() {
          type = type->next;
       }
    } while( swapped ) ;  // If we swapped two rows, then keep sorting
-
-   return true ;
 } // sort_iomem
 
 
