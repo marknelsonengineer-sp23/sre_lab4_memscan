@@ -28,8 +28,10 @@ frame numbers can be exploited by malware.  Therefore,
 memscan must be run as `root` or as a process that has `CAP_SYS_ADMIN` 
 enabled.  There are ways to have Linux run memscan with this
 capability and there are other ways to add `CAP_SYS_ADMIN` to your user 
-(not recommended).  It's left to the reader to research these other methods
+(not recommended).  It's left to the reader to research these [other methods]
 as I just run it from a `$ sudo bash` process as root:  `# ./memscan --path`.
+
+[other methods]: https://unix.stackexchange.com/questions/454708/how-do-you-add-cap-sys-admin-permissions-to-user-in-centos-7
 
 [This](https://www.kernel.org/doc/Documentation/vm/pagemap.txt) is a good 
 place to start to learn about how memscan 2 gets its raw data.

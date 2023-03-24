@@ -387,8 +387,6 @@ void print_iomem_summary() {
 /// Sort the linked list of #Iomem_summary_t under #iomem_summary_head
 ///
 /// Implementation of a bubble sort of a linked list
-///
-/// @return `true` if successful.  `false` if there was a problem.
 void sort_iomem_summary() {
    bool swapped;
    do {

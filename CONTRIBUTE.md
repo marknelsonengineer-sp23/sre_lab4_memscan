@@ -99,7 +99,7 @@ A good stress-test of memscan is:
 - Scrub all `@todo`s
 - Create `scratch.c`, then `#include` each `.h` file and ensure they are 
   self-sufficient:
-  - Ensure they have the #includes to stand alone.  
+  - Ensure they have the `#include`s to stand alone.  
   - Ensure the functions they import are documented.
   - Remove any unnecessary `#include`s.
 - Scrub GitHub issues

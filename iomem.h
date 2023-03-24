@@ -32,8 +32,6 @@ extern const char* get_iomem_region_description( const void* physAddr ) ;
 
 
 /// Read `/proc/iomem` to characterize physical addresses
-///
-/// @return `true` if successful.  `false` if there was a problem.
 extern void read_iomem() ;
 
 
