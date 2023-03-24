@@ -33,3 +33,7 @@ span.preprocessor {
 span.keywordflow {
     color: darkorange;
 }
+
+h1 {
+    font-size: 1.5em;
+}
