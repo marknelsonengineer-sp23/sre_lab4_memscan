@@ -209,14 +209,23 @@ void printPageFlags( const struct PageInfo* page ) {
 /// message that's not a flag
 ///
 /// @param page The page to print
+/// @param startPage Is NULL when #includePhysicalPageNumber is set.  When
+///                  #includePhysicalPageSummary, it's the start page for
+///                  the region and is used to compute the size of the region.
 /// @return `true` if flags should be printed.  `false` if flags should not
 ///         be printed.
-bool printPageContext( const struct PageInfo* page ) {
+bool printPageContext( const struct PageInfo* page, const struct PageInfo* startPage ) {
    ASSERT( page != NULL );
 
+   if( includePhysicalPageNumber ) {
+      ASSERT( startPage == NULL ) ;
+   }
+
    if( includePhysicalPageSummary ) {
+      ASSERT( startPage != NULL ) ;
       /// @todo Optimize this a bit, so we don't have to call getPageSizeInBytes() every time... Maybe make it a global/inline
       printf( ANSI_COLOR_GREEN "%p " ANSI_COLOR_RESET, page->virtualAddress + getPageSizeInBytes() - 1 ) ;
+      printf( ANSI_COLOR_CYAN "%'10zu " ANSI_COLOR_RESET, page->virtualAddress - startPage->virtualAddress + getPageSizeInBytes() ) ;
    }
 
    if( !page->valid ) {
@@ -232,7 +241,9 @@ bool printPageContext( const struct PageInfo* page ) {
    if( page->swapped ) {
       printf( ANSI_COLOR_RED "swapped: " ANSI_COLOR_RESET );
       printf( "type: %u  ", page->swap_type );
-      printf( "offset: 0x%p  ", page->swap_offset );
+      if( includePhysicalPageNumber ) {
+         printf( "offset: 0x%p  ", page->swap_offset );
+      }
       return false ;
    }
 
@@ -249,7 +260,7 @@ void printFullPhysicalPage( const struct PageInfo* page ) {
    ASSERT( page != NULL );
 
    printVirtualAddressStart( page ) ;
-   if( printPageContext( page ) ) {
+   if( printPageContext( page, NULL ) ) {
       printPageFlags( page ) ;
    }
 
@@ -288,6 +299,14 @@ enum PageCompare comparePages( const struct PageInfo* left, const struct PageInf
        && !right->present
        && !left->swapped
        && !right->swapped ) {
+      same = true ;
+      goto Done ;
+   }
+
+   // If swapped & swap_type is the same, then ignore the other flags
+   if(     left->swapped
+        && right->swapped
+        && left->swap_type == right->swap_type ) {
       same = true ;
       goto Done ;
    }
@@ -350,6 +369,8 @@ enum PageCompare comparePages( const struct PageInfo* left, const struct PageInf
 void printPageSummary( const struct PageInfo page[], const size_t numPages ) {
    ASSERT( numPages > 0 ) ;
 
+   size_t startPage = 0 ;  // The start of the current region
+
    printVirtualAddressStart( &page[0] ) ;
 
    for( size_t i = 0 ; i < numPages-1 ; i++ ) {
@@ -357,17 +378,18 @@ void printPageSummary( const struct PageInfo page[], const size_t numPages ) {
          continue ;
       }
 
-      if( printPageContext( &page[i] ) ) {
+      if( printPageContext( &page[i], &page[startPage] ) ) {
          printPageFlags( &page[i] ) ;
       }
 
       printf( "\n" ) ;
 
       printVirtualAddressStart( &page[i+1] ) ;
+      startPage = i+1 ;
    }
 
    // Print the last page
-   if( printPageContext( &page[numPages-1] ) ) {
+   if( printPageContext( &page[numPages-1], &page[startPage] ) ) {
       printPageFlags( &page[numPages-1] ) ;
    }
    printf( "\n" ) ;

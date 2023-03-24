@@ -255,6 +255,8 @@ void printMaps() {
 
       printf( ANSI_COLOR_CYAN "%2zu: " ANSI_COLOR_RESET, i ) ;
       printf( "%p - %p ", map[i].pAddressStart, map[i].pAddressEnd - 1 ) ;
+      printf( ANSI_COLOR_CYAN "%'10zu " ANSI_COLOR_RESET, map[i].numBytes ) ;
+
       printf( ANSI_COLOR_BRIGHT_GREEN "%c" ANSI_COLOR_RESET, map[i].sPermissions[0] ) ;
       if( map[i].sPermissions[1] == 'w' ) {
          printf( ANSI_COLOR_MAGENTA "%c" ANSI_COLOR_RESET, map[i].sPermissions[1] ) ;
@@ -267,7 +269,6 @@ void printMaps() {
          printf( "%c", map[i].sPermissions[2] ) ;
       }
       printf( "%c", map[i].sPermissions[3] ) ;
-      printf( ANSI_COLOR_CYAN "%'10zu " ANSI_COLOR_RESET, map[i].numBytes ) ;
 
       if( map[i].sPermissions[0] != 'r' ) {
          printf( ANSI_COLOR_RED "read permission not set" ANSI_COLOR_RESET );
