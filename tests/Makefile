@@ -16,7 +16,7 @@ all:  $(TARGET) lint
 
 CXX       = g++
 CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS)
-LDLIBS    = -lm -lcap
+LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
 LINTFLAGS = --quiet
 

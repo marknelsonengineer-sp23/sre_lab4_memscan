@@ -2,14 +2,69 @@ Contribute to MemScan
 =====================
 
 ### Setup the development environment
-- THIS SECTION IS INCOMPLETE AND NOT TESTED
+- THIS SECTION IS STILL INCOMPLETE...
   - ...but it worked on Rasberian!
-- Install Boost ( # apt-get install libboost-all-dev )
-- Install clang-tidy ( # apt-get install clang-tidy )
-- Install doxygen ( # apt-get install doxygen )
-- Install python3-pip ( # pacman -S python-pip ) ( # apt-get install python3-pip )
-- Install GitPython ( # pip install GitPython )
-- Install GraphViz (for DOT)  ( # apt-get install graphviz )
+  - ...and it worked on Debian under WSL2
+- Install Boost:  `# apt-get install libboost-all-dev`
+- Install clang-tidy:  `# apt-get install clang-tidy`
+- Install doxygen:  `# apt-get install doxygen`
+- Install python3-pip ( # pacman -S python-pip ) `# apt-get install python3-pip`
+- Install GitPython:  `# pip install GitPython`
+- Install GraphViz (for DOT):  `# apt-get install graphviz`
+- Install Capabilities:  `# apt-get install libcap-dev`
+
+
+### Checkout memscan
+
+Try out the different [Makefile targets](#MakeTargets), but `$ make memscan` 
+will allow you to do the following:
+
+- Usage:  `# ./memscan --version`, `# ./memscan --key`, `# ./memscan --help`
+- The basics:  `# ./memscan`, `# ./memscan --path` 
+- Checkout iomem:  `# cat /proc/iomem`, `# ./memscan --iomem`
+- Look at physical memory:  `# ./memscan --phys`, `# ./memscan --pfn`
+- Carve out some memory at a specific location, but don't access it:
+  - `# ./memscan --path --map_addr=0x100000000000 --map_mem=64K --pfn | head -20`
+  - Notice how most of them are `page not present`?  It's because even though
+    the page has been allocated, it hasn't been accessed, so Linux, which is 
+    demand paged, hasn't brought it in yet.
+- Carve out some memory, and just read it:
+  - `./memscan --path --map_addr=0x100000000000 --map_mem=64K --pfn --scan_byte=00 | head -20`
+  - Notice how the pages have been allocated now, but the PFNs are all the same...
+  - ...and the `0` flag has been set.  The demand pager brought in a bunch of 
+    physical pages, but pointed them to one page (with all '0's) and set it to 
+    copy-on-write.
+  - Notice how it found 65,536 bytes of `0x00`.
+- Run the same command with Shannon Entropy
+  - `./memscan --path --map_addr=0x100000000000 --map_mem=64K --pfn --shannon | head -20`
+  - Notice how all pages have `No entropy` -- all the values are the same
+- Carve out some memory and write to it:
+  - `# ./memscan --path --map_addr=0x100000000000 --map_mem=64K --pfn --shannon --fill | head -20`
+  - The pages have been filled with #SHANNON_CONSTANT_FOR_ALLOCATIONS
+  - This yields an exact Shannon entropy of `3.000`.
+  - Notice how each of the PFNs are now different... and several new
+    [flags](KEY.md) may be set:
+    - `X`:   page exclusively mapped
+    - `U`:   page has up-to-date data for file backed page
+    - `L`:   page is in one of the LRU lists
+    - `M`:   memory mapped page 
+    - `A`:   anonymous: memory mapped page that is not part of a file
+    - `B`:   swapBacked: page is backed by swap/RAM
+- The same thing happens with memory mapped files...
+  - `# ./memscan --path --map_file=/bin/cat --pfn cat`
+  - Notice how the page never gets mapped into memory... but if you run:
+  - `# ./memscan --path --map_file=/bin/cat --pfn --read cat`
+  - ...the pages get mapped to memory that's backed by an actual file:
+    - `X`:   page exclusively mapped
+    - `F`:   page is file mapped and not anonymously mapped
+    - `U`:   page has up-to-date data for file backed page
+    - `L`:   page is in one of the LRU lists 
+    - `A`:   active: page is in the active LRU list
+    - `R`:   reclaim: page will be reclaimed soon after its pageout IO completed 
+    - `M`:   memory mapped page
+- To stress test memscan and do a bit of everything, try this:
+  - `clear && ./memscan --block=/etc/passwd --stream=/etc/passwd --map_file=/etc/passwd --read --local=16384 --numLocal=500 --malloc=1M --numMalloc=4 --map_mem=13M --map_addr=0x555000000000 --fill --threads=10 --sleep=1 --scan_byte=0xc3 --shannon --path --phys`
+  
 
 ### Handling errors & warnings in a testing framework
 - MemScan does not have a dedicated logger.
@@ -65,10 +120,12 @@ but not _why_.
     `CAP_SYS_ADMIN` capability.  See https://www.kernel.org/doc/Documentation/vm/pagemap.txt
 - MemScan was written in CLion, using `Makefile` based build.  Note:  CLion 
   usually uses a CMake based build.
+
   
 ### Coding Conventions
 - Put 2 blank lines between functions
 - Put a space before the `;`.  Ex. `return true ;`
+
 
 ### Naming Conventions
 - I use CaMel case and snake_case interchangeably, depending on my mood.
@@ -79,6 +136,7 @@ but not _why_.
   in this project.
 - Structures start with uppercase.
 
+
 ### Documentation Conventions
 - Fully document "published" functions in `.h` files.  Leave internal 
   documentation in the `.c` files.
@@ -87,10 +145,29 @@ but not _why_.
 - Markdown files should use [references] and avoid embedding URLs in the
   narrative.
 
-### Testing Notes
-A good stress-test of memscan is:
 
-    clear && ./memscan --block=/etc/passwd --stream=/etc/passwd --map_file=/etc/passwd --read --local=16384 --numLocal=500 --malloc=1M --numMalloc=4 --map_mem=13M --map_addr=0x555000000000 --fill --threads=10 --sleep=1 --scan_byte=0xc3 --shannon --path --phys
+### Testing Notes
+I need to work on this section as well.  Memscan is severely test deficient and
+I'd like to sweep through the code and make a bunch of unit and system tests
+for it.
+
+`make test` needs to run as `root`
+
+One cool thing about memscan is that it's a C program that is tested by a C++
+unit test framework [Boost Test](https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html).  
+It's cool to have this working.
+
+#### Test Results
+|              | Archlinux | Debian                                                                                        | System X | System Y |
+|--------------|-----------|-----------------------------------------------------------------------------------------------|----------|----------|
+| Architecture | x86-64    | x86-64                                                                                        |          |          |
+| Date tested  | Ongoing   | 24 Mar 2023                                                                                   |          |          |
+| Build tested | Ongoing   | 2.1.2394                                                                                      |          |          |
+| make memscan | Clean     | Clean                                                                                         |          |          |
+| make doc     | Clean     | A few warnings, due to Doxygen being a rev behind                                             |          |          |
+| make test    | Clean     | Clean, but I observed 1 segfault out of 5 successful runs                                     |          |          |
+| make lint    | Clean     | Some magic number warnings & boost test warnings, I think because `clang-tidy` is out of date |          |          |
+
 
 ### Release Procedures
 - Run `make lint`

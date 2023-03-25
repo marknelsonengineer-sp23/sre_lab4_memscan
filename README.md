@@ -222,7 +222,7 @@ To that end, your program does not have to match the output perfectly... here ar
 [RDTSC]: https://en.wikipedia.org/wiki/Time_Stamp_Counter
 
 
-# Makefile
+# Makefile {#MakeTargets}
 Memscan 2 uses the following `Makefile` targets:
 
 | Command      | Purpose                                                            |

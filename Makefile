@@ -16,7 +16,7 @@ all:  $(TARGET) lint doc
 
 CC        = gcc
 CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\"
-LDLIBS    = -lm -lcap
+LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
 LINTFLAGS = --quiet
 MAKE      = make

@@ -4,6 +4,9 @@ Examples
 ## Swap
 One of the goals of memscan is to observe how and when systems swap pages to memory.
 
+This experiment was run on a current ArchLinux VM provisioned with 2G of memory
+and the default swapfile.
+
 To induce swapping, we need a little help...I use [stressapptest](https://github.com/stressapptest/stressapptest) 
 which is available on ArchLinux [here](https://aur.archlinux.org/packages/stressapptest).  Other
 stress testing tools are listed [here](https://wiki.archlinux.org/title/Stress_testing).
@@ -352,8 +355,159 @@ When a system is under memory pressure, idle processes will:
   - The 1G region `memscan` allocated was unevenly swapped... 
   - Even `libc` and `ld-linux` pages would be swapped out
 
-## 32-bit system 
-Memscan running on a 32-bit, Windows WSL 2 Debian system
+
+## Debian
+Here's a simple memscan on a Debian system running under WSL2
+
+#### Output
+Here's a screenshot from this command:  `# ./memscan --path --shannon`
+
+<img src="examples/images/debian_screenshot_1.png" style="width:95%;" alt="Debian Screenshot 1"/>
+
+Here's the full output from this command:  `# ./memscan --path --shannon --phys`
+
+     0: 0x55b0cf5b9000 - 0x55b0cf5bafff      8,192 r--p H: 1.877 Unknown                 /home/mark/src/src-clion/sre_lab4_memscan/memscan
+        0x55b0cf5b9000 - 0x55b0cf5bafff      8,192 Flags:  XF          \      IO: U LRU:L    M       ACPI Tables H: 0.572 Very low entropy
+     1: 0x55b0cf5bb000 - 0x55b0cf5c1fff     28,672 r-xp H: 5.579 ARM code                /home/mark/src/src-clion/sre_lab4_memscan/memscan
+        0x55b0cf5bb000 - 0x55b0cf5c1fff     28,672 Flags:  XF          \      IO: U LRU:L    M       ACPI Tables H: 5.210 ARM code
+     2: 0x55b0cf5c2000 - 0x55b0cf5c5fff     16,384 r--p H: 5.116 ARM code                /home/mark/src/src-clion/sre_lab4_memscan/memscan
+        0x55b0cf5c2000 - 0x55b0cf5c5fff     16,384 Flags:  XF          \      IO: U LRU:L    M       ACPI Tables H: 2.860 Unknown
+     3: 0x55b0cf5c6000 - 0x55b0cf5c6fff      4,096 r--p H: 2.994 Unknown                 /home/mark/src/src-clion/sre_lab4_memscan/memscan
+        0x55b0cf5c6000 - 0x55b0cf5c6fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 2.994 Unknown
+     4: 0x55b0cf5c7000 - 0x55b0cf5c7fff      4,096 rw-p H: 1.991 Unknown                 /home/mark/src/src-clion/sre_lab4_memscan/memscan
+        0x55b0cf5c7000 - 0x55b0cf5c7fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 1.982 Unknown
+     5: 0x55b0cf5c8000 - 0x55b0cf612fff    307,200 rw-p H: 0.252 Very low entropy
+        0x55b0cf5c8000 - 0x55b0cf5c9fff      8,192 Flags:       0      \      IO:   LRU:             System RAM H: 0.000 No entropy
+        0x55b0cf5ca000 - 0x55b0cf60efff    282,624 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 0.000 No entropy
+        0x55b0cf60f000 - 0x55b0cf612fff     16,384 Flags:  X           \      IO: U LRU:     MA B    ACPI Tables H: 0.003 Very low entropy
+     6: 0x55b0cf6ed000 - 0x55b0cf70dfff    135,168 rw-p H: 0.439 Very low entropy        [heap]
+        0x55b0cf6ed000 - 0x55b0cf6effff     12,288 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 2.281 Unknown
+        0x55b0cf6f0000 - 0x55b0cf6f2fff     12,288 Flags:  X           \      IO: U LRU:     MA B    ACPI Tables H: 0.010 Very low entropy
+        0x55b0cf6f3000 - 0x55b0cf70dfff    110,592 Flags:       0      \      IO:   LRU:             System RAM H: 0.000 No entropy
+     7: 0x7faf2eecf000 - 0x7faf2f1b5fff  3,043,328 r--p /usr/lib/locale/locale-archive excluded
+        0x7faf2eecf000 - 0x7faf2eedefff     65,536 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2eedf000 - 0x7faf2eedffff      4,096 page not present
+        0x7faf2eee0000 - 0x7faf2eee6fff     28,672 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2eee7000 - 0x7faf2eee7fff      4,096 page not present
+        0x7faf2eee8000 - 0x7faf2eefafff     77,824 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2eefb000 - 0x7faf2eefbfff      4,096 page not present
+        0x7faf2eefc000 - 0x7faf2eefffff     16,384 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2ef00000 - 0x7faf2ef0ffff     65,536 page not present
+        0x7faf2ef10000 - 0x7faf2ef11fff      8,192 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2ef12000 - 0x7faf2ef1ffff     57,344 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2ef20000 - 0x7faf2ef2ffff     65,536 page not present
+        0x7faf2ef30000 - 0x7faf2ef3ffff     65,536 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2ef40000 - 0x7faf2f15ffff  2,228,224 page not present
+        0x7faf2f160000 - 0x7faf2f161fff      8,192 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2f162000 - 0x7faf2f16ffff     57,344 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+        0x7faf2f170000 - 0x7faf2f1affff    262,144 page not present
+        0x7faf2f1b0000 - 0x7faf2f1b5fff     24,576 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.000 No entropy
+     8: 0x7faf2f1b6000 - 0x7faf2f1b7fff      8,192 rw-p H: 0.231 Very low entropy
+        0x7faf2f1b6000 - 0x7faf2f1b7fff      8,192 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 0.083 Very low entropy
+     9: 0x7faf2f1b8000 - 0x7faf2f1d9fff    139,264 r--p H: 4.364 English text in ASCII   /usr/lib/x86_64-linux-gnu/libc-2.31.so
+        0x7faf2f1b8000 - 0x7faf2f1d9fff    139,264 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.774 Very low entropy
+    10: 0x7faf2f1da000 - 0x7faf2f333fff  1,417,216 r-xp H: 6.406 Unknown                 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+        0x7faf2f1da000 - 0x7faf2f1defff     20,480 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 6.260 x86 code
+        0x7faf2f1df000 - 0x7faf2f1dffff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 6.198 x86 code
+        0x7faf2f1e0000 - 0x7faf2f214fff    217,088 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 5.667 x86 code
+        0x7faf2f215000 - 0x7faf2f215fff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 5.913 x86 code
+        0x7faf2f216000 - 0x7faf2f24bfff    221,184 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 5.413 ARM code
+        0x7faf2f24c000 - 0x7faf2f24cfff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 5.192 ARM code
+        0x7faf2f24d000 - 0x7faf2f264fff     98,304 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 6.307 x86 code
+        0x7faf2f265000 - 0x7faf2f265fff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 6.225 x86 code
+        0x7faf2f266000 - 0x7faf2f28cfff    159,744 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 6.295 x86 code
+        0x7faf2f28d000 - 0x7faf2f299fff     53,248 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 6.210 x86 code
+        0x7faf2f29a000 - 0x7faf2f2c9fff    196,608 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 6.254 x86 code
+        0x7faf2f2ca000 - 0x7faf2f2cafff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 6.014 x86 code
+        0x7faf2f2cb000 - 0x7faf2f2f4fff    172,032 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 5.621 x86 code
+        0x7faf2f2f5000 - 0x7faf2f2f5fff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 5.679 x86 code
+        0x7faf2f2f6000 - 0x7faf2f2fcfff     28,672 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 5.544 ARM code
+        0x7faf2f2fd000 - 0x7faf2f305fff     36,864 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 5.335 ARM code
+        0x7faf2f306000 - 0x7faf2f31dfff     98,304 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 5.925 x86 code
+        0x7faf2f31e000 - 0x7faf2f31efff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 5.380 ARM code
+        0x7faf2f31f000 - 0x7faf2f322fff     16,384 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 6.081 x86 code
+        0x7faf2f323000 - 0x7faf2f333fff     69,632 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 5.752 x86 code
+    11: 0x7faf2f334000 - 0x7faf2f382fff    323,584 r--p H: 5.460 ARM code                /usr/lib/x86_64-linux-gnu/libc-2.31.so
+        0x7faf2f334000 - 0x7faf2f33bfff     32,768 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.900 Very low entropy
+        0x7faf2f33c000 - 0x7faf2f33cfff      4,096 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 3.930 Unknown
+        0x7faf2f33d000 - 0x7faf2f35efff    139,264 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 5.810 x86 code
+        0x7faf2f35f000 - 0x7faf2f382fff    147,456 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 2.263 Unknown
+    12: 0x7faf2f383000 - 0x7faf2f386fff     16,384 r--p H: 3.597 Unknown                 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+        0x7faf2f383000 - 0x7faf2f386fff     16,384 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 3.646 Unknown
+    13: 0x7faf2f387000 - 0x7faf2f388fff      8,192 rw-p H: 2.652 Unknown                 /usr/lib/x86_64-linux-gnu/libc-2.31.so
+        0x7faf2f387000 - 0x7faf2f388fff      8,192 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 2.130 Unknown
+    14: 0x7faf2f389000 - 0x7faf2f38cfff     16,384 rw-p H: 0.266 Very low entropy
+        0x7faf2f389000 - 0x7faf2f38afff      8,192 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 0.077 Very low entropy
+        0x7faf2f38b000 - 0x7faf2f38cfff      8,192 Flags:       0      \      IO:   LRU:             System RAM H: 0.000 No entropy
+    15: 0x7faf2f38d000 - 0x7faf2f392fff     24,576 r--p H: 3.769 Unknown                 /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+        0x7faf2f38d000 - 0x7faf2f392fff     24,576 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 1.230 Unknown
+    16: 0x7faf2f393000 - 0x7faf2f3a2fff     65,536 r-xp H: 5.882 x86 code                /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+        0x7faf2f393000 - 0x7faf2f3a2fff     65,536 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 0.399 Very low entropy
+    17: 0x7faf2f3a3000 - 0x7faf2f3a8fff     24,576 r--p H: 4.534 English text in ASCII   /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+        0x7faf2f3a3000 - 0x7faf2f3a8fff     24,576 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 1.037 Unknown
+    18: 0x7faf2f3a9000 - 0x7faf2f3a9fff      4,096 r--p H: 1.506 Unknown                 /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+        0x7faf2f3a9000 - 0x7faf2f3a9fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 1.506 Unknown
+    19: 0x7faf2f3aa000 - 0x7faf2f3aafff      4,096 rw-p H: 1.167 Unknown                 /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+        0x7faf2f3aa000 - 0x7faf2f3aafff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 1.167 Unknown
+    20: 0x7faf2f3ab000 - 0x7faf2f3aefff     16,384 rw-p H: 0.013 Very low entropy
+        0x7faf2f3ab000 - 0x7faf2f3adfff     12,288 Flags:       0      \      IO:   LRU:             System RAM H: 0.000 No entropy
+        0x7faf2f3ae000 - 0x7faf2f3aefff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 0.046 Very low entropy
+    21: 0x7faf2f3af000 - 0x7faf2f3b1fff     12,288 r--p H: 2.410 Unknown                 /usr/lib/x86_64-linux-gnu/libcap.so.2.44
+        0x7faf2f3af000 - 0x7faf2f3b1fff     12,288 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 0.249 Very low entropy
+    22: 0x7faf2f3b2000 - 0x7faf2f3b5fff     16,384 r-xp H: 5.520 ARM code                /usr/lib/x86_64-linux-gnu/libcap.so.2.44
+        0x7faf2f3b2000 - 0x7faf2f3b5fff     16,384 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 2.381 Unknown
+    23: 0x7faf2f3b6000 - 0x7faf2f3b7fff      8,192 r--p H: 4.398 English text in ASCII   /usr/lib/x86_64-linux-gnu/libcap.so.2.44
+        0x7faf2f3b6000 - 0x7faf2f3b7fff      8,192 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 2.493 Unknown
+    24: 0x7faf2f3b8000 - 0x7faf2f3b8fff      4,096 r--p H: 3.370 English text in UNICODE /usr/lib/x86_64-linux-gnu/libcap.so.2.44
+        0x7faf2f3b8000 - 0x7faf2f3b8fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 3.370 English text in UNICODE
+    25: 0x7faf2f3b9000 - 0x7faf2f3b9fff      4,096 rw-p H: 1.347 Unknown                 /usr/lib/x86_64-linux-gnu/libcap.so.2.44
+        0x7faf2f3b9000 - 0x7faf2f3b9fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 1.347 Unknown
+    26: 0x7faf2f3ba000 - 0x7faf2f3c6fff     53,248 r--p H: 4.357 English text in ASCII   /usr/lib/x86_64-linux-gnu/libm-2.31.so
+        0x7faf2f3ba000 - 0x7faf2f3c6fff     53,248 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 0.424 Very low entropy
+    27: 0x7faf2f3c7000 - 0x7faf2f460fff    630,784 r-xp H: 6.558 Unknown                 /usr/lib/x86_64-linux-gnu/libm-2.31.so
+        0x7faf2f3c7000 - 0x7faf2f460fff    630,784 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 5.016 ARM code
+    28: 0x7faf2f461000 - 0x7faf2f4fbfff    634,880 r--p H: 7.347 Unknown                 /usr/lib/x86_64-linux-gnu/libm-2.31.so
+        0x7faf2f461000 - 0x7faf2f4fbfff    634,880 Flags:  XF          \      IO: U LRU:LA R M       ACPI Tables H: 0.639 Very low entropy
+    29: 0x7faf2f4fc000 - 0x7faf2f4fcfff      4,096 r--p H: 0.832 Very low entropy        /usr/lib/x86_64-linux-gnu/libm-2.31.so
+        0x7faf2f4fc000 - 0x7faf2f4fcfff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 0.832 Very low entropy
+    30: 0x7faf2f4fd000 - 0x7faf2f4fdfff      4,096 rw-p H: 1.892 Unknown                 /usr/lib/x86_64-linux-gnu/libm-2.31.so
+        0x7faf2f4fd000 - 0x7faf2f4fdfff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 1.892 Unknown
+    31: 0x7faf2f4fe000 - 0x7faf2f4fffff      8,192 rw-p H: 2.937 Unknown
+        0x7faf2f4fe000 - 0x7faf2f4fffff      8,192 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 2.940 Unknown
+    32: 0x7faf2f50a000 - 0x7faf2f50afff      4,096 r--p H: 3.471 Unknown                 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+        0x7faf2f50a000 - 0x7faf2f50afff      4,096 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 3.471 Unknown
+    33: 0x7faf2f50b000 - 0x7faf2f52afff    131,072 r-xp H: 6.236 x86 code                /usr/lib/x86_64-linux-gnu/ld-2.31.so
+        0x7faf2f50b000 - 0x7faf2f52afff    131,072 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 1.537 Unknown
+    34: 0x7faf2f52b000 - 0x7faf2f532fff     32,768 r--p H: 5.830 x86 code                /usr/lib/x86_64-linux-gnu/ld-2.31.so
+        0x7faf2f52b000 - 0x7faf2f532fff     32,768 Flags:   F          \      IO: U LRU:LA R M       ACPI Tables H: 4.017 Unknown
+    35: 0x7faf2f534000 - 0x7faf2f534fff      4,096 r--p H: 1.813 Unknown                 /usr/lib/x86_64-linux-gnu/ld-2.31.so
+        0x7faf2f534000 - 0x7faf2f534fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 1.813 Unknown
+    36: 0x7faf2f535000 - 0x7faf2f535fff      4,096 rw-p H: 0.822 Very low entropy        /usr/lib/x86_64-linux-gnu/ld-2.31.so
+        0x7faf2f535000 - 0x7faf2f535fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 0.822 Very low entropy
+    37: 0x7faf2f536000 - 0x7faf2f536fff      4,096 rw-p H: 2.041 Unknown
+        0x7faf2f536000 - 0x7faf2f536fff      4,096 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 2.041 Unknown
+    38: 0x7ffee93d3000 - 0x7ffee93f3fff    135,168 rw-p H: 0.352 Very low entropy        [stack]
+        0x7ffee93d3000 - 0x7ffee93f0fff    122,880 Flags:       0      \      IO:   LRU:             System RAM H: 0.000 No entropy
+        0x7ffee93f1000 - 0x7ffee93f2fff      8,192 Flags:  X           \      IO: U LRU:L    MA B    ACPI Tables H: 3.079 English text in UNICODE
+        0x7ffee93f3000 - 0x7ffee93f3fff      4,096 Flags:  X           \      IO: U LRU:LA R MA B    ACPI Tables H: 3.741 Unknown
+    39: 0x7ffee93f9000 - 0x7ffee93fcfff     16,384 r--p [vvar] excluded
+        0x7ffee93f9000 - 0x7ffee93fcfff     16,384 page not present
+    40: 0x7ffee93fd000 - 0x7ffee93fefff      8,192 r-xp H: 3.035 English text in UNICODE [vdso]
+        0x7ffee93fd000 - 0x7ffee93fdfff      4,096 Flags:   F          \      IO:   LRU:     M       System RAM H: 5.118 ARM code
+        0x7ffee93fe000 - 0x7ffee93fefff      4,096 Flags:  XF          \      IO:   LRU:     M       System RAM H: 0.201 Very low entropy
+
+#### Observations
+- Debian required `libpthread`, which ArchLinux did not.
+  - On both systems `-lpthread` is specified at compile time.  On Debian, 
+    `libpthread` is loaded into memory, but on Arch it's not.
+- Shannon Entropy reports a lot of the code as `ARM code`.  It's not, it's all x86.
+- The Debian system seems to load physical pages in memory marked `ACPI Tables`.  I 
+  don't believe the data and I suspect it's because the Linux instance is running in
+  a container (WSL2) on Windows.  `/proc/iomem` was never designed to faithfully report
+  memory regions in such a convoluted setup.
+
 
 ## ARM system
-Memscabn running on a Raspberry Pi running Rasberian
+Memscan running on a Raspberry Pi running Rasberian
+
+TBD
