@@ -147,8 +147,8 @@ but not _why_.
 
 
 ### Testing Notes
-I need to work on this section as well.  Memscan is severely test deficient and
-I'd like to sweep through the code and make a bunch of unit and system tests
+I need to work on this section as well.  Memscan is severely test deficient.  I'd
+like to sweep through the code and make a bunch of unit and system tests
 for it.
 
 `make test` needs to run as `root`

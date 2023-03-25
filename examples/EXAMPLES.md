@@ -32,7 +32,7 @@ Start `htop` and watch the `Mem` and `Swp` lines.  Run `stressapptest` then imme
 
 #### Notes
   - `stressapptest` only runs for 20 seconds
-  - None of the options to `stressapptest` seemed to be working, but it consumed all of the memory for 20 seconds and that's all we need.
+  - None of the options to `stressapptest` seemed to be working, but it consumed all the memory for 20 seconds and that's all we need.
   - This virtual machine was provisioned with 2G of memory
 
 #### Output
