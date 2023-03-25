@@ -32,12 +32,13 @@ unsigned long long stringToUnsignedLongLongWithScale( char* inString ) {
 
    ASSERT( strlen( inString ) > 0 ) ;
 
+   errno = 0 ;
    result = strtoull( inString, &strtolRemainder, 10 ) ;
-   // printf( "result=%ld  strtolRemainder=%p [%s]  errno=%d\n", result, strtolRemainder, strtolRemainder, errno ) ;
+   // printf( "result=%lld  strtolRemainder=%p [%s]  errno=%d\n", result, strtolRemainder, strtolRemainder, errno ) ;
 
    // If there's an error or excess characters...
-   if( errno != 0 ) {
-      FATAL_ERROR( "illegal numeric option" ) ;
+   if( result == 0 && errno != 0 ) {
+      FATAL_ERROR( "illegal numeric option errno=%d", errno ) ;
    }
 
    if( strlen( strtolRemainder ) > 0 ) {
@@ -54,7 +55,7 @@ unsigned long long stringToUnsignedLongLongWithScale( char* inString ) {
       } else if( strcmp( strtolRemainder, "G" ) == 0 ) {
          result = result * 1024 * 1024 * 1024 ;
       } else {
-         FATAL_ERROR( "illegal numeric option" ) ;
+         FATAL_ERROR( "illegal numeric suffix" ) ;
       }
    }
 
