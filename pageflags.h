@@ -11,10 +11,10 @@
 
 #include "pagemap.h"  // For PageInfo
 
-/// Set physical frame flags in #PageInfo
+/// Get physical frame flags from #PAGEFLAG_FILE and put them into #PageInfo
 ///
 /// @param page The page to update
-extern void setPageflags( struct PageInfo* page ) ;
+extern void getPageflags( struct PageInfo* page ) ;
 
 
 /// Close any open pageflags resources

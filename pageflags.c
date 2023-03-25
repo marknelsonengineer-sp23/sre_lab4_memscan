@@ -36,7 +36,7 @@
 static int pageflag_fd = -1 ;
 
 
-void setPageflags( struct PageInfo* page ) {
+void getPageflags( struct PageInfo* page ) {
    off_t pageflag_offset = (long) ((size_t) page->pfn * sizeof( uint64_t ) ) ;
 
    if( pageflag_fd < 0 ) {
@@ -88,7 +88,7 @@ void setPageflags( struct PageInfo* page ) {
    page->zero_page   = GET_BIT( pageflag_data, 24 ) ;
    page->idle        = GET_BIT( pageflag_data, 25 ) ;
    page->pgtable     = GET_BIT( pageflag_data, 26 ) ;
-} // setPageflags
+} // getPageflags
 
 void closePageflags() {
    /// Pageflags holds some files open (like #pageflag_fd) in static variables.
