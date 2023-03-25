@@ -268,7 +268,7 @@ void printMaps() {
       } else {
          printf( "%c", map[i].sPermissions[2] ) ;
       }
-      printf( "%c", map[i].sPermissions[3] ) ;
+      printf( "%c ", map[i].sPermissions[3] ) ;
 
       if( map[i].sPermissions[0] != 'r' ) {
          printf( ANSI_COLOR_RED "read permission not set" ANSI_COLOR_RESET );
