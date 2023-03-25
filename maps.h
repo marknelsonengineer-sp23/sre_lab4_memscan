@@ -10,18 +10,23 @@
 
 #pragma once
 
-/// Parse each line from #MEMORY_MAP_FILE, mapping the data into
-/// a MapEntry field.  This function makes heavy use of [strtok()][1].
+/// Parse each line from #MEMORY_MAP_FILE and put the data into a #MapEntry
+/// field.  This function makes heavy use of [strtok()][1].
+///
+/// Anything that changes #MEMORY_MAP_FILE should be done before calling
+/// getMaps()
 ///
 /// [1]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
-extern void readMaps() ;
+extern void getMaps() ;
 
-/// This is the workhorse of this program:  Scan all readable memory
-/// regions
+/// Scan all readable memory regions.
+///
+/// Anything that changes the physical pagemap information should be done
+/// before calling scanMaps()
 extern void scanMaps() ;
 
-/// Read data from `pagemap` `xxx` and `yyy` and get information
-/// about the physical pages referenced by `maps`
+/// Read data from `pagemap`, `pageflags` and `pagecount` and get information
+/// about the physical pages referenced in `maps`
 extern void readPagemapInfo() ;
 
 /// Print the map, results of the scan and physical page info

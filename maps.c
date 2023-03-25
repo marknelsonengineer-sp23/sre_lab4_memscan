@@ -9,8 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>   // For printf() fprintf() fopen() and FILE
-#include <stdlib.h>  // For EXIT_SUCCESS and EXIT_FAILURE
-#include <string.h>  // For strtok() strcmp() strstr() memset()
+#include <string.h>  // For strtok() strcmp() strstr() memset() strlen()
 
 #include "colors.h"  // For ANSI colors i.e. #ANSI_COLOR_RED
 #include "config.h"  // For FATAL_ERROR and other configuration options
@@ -26,9 +25,10 @@
 /// The longest allowed length from #MEMORY_MAP_FILE
 #define MAX_LINE_LENGTH 1024
 
-/// The maximum number of MapEntry records in #map
+/// The maximum number of #MapEntry records in #map
 /// @todo Consider converting to a linked list
 #define MAX_ENTRIES     256
+
 
 /// Define an array of paths that should be excluded from the scan.
 /// On x86 architectures, we should avoid the `[vvar]` path.
@@ -36,35 +36,39 @@
 /// The list ends with an empty value.
 ///
 /// @see https://lwn.net/Articles/615809/
-char* ExcludePaths[] = { "[vvar]", "/usr/lib/locale/locale-archive", "" };
+char* ExcludePaths[] = { "[vvar]"
+                        ,"/usr/lib/locale/locale-archive"
+                        ,""
+                       } ;
 
 
-/// Holds the original (and some processed data) from each map entry
+/// Hold the original (and some processed data) from each line of
+/// `/proc/$PID/maps`
 struct MapEntry {
-   char  szLine[MAX_LINE_LENGTH];  ///< String buffer for the entire line
-                                   ///  All of the string pointers in this
-                                   ///  struct will point to strings in this
-                                   ///  buffer after they've been tokenized
-   char*  sAddressStart;    ///< String pointer to the start of the address range
-   char*  sAddressEnd;      ///< String pointer to the end of the address range
-   void*  pAddressStart;    ///< Pointer to the start of the memory mapped region
-   void*  pAddressEnd;      ///< Pointer to the byte just *after* the end of
+   char   szLine[MAX_LINE_LENGTH] ; ///< String buffer for the entire line.
+                                    ///  All of the string pointers in this
+                                    ///  struct will point to strings in this
+                                    ///  buffer after they've been tokenized
+   char*  sAddressStart ;   ///< String pointer to the start of the address range
+   char*  sAddressEnd ;     ///< String pointer to the end of the address range
+   void*  pAddressStart ;   ///< Pointer to the start of the memory mapped region
+   void*  pAddressEnd ;     ///< Pointer to the byte just *after* the end of
                             ///  the memory mapped region
-   char*  sPermissions;     ///< String pointer to the permissions
-   char*  sOffset;          ///< String pointer to the offset
-   char*  sDevice;          ///< String pointer to the device name
-   char*  sInode;           ///< String pointer to the iNode number
-   char*  sPath;            ///< String pointer to the path (may be NULL)
-   bool   include;          ///< `true` if the entry should be processed.  `false` if it should be excluded.
-   size_t numBytes;         ///< Number of bytes in this region
-   size_t numPages;         ///< The number of #PageInfo records allocated for this region
-   struct PageInfo* pages;  ///< Pointer to a #PageInfo array
-   size_t numBytesFound;    ///< Number of #byteToScanFor bytes found in this region when #scanForByte is set
-   double shannonEntropy;   ///< Shannon Entropy of the region when #scanForShannon is set
+   char*  sPermissions ;    ///< String pointer to the permissions
+   char*  sOffset ;         ///< String pointer to the offset
+   char*  sDevice ;         ///< String pointer to the device name
+   char*  sInode ;          ///< String pointer to the iNode number
+   char*  sPath ;           ///< String pointer to the path (may be `NULL`)
+   bool   include ;         ///< `true` if the entry should be processed.  `false` if it should be excluded.
+   size_t numBytes ;        ///< Number of bytes in this region
+   size_t numPages ;        ///< The number of #PageInfo records allocated for this region
+   struct PageInfo* pages ; ///< Pointer to a #PageInfo array
+   size_t numBytesFound ;   ///< Number of #byteToScanFor bytes found in this region when #scanForByte is set
+   double shannonEntropy ;  ///< Shannon Entropy of the region when #scanForShannon is set
 } ;
 
 
-/// Holds up to #MAX_ENTRIES of MapEntry structs
+/// Holds up to #MAX_ENTRIES of #MapEntry structs
 struct MapEntry map[MAX_ENTRIES] ;
 
 
@@ -72,26 +76,26 @@ struct MapEntry map[MAX_ENTRIES] ;
 size_t numMaps = 0 ;
 
 
-void readMaps() {
-   memset( map, 0, sizeof( map ));  // Zero out the map data structure
+void getMaps() {
+   memset( map, 0, sizeof( map )) ;  // Zero out the map array
 
-   FILE* file = NULL ;  // File handle to #MEMORY_MAP_FILE
+   FILE* maps_fd = NULL ;  // File handle to #MEMORY_MAP_FILE
 
-   file = fopen( MEMORY_MAP_FILE, "r" ) ;
-
-   if( file == NULL ) {
+   maps_fd = fopen( MEMORY_MAP_FILE, "r" ) ;
+   if( maps_fd == NULL ) {
       FATAL_ERROR( "Unable to open [%s]", MEMORY_MAP_FILE ) ;
    }
 
    char* pRead ;
 
-   pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file ) ;
+   pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, maps_fd ) ;
 
    while( pRead != NULL ) {
       #ifdef DEBUG
-         printf( "%s", map[numMaps].szLine ) ;
+         printf( "%s", map[numMaps].szLine ) ;  // A \n is in .szLine
       #endif
 
+      // Store data into map[]
       map[numMaps].sAddressStart = strtok( map[numMaps].szLine, "-" ) ;
       map[numMaps].sAddressEnd   = strtok( NULL, " "   ) ;
       map[numMaps].sPermissions  = strtok( NULL, " "   ) ;
@@ -103,8 +107,8 @@ void readMaps() {
       ///       out of the ordinary
 
       // Convert the strings holding the start & end address into pointers
-		int retVal1;
-		int retVal2;
+		int retVal1 ;
+		int retVal2 ;
       retVal1 = sscanf( map[numMaps].sAddressStart, "%p", &(map[numMaps].pAddressStart) ) ;
       retVal2 = sscanf( map[numMaps].sAddressEnd,   "%p", &(map[numMaps].pAddressEnd  ) ) ;
 
@@ -124,39 +128,37 @@ void readMaps() {
       } else {  /// If PATTERN is specified, then only include regions that include PATTERN
          map[numMaps].include = false ;
 
-         if( map[numMaps].sPath != NULL) {
-            struct IncludePattern* current = patternHead ;
-            while( current != NULL ) {
-               // Compare pattern with 'r' 'w' and 'x' permissions
-               if( strlen( current->pattern ) == 1 ) {
-                  if( current->pattern[0] == 'r' && map[numMaps].sPermissions[0] == 'r' ) {
-                     map[numMaps].include = true ;
-                     break ;
-                  }
-                  if( current->pattern[0] == 'w' && map[numMaps].sPermissions[1] == 'w' ) {
-                     map[numMaps].include = true ;
-                     break ;
-                  }
-                  if( current->pattern[0] == 'x' && map[numMaps].sPermissions[2] == 'x' ) {
-                     map[numMaps].include = true ;
-                     break ;
-                  }
-                  if(    current->pattern[0] == 'r'
-                      || current->pattern[0] == 'w'
-                      || current->pattern[0] == 'x' ) {
-                     break ;
-                  }
+         struct IncludePattern* current = patternHead ;
+         while( current != NULL ) {
+            // Compare pattern with 'r' 'w' and 'x' permissions
+            if( strcmp( current->pattern, "r" ) == 0 ) {
+               if( map[numMaps].sPermissions[0] == 'r' ) {
+                  map[numMaps].include = true ;
                }
-
-               // If not `r`, `w` or `x`, then compare with `pattern`
+               goto Next ;
+            }
+            if( strcmp( current->pattern, "w" ) == 0 ) {
+               if( map[numMaps].sPermissions[1] == 'w' ) {
+                  map[numMaps].include = true ;
+               }
+               goto Next ;
+            }
+            if( strcmp( current->pattern, "x" ) == 0 ) {
+               if( map[numMaps].sPermissions[2] == 'x' ) {
+                  map[numMaps].include = true ;
+               }
+               goto Next ;
+            }
+            if( map[numMaps].sPath != NULL) {
                if( strstr( map[numMaps].sPath, current->pattern ) != NULL ) {
                   map[numMaps].include = true ;
-                  break ;
+                  goto Next ;
                }
+            }
 
-               current = current->next ;
-            } // while( current != NULL )
-         }
+            Next:
+            current = current->next ;
+         } // while( current != NULL )
       }
 
       // Skip excluded paths
@@ -170,7 +172,7 @@ void readMaps() {
 
       #ifdef DEBUG
          printf( "DEBUG:  " ) ;
-         printf( "numMaps[%zu]  ",       numMaps );
+         printf( "numMaps[%zu]  ",       numMaps ) ;
          printf( "sAddressStart=[%s]  ", map[numMaps].sAddressStart ) ;
          printf( "pAddressStart=[%p]  ", map[numMaps].pAddressStart ) ;
          printf( "sAddressEnd=[%s]  ",   map[numMaps].sAddressEnd ) ;
@@ -186,16 +188,18 @@ void readMaps() {
          printf( "\n" ) ;
       #endif
 
-      numMaps++;
-      pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, file );
+      numMaps++ ;
+
+      // Get the next line
+      pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, maps_fd ) ;
    } // while( pRead != NULL )
 
-   int iRetVal = fclose( file ) ;
+   int iRetVal = fclose( maps_fd ) ;
    if( iRetVal != 0 ) {
       FATAL_ERROR( "Unable to close [%s]", MEMORY_MAP_FILE ) ;
    }
 
-} // readMaps()
+} // getMaps()
 
 
 void scanMaps() {
@@ -214,19 +218,19 @@ void scanMaps() {
             if( *(unsigned char*)scanThisAddress == byteToScanFor ) {
                map[i].numBytesFound++ ;
             }
-         } // for( each address )
-      } // if( scanForByte )
+         }
+      }
 
       if( scanForShannon ) {
             map[i].shannonEntropy = computeShannonEntropy( map[i].pAddressStart, map[i].numBytes ) ;
-      } // if( scanForShannon )
+      }
 
-   } // for()
+   } // for( each map )
 } // scanMaps()
 
 
-void readPagemapInfo() {
-   if( !includePhysicalPageNumber && !includePhysicalPageSummary ) {  // Process --pfn --phys
+void readPagemapInfo() {  // Process --pfn --phys
+   if( !includePhysicalPageNumber && !includePhysicalPageSummary ) {
       return ;
    }
 
@@ -271,14 +275,14 @@ void printMaps() {
       printf( "%c ", map[i].sPermissions[3] ) ;
 
       if( map[i].sPermissions[0] != 'r' ) {
-         printf( ANSI_COLOR_RED "read permission not set" ANSI_COLOR_RESET );
-         goto finishRegion;
+         printf( ANSI_COLOR_RED "read permission not set" ANSI_COLOR_RESET ) ;
+         goto finishRegion ;
       }
 
       // Skip excluded paths
       if( !map[i].include ) {
-         printf( ANSI_COLOR_RED "%s excluded" ANSI_COLOR_RESET, map[i].sPath );
-         goto finishRegion;
+         printf( ANSI_COLOR_RED "%s excluded" ANSI_COLOR_RESET, map[i].sPath ) ;
+         goto finishRegion ;
       }
 
       if( scanForByte ) {

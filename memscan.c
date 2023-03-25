@@ -15,7 +15,7 @@
 #include "config.h"   // For processOptions() checkCapabilities()
 #include "files.h"    // For openPreScanFiles() readPreScanFiles() closePreScanFiles()
 #include "iomem.h"    // For read_iomem() summarize_iomem()
-#include "maps.h"     // For readMaps() scanMaps() readPagemapInfo() printMaps()
+#include "maps.h"     // For getMaps() scanMaps() readPagemapInfo() printMaps()
 #include "memscan.h"  // Just cuz
 #include "pagemap.h"  // For closePagemap()
 #include "threads.h"  // For createThreads() closeThreads()
@@ -46,7 +46,7 @@ int main( int argc, char* argv[] ) {
    allocatePreScanMemory() ;   // Process --local, --numLocal, --malloc, --numMalloc,
                                // --mem_map, --mapAddr and --fill
 
-   /// Anything that changes #MEMORY_MAP_FILE should be done before calling readMaps()
+   /// Anything that changes #MEMORY_MAP_FILE should be done before calling getMaps()
 
    /// Anything that changes the physical pagemap information such as scanning
    /// or waiting, should be done before calling readPagemapInfo()
@@ -67,7 +67,7 @@ int main( int argc, char* argv[] ) {
       sleep( sleepSeconds ) ;  // Process --sleep
    }
 
-   readMaps() ;
+   getMaps() ;
 
    scanMaps() ;                // Process --scan_byte, --shannon
 

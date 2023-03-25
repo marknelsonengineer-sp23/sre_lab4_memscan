@@ -171,10 +171,15 @@ It's cool to have this working.
 
 
 ### Release Procedures
+- Scrub all `@todo`s
+- Review code for:
+  - `const` correctness
+  - Extraneous `#include`s or ill-documented `#include`s
+  - Read the Doxygen content for each source file and Markdown file
+  - Check for a space before `;`
 - Run `make lint`
 - Run `make clean` and then `make test`
 - Run `make doc` and then `make publish`
-- Scrub all `@todo`s
 - Create `scratch.c`, then `#include` each `.h` file and ensure they are 
   self-sufficient:
   - Ensure they have the `#include`s to stand alone.  
