@@ -24,19 +24,19 @@ stress testing tools are listed [here](https://wiki.archlinux.org/title/Stress_t
                  
 #### Running memscan and looking at swap
 I run the stress test in 3 windows:
-  - `htop`
-  - `stressapptest`
-  - `clear && ./memscan --map_mem=1G --fill --sleep=15 --path --phys`
+  - `$ htop`
+  - `# stressapptest`
+  - `# clear && ./memscan --map_mem=1G --fill --sleep=15 --path --phys`
 
-Start `htop` and watch the `Mem` and `Swp` lines.  Run `stressapptest` then immediately start `memscan`
+Start `$ htop` and watch the `Mem` and `Swp` lines.  Run `# stressapptest` then immediately start `# memscan`
 
 #### Notes
   - `stressapptest` only runs for 20 seconds
-  - None of the options to `stressapptest` seemed to be working, but it consumed all the memory for 20 seconds and that's all we need.
-  - This virtual machine was provisioned with 2G of memory
+  - None of the options to `stressapptest` seem to work, but it consumed all the memory for 20 seconds and that's all we need.
+  - This virtual machine was provisioned with 2G of memory.
 
 #### Output
-Here's a screenshot of the setup:
+Here's a screenshot of the test:
 
 <img src="examples/images/swap_screenshot_1.png" style="width:95%;" alt="Swap Screenshot 1"/>
 

@@ -82,7 +82,7 @@ will allow you to do the following:
 - Use ASSERT() for things that should never happen.
 - Use FATAL_ERROR() for things that may happen and we need to tell the user
   why the program is ending.
-- Functions may return `bool` if local logic needs to check the results.  In
+- Functions may return `bool` if the local logic needs to check the results.  In
   most cases, however, functions should call FATAL_ERROR().
 - Successful functions should operate silently.
 
@@ -102,6 +102,7 @@ fidelity in that we don't get a reason code or message.  I'm willing to
 accept that as I'd like to focus on writing a traditional command-line
 program in C.  Bare-bones tests will tell us if something works or doesn't
 but not _why_.
+
 
 ### Toolchain
 - MemScan is written in C.
