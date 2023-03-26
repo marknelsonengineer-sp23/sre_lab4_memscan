@@ -9,9 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <errno.h>   // For errno
-#include <stddef.h>  // For NULL
 #include <stdlib.h>  // For strtoull()
-#include <string.h>  // For strlen()
+#include <string.h>  // For strlen() strcmp()
 
 #include "config.h"  // For ASSERT() and FATAL_ERROR()
 #include "convert.h" // Just cuz
