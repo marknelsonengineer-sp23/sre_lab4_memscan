@@ -39,17 +39,14 @@
 #include "shannon.h"      // For computeShannonEntropy() getShannonClassification()
 #include "version.h"      // For STRINGIFY_VALUE()
 
-/// The `pagemap` file we intend to read from `/proc`
-#define PAGEMAP_FILE "/proc/self/pagemap"
-
 /// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt),
 /// each pagemap entry is `8` bytes long
 #define PAGEMAP_ENTRY 8
 
 
-/// A static file descriptor to #PAGEMAP_FILE (or `-1` if it hasn't been set yet)
+/// A static file descriptor to #pagemapFilePath (or `-1` if it hasn't been set)
 ///
-/// The static file descriptor allows us to efficiently keep #PAGEMAP_FILE open.
+/// The static file descriptor allows us to efficiently keep #pagemapFilePath open.
 /// It's closed in closePagemap()
 static int pagemap_fd = -1 ;
 
@@ -94,9 +91,9 @@ struct PageInfo getPageInfo( void* vAddr, bool okToRead ) {
    off_t pagemap_offset = (long) ((size_t) vAddr / getPageSizeInBytes() * PAGEMAP_ENTRY ) ;
 
    if( pagemap_fd < 0 ) {
-      pagemap_fd = open( PAGEMAP_FILE, O_RDONLY ) ;
+      pagemap_fd = open( pagemapFilePath, O_RDONLY ) ;
       if( pagemap_fd == -1 ) {
-         FATAL_ERROR( "Unable to open [%s]", PAGEMAP_FILE );
+         FATAL_ERROR( "Unable to open [%s]", pagemapFilePath );
       }
    }
 
@@ -113,7 +110,7 @@ struct PageInfo getPageInfo( void* vAddr, bool okToRead ) {
                       ,pagemap_offset );           // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
    if( ret != PAGEMAP_ENTRY ) {
       page.valid = false ;
-      printf( "Unable to read[%s] for [%p]\n", PAGEMAP_FILE, vAddr ) ;
+      printf( "Unable to read[%s] for [%p]\n", pagemapFilePath, vAddr ) ;
    }
 
    if( page.valid ) {
@@ -403,7 +400,7 @@ void closePagemap() {
       int closeStatus = close( pagemap_fd ) ;
       pagemap_fd = -1 ;
       if( closeStatus != 0 ) {
-         FATAL_ERROR( "Unable to close [%s]", PAGEMAP_FILE );
+         FATAL_ERROR( "Unable to close [%s]", pagemapFilePath );
       }
    }
 

@@ -46,7 +46,7 @@ int main( int argc, char* argv[] ) {
    allocatePreScanMemory() ;   // Process --local, --numLocal, --malloc, --numMalloc,
                                // --mem_map, --mapAddr and --fill
 
-   /// Anything that changes #MEMORY_MAP_FILE should be done before calling getMaps()
+   /// Anything that changes #mapsFilePath should be done before calling getMaps()
 
    /// Anything that changes the physical pagemap information such as scanning
    /// or waiting, should be done before calling readPagemapInfo()

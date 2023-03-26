@@ -19,10 +19,7 @@
 #include "version.h" // For STRINGIFY_VALUE()
 
 
-/// The `maps` file we intend to read from `/proc`
-#define MEMORY_MAP_FILE "/proc/self/maps"
-
-/// The longest allowed length from #MEMORY_MAP_FILE
+/// The longest allowed length from #mapsFilePath
 #define MAX_LINE_LENGTH 1024
 
 /// The maximum number of #MapEntry records in #map
@@ -79,11 +76,11 @@ size_t numMaps = 0 ;
 void getMaps() {
    memset( map, 0, sizeof( map )) ;  // Zero out the map array
 
-   FILE* maps_fd = NULL ;  // File handle to #MEMORY_MAP_FILE
+   FILE* maps_fd = NULL ;  // File handle to #mapsFilePath
 
-   maps_fd = fopen( MEMORY_MAP_FILE, "r" ) ;
+   maps_fd = fopen( mapsFilePath, "r" ) ;
    if( maps_fd == NULL ) {
-      FATAL_ERROR( "Unable to open [%s]", MEMORY_MAP_FILE ) ;
+      FATAL_ERROR( "Unable to open [%s]", mapsFilePath ) ;
    }
 
    char* pRead ;
@@ -196,7 +193,7 @@ void getMaps() {
 
    int iRetVal = fclose( maps_fd ) ;
    if( iRetVal != 0 ) {
-      FATAL_ERROR( "Unable to close [%s]", MEMORY_MAP_FILE ) ;
+      FATAL_ERROR( "Unable to close [%s]", mapsFilePath ) ;
    }
 
 } // getMaps()

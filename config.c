@@ -167,6 +167,9 @@ unsigned int sleepSeconds = 0 ;  // By default, don't sleep
 
 unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
 
+char mapsFilePath[ FILENAME_MAX ]    = "/proc/self/maps" ;
+char pagemapFilePath[ FILENAME_MAX ] = "/proc/self/pagemap" ;
+
 
 void processOptions( int argc, char* argv[] ) {
    if( argc < 1 ) {

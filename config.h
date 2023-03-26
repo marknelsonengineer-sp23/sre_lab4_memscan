@@ -89,7 +89,7 @@ extern bool includePhysicalPageNumber  ;  ///< `true` if `--pfn` is set
 
 extern char blockPath[ FILENAME_MAX ]   ; ///< The path to the file specified by `--block`
 extern char streamPath[ FILENAME_MAX ]  ; ///< The path to the file specified by `--stream`
-extern char mapFilePath[ FILENAME_MAX ] ; ///< the path to the file specified by `--map_file`
+extern char mapFilePath[ FILENAME_MAX ] ; ///< The path to the file specified by `--map_file`
 
 extern size_t localSize ;   ///< The number of bytes specified by `--local`
 extern size_t numLocals ;   ///< The number of recursive local allocations of `--localSize`
@@ -103,6 +103,9 @@ extern unsigned int sleepSeconds ;  ///< The number of seconds specified by `--s
                                       /// The byte to scan for.
 extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
                                       ///< (near) instruction
+
+extern char mapsFilePath[ FILENAME_MAX ] ; ///< The path to the process-specific `maps` file, defaults to `/proc/self/maps`
+extern char pagemapFilePath[ FILENAME_MAX ] ; ///< The path to the process-specific `pagemap` file, defaults to `/proc/self/pagemap`
 
 
 /// Print `...` to `outStream`.

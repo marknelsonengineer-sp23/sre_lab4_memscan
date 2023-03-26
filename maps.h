@@ -10,10 +10,10 @@
 
 #pragma once
 
-/// Parse each line from #MEMORY_MAP_FILE and put the data into a #MapEntry
+/// Parse each line from #mapsFilePath and put the data into a #MapEntry
 /// field.  This function makes heavy use of [strtok()][1].
 ///
-/// Anything that changes #MEMORY_MAP_FILE should be done before calling
+/// Anything that changes #mapsFilePath should be done before calling
 /// getMaps()
 ///
 /// [1]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
