@@ -1,0 +1,214 @@
+00400000-007b4000 r-xp 00000000 08:01 4361                               /usr/bin/python3.6
+009b3000-009b4000 r--p 003b3000 08:01 4361                               /usr/bin/python3.6
+009b4000-00a51000 rw-p 003b4000 08:01 4361                               /usr/bin/python3.6
+00a51000-00a84000 rw-p 00000000 00:00 0 
+00cd0000-00ee4000 rw-p 00000000 00:00 0                                  [heap]
+7fb7ec000000-7fb7ec021000 rw-p 00000000 00:00 0 
+7fb7ec021000-7fb7f0000000 ---p 00000000 00:00 0 
+7fb7f3f32000-7fb7f3f33000 ---p 00000000 00:00 0 
+7fb7f3f33000-7fb7f4733000 rw-p 00000000 00:00 0 
+7fb7f4733000-7fb7f4750000 r-xp 00000000 08:01 2208                       /lib/x86_64-linux-gnu/libudev.so.1.6.9
+7fb7f4750000-7fb7f494f000 ---p 0001d000 08:01 2208                       /lib/x86_64-linux-gnu/libudev.so.1.6.9
+7fb7f494f000-7fb7f4950000 r--p 0001c000 08:01 2208                       /lib/x86_64-linux-gnu/libudev.so.1.6.9
+7fb7f4950000-7fb7f4951000 rw-p 0001d000 08:01 2208                       /lib/x86_64-linux-gnu/libudev.so.1.6.9
+7fb7f4951000-7fb7f49cb000 r-xp 00000000 08:01 5085                       /usr/lib/x86_64-linux-gnu/libzstd.so.1.3.3
+7fb7f49cb000-7fb7f4bca000 ---p 0007a000 08:01 5085                       /usr/lib/x86_64-linux-gnu/libzstd.so.1.3.3
+7fb7f4bca000-7fb7f4bcb000 r--p 00079000 08:01 5085                       /usr/lib/x86_64-linux-gnu/libzstd.so.1.3.3
+7fb7f4bcb000-7fb7f4bcc000 rw-p 0007a000 08:01 5085                       /usr/lib/x86_64-linux-gnu/libzstd.so.1.3.3
+7fb7f4bcc000-7fb7f4bdb000 r-xp 00000000 08:01 2197                       /lib/x86_64-linux-gnu/libbz2.so.1.0.4
+7fb7f4bdb000-7fb7f4dda000 ---p 0000f000 08:01 2197                       /lib/x86_64-linux-gnu/libbz2.so.1.0.4
+7fb7f4dda000-7fb7f4ddb000 r--p 0000e000 08:01 2197                       /lib/x86_64-linux-gnu/libbz2.so.1.0.4
+7fb7f4ddb000-7fb7f4ddc000 rw-p 0000f000 08:01 2197                       /lib/x86_64-linux-gnu/libbz2.so.1.0.4
+7fb7f4ddc000-7fb7f4df3000 r-xp 00000000 08:01 2261                       /lib/x86_64-linux-gnu/libgcc_s.so.1
+7fb7f4df3000-7fb7f4ff2000 ---p 00017000 08:01 2261                       /lib/x86_64-linux-gnu/libgcc_s.so.1
+7fb7f4ff2000-7fb7f4ff3000 r--p 00016000 08:01 2261                       /lib/x86_64-linux-gnu/libgcc_s.so.1
+7fb7f4ff3000-7fb7f4ff4000 rw-p 00017000 08:01 2261                       /lib/x86_64-linux-gnu/libgcc_s.so.1
+7fb7f4ff4000-7fb7f516d000 r-xp 00000000 08:01 4807                       /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7fb7f516d000-7fb7f536d000 ---p 00179000 08:01 4807                       /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7fb7f536d000-7fb7f5377000 r--p 00179000 08:01 4807                       /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7fb7f5377000-7fb7f5379000 rw-p 00183000 08:01 4807                       /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7fb7f5379000-7fb7f537d000 rw-p 00000000 00:00 0 
+7fb7f537d000-7fb7f5533000 r-xp 00000000 08:01 4808                       /usr/lib/x86_64-linux-gnu/libapt-pkg.so.5.0.2
+7fb7f5533000-7fb7f5733000 ---p 001b6000 08:01 4808                       /usr/lib/x86_64-linux-gnu/libapt-pkg.so.5.0.2
+7fb7f5733000-7fb7f5739000 r--p 001b6000 08:01 4808                       /usr/lib/x86_64-linux-gnu/libapt-pkg.so.5.0.2
+7fb7f5739000-7fb7f573a000 rw-p 001bc000 08:01 4808                       /usr/lib/x86_64-linux-gnu/libapt-pkg.so.5.0.2
+7fb7f573a000-7fb7f5784000 r-xp 00000000 08:01 8059                       /usr/lib/python3/dist-packages/apt_pkg.cpython-36m-x86_64-linux-gnu.so
+7fb7f5784000-7fb7f5984000 ---p 0004a000 08:01 8059                       /usr/lib/python3/dist-packages/apt_pkg.cpython-36m-x86_64-linux-gnu.so
+7fb7f5984000-7fb7f5986000 r--p 0004a000 08:01 8059                       /usr/lib/python3/dist-packages/apt_pkg.cpython-36m-x86_64-linux-gnu.so
+7fb7f5986000-7fb7f598f000 rw-p 0004c000 08:01 8059                       /usr/lib/python3/dist-packages/apt_pkg.cpython-36m-x86_64-linux-gnu.so
+7fb7f598f000-7fb7f5a0f000 rw-p 00000000 00:00 0 
+7fb7f5a0f000-7fb7f5a3d000 r--p 00000000 08:01 6247                       /usr/lib/x86_64-linux-gnu/girepository-1.0/GLib-2.0.typelib
+7fb7f5a3d000-7fb7f5a7d000 rw-p 00000000 00:00 0 
+7fb7f5a7d000-7fb7f5a83000 r-xp 00000000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7fb7f5a83000-7fb7f5c82000 ---p 00006000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7fb7f5c82000-7fb7f5c83000 r--p 00005000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7fb7f5c83000-7fb7f5c84000 rw-p 00006000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7fb7f5c84000-7fb7f5ccb000 r-xp 00000000 08:01 2194                       /lib/x86_64-linux-gnu/libblkid.so.1.1.0
+7fb7f5ccb000-7fb7f5ecb000 ---p 00047000 08:01 2194                       /lib/x86_64-linux-gnu/libblkid.so.1.1.0
+7fb7f5ecb000-7fb7f5ecf000 r--p 00047000 08:01 2194                       /lib/x86_64-linux-gnu/libblkid.so.1.1.0
+7fb7f5ecf000-7fb7f5ed0000 rw-p 0004b000 08:01 2194                       /lib/x86_64-linux-gnu/libblkid.so.1.1.0
+7fb7f5ed0000-7fb7f5ed1000 rw-p 00000000 00:00 0 
+7fb7f5ed1000-7fb7f5f22000 r-xp 00000000 08:01 2114                       /lib/x86_64-linux-gnu/libmount.so.1.1.0
+7fb7f5f22000-7fb7f6121000 ---p 00051000 08:01 2114                       /lib/x86_64-linux-gnu/libmount.so.1.1.0
+7fb7f6121000-7fb7f6123000 r--p 00050000 08:01 2114                       /lib/x86_64-linux-gnu/libmount.so.1.1.0
+7fb7f6123000-7fb7f6124000 rw-p 00052000 08:01 2114                       /lib/x86_64-linux-gnu/libmount.so.1.1.0
+7fb7f6124000-7fb7f6125000 rw-p 00000000 00:00 0 
+7fb7f6125000-7fb7f613c000 r-xp 00000000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7fb7f613c000-7fb7f633b000 ---p 00017000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7fb7f633b000-7fb7f633c000 r--p 00016000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7fb7f633c000-7fb7f633d000 rw-p 00017000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7fb7f633d000-7fb7f633f000 rw-p 00000000 00:00 0 
+7fb7f633f000-7fb7f6364000 r-xp 00000000 08:01 2193                       /lib/x86_64-linux-gnu/libselinux.so.1
+7fb7f6364000-7fb7f6563000 ---p 00025000 08:01 2193                       /lib/x86_64-linux-gnu/libselinux.so.1
+7fb7f6563000-7fb7f6564000 r--p 00024000 08:01 2193                       /lib/x86_64-linux-gnu/libselinux.so.1
+7fb7f6564000-7fb7f6565000 rw-p 00025000 08:01 2193                       /lib/x86_64-linux-gnu/libselinux.so.1
+7fb7f6565000-7fb7f6567000 rw-p 00000000 00:00 0 
+7fb7f6567000-7fb7f66fd000 r-xp 00000000 08:01 6253                       /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.5600.4
+7fb7f66fd000-7fb7f68fc000 ---p 00196000 08:01 6253                       /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.5600.4
+7fb7f68fc000-7fb7f6903000 r--p 00195000 08:01 6253                       /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.5600.4
+7fb7f6903000-7fb7f6904000 rw-p 0019c000 08:01 6253                       /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.5600.4
+7fb7f6904000-7fb7f6906000 rw-p 00000000 00:00 0 
+7fb7f6906000-7fb7f6909000 r-xp 00000000 08:01 6255                       /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.5600.4
+7fb7f6909000-7fb7f6b08000 ---p 00003000 08:01 6255                       /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.5600.4
+7fb7f6b08000-7fb7f6b09000 r--p 00002000 08:01 6255                       /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.5600.4
+7fb7f6b09000-7fb7f6b0a000 rw-p 00003000 08:01 6255                       /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.5600.4
+7fb7f6b0a000-7fb7f6b11000 r-xp 00000000 08:01 6281                       /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7fb7f6b11000-7fb7f6d10000 ---p 00007000 08:01 6281                       /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7fb7f6d10000-7fb7f6d11000 r--p 00006000 08:01 6281                       /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7fb7f6d11000-7fb7f6d12000 rw-p 00007000 08:01 6281                       /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7fb7f6d12000-7fb7f6d64000 r-xp 00000000 08:01 6256                       /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4
+7fb7f6d64000-7fb7f6f64000 ---p 00052000 08:01 6256                       /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4
+7fb7f6f64000-7fb7f6f65000 r--p 00052000 08:01 6256                       /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4
+7fb7f6f65000-7fb7f6f66000 rw-p 00053000 08:01 6256                       /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4
+7fb7f6f66000-7fb7f6f99000 r-xp 00000000 08:01 6283                       /usr/lib/x86_64-linux-gnu/libgirepository-1.0.so.1.0.0
+7fb7f6f99000-7fb7f7198000 ---p 00033000 08:01 6283                       /usr/lib/x86_64-linux-gnu/libgirepository-1.0.so.1.0.0
+7fb7f7198000-7fb7f7199000 r--p 00032000 08:01 6283                       /usr/lib/x86_64-linux-gnu/libgirepository-1.0.so.1.0.0
+7fb7f7199000-7fb7f719a000 rw-p 00033000 08:01 6283                       /usr/lib/x86_64-linux-gnu/libgirepository-1.0.so.1.0.0
+7fb7f719a000-7fb7f71df000 r-xp 00000000 08:01 8108                       /usr/lib/python3/dist-packages/gi/_gi.cpython-36m-x86_64-linux-gnu.so
+7fb7f71df000-7fb7f73de000 ---p 00045000 08:01 8108                       /usr/lib/python3/dist-packages/gi/_gi.cpython-36m-x86_64-linux-gnu.so
+7fb7f73de000-7fb7f73e0000 r--p 00044000 08:01 8108                       /usr/lib/python3/dist-packages/gi/_gi.cpython-36m-x86_64-linux-gnu.so
+7fb7f73e0000-7fb7f73e7000 rw-p 00046000 08:01 8108                       /usr/lib/python3/dist-packages/gi/_gi.cpython-36m-x86_64-linux-gnu.so
+7fb7f73e7000-7fb7f73e8000 rw-p 00000000 00:00 0 
+7fb7f73e8000-7fb7f7458000 r-xp 00000000 08:01 2104                       /lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7fb7f7458000-7fb7f7657000 ---p 00070000 08:01 2104                       /lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7fb7f7657000-7fb7f7658000 r--p 0006f000 08:01 2104                       /lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7fb7f7658000-7fb7f7659000 rw-p 00070000 08:01 2104                       /lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7fb7f7659000-7fb7f776d000 r-xp 00000000 08:01 6254                       /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4
+7fb7f776d000-7fb7f796d000 ---p 00114000 08:01 6254                       /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4
+7fb7f796d000-7fb7f796e000 r--p 00114000 08:01 6254                       /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4
+7fb7f796e000-7fb7f796f000 rw-p 00115000 08:01 6254                       /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4
+7fb7f796f000-7fb7f7970000 rw-p 00000000 00:00 0 
+7fb7f7970000-7fb7f7974000 r-xp 00000000 08:01 8065                       /usr/lib/python3/dist-packages/_dbus_glib_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f7974000-7fb7f7b73000 ---p 00004000 08:01 8065                       /usr/lib/python3/dist-packages/_dbus_glib_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f7b73000-7fb7f7b74000 r--p 00003000 08:01 8065                       /usr/lib/python3/dist-packages/_dbus_glib_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f7b74000-7fb7f7b75000 rw-p 00004000 08:01 8065                       /usr/lib/python3/dist-packages/_dbus_glib_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f7b75000-7fb7f7cbe000 rw-p 00000000 00:00 0 
+7fb7f7cbe000-7fb7f7cd2000 r-xp 00000000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7fb7f7cd2000-7fb7f7ed1000 ---p 00014000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7fb7f7ed1000-7fb7f7ed2000 r--p 00013000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7fb7f7ed2000-7fb7f7ed3000 rw-p 00014000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7fb7f7ed3000-7fb7f7fe7000 r-xp 00000000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7fb7f7fe7000-7fb7f81e7000 ---p 00114000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7fb7f81e7000-7fb7f81e9000 r--p 00114000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7fb7f81e9000-7fb7f81ee000 rw-p 00116000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7fb7f81ee000-7fb7f81ef000 rw-p 00000000 00:00 0 
+7fb7f81ef000-7fb7f820a000 r-xp 00000000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7fb7f820a000-7fb7f8409000 ---p 0001b000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7fb7f8409000-7fb7f840a000 r--p 0001a000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7fb7f840a000-7fb7f840b000 rw-p 0001b000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7fb7f840b000-7fb7f842f000 r-xp 00000000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7fb7f842f000-7fb7f862f000 ---p 00024000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7fb7f862f000-7fb7f8630000 r--p 00024000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7fb7f8630000-7fb7f8631000 rw-p 00025000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7fb7f8631000-7fb7f8638000 r-xp 00000000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7fb7f8638000-7fb7f8837000 ---p 00007000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7fb7f8837000-7fb7f8838000 r--p 00006000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7fb7f8838000-7fb7f8839000 rw-p 00007000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7fb7f8839000-7fb7f88b9000 r-xp 00000000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7fb7f88b9000-7fb7f8ab8000 ---p 00080000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7fb7f8ab8000-7fb7f8abb000 r--p 0007f000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7fb7f8abb000-7fb7f8abc000 rw-p 00082000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7fb7f8abc000-7fb7f8abd000 rw-p 00000000 00:00 0 
+7fb7f8abd000-7fb7f8b08000 r-xp 00000000 08:01 2135                       /lib/x86_64-linux-gnu/libdbus-1.so.3.19.4
+7fb7f8b08000-7fb7f8d08000 ---p 0004b000 08:01 2135                       /lib/x86_64-linux-gnu/libdbus-1.so.3.19.4
+7fb7f8d08000-7fb7f8d09000 r--p 0004b000 08:01 2135                       /lib/x86_64-linux-gnu/libdbus-1.so.3.19.4
+7fb7f8d09000-7fb7f8d0a000 rw-p 0004c000 08:01 2135                       /lib/x86_64-linux-gnu/libdbus-1.so.3.19.4
+7fb7f8d0a000-7fb7f8d24000 r-xp 00000000 08:01 8064                       /usr/lib/python3/dist-packages/_dbus_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f8d24000-7fb7f8f23000 ---p 0001a000 08:01 8064                       /usr/lib/python3/dist-packages/_dbus_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f8f23000-7fb7f8f24000 r--p 00019000 08:01 8064                       /usr/lib/python3/dist-packages/_dbus_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f8f24000-7fb7f8f31000 rw-p 0001a000 08:01 8064                       /usr/lib/python3/dist-packages/_dbus_bindings.cpython-36m-x86_64-linux-gnu.so
+7fb7f8f31000-7fb7f9071000 rw-p 00000000 00:00 0 
+7fb7f9071000-7fb7f907c000 r-xp 00000000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fb7f907c000-7fb7f927b000 ---p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fb7f927b000-7fb7f927c000 r--p 0000a000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fb7f927c000-7fb7f927d000 rw-p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fb7f927d000-7fb7f9283000 rw-p 00000000 00:00 0 
+7fb7f9283000-7fb7f929a000 r-xp 00000000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fb7f929a000-7fb7f9499000 ---p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fb7f9499000-7fb7f949a000 r--p 00016000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fb7f949a000-7fb7f949b000 rw-p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fb7f949b000-7fb7f949d000 rw-p 00000000 00:00 0 
+7fb7f949d000-7fb7f94a8000 r-xp 00000000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fb7f94a8000-7fb7f96a7000 ---p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fb7f96a7000-7fb7f96a8000 r--p 0000a000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fb7f96a8000-7fb7f96a9000 rw-p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fb7f96a9000-7fb7f96b1000 r-xp 00000000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fb7f96b1000-7fb7f98b1000 ---p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fb7f98b1000-7fb7f98b2000 r--p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fb7f98b2000-7fb7f98b3000 rw-p 00009000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fb7f98b3000-7fb7f98f3000 rw-p 00000000 00:00 0 
+7fb7f9918000-7fb7f9a58000 rw-p 00000000 00:00 0 
+7fb7f9a58000-7fb7f9bcb000 r--p 00000000 08:01 7848                       /usr/lib/locale/C.UTF-8/LC_COLLATE
+7fb7f9bcb000-7fb7f9d68000 r-xp 00000000 08:01 2246                       /lib/x86_64-linux-gnu/libm-2.27.so
+7fb7f9d68000-7fb7f9f67000 ---p 0019d000 08:01 2246                       /lib/x86_64-linux-gnu/libm-2.27.so
+7fb7f9f67000-7fb7f9f68000 r--p 0019c000 08:01 2246                       /lib/x86_64-linux-gnu/libm-2.27.so
+7fb7f9f68000-7fb7f9f69000 rw-p 0019d000 08:01 2246                       /lib/x86_64-linux-gnu/libm-2.27.so
+7fb7f9f69000-7fb7f9f85000 r-xp 00000000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7fb7f9f85000-7fb7fa184000 ---p 0001c000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7fb7fa184000-7fb7fa185000 r--p 0001b000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7fb7fa185000-7fb7fa186000 rw-p 0001c000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7fb7fa186000-7fb7fa1b5000 r-xp 00000000 08:01 2203                       /lib/x86_64-linux-gnu/libexpat.so.1.6.7
+7fb7fa1b5000-7fb7fa3b5000 ---p 0002f000 08:01 2203                       /lib/x86_64-linux-gnu/libexpat.so.1.6.7
+7fb7fa3b5000-7fb7fa3b7000 r--p 0002f000 08:01 2203                       /lib/x86_64-linux-gnu/libexpat.so.1.6.7
+7fb7fa3b7000-7fb7fa3b8000 rw-p 00031000 08:01 2203                       /lib/x86_64-linux-gnu/libexpat.so.1.6.7
+7fb7fa3b8000-7fb7fa3ba000 r-xp 00000000 08:01 2273                       /lib/x86_64-linux-gnu/libutil-2.27.so
+7fb7fa3ba000-7fb7fa5b9000 ---p 00002000 08:01 2273                       /lib/x86_64-linux-gnu/libutil-2.27.so
+7fb7fa5b9000-7fb7fa5ba000 r--p 00001000 08:01 2273                       /lib/x86_64-linux-gnu/libutil-2.27.so
+7fb7fa5ba000-7fb7fa5bb000 rw-p 00002000 08:01 2273                       /lib/x86_64-linux-gnu/libutil-2.27.so
+7fb7fa5bb000-7fb7fa5be000 r-xp 00000000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fb7fa5be000-7fb7fa7bd000 ---p 00003000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fb7fa7bd000-7fb7fa7be000 r--p 00002000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fb7fa7be000-7fb7fa7bf000 rw-p 00003000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fb7fa7bf000-7fb7fa7d9000 r-xp 00000000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fb7fa7d9000-7fb7fa9d8000 ---p 0001a000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fb7fa9d8000-7fb7fa9d9000 r--p 00019000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fb7fa9d9000-7fb7fa9da000 rw-p 0001a000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fb7fa9da000-7fb7fa9de000 rw-p 00000000 00:00 0 
+7fb7fa9de000-7fb7fabc5000 r-xp 00000000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb7fabc5000-7fb7fadc5000 ---p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb7fadc5000-7fb7fadc9000 r--p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb7fadc9000-7fb7fadcb000 rw-p 001eb000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb7fadcb000-7fb7fadcf000 rw-p 00000000 00:00 0 
+7fb7fadcf000-7fb7fadf8000 r-xp 00000000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fb7fae13000-7fb7fae14000 rwxp 00000000 00:00 0 
+7fb7fae14000-7fb7fae45000 r--p 00000000 08:01 7849                       /usr/lib/locale/C.UTF-8/LC_CTYPE
+7fb7fae45000-7fb7fae46000 r--p 00000000 08:01 7854                       /usr/lib/locale/C.UTF-8/LC_NUMERIC
+7fb7fae46000-7fb7fae47000 r--p 00000000 08:01 7857                       /usr/lib/locale/C.UTF-8/LC_TIME
+7fb7fae47000-7fb7fae48000 r--p 00000000 08:01 7852                       /usr/lib/locale/C.UTF-8/LC_MONETARY
+7fb7fae48000-7fb7fae49000 r--p 00000000 08:01 7846                       /usr/lib/locale/C.UTF-8/LC_MESSAGES/SYS_LC_MESSAGES
+7fb7fae49000-7fb7fae50000 r--s 00000000 08:01 5065                       /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7fb7fae50000-7fb7fafeb000 r--p 00000000 08:01 7843                       /usr/lib/locale/locale-archive
+7fb7fafeb000-7fb7faff2000 rw-p 00000000 00:00 0 
+7fb7faff2000-7fb7faff3000 r--p 00000000 08:01 7855                       /usr/lib/locale/C.UTF-8/LC_PAPER
+7fb7faff3000-7fb7faff4000 r--p 00000000 08:01 7853                       /usr/lib/locale/C.UTF-8/LC_NAME
+7fb7faff4000-7fb7faff5000 r--p 00000000 08:01 7847                       /usr/lib/locale/C.UTF-8/LC_ADDRESS
+7fb7faff5000-7fb7faff6000 r--p 00000000 08:01 7856                       /usr/lib/locale/C.UTF-8/LC_TELEPHONE
+7fb7faff6000-7fb7faff7000 r--p 00000000 08:01 7851                       /usr/lib/locale/C.UTF-8/LC_MEASUREMENT
+7fb7faff7000-7fb7faff8000 r--p 00000000 08:01 7850                       /usr/lib/locale/C.UTF-8/LC_IDENTIFICATION
+7fb7faff8000-7fb7faff9000 r--p 00029000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fb7faff9000-7fb7faffa000 rw-p 0002a000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fb7faffa000-7fb7faffb000 rw-p 00000000 00:00 0 
+7ffc014df000-7ffc01500000 rw-p 00000000 00:00 0                          [stack]
+7ffc0159a000-7ffc0159d000 r--p 00000000 00:00 0                          [vvar]
+7ffc0159d000-7ffc0159f000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

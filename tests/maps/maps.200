@@ -1,0 +1,19 @@
+564b3f98a000-564b3f9a6000 r-xp 00000000 08:01 29                         /bin/dash
+564b3fba5000-564b3fba7000 r--p 0001b000 08:01 29                         /bin/dash
+564b3fba7000-564b3fba8000 rw-p 0001d000 08:01 29                         /bin/dash
+564b3fba8000-564b3fbaa000 rw-p 00000000 00:00 0 
+564b40cf4000-564b40d15000 rw-p 00000000 00:00 0                          [heap]
+7fb74cddb000-7fb74cfc2000 r-xp 00000000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb74cfc2000-7fb74d1c2000 ---p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb74d1c2000-7fb74d1c6000 r--p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb74d1c6000-7fb74d1c8000 rw-p 001eb000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fb74d1c8000-7fb74d1cc000 rw-p 00000000 00:00 0 
+7fb74d1cc000-7fb74d1f5000 r-xp 00000000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fb74d3ed000-7fb74d3ef000 rw-p 00000000 00:00 0 
+7fb74d3f5000-7fb74d3f6000 r--p 00029000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fb74d3f6000-7fb74d3f7000 rw-p 0002a000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fb74d3f7000-7fb74d3f8000 rw-p 00000000 00:00 0 
+7fff0f30a000-7fff0f32b000 rw-p 00000000 00:00 0                          [stack]
+7fff0f36d000-7fff0f370000 r--p 00000000 00:00 0                          [vvar]
+7fff0f370000-7fff0f372000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

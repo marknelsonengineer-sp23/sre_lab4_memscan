@@ -1,0 +1,36 @@
+558361905000-558361933000 r--p 00000000 08:20 9395                       /usr/bin/bash
+558361933000-5583619ee000 r-xp 0002e000 08:20 9395                       /usr/bin/bash
+5583619ee000-558361a26000 r--p 000e9000 08:20 9395                       /usr/bin/bash
+558361a27000-558361a2a000 r--p 00121000 08:20 9395                       /usr/bin/bash
+558361a2a000-558361a33000 rw-p 00124000 08:20 9395                       /usr/bin/bash
+558361a33000-558361a3e000 rw-p 00000000 00:00 0 
+5583634ee000-558363530000 rw-p 00000000 00:00 0                          [heap]
+7f322eeb5000-7f322f19c000 r--p 00000000 08:20 445                        /usr/lib/locale/locale-archive
+7f322f19c000-7f322f19f000 rw-p 00000000 00:00 0 
+7f322f19f000-7f322f1c1000 r--p 00000000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f322f1c1000-7f322f31b000 r-xp 00022000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f322f31b000-7f322f36a000 r--p 0017c000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f322f36a000-7f322f36e000 r--p 001ca000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f322f36e000-7f322f370000 rw-p 001ce000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f322f370000-7f322f374000 rw-p 00000000 00:00 0 
+7f322f374000-7f322f375000 r--p 00000000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f322f375000-7f322f377000 r-xp 00001000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f322f377000-7f322f378000 r--p 00003000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f322f378000-7f322f379000 r--p 00003000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f322f379000-7f322f37a000 rw-p 00004000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f322f37a000-7f322f388000 r--p 00000000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f322f388000-7f322f396000 r-xp 0000e000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f322f396000-7f322f3a4000 r--p 0001c000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f322f3a4000-7f322f3a8000 r--p 00029000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f322f3a8000-7f322f3a9000 rw-p 0002d000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f322f3a9000-7f322f3ab000 rw-p 00000000 00:00 0 
+7f322f3ae000-7f322f3b5000 r--s 00000000 08:20 9881                       /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7f322f3b5000-7f322f3b6000 r--p 00000000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f322f3b6000-7f322f3d6000 r-xp 00001000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f322f3d6000-7f322f3de000 r--p 00021000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f322f3df000-7f322f3e0000 r--p 00029000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f322f3e0000-7f322f3e1000 rw-p 0002a000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f322f3e1000-7f322f3e2000 rw-p 00000000 00:00 0 
+7ffe7ff97000-7ffe7ffb8000 rw-p 00000000 00:00 0                          [stack]
+7ffe7ffca000-7ffe7ffce000 r--p 00000000 00:00 0                          [vvar]
+7ffe7ffce000-7ffe7ffd0000 r-xp 00000000 00:00 0                          [vdso]

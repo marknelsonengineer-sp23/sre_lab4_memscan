@@ -1,0 +1,40 @@
+562c80c8d000-562c80cad000 r--p 00000000 08:02 662407                     /usr/bin/bash
+562c80cad000-562c80d40000 r-xp 00020000 08:02 662407                     /usr/bin/bash
+562c80d40000-562c80d6f000 r--p 000b3000 08:02 662407                     /usr/bin/bash
+562c80d6f000-562c80d72000 r--p 000e1000 08:02 662407                     /usr/bin/bash
+562c80d72000-562c80d76000 rw-p 000e4000 08:02 662407                     /usr/bin/bash
+562c80d76000-562c80d84000 rw-p 00000000 00:00 0 
+562c8136f000-562c8145c000 rw-p 00000000 00:00 0                          [heap]
+7f628e000000-7f628e2e9000 r--p 00000000 08:02 697761                     /usr/lib/locale/locale-archive
+7f628e46d000-7f628e46f000 rw-p 00000000 00:00 0 
+7f628e46f000-7f628e485000 r--p 00000000 08:02 659602                     /usr/lib/libncursesw.so.6.4
+7f628e485000-7f628e4c7000 r-xp 00016000 08:02 659602                     /usr/lib/libncursesw.so.6.4
+7f628e4c7000-7f628e4de000 r--p 00058000 08:02 659602                     /usr/lib/libncursesw.so.6.4
+7f628e4de000-7f628e4e2000 r--p 0006f000 08:02 659602                     /usr/lib/libncursesw.so.6.4
+7f628e4e2000-7f628e4e3000 rw-p 00073000 08:02 659602                     /usr/lib/libncursesw.so.6.4
+7f628e4e3000-7f628e505000 r--p 00000000 08:02 658714                     /usr/lib/libc.so.6
+7f628e505000-7f628e660000 r-xp 00022000 08:02 658714                     /usr/lib/libc.so.6
+7f628e660000-7f628e6b7000 r--p 0017d000 08:02 658714                     /usr/lib/libc.so.6
+7f628e6b7000-7f628e6bb000 r--p 001d4000 08:02 658714                     /usr/lib/libc.so.6
+7f628e6bb000-7f628e6bd000 rw-p 001d8000 08:02 658714                     /usr/lib/libc.so.6
+7f628e6bd000-7f628e6ca000 rw-p 00000000 00:00 0 
+7f628e6ca000-7f628e6cb000 r--p 00000000 08:02 658719                     /usr/lib/libdl.so.2
+7f628e6cb000-7f628e6cc000 r-xp 00001000 08:02 658719                     /usr/lib/libdl.so.2
+7f628e6cc000-7f628e6cd000 r--p 00002000 08:02 658719                     /usr/lib/libdl.so.2
+7f628e6cd000-7f628e6ce000 r--p 00002000 08:02 658719                     /usr/lib/libdl.so.2
+7f628e6ce000-7f628e6cf000 rw-p 00003000 08:02 658719                     /usr/lib/libdl.so.2
+7f628e6cf000-7f628e6e6000 r--p 00000000 08:02 662376                     /usr/lib/libreadline.so.8.2
+7f628e6e6000-7f628e712000 r-xp 00017000 08:02 662376                     /usr/lib/libreadline.so.8.2
+7f628e712000-7f628e71c000 r--p 00043000 08:02 662376                     /usr/lib/libreadline.so.8.2
+7f628e71c000-7f628e71f000 r--p 0004d000 08:02 662376                     /usr/lib/libreadline.so.8.2
+7f628e71f000-7f628e725000 rw-p 00050000 08:02 662376                     /usr/lib/libreadline.so.8.2
+7f628e725000-7f628e728000 rw-p 00000000 00:00 0 
+7f628e72f000-7f628e730000 r--p 00000000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f628e730000-7f628e756000 r-xp 00001000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f628e756000-7f628e760000 r--p 00027000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f628e760000-7f628e762000 r--p 00031000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f628e762000-7f628e764000 rw-p 00033000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7ffc12bee000-7ffc12c0f000 rw-p 00000000 00:00 0                          [stack]
+7ffc12d98000-7ffc12d9c000 r--p 00000000 00:00 0                          [vvar]
+7ffc12d9c000-7ffc12d9e000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

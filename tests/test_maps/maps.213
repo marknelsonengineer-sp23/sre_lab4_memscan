@@ -1,0 +1,112 @@
+55c9d0a67000-55c9d0a75000 r--p 00000000 08:02 697350                     /usr/bin/VBoxService
+55c9d0a75000-55c9d0ac3000 r-xp 0000e000 08:02 697350                     /usr/bin/VBoxService
+55c9d0ac3000-55c9d0b0b000 r--p 0005c000 08:02 697350                     /usr/bin/VBoxService
+55c9d0b0b000-55c9d0b0f000 r--p 000a4000 08:02 697350                     /usr/bin/VBoxService
+55c9d0b0f000-55c9d0b11000 rw-p 000a8000 08:02 697350                     /usr/bin/VBoxService
+55c9d0b11000-55c9d0b1c000 rw-p 00000000 00:00 0 
+55c9d1dd8000-55c9d1e1a000 rw-p 00000000 00:00 0                          [heap]
+7f8ab0000000-7f8ab002f000 rw-p 00000000 00:00 0 
+7f8ab002f000-7f8ab4000000 ---p 00000000 00:00 0 
+7f8ab4000000-7f8ab4021000 rw-p 00000000 00:00 0 
+7f8ab4021000-7f8ab8000000 ---p 00000000 00:00 0 
+7f8ab8000000-7f8ab8021000 rw-p 00000000 00:00 0 
+7f8ab8021000-7f8abc000000 ---p 00000000 00:00 0 
+7f8abc000000-7f8abc021000 rw-p 00000000 00:00 0 
+7f8abc021000-7f8ac0000000 ---p 00000000 00:00 0 
+7f8ac0000000-7f8ac0021000 rw-p 00000000 00:00 0 
+7f8ac0021000-7f8ac4000000 ---p 00000000 00:00 0 
+7f8ac7802000-7f8ac7810000 r--p 00000000 08:02 658724                     /usr/lib/libm.so.6
+7f8ac7810000-7f8ac788a000 r-xp 0000e000 08:02 658724                     /usr/lib/libm.so.6
+7f8ac788a000-7f8ac78e8000 r--p 00088000 08:02 658724                     /usr/lib/libm.so.6
+7f8ac78e8000-7f8ac78e9000 r--p 000e5000 08:02 658724                     /usr/lib/libm.so.6
+7f8ac78e9000-7f8ac78ea000 rw-p 000e6000 08:02 658724                     /usr/lib/libm.so.6
+7f8ac78ea000-7f8ac78f1000 r--p 00000000 08:02 671287                     /usr/lib/libnss_systemd.so.2
+7f8ac78f1000-7f8ac7928000 r-xp 00007000 08:02 671287                     /usr/lib/libnss_systemd.so.2
+7f8ac7928000-7f8ac793a000 r--p 0003e000 08:02 671287                     /usr/lib/libnss_systemd.so.2
+7f8ac793a000-7f8ac793e000 r--p 00050000 08:02 671287                     /usr/lib/libnss_systemd.so.2
+7f8ac793e000-7f8ac793f000 rw-p 00054000 08:02 671287                     /usr/lib/libnss_systemd.so.2
+7f8ac793f000-7f8ac7944000 r--p 00000000 08:02 670999                     /usr/lib/libgpg-error.so.0.33.1
+7f8ac7944000-7f8ac7959000 r-xp 00005000 08:02 670999                     /usr/lib/libgpg-error.so.0.33.1
+7f8ac7959000-7f8ac7963000 r--p 0001a000 08:02 670999                     /usr/lib/libgpg-error.so.0.33.1
+7f8ac7963000-7f8ac7964000 r--p 00023000 08:02 670999                     /usr/lib/libgpg-error.so.0.33.1
+7f8ac7964000-7f8ac7965000 rw-p 00024000 08:02 670999                     /usr/lib/libgpg-error.so.0.33.1
+7f8ac7965000-7f8ac7968000 r--p 00000000 08:02 659506                     /usr/lib/libgcc_s.so.1
+7f8ac7968000-7f8ac797f000 r-xp 00003000 08:02 659506                     /usr/lib/libgcc_s.so.1
+7f8ac797f000-7f8ac7983000 r--p 0001a000 08:02 659506                     /usr/lib/libgcc_s.so.1
+7f8ac7983000-7f8ac7984000 r--p 0001d000 08:02 659506                     /usr/lib/libgcc_s.so.1
+7f8ac7984000-7f8ac7985000 rw-p 0001e000 08:02 659506                     /usr/lib/libgcc_s.so.1
+7f8ac7985000-7f8ac7988000 r--p 00000000 08:02 671250                     /usr/lib/liblz4.so.1.9.4
+7f8ac7988000-7f8ac79a3000 r-xp 00003000 08:02 671250                     /usr/lib/liblz4.so.1.9.4
+7f8ac79a3000-7f8ac79a5000 r--p 0001e000 08:02 671250                     /usr/lib/liblz4.so.1.9.4
+7f8ac79a5000-7f8ac79a6000 r--p 00020000 08:02 671250                     /usr/lib/liblz4.so.1.9.4
+7f8ac79a6000-7f8ac79a7000 rw-p 00021000 08:02 671250                     /usr/lib/liblz4.so.1.9.4
+7f8ac79a7000-7f8ac79b1000 r--p 00000000 08:02 671273                     /usr/lib/libzstd.so.1.5.2
+7f8ac79b1000-7f8ac7a3e000 r-xp 0000a000 08:02 671273                     /usr/lib/libzstd.so.1.5.2
+7f8ac7a3e000-7f8ac7a4d000 r--p 00097000 08:02 671273                     /usr/lib/libzstd.so.1.5.2
+7f8ac7a4d000-7f8ac7a4e000 ---p 000a6000 08:02 671273                     /usr/lib/libzstd.so.1.5.2
+7f8ac7a4e000-7f8ac7a4f000 r--p 000a6000 08:02 671273                     /usr/lib/libzstd.so.1.5.2
+7f8ac7a4f000-7f8ac7a50000 rw-p 000a7000 08:02 671273                     /usr/lib/libzstd.so.1.5.2
+7f8ac7a50000-7f8ac7a54000 r--p 00000000 08:02 670339                     /usr/lib/liblzma.so.5.4.0
+7f8ac7a54000-7f8ac7a75000 r-xp 00004000 08:02 670339                     /usr/lib/liblzma.so.5.4.0
+7f8ac7a75000-7f8ac7a81000 r--p 00025000 08:02 670339                     /usr/lib/liblzma.so.5.4.0
+7f8ac7a81000-7f8ac7a82000 r--p 00031000 08:02 670339                     /usr/lib/liblzma.so.5.4.0
+7f8ac7a82000-7f8ac7a83000 rw-p 00032000 08:02 670339                     /usr/lib/liblzma.so.5.4.0
+7f8ac7a83000-7f8ac7a92000 r--p 00000000 08:02 671041                     /usr/lib/libgcrypt.so.20.4.1
+7f8ac7a92000-7f8ac7b81000 r-xp 0000f000 08:02 671041                     /usr/lib/libgcrypt.so.20.4.1
+7f8ac7b81000-7f8ac7bc1000 r--p 000fe000 08:02 671041                     /usr/lib/libgcrypt.so.20.4.1
+7f8ac7bc1000-7f8ac7bc6000 r--p 0013e000 08:02 671041                     /usr/lib/libgcrypt.so.20.4.1
+7f8ac7bc6000-7f8ac7bca000 rw-p 00143000 08:02 671041                     /usr/lib/libgcrypt.so.20.4.1
+7f8ac7bca000-7f8ac7bcb000 rw-p 00000000 00:00 0 
+7f8ac7bcb000-7f8ac7be2000 r--p 00000000 08:02 671290                     /usr/lib/libsystemd.so.0.35.0
+7f8ac7be2000-7f8ac7c67000 r-xp 00017000 08:02 671290                     /usr/lib/libsystemd.so.0.35.0
+7f8ac7c67000-7f8ac7c9a000 r--p 0009c000 08:02 671290                     /usr/lib/libsystemd.so.0.35.0
+7f8ac7c9a000-7f8ac7ca5000 r--p 000cf000 08:02 671290                     /usr/lib/libsystemd.so.0.35.0
+7f8ac7ca5000-7f8ac7ca6000 rw-p 000da000 08:02 671290                     /usr/lib/libsystemd.so.0.35.0
+7f8ac7ca6000-7f8ac7ca7000 rw-p 00000000 00:00 0 
+7f8ac7ca7000-7f8ac7ca8000 ---p 00000000 00:00 0 
+7f8ac7ca8000-7f8ac7d28000 rw-p 00000000 00:00 0 
+7f8ac7d28000-7f8ac7d36000 r--p 00000000 08:02 677295                     /usr/lib/libdbus-1.so.3.32.1
+7f8ac7d36000-7f8ac7d64000 r-xp 0000e000 08:02 677295                     /usr/lib/libdbus-1.so.3.32.1
+7f8ac7d64000-7f8ac7d76000 r--p 0003c000 08:02 677295                     /usr/lib/libdbus-1.so.3.32.1
+7f8ac7d76000-7f8ac7d78000 r--p 0004e000 08:02 677295                     /usr/lib/libdbus-1.so.3.32.1
+7f8ac7d78000-7f8ac7d79000 rw-p 00050000 08:02 677295                     /usr/lib/libdbus-1.so.3.32.1
+7f8ac7d79000-7f8ac7d7a000 ---p 00000000 00:00 0 
+7f8ac7d7a000-7f8ac7dfa000 rw-p 00000000 00:00 0 
+7f8ac7dfa000-7f8ac7dfb000 ---p 00000000 00:00 0 
+7f8ac7dfb000-7f8ac7e7b000 rw-p 00000000 00:00 0 
+7f8ac7e7b000-7f8ac7e7c000 ---p 00000000 00:00 0 
+7f8ac7e7c000-7f8ac7efc000 rw-p 00000000 00:00 0 
+7f8ac7efc000-7f8ac7efd000 ---p 00000000 00:00 0 
+7f8ac7efd000-7f8ac7f7d000 rw-p 00000000 00:00 0 
+7f8ac7f7d000-7f8ac7f7e000 ---p 00000000 00:00 0 
+7f8ac7f7e000-7f8ac7ffe000 rw-p 00000000 00:00 0 
+7f8ac7ffe000-7f8ac7fff000 ---p 00000000 00:00 0 
+7f8ac7fff000-7f8ac87ff000 rw-p 00000000 00:00 0 
+7f8ac87ff000-7f8ac8800000 ---p 00000000 00:00 0 
+7f8ac8800000-7f8ac9000000 rw-p 00000000 00:00 0 
+7f8ac9000000-7f8ac92e9000 r--p 00000000 08:02 697761                     /usr/lib/locale/locale-archive
+7f8ac92f0000-7f8ac92f3000 r--p 00000000 08:02 669868                     /usr/lib/libcap.so.2.66
+7f8ac92f3000-7f8ac92f8000 r-xp 00003000 08:02 669868                     /usr/lib/libcap.so.2.66
+7f8ac92f8000-7f8ac92fa000 r--p 00008000 08:02 669868                     /usr/lib/libcap.so.2.66
+7f8ac92fa000-7f8ac92fb000 r--p 00009000 08:02 669868                     /usr/lib/libcap.so.2.66
+7f8ac92fb000-7f8ac92fc000 rw-p 0000a000 08:02 669868                     /usr/lib/libcap.so.2.66
+7f8ac92fc000-7f8ac92fd000 ---p 00000000 00:00 0 
+7f8ac92fd000-7f8ac937d000 rw-p 00000000 00:00 0 
+7f8ac937d000-7f8ac937e000 ---p 00000000 00:00 0 
+7f8ac937e000-7f8ac93fe000 rw-p 00000000 00:00 0 
+7f8ac93fe000-7f8ac9445000 rw-p 00000000 00:00 0 
+7f8ac9445000-7f8ac9467000 r--p 00000000 08:02 658714                     /usr/lib/libc.so.6
+7f8ac9467000-7f8ac95c2000 r-xp 00022000 08:02 658714                     /usr/lib/libc.so.6
+7f8ac95c2000-7f8ac9619000 r--p 0017d000 08:02 658714                     /usr/lib/libc.so.6
+7f8ac9619000-7f8ac961d000 r--p 001d4000 08:02 658714                     /usr/lib/libc.so.6
+7f8ac961d000-7f8ac961f000 rw-p 001d8000 08:02 658714                     /usr/lib/libc.so.6
+7f8ac961f000-7f8ac962e000 rw-p 00000000 00:00 0 
+7f8ac9635000-7f8ac9636000 r--p 00000000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f8ac9636000-7f8ac965c000 r-xp 00001000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f8ac965c000-7f8ac9666000 r--p 00027000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f8ac9666000-7f8ac9668000 r--p 00031000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7f8ac9668000-7f8ac966a000 rw-p 00033000 08:02 658705                     /usr/lib/ld-linux-x86-64.so.2
+7fffb521d000-7fffb523e000 rw-p 00000000 00:00 0                          [stack]
+7fffb52f1000-7fffb52f5000 r--p 00000000 00:00 0                          [vvar]
+7fffb52f5000-7fffb52f7000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

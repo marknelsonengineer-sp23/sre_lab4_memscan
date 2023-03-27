@@ -1,0 +1,51 @@
+55a822739000-55a822746000 r-xp 00000000 08:01 3896                       /sbin/agetty
+55a822945000-55a822946000 r--p 0000c000 08:01 3896                       /sbin/agetty
+55a822946000-55a822947000 rw-p 0000d000 08:01 3896                       /sbin/agetty
+55a822947000-55a822949000 rw-p 00000000 00:00 0 
+55a823c11000-55a823c32000 rw-p 00000000 00:00 0                          [heap]
+7f73a3ad0000-7f73a3adb000 r-xp 00000000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7f73a3adb000-7f73a3cda000 ---p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7f73a3cda000-7f73a3cdb000 r--p 0000a000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7f73a3cdb000-7f73a3cdc000 rw-p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7f73a3cdc000-7f73a3ce2000 rw-p 00000000 00:00 0 
+7f73a3ce2000-7f73a3cf9000 r-xp 00000000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7f73a3cf9000-7f73a3ef8000 ---p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7f73a3ef8000-7f73a3ef9000 r--p 00016000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7f73a3ef9000-7f73a3efa000 rw-p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7f73a3efa000-7f73a3efc000 rw-p 00000000 00:00 0 
+7f73a3efc000-7f73a3f07000 r-xp 00000000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7f73a3f07000-7f73a4106000 ---p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7f73a4106000-7f73a4107000 r--p 0000a000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7f73a4107000-7f73a4108000 rw-p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7f73a4108000-7f73a4110000 r-xp 00000000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7f73a4110000-7f73a4310000 ---p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7f73a4310000-7f73a4311000 r--p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7f73a4311000-7f73a4312000 rw-p 00009000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7f73a4312000-7f73a4485000 r--p 00000000 08:01 7848                       /usr/lib/locale/C.UTF-8/LC_COLLATE
+7f73a4485000-7f73a466c000 r-xp 00000000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7f73a466c000-7f73a486c000 ---p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7f73a486c000-7f73a4870000 r--p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7f73a4870000-7f73a4872000 rw-p 001eb000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7f73a4872000-7f73a4876000 rw-p 00000000 00:00 0 
+7f73a4876000-7f73a489f000 r-xp 00000000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7f73a48c0000-7f73a48f1000 r--p 00000000 08:01 7849                       /usr/lib/locale/C.UTF-8/LC_CTYPE
+7f73a48f1000-7f73a48f2000 r--p 00000000 08:01 7854                       /usr/lib/locale/C.UTF-8/LC_NUMERIC
+7f73a48f2000-7f73a48f3000 r--p 00000000 08:01 7857                       /usr/lib/locale/C.UTF-8/LC_TIME
+7f73a48f3000-7f73a48f4000 r--p 00000000 08:01 7852                       /usr/lib/locale/C.UTF-8/LC_MONETARY
+7f73a48f4000-7f73a48f5000 r--p 00000000 08:01 7846                       /usr/lib/locale/C.UTF-8/LC_MESSAGES/SYS_LC_MESSAGES
+7f73a48f5000-7f73a48fc000 r--s 00000000 08:01 5065                       /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7f73a48fc000-7f73a4a97000 r--p 00000000 08:01 7843                       /usr/lib/locale/locale-archive
+7f73a4a97000-7f73a4a99000 rw-p 00000000 00:00 0 
+7f73a4a99000-7f73a4a9a000 r--p 00000000 08:01 7855                       /usr/lib/locale/C.UTF-8/LC_PAPER
+7f73a4a9a000-7f73a4a9b000 r--p 00000000 08:01 7853                       /usr/lib/locale/C.UTF-8/LC_NAME
+7f73a4a9b000-7f73a4a9c000 r--p 00000000 08:01 7847                       /usr/lib/locale/C.UTF-8/LC_ADDRESS
+7f73a4a9c000-7f73a4a9d000 r--p 00000000 08:01 7856                       /usr/lib/locale/C.UTF-8/LC_TELEPHONE
+7f73a4a9d000-7f73a4a9e000 r--p 00000000 08:01 7851                       /usr/lib/locale/C.UTF-8/LC_MEASUREMENT
+7f73a4a9e000-7f73a4a9f000 r--p 00000000 08:01 7850                       /usr/lib/locale/C.UTF-8/LC_IDENTIFICATION
+7f73a4a9f000-7f73a4aa0000 r--p 00029000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7f73a4aa0000-7f73a4aa1000 rw-p 0002a000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7f73a4aa1000-7f73a4aa2000 rw-p 00000000 00:00 0 
+7ffe6beb2000-7ffe6bed3000 rw-p 00000000 00:00 0                          [stack]
+7ffe6bf4d000-7ffe6bf50000 r--p 00000000 00:00 0                          [vvar]
+7ffe6bf50000-7ffe6bf52000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

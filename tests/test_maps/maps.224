@@ -1,0 +1,40 @@
+55ac1ac36000-55ac1ac43000 r-xp 00000000 08:01 3896                       /sbin/agetty
+55ac1ae42000-55ac1ae43000 r--p 0000c000 08:01 3896                       /sbin/agetty
+55ac1ae43000-55ac1ae44000 rw-p 0000d000 08:01 3896                       /sbin/agetty
+55ac1ae44000-55ac1ae46000 rw-p 00000000 00:00 0 
+55ac1b988000-55ac1b9a9000 rw-p 00000000 00:00 0                          [heap]
+7fc1fe7a4000-7fc1fe7af000 r-xp 00000000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fc1fe7af000-7fc1fe9ae000 ---p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fc1fe9ae000-7fc1fe9af000 r--p 0000a000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fc1fe9af000-7fc1fe9b0000 rw-p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7fc1fe9b0000-7fc1fe9b6000 rw-p 00000000 00:00 0 
+7fc1fe9b6000-7fc1fe9cd000 r-xp 00000000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fc1fe9cd000-7fc1febcc000 ---p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fc1febcc000-7fc1febcd000 r--p 00016000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fc1febcd000-7fc1febce000 rw-p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7fc1febce000-7fc1febd0000 rw-p 00000000 00:00 0 
+7fc1febd0000-7fc1febdb000 r-xp 00000000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fc1febdb000-7fc1fedda000 ---p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fc1fedda000-7fc1feddb000 r--p 0000a000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fc1feddb000-7fc1feddc000 rw-p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7fc1feddc000-7fc1fede4000 r-xp 00000000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fc1fede4000-7fc1fefe4000 ---p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fc1fefe4000-7fc1fefe5000 r--p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fc1fefe5000-7fc1fefe6000 rw-p 00009000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7fc1fefe6000-7fc1ff1cd000 r-xp 00000000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fc1ff1cd000-7fc1ff3cd000 ---p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fc1ff3cd000-7fc1ff3d1000 r--p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fc1ff3d1000-7fc1ff3d3000 rw-p 001eb000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fc1ff3d3000-7fc1ff3d7000 rw-p 00000000 00:00 0 
+7fc1ff3d7000-7fc1ff400000 r-xp 00000000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fc1ff425000-7fc1ff42c000 r--s 00000000 08:01 5065                       /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7fc1ff42c000-7fc1ff45d000 r--p 00000000 08:01 7849                       /usr/lib/locale/C.UTF-8/LC_CTYPE
+7fc1ff45d000-7fc1ff5f8000 r--p 00000000 08:01 7843                       /usr/lib/locale/locale-archive
+7fc1ff5f8000-7fc1ff5fa000 rw-p 00000000 00:00 0 
+7fc1ff600000-7fc1ff601000 r--p 00029000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fc1ff601000-7fc1ff602000 rw-p 0002a000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fc1ff602000-7fc1ff603000 rw-p 00000000 00:00 0 
+7ffee3ced000-7ffee3d0e000 rw-p 00000000 00:00 0                          [stack]
+7ffee3d12000-7ffee3d15000 r--p 00000000 00:00 0                          [vvar]
+7ffee3d15000-7ffee3d17000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

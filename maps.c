@@ -75,6 +75,7 @@ size_t numMaps = 0 ;
 
 void getMaps() {
    memset( map, 0, sizeof( map )) ;  // Zero out the map array
+   numMaps = 0 ;
 
    FILE* maps_fd = NULL ;  // File handle to #mapsFilePath
 

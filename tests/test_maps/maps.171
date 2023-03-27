@@ -1,0 +1,45 @@
+559a37fda000-559a37fde000 r-xp 00000000 08:01 4715                       /usr/bin/lxcfs
+559a381dd000-559a381de000 r--p 00003000 08:01 4715                       /usr/bin/lxcfs
+559a381de000-559a381df000 rw-p 00004000 08:01 4715                       /usr/bin/lxcfs
+559a39df9000-559a39e3c000 rw-p 00000000 00:00 0                          [heap]
+7fbed8000000-7fbed8021000 rw-p 00000000 00:00 0 
+7fbed8021000-7fbedc000000 ---p 00000000 00:00 0 
+7fbee0000000-7fbee0021000 rw-p 00000000 00:00 0 
+7fbee0021000-7fbee4000000 ---p 00000000 00:00 0 
+7fbee5327000-7fbee5328000 ---p 00000000 00:00 0 
+7fbee5328000-7fbee5b28000 rw-p 00000000 00:00 0 
+7fbee5b28000-7fbee5b29000 ---p 00000000 00:00 0 
+7fbee5b29000-7fbee6329000 rw-p 00000000 00:00 0 
+7fbee6329000-7fbee6338000 r-xp 00000000 08:01 6699                       /usr/lib/x86_64-linux-gnu/lxcfs/liblxcfs.so
+7fbee6338000-7fbee6538000 ---p 0000f000 08:01 6699                       /usr/lib/x86_64-linux-gnu/lxcfs/liblxcfs.so
+7fbee6538000-7fbee6539000 r--p 0000f000 08:01 6699                       /usr/lib/x86_64-linux-gnu/lxcfs/liblxcfs.so
+7fbee6539000-7fbee653a000 rw-p 00010000 08:01 6699                       /usr/lib/x86_64-linux-gnu/lxcfs/liblxcfs.so
+7fbee653a000-7fbee6542000 rw-p 00000000 00:00 0 
+7fbee6542000-7fbee6729000 r-xp 00000000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fbee6729000-7fbee6929000 ---p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fbee6929000-7fbee692d000 r--p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fbee692d000-7fbee692f000 rw-p 001eb000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7fbee692f000-7fbee6933000 rw-p 00000000 00:00 0 
+7fbee6933000-7fbee694d000 r-xp 00000000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fbee694d000-7fbee6b4c000 ---p 0001a000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fbee6b4c000-7fbee6b4d000 r--p 00019000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fbee6b4d000-7fbee6b4e000 rw-p 0001a000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7fbee6b4e000-7fbee6b52000 rw-p 00000000 00:00 0 
+7fbee6b52000-7fbee6b55000 r-xp 00000000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fbee6b55000-7fbee6d54000 ---p 00003000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fbee6d54000-7fbee6d55000 r--p 00002000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fbee6d55000-7fbee6d56000 rw-p 00003000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7fbee6d56000-7fbee6d80000 r-xp 00000000 08:01 2250                       /lib/x86_64-linux-gnu/libfuse.so.2.9.7
+7fbee6d80000-7fbee6f7f000 ---p 0002a000 08:01 2250                       /lib/x86_64-linux-gnu/libfuse.so.2.9.7
+7fbee6f7f000-7fbee6f91000 r--p 00029000 08:01 2250                       /lib/x86_64-linux-gnu/libfuse.so.2.9.7
+7fbee6f91000-7fbee6f92000 rw-p 0003b000 08:01 2250                       /lib/x86_64-linux-gnu/libfuse.so.2.9.7
+7fbee6f92000-7fbee6fbb000 r-xp 00000000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fbee716d000-7fbee71b5000 rw-p 00000000 00:00 0 
+7fbee71ba000-7fbee71bb000 rw-p 00000000 00:00 0 
+7fbee71bb000-7fbee71bc000 r--p 00029000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fbee71bc000-7fbee71bd000 rw-p 0002a000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7fbee71bd000-7fbee71be000 rw-p 00000000 00:00 0 
+7fff5f0d0000-7fff5f0f1000 rw-p 00000000 00:00 0                          [stack]
+7fff5f1a3000-7fff5f1a6000 r--p 00000000 00:00 0                          [vvar]
+7fff5f1a6000-7fff5f1a8000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

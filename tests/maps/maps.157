@@ -1,0 +1,125 @@
+563df74be000-563df755b000 r-xp 00000000 08:01 14387                      /usr/sbin/rsyslogd
+563df775b000-563df775e000 r--p 0009d000 08:01 14387                      /usr/sbin/rsyslogd
+563df775e000-563df7765000 rw-p 000a0000 08:01 14387                      /usr/sbin/rsyslogd
+563df7765000-563df7766000 rw-p 00000000 00:00 0 
+563df7adf000-563df7b1d000 rw-p 00000000 00:00 0                          [heap]
+7faec4000000-7faec4056000 rw-p 00000000 00:00 0 
+7faec4056000-7faec8000000 ---p 00000000 00:00 0 
+7faec8000000-7faec8034000 rw-p 00000000 00:00 0 
+7faec8034000-7faecc000000 ---p 00000000 00:00 0 
+7faecc000000-7faecc037000 rw-p 00000000 00:00 0 
+7faecc037000-7faed0000000 ---p 00000000 00:00 0 
+7faed19da000-7faed19db000 ---p 00000000 00:00 0 
+7faed19db000-7faed21db000 rw-p 00000000 00:00 0 
+7faed21db000-7faed21dc000 ---p 00000000 00:00 0 
+7faed21dc000-7faed25dc000 rw-p 00000000 00:00 0 
+7faed25dc000-7faed25dd000 ---p 00000000 00:00 0 
+7faed25dd000-7faed29dd000 rw-p 00000000 00:00 0 
+7faed29dd000-7faed2a18000 r-xp 00000000 08:01 2196                       /lib/x86_64-linux-gnu/libnss_systemd.so.2
+7faed2a18000-7faed2c17000 ---p 0003b000 08:01 2196                       /lib/x86_64-linux-gnu/libnss_systemd.so.2
+7faed2c17000-7faed2c1a000 r--p 0003a000 08:01 2196                       /lib/x86_64-linux-gnu/libnss_systemd.so.2
+7faed2c1a000-7faed2c1b000 rw-p 0003d000 08:01 2196                       /lib/x86_64-linux-gnu/libnss_systemd.so.2
+7faed2c1b000-7faed2c32000 r-xp 00000000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7faed2c32000-7faed2e31000 ---p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7faed2e31000-7faed2e32000 r--p 00016000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7faed2e32000-7faed2e33000 rw-p 00017000 08:01 2260                       /lib/x86_64-linux-gnu/libnsl-2.27.so
+7faed2e33000-7faed2e35000 rw-p 00000000 00:00 0 
+7faed2e35000-7faed2e40000 r-xp 00000000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7faed2e40000-7faed303f000 ---p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7faed303f000-7faed3040000 r--p 0000a000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7faed3040000-7faed3041000 rw-p 0000b000 08:01 2266                       /lib/x86_64-linux-gnu/libnss_nis-2.27.so
+7faed3041000-7faed3049000 r-xp 00000000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7faed3049000-7faed3249000 ---p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7faed3249000-7faed324a000 r--p 00008000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7faed324a000-7faed324b000 rw-p 00009000 08:01 2262                       /lib/x86_64-linux-gnu/libnss_compat-2.27.so
+7faed324b000-7faed324f000 r-xp 00000000 08:01 6318                       /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7faed324f000-7faed344e000 ---p 00004000 08:01 6318                       /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7faed344e000-7faed344f000 r--p 00003000 08:01 6318                       /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7faed344f000-7faed3450000 rw-p 00004000 08:01 6318                       /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7faed3450000-7faed3457000 r-xp 00000000 08:01 6325                       /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7faed3457000-7faed3657000 ---p 00007000 08:01 6325                       /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7faed3657000-7faed3658000 r--p 00007000 08:01 6325                       /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7faed3658000-7faed3659000 rw-p 00008000 08:01 6325                       /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7faed3659000-7faed3670000 r-xp 00000000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7faed3670000-7faed386f000 ---p 00017000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7faed386f000-7faed3870000 r--p 00016000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7faed3870000-7faed3871000 rw-p 00017000 08:01 2270                       /lib/x86_64-linux-gnu/libresolv-2.27.so
+7faed3871000-7faed3873000 rw-p 00000000 00:00 0 
+7faed3873000-7faed3878000 r-xp 00000000 08:01 2263                       /lib/x86_64-linux-gnu/libnss_dns-2.27.so
+7faed3878000-7faed3a78000 ---p 00005000 08:01 2263                       /lib/x86_64-linux-gnu/libnss_dns-2.27.so
+7faed3a78000-7faed3a79000 r--p 00005000 08:01 2263                       /lib/x86_64-linux-gnu/libnss_dns-2.27.so
+7faed3a79000-7faed3a7a000 rw-p 00006000 08:01 2263                       /lib/x86_64-linux-gnu/libnss_dns-2.27.so
+7faed3a7a000-7faed3a85000 r-xp 00000000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7faed3a85000-7faed3c84000 ---p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7faed3c84000-7faed3c85000 r--p 0000a000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7faed3c85000-7faed3c86000 rw-p 0000b000 08:01 2264                       /lib/x86_64-linux-gnu/libnss_files-2.27.so
+7faed3c86000-7faed3c8c000 rw-p 00000000 00:00 0 
+7faed3c8c000-7faed3c91000 r-xp 00000000 08:01 6326                       /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7faed3c91000-7faed3e91000 ---p 00005000 08:01 6326                       /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7faed3e91000-7faed3e92000 r--p 00005000 08:01 6326                       /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7faed3e92000-7faed3e93000 rw-p 00006000 08:01 6326                       /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7faed3e93000-7faed3ea7000 r-xp 00000000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7faed3ea7000-7faed40a6000 ---p 00014000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7faed40a6000-7faed40a7000 r--p 00013000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7faed40a7000-7faed40a8000 rw-p 00014000 08:01 2121                       /lib/x86_64-linux-gnu/libgpg-error.so.0.22.0
+7faed40a8000-7faed41bc000 r-xp 00000000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7faed41bc000-7faed43bc000 ---p 00114000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7faed43bc000-7faed43be000 r--p 00114000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7faed43be000-7faed43c3000 rw-p 00116000 08:01 2202                       /lib/x86_64-linux-gnu/libgcrypt.so.20.2.1
+7faed43c3000-7faed43c4000 rw-p 00000000 00:00 0 
+7faed43c4000-7faed43df000 r-xp 00000000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7faed43df000-7faed45de000 ---p 0001b000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7faed45de000-7faed45df000 r--p 0001a000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7faed45df000-7faed45e0000 rw-p 0001b000 08:01 4812                       /usr/lib/x86_64-linux-gnu/liblz4.so.1.7.1
+7faed45e0000-7faed4604000 r-xp 00000000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7faed4604000-7faed4804000 ---p 00024000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7faed4804000-7faed4805000 r--p 00024000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7faed4805000-7faed4806000 rw-p 00025000 08:01 2125                       /lib/x86_64-linux-gnu/liblzma.so.5.2.2
+7faed4806000-7faed49ed000 r-xp 00000000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7faed49ed000-7faed4bed000 ---p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7faed4bed000-7faed4bf1000 r--p 001e7000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7faed4bf1000-7faed4bf3000 rw-p 001eb000 08:01 2242                       /lib/x86_64-linux-gnu/libc-2.27.so
+7faed4bf3000-7faed4bf7000 rw-p 00000000 00:00 0 
+7faed4bf7000-7faed4bfd000 r-xp 00000000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7faed4bfd000-7faed4dfc000 ---p 00006000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7faed4dfc000-7faed4dfd000 r--p 00005000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7faed4dfd000-7faed4dfe000 rw-p 00006000 08:01 2128                       /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7faed4dfe000-7faed4e7e000 r-xp 00000000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7faed4e7e000-7faed507d000 ---p 00080000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7faed507d000-7faed5080000 r--p 0007f000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7faed5080000-7faed5081000 rw-p 00082000 08:01 2124                       /lib/x86_64-linux-gnu/libsystemd.so.0.21.0
+7faed5081000-7faed5082000 rw-p 00000000 00:00 0 
+7faed5082000-7faed508c000 r-xp 00000000 08:01 6279                       /usr/lib/x86_64-linux-gnu/libfastjson.so.4.2.0
+7faed508c000-7faed528b000 ---p 0000a000 08:01 6279                       /usr/lib/x86_64-linux-gnu/libfastjson.so.4.2.0
+7faed528b000-7faed528c000 r--p 00009000 08:01 6279                       /usr/lib/x86_64-linux-gnu/libfastjson.so.4.2.0
+7faed528c000-7faed528d000 rw-p 0000a000 08:01 6279                       /usr/lib/x86_64-linux-gnu/libfastjson.so.4.2.0
+7faed528d000-7faed5290000 r-xp 00000000 08:01 6277                       /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7faed5290000-7faed548f000 ---p 00003000 08:01 6277                       /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7faed548f000-7faed5490000 r--p 00002000 08:01 6277                       /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7faed5490000-7faed5491000 rw-p 00003000 08:01 6277                       /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7faed5491000-7faed5498000 r-xp 00000000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7faed5498000-7faed5697000 ---p 00007000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7faed5697000-7faed5698000 r--p 00006000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7faed5698000-7faed5699000 rw-p 00007000 08:01 2271                       /lib/x86_64-linux-gnu/librt-2.27.so
+7faed5699000-7faed569c000 r-xp 00000000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7faed569c000-7faed589b000 ---p 00003000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7faed589b000-7faed589c000 r--p 00002000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7faed589c000-7faed589d000 rw-p 00003000 08:01 2245                       /lib/x86_64-linux-gnu/libdl-2.27.so
+7faed589d000-7faed58b7000 r-xp 00000000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7faed58b7000-7faed5ab6000 ---p 0001a000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7faed5ab6000-7faed5ab7000 r--p 00019000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7faed5ab7000-7faed5ab8000 rw-p 0001a000 08:01 2269                       /lib/x86_64-linux-gnu/libpthread-2.27.so
+7faed5ab8000-7faed5abc000 rw-p 00000000 00:00 0 
+7faed5abc000-7faed5ad8000 r-xp 00000000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7faed5ad8000-7faed5cd7000 ---p 0001c000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7faed5cd7000-7faed5cd8000 r--p 0001b000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7faed5cd8000-7faed5cd9000 rw-p 0001c000 08:01 2094                       /lib/x86_64-linux-gnu/libz.so.1.2.11
+7faed5cd9000-7faed5d02000 r-xp 00000000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7faed5e30000-7faed5efc000 rw-p 00000000 00:00 0 
+7faed5f02000-7faed5f03000 r--p 00029000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7faed5f03000-7faed5f04000 rw-p 0002a000 08:01 2238                       /lib/x86_64-linux-gnu/ld-2.27.so
+7faed5f04000-7faed5f05000 rw-p 00000000 00:00 0 
+7ffd211ff000-7ffd21220000 rw-p 00000000 00:00 0                          [stack]
+7ffd21308000-7ffd2130b000 r--p 00000000 00:00 0                          [vvar]
+7ffd2130b000-7ffd2130d000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

@@ -1,0 +1,42 @@
+55adbae97000-55adbaec5000 r--p 00000000 08:20 9395                       /usr/bin/bash
+55adbaec5000-55adbaf80000 r-xp 0002e000 08:20 9395                       /usr/bin/bash
+55adbaf80000-55adbafb8000 r--p 000e9000 08:20 9395                       /usr/bin/bash
+55adbafb9000-55adbafbc000 r--p 00121000 08:20 9395                       /usr/bin/bash
+55adbafbc000-55adbafc5000 rw-p 00124000 08:20 9395                       /usr/bin/bash
+55adbafc5000-55adbafd0000 rw-p 00000000 00:00 0 
+55adbb837000-55adbb89a000 rw-p 00000000 00:00 0                          [heap]
+7f2694126000-7f2694129000 r--p 00000000 08:20 9624                       /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2694129000-7f2694130000 r-xp 00003000 08:20 9624                       /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2694130000-7f2694132000 r--p 0000a000 08:20 9624                       /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2694132000-7f2694133000 r--p 0000b000 08:20 9624                       /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2694133000-7f2694134000 rw-p 0000c000 08:20 9624                       /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2694134000-7f269413a000 rw-p 00000000 00:00 0 
+7f2694144000-7f269442b000 r--p 00000000 08:20 445                        /usr/lib/locale/locale-archive
+7f269442b000-7f269442e000 rw-p 00000000 00:00 0 
+7f269442e000-7f2694450000 r--p 00000000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f2694450000-7f26945aa000 r-xp 00022000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f26945aa000-7f26945f9000 r--p 0017c000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f26945f9000-7f26945fd000 r--p 001ca000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f26945fd000-7f26945ff000 rw-p 001ce000 08:20 9616                       /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f26945ff000-7f2694603000 rw-p 00000000 00:00 0 
+7f2694603000-7f2694604000 r--p 00000000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2694604000-7f2694606000 r-xp 00001000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2694606000-7f2694607000 r--p 00003000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2694607000-7f2694608000 r--p 00003000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2694608000-7f2694609000 rw-p 00004000 08:20 9617                       /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2694609000-7f2694617000 r--p 00000000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f2694617000-7f2694625000 r-xp 0000e000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f2694625000-7f2694633000 r--p 0001c000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f2694633000-7f2694637000 r--p 00029000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f2694637000-7f2694638000 rw-p 0002d000 08:20 1787                       /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7f2694638000-7f269463a000 rw-p 00000000 00:00 0 
+7f269463d000-7f2694644000 r--s 00000000 08:20 9881                       /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7f2694644000-7f2694645000 r--p 00000000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2694645000-7f2694665000 r-xp 00001000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2694665000-7f269466d000 r--p 00021000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f269466e000-7f269466f000 r--p 00029000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f269466f000-7f2694670000 rw-p 0002a000 08:20 9612                       /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2694670000-7f2694671000 rw-p 00000000 00:00 0 
+7ffdd125b000-7ffdd127c000 rw-p 00000000 00:00 0                          [stack]
+7ffdd1306000-7ffdd130a000 r--p 00000000 00:00 0                          [vvar]
+7ffdd130a000-7ffdd130c000 r-xp 00000000 00:00 0                          [vdso]
