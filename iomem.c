@@ -46,10 +46,7 @@
 #include "version.h" // For STRINGIFY_VALUE()
 
 
-/// The file to read from `/proc`
-#define IOMEM_FILE "/proc/iomem"
-
-/// The longest allowed line length from #IOMEM_FILE
+/// The longest allowed line length from #iomemFilePath
 #define MAX_LINE_LENGTH 1024
 
 /// Typedef of #Iomem_region
@@ -290,11 +287,11 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
 void read_iomem() {
    reset_iomem() ;
 
-   FILE* file = NULL ;  // File handle to #IOMEM_FILE
+   FILE* file = NULL ;  // File handle to #iomemFilePath
 
-   file = fopen( IOMEM_FILE, "r" ) ;
+   file = fopen( iomemFilePath, "r" ) ;
    if( file == NULL ) {
-      FATAL_ERROR( "Unable to open [%s]", IOMEM_FILE ) ;
+      FATAL_ERROR( "Unable to open [%s]", iomemFilePath ) ;
    }
 
    char* pRead ;
@@ -347,7 +344,7 @@ void read_iomem() {
 
    int iRetVal = fclose( file ) ;
    if( iRetVal != 0 ) {
-      FATAL_ERROR( "Unable to close [%s]", IOMEM_FILE ) ;
+      FATAL_ERROR( "Unable to close [%s]", iomemFilePath ) ;
    }
 } // read_iomem
 
@@ -423,7 +420,7 @@ void sort_iomem_summary() {
 
 
 void summarize_iomem() {
-   printf( "Summary of %s\n", IOMEM_FILE ) ;
+   printf( "Summary of %s\n", iomemFilePath ) ;
 
    Iomem_region_t* region = &iomem_head;
 

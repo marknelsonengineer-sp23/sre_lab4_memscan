@@ -169,6 +169,7 @@ unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
 
 char mapsFilePath[ FILENAME_MAX ]    = "/proc/self/maps" ;
 char pagemapFilePath[ FILENAME_MAX ] = "/proc/self/pagemap" ;
+char iomemFilePath[]                 = "/proc/iomem" ;
 
 
 void processOptions( int argc, char* argv[] ) {

@@ -12,7 +12,7 @@
 #include <stdbool.h>  // For bool
 
 
-/// The longest allowed description in #IOMEM_FILE
+/// The longest allowed description in #iomemFilePath
 #define MAX_IOMEM_DESCRIPTION  64
 
 /// The description attached to unmapped memory

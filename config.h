@@ -104,8 +104,10 @@ extern unsigned int sleepSeconds ;  ///< The number of seconds specified by `--s
 extern unsigned char byteToScanFor ;  ///< The default value is an x86 `RET`
                                       ///< (near) instruction
 
-extern char mapsFilePath[ FILENAME_MAX ] ; ///< The path to the process-specific `maps` file, defaults to `/proc/self/maps`
+extern char mapsFilePath[ FILENAME_MAX ]    ; ///< The path to the process-specific `maps` file, defaults to `/proc/self/maps`
 extern char pagemapFilePath[ FILENAME_MAX ] ; ///< The path to the process-specific `pagemap` file, defaults to `/proc/self/pagemap`
+extern char iomemFilePath[]                 ; ///< The path to the system-specific `iomem` file, defaults to `/proc/iomem`.
+                                              /// No config changes this.  It's parameterized for unit testing.
 
 
 /// Print `...` to `outStream`.
