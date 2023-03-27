@@ -8,8 +8,9 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>   // For printf() fprintf() fopen() and FILE
-#include <string.h>  // For strtok() strcmp() strstr() memset() strlen()
+#include <linux/limits.h>  // For PATH_MAX
+#include <stdio.h>         // For printf() fprintf() fopen() and FILE
+#include <string.h>        // For strtok() strcmp() strstr() memset() strlen()
 
 #include "colors.h"  // For ANSI colors i.e. #ANSI_COLOR_RED
 #include "config.h"  // For FATAL_ERROR and other configuration options
@@ -18,9 +19,6 @@
 #include "shannon.h" // For scanForShannon()
 #include "version.h" // For STRINGIFY_VALUE()
 
-
-/// The longest allowed length from #mapsFilePath
-#define MAX_LINE_LENGTH 1024
 
 /// The maximum number of #MapEntry records in #map
 /// @todo Consider converting to a linked list
@@ -59,13 +57,29 @@ void getMaps() {
    }
 
    char* pRead ;
+   char szLine[ 73 + PATH_MAX ] ; ///< String buffer for the entire line.  Maps has 73 bytes of data + the path.
 
-   pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, maps_fd ) ;
+   while( true ) {
+      pRead = fgets( szLine, sizeof( szLine ), maps_fd ) ;
+      if( pRead == NULL ) {
+         break ;  // We're done when fgets() is done
+      }
 
-   while( pRead != NULL ) {
       #ifdef DEBUG
-         printf( "%s", map[numMaps].szLine ) ;  // A \n is in .szLine
+         printf( "[%s]", szLine ) ;  // A \n is already in .szLine
       #endif
+
+      size_t szLineLength = strlen( szLine ) ;
+      if( szLineLength == 0 ) {
+         continue ;  // Nothing to see here, move on
+      }
+
+      map[numMaps].szLine = malloc( szLineLength + 1 ) ;  // One extra byte for the \0
+      if( map[numMaps].szLine == NULL ) {
+         FATAL_ERROR( "Unable to allocate maps line" ) ;
+      }
+
+      strncpy( map[numMaps].szLine, szLine, szLineLength+1 ) ;
 
       // Store data into map[]
       map[numMaps].sAddressStart = strtok( map[numMaps].szLine, "-" ) ;
@@ -161,9 +175,6 @@ void getMaps() {
       #endif
 
       numMaps++ ;
-
-      // Get the next line
-      pRead = fgets( (char *)&map[numMaps].szLine, MAX_LINE_LENGTH, maps_fd ) ;
    } // while( pRead != NULL )
 
    int iRetVal = fclose( maps_fd ) ;
