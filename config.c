@@ -359,7 +359,6 @@ void processOptions( int argc, char* argv[] ) {
    }
 
    while (optind < argc) {
-      /// @todo I am not `free`ing this memory and I should be
       struct IncludePattern* newPattern = malloc( sizeof ( struct IncludePattern ) ) ;
       if( newPattern == NULL ) {
          FATAL_ERROR( "unable to allocate memory for newPattern") ;
@@ -433,4 +432,17 @@ void setProgramName( const char* newProgramName ) {
 
 char* getProgramName() {
    return programName ;
+}
+
+
+void reset_config() {
+   /// Free the #IncludePattern linked list from #patternHead
+   struct IncludePattern* currentPattern = patternHead ;
+   while( currentPattern != NULL ) {
+      struct IncludePattern* oldPattern = currentPattern ;
+      currentPattern = currentPattern->next ;
+      free( oldPattern ) ;
+   }
+
+   patternHead = NULL ;
 }

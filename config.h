@@ -109,6 +109,10 @@ extern char pagemapFilePath[ FILENAME_MAX ] ; ///< The path to the process-speci
 extern char iomemFilePath[ FILENAME_MAX ]   ; ///< The path to the system-specific `iomem` file, defaults to `/proc/iomem`.
                                               /// No config changes this.  It's parameterized for unit testing.
 
+/// Reset the entire configuration and free any resources that may have been
+/// allocated.
+extern void reset_config() ;
+
 
 /// Print `...` to `outStream`.
 ///
