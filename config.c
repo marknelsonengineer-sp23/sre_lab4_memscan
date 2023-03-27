@@ -136,40 +136,41 @@ static struct option long_options[] = {
 const char SINGLE_OPTION_STRING[] = "b:rfl:m:t:ipPhkv" ;
 
 
-bool openFileWithBlockIO        = 0 ;
-bool openFileWithStreamIO       = 0 ;
-bool openFileWithMapIO          = 0 ;
-bool readFileContents           = 0 ;
-bool forkProcess                = 0 ;
-bool allocateLocalMemory        = 0 ;
-bool allocateHeapMemory         = 0 ;
-bool allocateMappedMemory       = 0 ;
-bool fillAllocatedMemory        = 0 ;
-bool scanForByte                = 0 ;
-bool scanForShannon             = 0 ;
-bool iomemSummary               = 0 ;
-bool printPath                  = 0 ;
-bool includePhysicalPageSummary = 0 ;
-bool includePhysicalPageNumber  = 0 ;
+// All of these globals are set in reset_config()
+bool openFileWithBlockIO ;
+bool openFileWithStreamIO ;
+bool openFileWithMapIO ;
+bool readFileContents ;
+bool forkProcess ;
+bool allocateLocalMemory ;
+bool allocateHeapMemory ;
+bool allocateMappedMemory ;
+bool fillAllocatedMemory ;
+bool scanForByte ;
+bool scanForShannon ;
+bool iomemSummary ;
+bool printPath ;
+bool includePhysicalPageSummary ;
+bool includePhysicalPageNumber ;
 
-char blockPath[ FILENAME_MAX ]    = {} ;
-char streamPath [ FILENAME_MAX ]  = {} ;
-char mapFilePath [ FILENAME_MAX ] = {} ;
+char blockPath[ FILENAME_MAX ] ;
+char streamPath [ FILENAME_MAX ] ;
+char mapFilePath [ FILENAME_MAX ] ;
 
-size_t localSize  = 0 ;
-size_t numLocals  = 1 ;  // By default, --local will allocate 1 region
-size_t mallocSize = 0 ;
-size_t numMallocs = 1 ;  // By default, --malloc will allocate 1 region
-size_t mappedSize = 0 ;
-void*  mappedStart = NULL ;  // By default, the OS will select a start address
-size_t numThreads = 0 ;
-unsigned int sleepSeconds = 0 ;  // By default, don't sleep
+size_t localSize ;
+size_t numLocals ;
+size_t mallocSize ;
+size_t numMallocs ;
+size_t mappedSize ;
+void*  mappedStart ;
+size_t numThreads ;
+unsigned int sleepSeconds ;
 
-unsigned char byteToScanFor = X86_RET_INSTRUCTION ;
+unsigned char byteToScanFor ;
 
-char mapsFilePath[ FILENAME_MAX ]    = "/proc/self/maps" ;
-char pagemapFilePath[ FILENAME_MAX ] = "/proc/self/pagemap" ;
-char iomemFilePath[ FILENAME_MAX ]   = "/proc/iomem" ;
+char mapsFilePath[ FILENAME_MAX ] ;
+char pagemapFilePath[ FILENAME_MAX ] ;
+char iomemFilePath[ FILENAME_MAX ] ;
 
 
 void processOptions( int argc, char* argv[] ) {
@@ -436,6 +437,45 @@ char* getProgramName() {
 
 
 void reset_config() {
+   openFileWithBlockIO        = 0 ;
+   openFileWithStreamIO       = 0 ;
+   openFileWithMapIO          = 0 ;
+   readFileContents           = 0 ;
+   forkProcess                = 0 ;
+   allocateLocalMemory        = 0 ;
+   allocateHeapMemory         = 0 ;
+   allocateMappedMemory       = 0 ;
+   fillAllocatedMemory        = 0 ;
+   scanForByte                = 0 ;
+   scanForShannon             = 0 ;
+   iomemSummary               = 0 ;
+   printPath                  = 0 ;
+   includePhysicalPageSummary = 0 ;
+   includePhysicalPageNumber  = 0 ;
+
+   memset( blockPath,   0, FILENAME_MAX ) ;
+   memset( streamPath,  0, FILENAME_MAX ) ;
+   memset( mapFilePath, 0, FILENAME_MAX ) ;
+
+   localSize  = 0 ;
+   numLocals  = 1 ;      /// By default, `--local` will allocate 1 region
+   mallocSize = 0 ;
+   numMallocs = 1 ;      /// By default, `--malloc` will allocate 1 region
+   mappedSize = 0 ;
+   mappedStart = NULL ;  /// By default, the OS will select a start address
+   numThreads = 0 ;
+   sleepSeconds = 0 ;    /// By default, don't sleep
+
+   byteToScanFor = X86_RET_INSTRUCTION ;
+
+   memset( mapsFilePath,    0, FILENAME_MAX ) ;
+   memset( pagemapFilePath, 0, FILENAME_MAX ) ;
+   memset( iomemFilePath,   0, FILENAME_MAX ) ;
+
+   strncpy( mapsFilePath,    "/proc/self/maps",    FILENAME_MAX ) ;
+   strncpy( pagemapFilePath, "/proc/self/pagemap", FILENAME_MAX ) ;
+   strncpy( iomemFilePath,   "/proc/iomem",        FILENAME_MAX ) ;
+
    /// Free the #IncludePattern linked list from #patternHead
    struct IncludePattern* currentPattern = patternHead ;
    while( currentPattern != NULL ) {

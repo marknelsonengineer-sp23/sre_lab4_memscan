@@ -24,6 +24,17 @@ extern "C" {
    #include "../config.h"
 }
 
+
+// Ensure that reset_config() runs before we start testing.
+struct MyGlobalFixture {
+   void setup() {
+      BOOST_TEST_MESSAGE( "setup fixture" );
+      reset_config() ;
+   }
+};
+BOOST_TEST_GLOBAL_FIXTURE( MyGlobalFixture );
+
+
 BOOST_AUTO_TEST_SUITE( test_config )
 
 BOOST_AUTO_TEST_CASE( test_architecture ) {

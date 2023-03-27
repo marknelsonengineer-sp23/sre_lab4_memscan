@@ -30,6 +30,7 @@
 /// @return     The program's return code:  `EXIT_SUCCESS` or `EXIT_FAILURE`
 int main( int argc, char* argv[] ) {
    // Initialize the program
+   reset_config() ;
    processOptions( argc, argv ) ;  // Process --help, --key, --version
 
    checkCapabilities() ;       // Ensure memscan is running with `CAP_SYS_ADMIN`
