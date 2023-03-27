@@ -34,11 +34,10 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdbool.h> // For true & false
-#include <stddef.h>  // For NULL
-#include <stdio.h>   // For printf() fopen() and FILE
+#include <stdbool.h> // For bool, true & false
+#include <stdio.h>   // For printf() fopen() fgets() sscanf() fclose() and FILE
 #include <stdlib.h>  // For malloc() free()
-#include <string.h>  // For strncpy() memset() strlen()
+#include <string.h>  // For strncpy() memset() strlen() strtok() strncmp()
 
 #include "config.h"  // For FATAL_ERROR()
 #include "iomem.h"   // Just cuz
@@ -52,7 +51,7 @@
 /// Typedef of #Iomem_region
 typedef struct Iomem_region Iomem_region_t ;
 
-/// Hold each iomem region as elements in a linked list
+/// Hold each `iomem` region as elements in a linked list
 struct Iomem_region {
                    /// The starting physical address of this memory region.
                    /// This will **_NOT_** be a valid pointer as it's a physical address.
@@ -66,10 +65,29 @@ struct Iomem_region {
 } ;
 
 
-/// The head pointer to the iomem region linked list
+/// The head pointer to the #Iomem_region linked list
 ///
 /// Unlike many linked lists... this is __always__ set
 Iomem_region_t iomem_head = { 0, NULL, UNMAPPED_MEMORY_DESCRIPTION } ;
+
+
+/// Typedef of #Iomem_summary
+typedef struct Iomem_summary Iomem_summary_t ;
+
+
+/// A summary (sum of region sizes) of #Iomem_region records in a linked list
+struct Iomem_summary {
+   /// The total number of bytes for all of the regions with this `description`.
+   size_t           size;
+   /// Pointer to the next summary.
+   Iomem_summary_t* next;
+   /// The name/description of this memory region
+   char             description[ MAX_IOMEM_DESCRIPTION ];
+} ;
+
+
+/// The head pointer to the #Iomem_summary linked list
+Iomem_summary_t* iomem_summary_head = NULL ;
 
 
 /// Compute the end address of a region
@@ -78,12 +96,12 @@ Iomem_region_t iomem_head = { 0, NULL, UNMAPPED_MEMORY_DESCRIPTION } ;
 /// @return The ending physical address which is either:
 ///         1) The byte before the next region's starting address
 ///         2) or #MAX_PHYS_ADDR
-void* getEnd( Iomem_region_t* region ) {
+void* getEnd( const Iomem_region_t* region ) {
    return ( region->next == NULL ) ? ((void*)MAX_PHYS_ADDR) : ( region->next->start - 1 );
 }
 
 
-/// Recursively zero out and free the iomem region linked list
+/// Recursively zero out and free the `iomem` region linked list
 ///
 /// @param region The region to zero out and free
 void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursion): Recursion is authorized
@@ -96,8 +114,7 @@ void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursio
 }
 
 
-/// Reset the iomem region linked list
-void reset_iomem() {
+void release_iomem() {
    // Recursively zero out the linked list
    if( iomem_head.next != NULL ) {
       free_iomem_region( iomem_head.next ) ;
@@ -107,10 +124,20 @@ void reset_iomem() {
    iomem_head.start = 0 ;
    iomem_head.next = NULL ;
    strncpy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
+
+   // Free the summary list
+   Iomem_summary_t* currentSummary = iomem_summary_head ;
+
+   while( currentSummary != NULL ) {
+      Iomem_summary_t* oldSummary = currentSummary ;
+      currentSummary = currentSummary->next ;
+      free( oldSummary ) ;
+   }
+   iomem_summary_head = NULL ;
 }
 
 
-/// Validate the iomem linked list
+/// Validate the `iomem` linked list
 ///
 /// The validation rules are:
 ///   - The list can not be empty
@@ -140,7 +167,7 @@ bool validate_iomem() {
 }
 
 
-/// Print all of the iomem regions.
+/// Print all of the `iomem` regions.
 ///
 /// Assumes a 48-bit physical address bus size (6 bytes or 12 characters wide).
 void print_iomem_regions() {
@@ -166,7 +193,7 @@ const char* get_iomem_region_description( const void* physAddr ) {
 }
 
 
-/// Add a new iomem region
+/// Add a new `iomem` region
 ///
 /// @param start The starting physical address of the new region (inclusive).
 ///              It may overlap with an existing region.
@@ -285,7 +312,7 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
 
 
 void read_iomem() {
-   reset_iomem() ;
+   release_iomem() ;
 
    FILE* file = NULL ;  // File handle to #iomemFilePath
 
@@ -349,26 +376,7 @@ void read_iomem() {
 } // read_iomem
 
 
-/// Typedef of #Iomem_summary
-typedef struct Iomem_summary Iomem_summary_t ;
-
-
-/// Hold a summary (sum of region sizes) of iomem regions in a linked list
-struct Iomem_summary {
-   /// The total number of bytes for all of the regions with this `description`.
-   size_t           size;
-   /// Pointer to the next summary.
-   Iomem_summary_t* next;
-   /// The name/description of this memory region
-   char             description[ MAX_IOMEM_DESCRIPTION ];
-} ;
-
-
-/// The head pointer to the iomem summery linked list
-Iomem_summary_t* iomem_summary_head = NULL ;
-
-
-/// Print the linked list of iomem summaries
+/// Print the linked list of #Iomem_summary records under #iomem_summary_head
 void print_iomem_summary() {
    Iomem_summary_t* type = iomem_summary_head;
 
@@ -381,7 +389,7 @@ void print_iomem_summary() {
 }
 
 
-/// Sort the linked list of #Iomem_summary_t under #iomem_summary_head
+/// Sort the linked list of #Iomem_summary records under #iomem_summary_head
 ///
 /// Implementation of a bubble sort of a linked list
 void sort_iomem_summary() {
@@ -436,7 +444,6 @@ void summarize_iomem() {
 
       if( type == NULL ) {  // If we got to the end of the list without a hit, then add an entry
          Iomem_summary_t* newType = malloc( sizeof( Iomem_summary_t ) ) ;
-         /// @todo Properly free this linked list.  Right now it's not an issue because the program exits after it's printed.  Still, it's rookie and should be fixed.
          strncpy( newType->description, region->description, MAX_IOMEM_DESCRIPTION ) ;
          newType->size = getEnd( region ) - region->start + 1 ;
          newType->next = iomem_summary_head ;  // Add newType to the front of the list

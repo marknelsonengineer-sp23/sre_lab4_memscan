@@ -9,8 +9,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include <stdbool.h>  // For bool
-
 
 /// The longest allowed description in #iomemFilePath
 #define MAX_IOMEM_DESCRIPTION  64
@@ -24,18 +22,18 @@
 #define MAX_PHYS_ADDR 0xffffffffffff
 
 
-/// Get a description of the iomem region at `physAddr`
+/// Get a description of the `iomem` region at `physAddr`
 ///
 /// @param physAddr The physical address
 /// @return         A description of the region at `physAddr`
 extern const char* get_iomem_region_description( const void* physAddr ) ;
 
 
-/// Read `/proc/iomem` to characterize physical addresses
+/// Read #iomemFilePath to characterize physical addresses
 extern void read_iomem() ;
 
 
-/// Print a sorted summary of `/proc/iomem` listing the number of bytes in each
+/// Print a sorted summary of #iomemFilePath listing the number of bytes in each
 /// region.
 ///
 /// ````
@@ -52,3 +50,9 @@ extern void read_iomem() ;
 /// Unmapped memory                281,470,711,262,208
 /// ````
 extern void summarize_iomem() ;
+
+
+/// Release resources needed by the `iomem` module
+///
+/// Release the `iomem` region linked list starting from #iomem_head
+extern void release_iomem() ;

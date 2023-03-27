@@ -25,7 +25,6 @@ extern "C" {
    sync with the code under test.  Because these are white box tests, it's on
    the tester to ensure the code is in sync.                                 */
 
-extern "C" void reset_iomem() ;
 extern "C" bool validate_iomem() ;
 extern "C" void add_iomem_region( const void* start, const void* end, const char* description ) ;
 
@@ -34,18 +33,18 @@ extern "C" void add_iomem_region( const void* start, const void* end, const char
 
 BOOST_AUTO_TEST_SUITE( test_iomem )
 
-BOOST_AUTO_TEST_CASE( test_iomem_reset ) {
+BOOST_AUTO_TEST_CASE( test_iomem_release ) {
    BOOST_CHECK( validate_iomem() ) ;
-   BOOST_CHECK_NO_THROW( reset_iomem() ) ;
+   BOOST_CHECK_NO_THROW( release_iomem() ) ;
    BOOST_CHECK( validate_iomem() ) ;
-   BOOST_CHECK_NO_THROW( reset_iomem() ) ;
+   BOOST_CHECK_NO_THROW( release_iomem() ) ;
    BOOST_CHECK( validate_iomem() ) ;
 }
 
 
 BOOST_AUTO_TEST_CASE( test_iomem_add ) {
    BOOST_CHECK( validate_iomem() ) ;
-   BOOST_CHECK_NO_THROW( reset_iomem() ) ;
+   BOOST_CHECK_NO_THROW( release_iomem() ) ;
 
    BOOST_CHECK_EQUAL( get_iomem_region_description( (void*)         0x000 ), UNMAPPED_MEMORY_DESCRIPTION ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description( (void*)         0x100 ), UNMAPPED_MEMORY_DESCRIPTION ) ;
@@ -150,7 +149,7 @@ BOOST_AUTO_TEST_CASE( test_iomem_add ) {
    BOOST_CHECK_EQUAL( get_iomem_region_description( (void*) MAX_PHYS_ADDR ), "replaced - all" ) ;
 
    BOOST_CHECK( validate_iomem() ) ;
-   BOOST_CHECK_NO_THROW( reset_iomem() ) ;
+   BOOST_CHECK_NO_THROW( release_iomem() ) ;
    BOOST_CHECK( validate_iomem() ) ;
 
    BOOST_CHECK_EQUAL( get_iomem_region_description( (void*)         0x000 ), UNMAPPED_MEMORY_DESCRIPTION ) ;

@@ -38,6 +38,7 @@ int main( int argc, char* argv[] ) {
 
    if( iomemSummary ) {        // Process --iomem
       summarize_iomem() ;
+      release_iomem() ;
       exit( EXIT_SUCCESS ) ;
    }
 
@@ -81,6 +82,7 @@ int main( int argc, char* argv[] ) {
    releasePreScanMemory() ;
    closePreScanFiles() ;
    closePagemap() ;
+   release_iomem() ;
 
    return EXIT_SUCCESS ;
 } // main()
