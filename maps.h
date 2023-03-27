@@ -49,6 +49,16 @@ struct MapEntry {
 /// @return The head of a linked list of #MapEntry nodes
 extern struct MapEntry* getMaps() ;
 
+
+/// Get a #MapEntry at `virtualAddress`
+///
+/// @param maps           The link list of #MapEntry records to search
+/// @param virtualAddress The virtual address to find
+/// @return The #MapEntry that's covers `virtualAddress` or `NULL` if it's not
+///         mapped
+extern struct MapEntry* getMap( struct MapEntry* maps, const void* virtualAddress ) ;
+
+
 /// Scan all readable memory regions.
 ///
 /// Anything that changes the physical pagemap information should be done

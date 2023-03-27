@@ -71,5 +71,64 @@ BOOST_AUTO_TEST_CASE( test_getMaps_unit ) {
    BOOST_CHECK_EQUAL( mapList->shannonEntropy, 0.0 ) ;
 }
 
+
+BOOST_AUTO_TEST_CASE( test_getMap_unit ) {
+   strcpy( mapsFilePath, "test_maps/maps.unitTest.2" ) ;
+   struct MapEntry* mapList = NULL ;
+   BOOST_CHECK_NO_THROW( mapList = getMaps() ) ;
+   BOOST_CHECK( mapList != NULL ) ;
+
+   struct MapEntry* mapFirst = NULL ;
+   struct MapEntry* mapLast = NULL ;
+
+   mapFirst = getMap( mapList, (void*) 0x00000000 ) ;
+   BOOST_CHECK( mapFirst != NULL ) ;
+   mapLast = getMap( mapList, (void*) 0x10000000 ) ;
+   BOOST_CHECK( mapLast != NULL ) ;
+   BOOST_CHECK_EQUAL( mapFirst, mapLast ) ;
+
+   BOOST_CHECK_EQUAL( mapFirst->sAddressStart, "00000000" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->pAddressStart, (void*) 0x00000000 ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sAddressEnd, "10000000" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->pAddressEnd, (void*) 0x10000000 ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sPermissions, "rwxp" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sOffset,      "11111111" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sDevice,      "88:88" ) ;
+   BOOST_CHECK( mapFirst->sPath == NULL ) ;
+   BOOST_CHECK_EQUAL( mapFirst->include, true ) ;
+   BOOST_CHECK_EQUAL( mapFirst->numBytes, 0x10000000 ) ;
+   BOOST_CHECK_EQUAL( mapFirst->numPages,    0x10000 ) ;
+   BOOST_CHECK_EQUAL( mapFirst->pages, (void*) NULL ) ;
+   BOOST_CHECK_EQUAL( mapFirst->numBytesFound, 0 ) ;
+   BOOST_CHECK_EQUAL( mapFirst->shannonEntropy, 0.0 ) ;
+
+   struct MapEntry* mapBadAddr = NULL ;
+   mapBadAddr = getMap( mapList, (void*) 0x10000001 ) ;
+   BOOST_CHECK( mapBadAddr == NULL ) ;
+   mapBadAddr = getMap( mapList, (void*) 0x7fffffff ) ;
+   BOOST_CHECK( mapBadAddr == NULL ) ;
+
+   mapFirst = getMap( mapList, (void*) 0x80000000 ) ;
+   BOOST_CHECK( mapFirst != NULL ) ;
+   mapLast = getMap( mapList, (void*) 0xffffffff ) ;
+   BOOST_CHECK( mapLast != NULL ) ;
+   BOOST_CHECK_EQUAL( mapFirst, mapLast ) ;
+
+   BOOST_CHECK_EQUAL( mapFirst->sAddressStart, "80000000" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->pAddressStart, (void*) 0x80000000 ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sAddressEnd, "ffffffff" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->pAddressEnd, (void*) 0xffffffff ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sPermissions, "rwxp" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sOffset,      "76543210" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sDevice,      "99:99" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->sPath, "/test2" ) ;
+   BOOST_CHECK_EQUAL( mapFirst->include, true ) ;
+   BOOST_CHECK_EQUAL( mapFirst->numBytes, 0x7fffffff ) ;
+   BOOST_CHECK_EQUAL( mapFirst->numPages,    0x7ffff ) ;
+   BOOST_CHECK_EQUAL( mapFirst->pages, (void*) NULL ) ;
+   BOOST_CHECK_EQUAL( mapFirst->numBytesFound, 0 ) ;
+   BOOST_CHECK_EQUAL( mapFirst->shannonEntropy, 0.0 ) ;
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 /// @endcond

@@ -191,6 +191,19 @@ struct MapEntry* getMaps() {
 } // getMaps()
 
 
+struct MapEntry* getMap( struct MapEntry* maps, const void* virtualAddress ) {
+   struct MapEntry* currentMap = maps ;
+   while( currentMap != NULL ) {
+      if( virtualAddress >= currentMap->pAddressStart && virtualAddress <= currentMap->pAddressEnd ) {
+         break ;
+      }
+      currentMap = currentMap->next ;
+   } // while( currentMap != NULL )
+
+   return currentMap ;
+}
+
+
 void scanMaps( struct MapEntry* maps ) {  // Process --scan_byte, --shannon
    struct MapEntry* currentMap = maps ;
 
