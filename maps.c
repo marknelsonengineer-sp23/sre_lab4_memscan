@@ -37,7 +37,15 @@ struct MapEntry* mapHead = NULL ;
 
 
 struct MapEntry* getMaps() {
-   struct MapEntry* mapsHead = NULL ;
+   struct MapEntry*  mapsHead     = NULL ;       // Head pointer returned to caller
+   struct MapEntry** nextMapEntry = &mapsHead ;  // Linked lists typically insert at
+                                                 // the beginning of the list, and
+                                                 // will hold the list in reverse
+                                                 // order.  This variable will always
+                                                 // point to the end of the list and
+                                                 // make it easier to create a list in
+                                                 // the correct order.
+
    size_t mapIndex = 0 ;
 
    FILE* maps_fd = NULL ;  // File handle to #mapsFilePath
@@ -176,9 +184,12 @@ struct MapEntry* getMaps() {
          printf( "\n" ) ;
       #endif
 
-      // Insert newMap into the linked list and increment mapIndex
-      newMap->next = mapsHead ;
-      mapsHead = newMap ;
+      // Insert newMap at the end of the linked list
+      *nextMapEntry = newMap ;
+      newMap->next = NULL ;
+      nextMapEntry = &newMap->next ;
+
+      // Increment mapIndex
       mapIndex++ ;
    } // while( pRead != NULL )
 
