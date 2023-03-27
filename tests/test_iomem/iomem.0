@@ -1,0 +1,39 @@
+00000000-00000fff : Reserved
+00001000-0009ffff : System RAM
+000a0000-000bffff : PCI Bus 0000:00
+000c0000-000c7fff : Video ROM
+000f0000-000fffff : System ROM
+00100000-7d866fff : System RAM
+  14600000-15601e0b : Kernel code
+  15800000-162d0fff : Kernel rodata
+  16400000-166154ff : Kernel data
+  16cb8000-16ffffff : Kernel bss
+7d867000-7d881fff : Reserved
+7d882000-7e19bfff : System RAM
+7e19c000-7e1e4fff : Reserved
+7e1e5000-7eceefff : System RAM
+7ecef000-7ef6efff : Reserved
+7ef6f000-7ef7efff : ACPI Tables
+7ef7f000-7effefff : ACPI Non-volatile Storage
+7efff000-7f36afff : System RAM
+7f36b000-7ffeffff : Reserved
+7fff0000-7fffffff : RAM buffer
+80000000-fdffffff : PCI Bus 0000:00
+  80000000-81ffffff : 0000:00:02.0
+    80000000-81ffffff : vmwgfx probe
+  82000000-823fffff : 0000:00:04.0
+    82000000-823fffff : vboxguest
+  82400000-825fffff : 0000:00:02.0
+    82400000-825fffff : vmwgfx probe
+  82600000-8261ffff : 0000:00:03.0
+    82600000-8261ffff : e1000
+  82620000-82623fff : 0000:00:04.0
+  82624000-82625fff : 0000:00:0d.0
+    82624000-82625fff : ahci
+  82626000-82626fff : 0000:00:0b.0
+    82626000-82626fff : ehci_hcd
+  82627000-82627fff : 0000:00:06.0
+    82627000-82627fff : ohci_hcd
+fec00000-fec003ff : IOAPIC 0
+fee00000-fee00fff : Local APIC
+ffc00000-ffffffff : Reserved

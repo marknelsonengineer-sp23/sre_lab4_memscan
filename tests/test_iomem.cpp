@@ -14,9 +14,13 @@
 
 #include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
 
+#include <filesystem>   // For std::filesystem
+
 extern "C" {
+   #include "../config.h"
    #include "../iomem.h"
 }
+
 
 /* ****************************************************************************
    White Box Test Declarations
@@ -27,11 +31,31 @@ extern "C" {
 
 extern "C" bool validate_iomem() ;
 extern "C" void add_iomem_region( const void* start, const void* end, const char* description ) ;
+extern "C" void compose_iomem_summary() ;
+extern "C" void sort_iomem_summary() ;
+extern "C" void print_iomem_summary() ;
 
 /* ***************************************************************************/
 
 
 BOOST_AUTO_TEST_SUITE( test_iomem )
+
+BOOST_AUTO_TEST_CASE( test_read_iomem_bulk ) {
+    /// Read the contents of `./tests/test_iomem`, which contains sample `iomem` files from
+    /// a variety of Linux systems.
+   const std::filesystem::path sandbox{"test_iomem"};
+
+   for (auto const& dir_entry : std::filesystem::directory_iterator{sandbox}) {
+      // std::cout << dir_entry.path() << '\n';
+      strncpy( iomemFilePath, dir_entry.path().u8string().c_str(), sizeof( iomemFilePath ) ) ;
+      BOOST_CHECK_NO_THROW( read_iomem() ) ;
+      BOOST_CHECK_NO_THROW( compose_iomem_summary() ) ;
+      BOOST_CHECK_NO_THROW( sort_iomem_summary() ) ;
+      // BOOST_CHECK_NO_THROW( print_iomem_summary() ) ;
+      BOOST_CHECK_NO_THROW( release_iomem() ) ;
+   }
+}
+
 
 BOOST_AUTO_TEST_CASE( test_iomem_release ) {
    BOOST_CHECK( validate_iomem() ) ;

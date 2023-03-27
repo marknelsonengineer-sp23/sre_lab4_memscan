@@ -378,6 +378,8 @@ void read_iomem() {
 
 /// Print the linked list of #Iomem_summary records under #iomem_summary_head
 void print_iomem_summary() {
+   printf( "Summary of %s\n", iomemFilePath );
+
    Iomem_summary_t* type = iomem_summary_head;
 
    while( type != NULL ) {
@@ -427,13 +429,14 @@ void sort_iomem_summary() {
 } // sort_iomem
 
 
-void summarize_iomem() {
-   printf( "Summary of %s\n", iomemFilePath ) ;
-
-   Iomem_region_t* region = &iomem_head;
+/// Iterate over the #Iomem_region linked list from #iomem_head and either
+/// find an existing #Iomem_summary (based on matching the description) and add
+/// to it or create a new one.
+void compose_iomem_summary() {
+   Iomem_region_t* region = &iomem_head ;
 
    while( region != NULL ) {
-      Iomem_summary_t* type = iomem_summary_head;
+      Iomem_summary_t* type = iomem_summary_head ;
       while( type != NULL ) {
          if( strncmp( region->description, type->description, MAX_IOMEM_DESCRIPTION ) == 0 ) {
             type->size += getEnd( region ) - region->start + 1 ;
@@ -443,16 +446,20 @@ void summarize_iomem() {
       }
 
       if( type == NULL ) {  // If we got to the end of the list without a hit, then add an entry
-         Iomem_summary_t* newType = malloc( sizeof( Iomem_summary_t ) ) ;
+         Iomem_summary_t* newType = malloc( sizeof( Iomem_summary_t )) ;
          strncpy( newType->description, region->description, MAX_IOMEM_DESCRIPTION ) ;
          newType->size = getEnd( region ) - region->start + 1 ;
          newType->next = iomem_summary_head ;  // Add newType to the front of the list
          iomem_summary_head = newType ;
       }
 
-      region = region->next;
+      region = region->next ;
    }
+}
 
+
+void summarize_iomem() {
+   compose_iomem_summary() ;
    sort_iomem_summary() ;
    print_iomem_summary() ;
-} // summarize_iomem
+}

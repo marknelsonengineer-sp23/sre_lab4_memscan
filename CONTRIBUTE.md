@@ -159,15 +159,15 @@ unit test framework [Boost Test](https://www.boost.org/doc/libs/1_81_0/libs/test
 It's cool to have this working.
 
 #### Test Results
-|              | Archlinux | Debian                                                                                        | System X | System Y |
-|--------------|-----------|-----------------------------------------------------------------------------------------------|----------|----------|
-| Architecture | x86-64    | x86-64                                                                                        |          |          |
-| Date tested  | Ongoing   | 24 Mar 2023                                                                                   |          |          |
-| Build tested | Ongoing   | 2.1.2394                                                                                      |          |          |
-| make memscan | Clean     | Clean                                                                                         |          |          |
-| make doc     | Clean     | A few warnings, due to Doxygen being a rev behind                                             |          |          |
-| make test    | Clean     | Clean, but I observed 1 segfault out of 5 successful runs                                     |          |          |
-| make lint    | Clean     | Some magic number warnings & boost test warnings, I think because `clang-tidy` is out of date |          |          |
+|              | Archlinux | Debian                                       | System X | System Y |
+|--------------|-----------|----------------------------------------------|----------|----------|
+| Architecture | x86-64    | x86-64                                       |          |          |
+| Date tested  | Ongoing   | 27 Mar 2023                                  |          |          |
+| Build tested | Ongoing   | 2.1.0+10332                                  |          |          |
+| make memscan | Clean     | Clean                                        |          |          |
+| make doc     | Clean     | A few warnings, as Doxygen is out of date    |          |          |
+| make test    | Clean     | Clean                                        |          |          |
+| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |          |          |
 
 
 ### Release Procedures

@@ -15,7 +15,7 @@ TARGET = boost_tests
 all:  $(TARGET) lint
 
 CXX       = g++
-CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS)
+CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS) -std=c++17
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
 LINTFLAGS = --quiet -extra-arg=-std=c++17
