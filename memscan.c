@@ -76,6 +76,7 @@ int main( int argc, char* argv[] ) {
    printMaps( myMaps ) ;
 
    releaseMaps( myMaps ) ;
+   myMaps = NULL ;
    closeThreads() ;
    releasePreScanMemory() ;
    closePreScanFiles() ;

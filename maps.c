@@ -347,7 +347,17 @@ void printMaps( struct MapEntry* maps ) {
 
 
 void releaseMaps( struct MapEntry* maps ) {
-   (void) maps ;
+   struct MapEntry* currentMap = maps ;
+
+   while( currentMap != NULL ) {
+      free( currentMap->pages ) ;
+      free( currentMap->szLine ) ;
+
+      struct MapEntry* oldMap = currentMap ;
+      currentMap = currentMap->next ;
+      memset( oldMap, 0, sizeof( struct MapEntry ) ) ;
+      free( oldMap ) ;
+   } // while( currentMap != NULL )
 }
 
 
