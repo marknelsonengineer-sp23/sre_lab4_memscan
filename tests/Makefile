@@ -18,7 +18,7 @@ CXX       = g++
 CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS)
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
-LINTFLAGS = --quiet
+LINTFLAGS = --quiet -extra-arg=-std=c++17
 
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: $(TARGET)

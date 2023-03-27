@@ -48,7 +48,7 @@ struct MapEntry* getMaps() {
    }
 
    char* pRead ;
-   char szLine[ 73 + PATH_MAX ] ; ///< String buffer for the entire line.  Maps has 73 bytes of data + the path.
+   char szLine[ 73 + PATH_MAX ] ; ///< String buffer for the entire line.  Maps has 73 bytes of data + the path.  @NOLINT(readability-magic-numbers):  A magic number is OK here
 
    while( true ) {
       // Get the next line from maps_fd
