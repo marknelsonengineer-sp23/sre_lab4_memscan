@@ -124,7 +124,7 @@ struct MapEntry* getMaps() {
       } else {  /// If FILTER is specified, then only include regions that match a filter
          newMap->include = false ;
 
-         struct IncludePattern* current = filterHead ;
+         struct Filter* current = filterHead ;
          while( current != NULL ) {
             // Compare pattern with 'r' 'w' and 'x' permissions
             if( strcmp( current->pattern, "r" ) == 0 ) {

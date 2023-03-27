@@ -31,7 +31,7 @@
 /// is the default value for the `--scan_byte` option
 #define X86_RET_INSTRUCTION 0xC3
 
-struct IncludePattern* filterHead ;
+struct Filter* filterHead ;
 
 
 enum Endian getEndianness() {
@@ -50,9 +50,9 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "Usage: memscan [OPTION]... [PATTERN]... \n" ) ;
    PRINT( outStream, "       memscan -i|--iomem\n" ) ;
    PRINT( outStream, "\n" ) ;
-   PRINT( outStream, "  When PATTERN is present, only process sections with a path that includes PATTERN\n" ) ;
-   PRINT( outStream, "  If PATTERN is 'r' 'w' or 'x' then include sections with that permission\n" ) ;
-   PRINT( outStream, "  When PATTERN is not present, process all sections\n" ) ;
+   PRINT( outStream, "  When FILTER is present, only process sections that match\n" ) ;
+   PRINT( outStream, "  If FILTER is 'r' 'w' or 'x' then include sections with that permission\n" ) ;
+   PRINT( outStream, "  When FILTER is not present, process all sections\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "The options below may be used to select memscan's operation\n" ) ;
    PRINT( outStream, "\n" ) ;
@@ -88,6 +88,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "      --path               print the path (if available) in the memscan\n" ) ;
    PRINT( outStream, "  -p, --phys               print a summary of the physical pages w/ flags\n" ) ;
    PRINT( outStream, "  -P  --pfn                print each physical page number w/ flags\n" ) ;
+   PRINT( outStream, "                           --pnf and --phys are exclusive\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "PROGRAM OPTIONS\n" ) ;
    PRINT( outStream, "  -h, --help               display this help and exit\n" ) ;
@@ -360,17 +361,17 @@ void processOptions( int argc, char* argv[] ) {
 
    // Search the remaining arguments, which should be filters
    while (optind < argc) {
-      struct IncludePattern* newFilter = malloc( sizeof ( struct IncludePattern ) ) ;
+      struct Filter* newFilter = malloc( sizeof ( struct Filter ) ) ;
       if( newFilter == NULL ) {
-         FATAL_ERROR( "unable to allocate memory for newPattern") ;
+         FATAL_ERROR( "unable to allocate memory for newFilter") ;
       }
       newFilter->pattern = malloc( strlen( argv[optind] ) ) ;
       if( newFilter->pattern == NULL ) {
-         FATAL_ERROR( "unable to allocate memory for pattern") ;
+         FATAL_ERROR( "unable to allocate memory for a filter's pattern") ;
       }
       strncpy( newFilter->pattern, argv[optind], strlen( argv[optind] ) ) ;
 
-      // Insert newPattern to the linked list
+      // Insert newFilter to the linked list
       newFilter->next = filterHead ;
       filterHead = newFilter ;
 
@@ -476,12 +477,16 @@ void reset_config() {
    strncpy( pagemapFilePath, "/proc/self/pagemap", FILENAME_MAX ) ;
    strncpy( iomemFilePath,   "/proc/iomem",        FILENAME_MAX ) ;
 
-   /// Free the #IncludePattern linked list from #filterHead
-   struct IncludePattern* currentPattern = filterHead ;
-   while( currentPattern != NULL ) {
-      struct IncludePattern* oldPattern = currentPattern ;
-      currentPattern = currentPattern->next ;
-      free( oldPattern ) ;
+   /// Free the #Filter linked list from #filterHead
+   struct Filter* currentFilter = filterHead ;
+   while( currentFilter != NULL ) {
+      if( currentFilter->pattern != NULL ) {
+         free( currentFilter->pattern ) ;
+         currentFilter->pattern = NULL ;
+      }
+      struct Filter* oldFilter = currentFilter ;
+      currentFilter = currentFilter->next ;
+      free( oldFilter ) ;
    }
 
    filterHead = NULL ;

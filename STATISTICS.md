@@ -3,12 +3,12 @@ Project Statistics
 
 | Type | Files | Lines | Bytes | Working Lines | Working Bytes |
 |------|------:|------:|------:|--------------:|--------------:|
-|.h Source|16|897|39,014|326|7,706|
-|.c Source|14|3,166|116,110|2,072|62,132|
+|.h Source|16|897|38,944|326|7,682|
+|.c Source|14|3,170|116,277|2,077|62,273|
 |Unit Tests|9|1,040|51,913|697|39,784|
 |Python|4|624|17,903|272|8,853|
 |HTML|1|39|790|n/a|n/a|
-|Markdown|7|1,104|82,714|n/a|n/a|
+|Markdown|7|1,105|82,780|n/a|n/a|
 |Images|15|n/a|3,244,929|n/a|n/a|
 |Other	Files|150|n/a|1,440,088|n/a|n/a|
 
@@ -21,7 +21,7 @@ Project Statistics
 
 ## Software Engineering Metrics
 
-Number of commits:  223
+Number of commits:  224
 
 Number of test cases:  24
 
@@ -32,4 +32,4 @@ Number of test assertions:  484
 |--------------------------------------|---------------------------|-------------------------|---------------------------|
 | ![GitHub code size	in	bytes](https://img.shields.io/github/languages/code-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub repo size](https://img.shields.io/github/repo-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub contributors](https://img.shields.io/github/contributors/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub last	commit](https://img.shields.io/github/last-commit/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub	issues](https://img.shields.io/github/issues-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub	closed issues](https://img.shields.io/github/issues-closed-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub forks](https://img.shields.io/github/forks/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub Repo	stars](https://img.shields.io/github/stars/marknelsonengineer-sp23/sre_lab4_memscan?style=social) |
 
-Automatically generated on Mon 27 Mar 2023 10:38:56 AM 
+Automatically generated on Mon 27 Mar 2023 11:02:29 AM 
