@@ -10,6 +10,7 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <ctype.h>   // For isdigit()
 #include <errno.h>   // For errno
 #include <getopt.h>  // For getopt_long() struct option
 #include <limits.h>  // For PATH_MAX UINT_MAX
@@ -47,10 +48,13 @@ enum Endian getEndianness() {
 void printUsage( FILE* outStream ) {
    ASSERT( outStream != NULL ) ;
 
-   PRINT( outStream, "Usage: memscan [OPTION]... [PATTERN]... \n" ) ;
+   PRINT( outStream, "Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... \n" ) ;
+   PRINT( outStream, "       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...\n" ) ;
    PRINT( outStream, "       memscan -i|--iomem\n" ) ;
    PRINT( outStream, "\n" ) ;
-   PRINT( outStream, "  When FILTER is present, only process sections that match\n" ) ;
+   PRINT( outStream, "  When FILTER is present, only process sections that match a filter\n" ) ;
+   PRINT( outStream, "  If FILTER is a decimal number, match it to the region's index\n" ) ;
+   PRINT( outStream, "  If FILTER is a hex number, include regions with that virtual address\n" ) ;
    PRINT( outStream, "  If FILTER is 'r' 'w' or 'x' then include sections with that permission\n" ) ;
    PRINT( outStream, "  When FILTER is not present, process all sections\n" ) ;
    PRINT( outStream, "\n" ) ;
@@ -84,7 +88,6 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "                           and physical page\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "OUTPUT OPTIONS\n" ) ;
-   PRINT( outStream, "  -i, --iomem              print a summary of /proc/iomem\n" ) ;
    PRINT( outStream, "      --path               print the path (if available) in the memscan\n" ) ;
    PRINT( outStream, "  -p, --phys               print a summary of the physical pages w/ flags\n" ) ;
    PRINT( outStream, "  -P  --pfn                print each physical page number w/ flags\n" ) ;
@@ -133,7 +136,7 @@ static struct option long_options[] = {
 };
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:rfl:m:t:ipPhkv" ;
+const char SINGLE_OPTION_STRING[] = "b:rfl:m:t:pPhkv" ;
 
 
 // All of these globals are set in reset_config()
@@ -361,19 +364,50 @@ void processOptions( int argc, char* argv[] ) {
 
    // Search the remaining arguments, which should be filters
    while (optind < argc) {
+      // Allocate and zero out a new Filter
       struct Filter* newFilter = malloc( sizeof ( struct Filter ) ) ;
       if( newFilter == NULL ) {
          FATAL_ERROR( "unable to allocate memory for newFilter") ;
       }
+      memset( newFilter, 0, sizeof( struct Filter ) ) ;
+
+      // Search for addresses:  Filters that start with 0x...
+      if( argv[optind][0] == '0' && argv[optind][1] == 'x' ) {
+         unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( argv[optind] ) ;
+         ASSERT( trialValue <= SIZE_MAX ) ;
+         newFilter->address = (void*) trialValue ;  /// @NOLINT(performance-no-int-to-ptr): integer to void* is intended
+         newFilter->type = ADDRESS ;
+         goto NextOption ;
+      }
+
+      // Search for indexes:  Filters that start with a number...
+      if( isdigit( argv[optind][0] ) ) {
+         unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( argv[optind] ) ;
+         ASSERT( trialValue <= SIZE_MAX ) ;
+         newFilter->index = (size_t) trialValue ;
+         newFilter->type = INDEX ;
+         goto NextOption ;
+      }
+
       newFilter->pattern = malloc( strlen( argv[optind] ) ) ;
       if( newFilter->pattern == NULL ) {
          FATAL_ERROR( "unable to allocate memory for a filter's pattern") ;
       }
       strncpy( newFilter->pattern, argv[optind], strlen( argv[optind] ) ) ;
+      newFilter->type = PATTERN ;
 
+      NextOption:
       // Insert newFilter to the linked list
       newFilter->next = filterHead ;
       filterHead = newFilter ;
+
+      #ifdef DEBUG
+         printf( "newFilter->type=%d\n", newFilter->type ) ;
+         printf( "newFilter->pattern=[%s]\n", newFilter->pattern ) ;
+         printf( "newFilter->index=%zu\n", newFilter->index ) ;
+         printf( "newFilter->address=%p\n", newFilter->address ) ;
+         printf( "newFilter->next=%p\n", newFilter->next ) ;
+      #endif
 
       optind += 1 ;
    }

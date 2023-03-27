@@ -62,6 +62,15 @@ will allow you to do the following:
     - `A`:   active: page is in the active LRU list
     - `R`:   reclaim: page will be reclaimed soon after its pageout IO completed 
     - `M`:   memory mapped page
+- Explore filters...
+  - Print region at index 0 (the first region)
+    - `# ./memscan --path 0`
+  - Print regions at index 0 and 2
+    - `# ./memscan --path 0`2
+  - Map a region to a specific address, then look at it
+    - `# ./memscan --map_mem=200K --map_addr=0x2000 0x2000`
+  - Look for regions that have `libc` in their `--path` (you may need to change the search)
+    - `# ./memscan --path libc`
 - To stress test memscan and do a bit of everything, try this:
   - `clear && ./memscan --block=/etc/passwd --stream=/etc/passwd --map_file=/etc/passwd --read --local=16384 --numLocal=500 --malloc=1M --numMalloc=4 --map_mem=13M --map_addr=0x555000000000 --fill --threads=10 --sleep=1 --scan_byte=0xc3 --shannon --path --phys`
   
