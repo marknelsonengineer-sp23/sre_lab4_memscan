@@ -20,11 +20,6 @@
 #include "version.h" // For STRINGIFY_VALUE()
 
 
-/// The maximum number of #MapEntry records in #map
-/// @todo Consider converting to a linked list
-#define MAX_ENTRIES     256
-
-
 /// Define an array of paths that should be excluded from the scan.
 /// On x86 architectures, we should avoid the `[vvar]` path.
 ///
@@ -37,29 +32,26 @@ char* ExcludePaths[] = { "[vvar]"
                        } ;
 
 
-/// Holds up to #MAX_ENTRIES of #MapEntry structs
-struct MapEntry map[MAX_ENTRIES] ;
+/// Holds a linked list of map entries
+struct MapEntry* mapHead = NULL ;
 
 
-/// The number of entries in #map
-size_t numMaps = 0 ;
-
-
-void getMaps() {
-   memset( map, 0, sizeof( map )) ;  // Zero out the map array
-   numMaps = 0 ;
+struct MapEntry* getMaps() {
+   struct MapEntry* mapsHead = NULL ;
+   size_t mapIndex = 0 ;
 
    FILE* maps_fd = NULL ;  // File handle to #mapsFilePath
 
    maps_fd = fopen( mapsFilePath, "r" ) ;
    if( maps_fd == NULL ) {
-      FATAL_ERROR( "Unable to open [%s]", mapsFilePath ) ;
+      FATAL_ERROR( "unable to open [%s]", mapsFilePath ) ;
    }
 
    char* pRead ;
    char szLine[ 73 + PATH_MAX ] ; ///< String buffer for the entire line.  Maps has 73 bytes of data + the path.
 
    while( true ) {
+      // Get the next line from maps_fd
       pRead = fgets( szLine, sizeof( szLine ), maps_fd ) ;
       if( pRead == NULL ) {
          break ;  // We're done when fgets() is done
@@ -69,75 +61,85 @@ void getMaps() {
          printf( "[%s]", szLine ) ;  // A \n is already in .szLine
       #endif
 
+      // Look at the length of the new map entry
       size_t szLineLength = strlen( szLine ) ;
       if( szLineLength == 0 ) {
          continue ;  // Nothing to see here, move on
       }
 
-      map[numMaps].szLine = malloc( szLineLength + 1 ) ;  // One extra byte for the \0
-      if( map[numMaps].szLine == NULL ) {
+      // Allocate a new MapEntry and zero it out
+      struct MapEntry* newMap = malloc( sizeof( struct MapEntry ) ) ;
+      if( newMap == NULL ) {
+         FATAL_ERROR( "unable to allocate a new MapEntry" ) ;
+      }
+      memset( newMap, 0, sizeof( struct MapEntry ) ) ;
+      newMap->index = mapIndex ;
+
+      // Allocate a new szLine in newMap
+      newMap->szLine = malloc( szLineLength + 1 ) ;  // One extra byte for the \0
+      if( newMap->szLine == NULL ) {
          FATAL_ERROR( "Unable to allocate maps line" ) ;
       }
 
-      strncpy( map[numMaps].szLine, szLine, szLineLength+1 ) ;
+      strncpy( newMap->szLine, szLine, szLineLength+1 ) ;
 
-      // Store data into map[]
-      map[numMaps].sAddressStart = strtok( map[numMaps].szLine, "-" ) ;
-      map[numMaps].sAddressEnd   = strtok( NULL, " "   ) ;
-      map[numMaps].sPermissions  = strtok( NULL, " "   ) ;
-      map[numMaps].sOffset       = strtok( NULL, " "   ) ;
-      map[numMaps].sDevice       = strtok( NULL, " "   ) ;
-      map[numMaps].sInode        = strtok( NULL, " "   ) ;
-      map[numMaps].sPath         = strtok( NULL, " \n" ) ;
+      // Store data into newMap
+      newMap->sAddressStart = strtok( newMap->szLine, "-" ) ;
+      newMap->sAddressEnd   = strtok( NULL, " "   ) ;
+      newMap->sPermissions  = strtok( NULL, " "   ) ;
+      newMap->sOffset       = strtok( NULL, " "   ) ;
+      newMap->sDevice       = strtok( NULL, " "   ) ;
+      newMap->sInode        = strtok( NULL, " "   ) ;
+      newMap->sPath         = strtok( NULL, " \n" ) ;
       /// @todo Add tests to check if anything returns `NULL` or does anything
       ///       out of the ordinary
 
       // Convert the strings holding the start & end address into pointers
-		int retVal1 ;
-		int retVal2 ;
-      retVal1 = sscanf( map[numMaps].sAddressStart, "%p", &(map[numMaps].pAddressStart) ) ;
-      retVal2 = sscanf( map[numMaps].sAddressEnd,   "%p", &(map[numMaps].pAddressEnd  ) ) ;
+      int retVal1 ;
+      int retVal2 ;
+      retVal1 = sscanf( newMap->sAddressStart, "%p", &(newMap->pAddressStart) ) ;
+      retVal2 = sscanf( newMap->sAddressEnd,   "%p", &(newMap->pAddressEnd  ) ) ;
 
-		if( retVal1 != 1 || retVal2 != 1 ) {
+      if( retVal1 != 1 || retVal2 != 1 ) {
          FATAL_ERROR( "Map entry %zu is unable parse start [%s] or end address [%s]"
-               ,numMaps
-               ,map[numMaps].sAddressStart
-               ,map[numMaps].sAddressEnd
+         ,newMap->index
+         ,newMap->sAddressStart
+         ,newMap->sAddressEnd
          ) ;
-		}
+      }
 
-      map[numMaps].numBytes = map[numMaps].pAddressEnd - map[numMaps].pAddressStart ;
-      map[numMaps].numPages = map[numMaps].numBytes >> getPageSizeInBits() ;
+      newMap->numBytes = newMap->pAddressEnd - newMap->pAddressStart ;
+      newMap->numPages = newMap->numBytes >> getPageSizeInBits() ;
 
       if( patternHead == NULL ) {  /// If PATTERN is not specified, then include all mapped regions
-         map[numMaps].include = true ;
+         newMap->include = true ;
       } else {  /// If PATTERN is specified, then only include regions that include PATTERN
-         map[numMaps].include = false ;
+         newMap->include = false ;
 
          struct IncludePattern* current = patternHead ;
          while( current != NULL ) {
             // Compare pattern with 'r' 'w' and 'x' permissions
             if( strcmp( current->pattern, "r" ) == 0 ) {
-               if( map[numMaps].sPermissions[0] == 'r' ) {
-                  map[numMaps].include = true ;
+               if( newMap->sPermissions[0] == 'r' ) {
+                  newMap->include = true ;
                }
                goto Next ;
             }
             if( strcmp( current->pattern, "w" ) == 0 ) {
-               if( map[numMaps].sPermissions[1] == 'w' ) {
-                  map[numMaps].include = true ;
+               if( newMap->sPermissions[1] == 'w' ) {
+                  newMap->include = true ;
                }
                goto Next ;
             }
             if( strcmp( current->pattern, "x" ) == 0 ) {
-               if( map[numMaps].sPermissions[2] == 'x' ) {
-                  map[numMaps].include = true ;
+               if( newMap->sPermissions[2] == 'x' ) {
+                  newMap->include = true ;
                }
                goto Next ;
             }
-            if( map[numMaps].sPath != NULL) {
-               if( strstr( map[numMaps].sPath, current->pattern ) != NULL ) {
-                  map[numMaps].include = true ;
+            if( newMap->sPath != NULL) {
+               if( strstr( newMap->sPath, current->pattern ) != NULL ) {
+                  newMap->include = true ;
                   goto Next ;
                }
             }
@@ -148,33 +150,36 @@ void getMaps() {
       }
 
       // Skip excluded paths
-      if( map[numMaps].sPath != NULL ) {
+      if( newMap->sPath != NULL ) {
          for( size_t j = 0 ; ExcludePaths[j][0] != '\0' ; j++ ) {
-            if( strcmp( map[numMaps].sPath, ExcludePaths[j] ) == 0 ) {
-               map[numMaps].include = false ;
+            if( strcmp( newMap->sPath, ExcludePaths[j] ) == 0 ) {
+               newMap->include = false ;
             }
          }
       }
 
       #ifdef DEBUG
          printf( "DEBUG:  " ) ;
-         printf( "numMaps[%zu]  ",       numMaps ) ;
-         printf( "sAddressStart=[%s]  ", map[numMaps].sAddressStart ) ;
-         printf( "pAddressStart=[%p]  ", map[numMaps].pAddressStart ) ;
-         printf( "sAddressEnd=[%s]  ",   map[numMaps].sAddressEnd ) ;
-         printf( "pAddressEnd=[%p]  ",   map[numMaps].pAddressEnd ) ;
-         printf( "sPermissions=[%s]  ",  map[numMaps].sPermissions ) ;
-         printf( "sOffset=[%s]  ",       map[numMaps].sOffset ) ;
-         printf( "sDevice=[%s]  ",       map[numMaps].sDevice ) ;
-         printf( "sInode=[%s]  ",        map[numMaps].sInode ) ;
-         printf( "sPath=[%s]  ",         map[numMaps].sPath ) ;
-         printf( "include=[%d]  ",       map[numMaps].include ) ;
-         printf( "numBytes=[%zu]  ",     map[numMaps].numBytes ) ;
-         printf( "numPages=[%zu]  ",     map[numMaps].numPages ) ;
+         printf( "index=[%zu]  ",        newMap->index ) ;
+         printf( "sAddressStart=[%s]  ", newMap->sAddressStart ) ;
+         printf( "pAddressStart=[%p]  ", newMap->pAddressStart ) ;
+         printf( "sAddressEnd=[%s]  ",   newMap->sAddressEnd ) ;
+         printf( "pAddressEnd=[%p]  ",   newMap->pAddressEnd ) ;
+         printf( "sPermissions=[%s]  ",  newMap->sPermissions ) ;
+         printf( "sOffset=[%s]  ",       newMap->sOffset ) ;
+         printf( "sDevice=[%s]  ",       newMap->sDevice ) ;
+         printf( "sInode=[%s]  ",        newMap->sInode ) ;
+         printf( "sPath=[%s]  ",         newMap->sPath ) ;
+         printf( "include=[%d]  ",       newMap->include ) ;
+         printf( "numBytes=[%zu]  ",     newMap->numBytes ) ;
+         printf( "numPages=[%zu]  ",     newMap->numPages ) ;
          printf( "\n" ) ;
       #endif
 
-      numMaps++ ;
+      // Insert newMap into the linked list and increment mapIndex
+      newMap->next = mapsHead ;
+      mapsHead = newMap ;
+      mapIndex++ ;
    } // while( pRead != NULL )
 
    int iRetVal = fclose( maps_fd ) ;
@@ -182,126 +187,144 @@ void getMaps() {
       FATAL_ERROR( "Unable to close [%s]", mapsFilePath ) ;
    }
 
+   return mapsHead ;
 } // getMaps()
 
 
-void scanMaps() {
-   for( size_t i = 0 ; i < numMaps ; i++ ) {
-      if( map[i].sPermissions[0] != 'r' ) {  // Skip non-readable regions
-         continue ;
+void scanMaps( struct MapEntry* maps ) {  // Process --scan_byte, --shannon
+   struct MapEntry* currentMap = maps ;
+
+   while( currentMap != NULL ) {
+      if( currentMap->sPermissions[0] != 'r' ) {  // Skip non-readable regions
+         goto Next ;
       }
 
-      if( !map[i].include ) {  // Skip excluded paths
-         continue ;
+      if( !currentMap->include ) {  // Skip excluded paths
+         goto Next ;
       }
 
       // Do the --scan_byte scan
       if( scanForByte ) {
-         for( void* scanThisAddress = map[i].pAddressStart ; scanThisAddress < map[i].pAddressEnd ; scanThisAddress++ ) {
+         for( void* scanThisAddress = currentMap->pAddressStart ; scanThisAddress < currentMap->pAddressEnd ; scanThisAddress++ ) {
             if( *(unsigned char*)scanThisAddress == byteToScanFor ) {
-               map[i].numBytesFound++ ;
+               currentMap->numBytesFound++ ;
             }
          }
       }
 
       if( scanForShannon ) {
-            map[i].shannonEntropy = computeShannonEntropy( map[i].pAddressStart, map[i].numBytes ) ;
+         currentMap->shannonEntropy = computeShannonEntropy( currentMap->pAddressStart, currentMap->numBytes ) ;
       }
 
-   } // for( each map )
-} // scanMaps()
+      Next:
+      currentMap = currentMap->next ;
+   } // while( currentMap != NULL )
+} // scanMaps
 
 
-void readPagemapInfo() {  // Process --pfn --phys
+void readPagemapInfo( struct MapEntry* maps ) {  // Process --pfn --phys
    if( !includePhysicalPageNumber && !includePhysicalPageSummary ) {
       return ;
    }
 
-   for( size_t i = 0 ; i < numMaps ; i++ ) {
-      bool okToRead = map[i].include && map[i].sPermissions[0] == 'r' ;
+   struct MapEntry* currentMap = maps ;
 
-      map[i].pages = malloc( sizeof( struct PageInfo ) * map[i].numPages ) ;
-      if( map[i].pages == NULL ) {
-         FATAL_ERROR( "unable to allocate memory for map entry [%zu]", i ) ;
+   while( currentMap != NULL ) {
+
+      bool okToRead = currentMap->include && currentMap->sPermissions[0] == 'r' ;
+
+      currentMap->pages = malloc( sizeof( struct PageInfo ) * currentMap->numPages ) ;
+      if( currentMap->pages == NULL ) {
+         FATAL_ERROR( "unable to allocate memory for map entry [%zu]", currentMap->index ) ;
       }
 
-      for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
-         // printf( "%p\n", map[i].pAddressStart + (j << getPageSizeInBits() ) ) ;
-         map[i].pages[j] = getPageInfo( map[i].pAddressStart + (j << getPageSizeInBits() ), okToRead ) ;
+      for( size_t j = 0 ; j < currentMap->numPages ; j++ ) {
+         // printf( "%p\n", currentMap->pAddressStart + (j << getPageSizeInBits() ) ) ;
+         currentMap->pages[j] = getPageInfo( currentMap->pAddressStart + (j << getPageSizeInBits() ), okToRead ) ;
       } // for( each page )
-   } // for( each map )
+
+      currentMap = currentMap->next ;
+   } // while( currentMap != NULL )
 } // readPagemapInfo
 
 
-void printMaps() {
-   for( size_t i = 0 ; i < numMaps ; i++ ) {
+void printMaps( struct MapEntry* maps ) {
+   struct MapEntry* currentMap = maps ;
+
+   while( currentMap != NULL ) {
       // If we are filtering on patterns, and it's not included, then skip the line.
-      if( patternHead != NULL && !map[i].include ) {
+      if( patternHead != NULL && !currentMap->include ) {
          continue ;
       }
 
-      printf( ANSI_COLOR_CYAN "%2zu: " ANSI_COLOR_RESET, i ) ;
-      printf( "%p - %p ", map[i].pAddressStart, map[i].pAddressEnd - 1 ) ;
-      printf( ANSI_COLOR_CYAN "%'10zu " ANSI_COLOR_RESET, map[i].numBytes ) ;
+      printf( ANSI_COLOR_CYAN "%2zu: " ANSI_COLOR_RESET, currentMap->index ) ;
+      printf( "%p - %p ", currentMap->pAddressStart, currentMap->pAddressEnd - 1 ) ;
+      printf( ANSI_COLOR_CYAN "%'10zu " ANSI_COLOR_RESET, currentMap->numBytes ) ;
 
-      printf( ANSI_COLOR_BRIGHT_GREEN "%c" ANSI_COLOR_RESET, map[i].sPermissions[0] ) ;
-      if( map[i].sPermissions[1] == 'w' ) {
-         printf( ANSI_COLOR_MAGENTA "%c" ANSI_COLOR_RESET, map[i].sPermissions[1] ) ;
+      printf( ANSI_COLOR_BRIGHT_GREEN "%c" ANSI_COLOR_RESET, currentMap->sPermissions[0] ) ;
+      if( currentMap->sPermissions[1] == 'w' ) {
+         printf( ANSI_COLOR_MAGENTA "%c" ANSI_COLOR_RESET, currentMap->sPermissions[1] ) ;
       } else {
-         printf( "%c", map[i].sPermissions[1] ) ;
+         printf( "%c", currentMap->sPermissions[1] ) ;
       }
-      if( map[i].sPermissions[2] == 'x' ) {
-         printf( ANSI_COLOR_RED "%c" ANSI_COLOR_RESET, map[i].sPermissions[2] ) ;
+      if( currentMap->sPermissions[2] == 'x' ) {
+         printf( ANSI_COLOR_RED "%c" ANSI_COLOR_RESET, currentMap->sPermissions[2] ) ;
       } else {
-         printf( "%c", map[i].sPermissions[2] ) ;
+         printf( "%c", currentMap->sPermissions[2] ) ;
       }
-      printf( "%c ", map[i].sPermissions[3] ) ;
+      printf( "%c ", currentMap->sPermissions[3] ) ;
 
-      if( map[i].sPermissions[0] != 'r' ) {
+      if( currentMap->sPermissions[0] != 'r' ) {
          printf( ANSI_COLOR_RED "read permission not set" ANSI_COLOR_RESET ) ;
          goto finishRegion ;
       }
 
       // Skip excluded paths
-      if( !map[i].include ) {
-         printf( ANSI_COLOR_RED "%s excluded" ANSI_COLOR_RESET, map[i].sPath ) ;
+      if( !currentMap->include ) {
+         printf( ANSI_COLOR_RED "%s excluded" ANSI_COLOR_RESET, currentMap->sPath ) ;
          goto finishRegion ;
       }
 
       if( scanForByte ) {
          printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
-         printf( "w/ %'7zu of ", map[i].numBytesFound ) ;
+         printf( "w/ %'7zu of ", currentMap->numBytesFound ) ;
          printf( "0x%02x ", byteToScanFor ) ;
          printf( ANSI_COLOR_RESET ) ;
       }
 
       if( scanForShannon ) {
          printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
-         printf( "H: %5.3lf ", map[i].shannonEntropy ) ;
-         printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( map[i].shannonEntropy ) ) ;
+         printf( "H: %5.3lf ", currentMap->shannonEntropy ) ;
+         printf( "%-" STRINGIFY_VALUE( MAX_SHANNON_CLASSIFICATION_LENGTH ) "s", getShannonClassification( currentMap->shannonEntropy ) ) ;
          printf( ANSI_COLOR_RESET ) ;
       }
 
       // Print the path
       if( printPath ) {
-         printf( ANSI_COLOR_BRIGHT_WHITE "%s" ANSI_COLOR_RESET, map[i].sPath != NULL ? map[i].sPath : "" ) ;
+         printf( ANSI_COLOR_BRIGHT_WHITE "%s" ANSI_COLOR_RESET, currentMap->sPath != NULL ? currentMap->sPath : "" ) ;
       }
 
       finishRegion:
       printf( "\n" ) ;
 
       if( includePhysicalPageNumber ) {
-         for( size_t j = 0 ; j < map[i].numPages ; j++ ) {
-            printFullPhysicalPage( &map[i].pages[j] ) ;
+         for( size_t j = 0 ; j < currentMap->numPages ; j++ ) {
+            printFullPhysicalPage( &currentMap->pages[j] ) ;
          }
       }
 
       if( includePhysicalPageSummary ) {
-         printPageSummary( map[i].pages, map[i].numPages ) ;
+         printPageSummary( currentMap->pages, currentMap->numPages ) ;
       }
 
-   } // for( each map )
+      currentMap = currentMap->next ;
+   } // while( currentMap != NULL )
 } // printMaps
+
+
+void releaseMaps( struct MapEntry* maps ) {
+   (void) maps ;
+}
 
 
 // When reviewing this for the class:

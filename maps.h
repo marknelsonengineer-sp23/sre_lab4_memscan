@@ -13,6 +13,7 @@
 /// Hold the original (and some processed data) from each line of
 /// `/proc/$PID/maps`
 struct MapEntry {
+   size_t  index ;          ///< A unique index for the line
    char*   szLine ;         ///< Malloc'd string buffer for the entire line.
                             ///  All of the string pointers in this struct will
                             ///  point to strings in this buffer after they've
@@ -33,6 +34,7 @@ struct MapEntry {
    struct PageInfo* pages ; ///< Pointer to a #PageInfo array
    size_t numBytesFound ;   ///< Number of #byteToScanFor bytes found in this region when #scanForByte is set
    double shannonEntropy ;  ///< Shannon Entropy of the region when #scanForShannon is set
+   struct MapEntry* next ;  ///< Pointer to the next #MapEntry or `NULL` for the last map in the list
 } ;
 
 
@@ -43,17 +45,20 @@ struct MapEntry {
 /// getMaps()
 ///
 /// [1]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
-extern void getMaps() ;
+extern struct MapEntry* getMaps() ;
 
 /// Scan all readable memory regions.
 ///
 /// Anything that changes the physical pagemap information should be done
 /// before calling scanMaps()
-extern void scanMaps() ;
+extern void scanMaps( struct MapEntry* maps ) ;
 
 /// Read data from `pagemap`, `pageflags` and `pagecount` and get information
 /// about the physical pages referenced in `maps`
-extern void readPagemapInfo() ;
+extern void readPagemapInfo( struct MapEntry* maps ) ;
 
 /// Print the map, results of the scan and physical page info
-extern void printMaps() ;
+extern void printMaps( struct MapEntry* maps ) ;
+
+/// Release any resources that may have been created by the maps module
+extern void releaseMaps( struct MapEntry* maps ) ;

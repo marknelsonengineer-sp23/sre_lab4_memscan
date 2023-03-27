@@ -67,14 +67,15 @@ int main( int argc, char* argv[] ) {
       sleep( sleepSeconds ) ;  // Process --sleep
    }
 
-   getMaps() ;
+   struct MapEntry* myMaps = getMaps() ;
 
-   scanMaps() ;                // Process --scan_byte, --shannon
+   scanMaps( myMaps ) ;        // Process --scan_byte, --shannon
 
-   readPagemapInfo() ;         // Process --phys and --pfx
+   readPagemapInfo( myMaps ) ; // Process --phys and --pfn
 
-   printMaps() ;
+   printMaps( myMaps ) ;
 
+   releaseMaps( myMaps ) ;
    closeThreads() ;
    releasePreScanMemory() ;
    closePreScanFiles() ;
