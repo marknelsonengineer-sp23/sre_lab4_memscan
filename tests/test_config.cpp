@@ -27,7 +27,7 @@ extern "C" {
 
 // Ensure that reset_config() runs before we start testing.
 struct MyGlobalFixture {
-   void setup() {
+   static void setup() {
       BOOST_TEST_MESSAGE( "setup fixture" );
       reset_config() ;
    }
