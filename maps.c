@@ -119,12 +119,12 @@ struct MapEntry* getMaps() {
       newMap->numBytes = newMap->pAddressEnd - newMap->pAddressStart ;
       newMap->numPages = newMap->numBytes >> getPageSizeInBits() ;
 
-      if( patternHead == NULL ) {  /// If PATTERN is not specified, then include all mapped regions
+      if( filterHead == NULL ) {  /// If FILTER is not specified, then include all mapped regions
          newMap->include = true ;
-      } else {  /// If PATTERN is specified, then only include regions that include PATTERN
+      } else {  /// If FILTER is specified, then only include regions that match a filter
          newMap->include = false ;
 
-         struct IncludePattern* current = patternHead ;
+         struct IncludePattern* current = filterHead ;
          while( current != NULL ) {
             // Compare pattern with 'r' 'w' and 'x' permissions
             if( strcmp( current->pattern, "r" ) == 0 ) {
@@ -277,8 +277,8 @@ void printMaps( struct MapEntry* maps ) {
 
    while( currentMap != NULL ) {
       // If we are filtering on patterns, and it's not included, then skip the line.
-      if( patternHead != NULL && !currentMap->include ) {
-         continue ;
+      if( filterHead != NULL && !currentMap->include ) {
+         goto done ;
       }
 
       printf( ANSI_COLOR_CYAN "%2zu: " ANSI_COLOR_RESET, currentMap->index ) ;
@@ -341,6 +341,7 @@ void printMaps( struct MapEntry* maps ) {
          printPageSummary( currentMap->pages, currentMap->numPages ) ;
       }
 
+      done:
       currentMap = currentMap->next ;
    } // while( currentMap != NULL )
 } // printMaps

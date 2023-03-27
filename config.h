@@ -185,13 +185,24 @@ extern void reset_config() ;
 #define GET_BIT( value, bitPosition ) (((value) >> (bitPosition)) & 1)
 
 
-/// Linked list of patterns to match against when processing map regions
+/// The type of #IncludePattern
+enum FilterType {
+   PATTERN  ///< Search MapEntry.sPath for pattern and include the region if there's a hit
+  ,INDEX    ///< Search MapEntry.index and include the region if there's a match
+  ,ADDRESS  ///< Search MapEntry and include the region if the virtual address is in the entry
+} ;
+
+
+/// Linked list of filters to match against when processing map regions
 struct IncludePattern {
+   enum FilterType        type ;     ///< The type of filter
                                      ///  Search for this pattern.
    char*                  pattern ;  ///< Search MapEntry.sPath for pattern and include the region if there's a hit.
                                      ///< Search patterns `r` `w` and `x` will match on MapEntry.sPermissions.
+   size_t                 index ;    ///< Search for this MapEntry.index
+   void*                  address ;  ///< Include if this is between MapEntry.pAddressStart and MapEntry.pAddressEnd
    struct IncludePattern* next ;     ///< The next #IncludePattern in the linked list or `NULL` for the end of the list.
 } ;
 
-/// The head pointer to a list of region patterns
-extern struct IncludePattern* patternHead ;
+/// The head pointer to a list of filters
+extern struct IncludePattern* filterHead ;

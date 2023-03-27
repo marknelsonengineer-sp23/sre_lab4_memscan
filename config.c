@@ -31,8 +31,7 @@
 /// is the default value for the `--scan_byte` option
 #define X86_RET_INSTRUCTION 0xC3
 
-
-struct IncludePattern* patternHead = NULL ;
+struct IncludePattern* filterHead ;
 
 
 enum Endian getEndianness() {
@@ -359,20 +358,21 @@ void processOptions( int argc, char* argv[] ) {
       }
    }
 
+   // Search the remaining arguments, which should be filters
    while (optind < argc) {
-      struct IncludePattern* newPattern = malloc( sizeof ( struct IncludePattern ) ) ;
-      if( newPattern == NULL ) {
+      struct IncludePattern* newFilter = malloc( sizeof ( struct IncludePattern ) ) ;
+      if( newFilter == NULL ) {
          FATAL_ERROR( "unable to allocate memory for newPattern") ;
       }
-      newPattern->pattern = malloc( strlen( argv[optind] ) ) ;
-      if( newPattern->pattern == NULL ) {
+      newFilter->pattern = malloc( strlen( argv[optind] ) ) ;
+      if( newFilter->pattern == NULL ) {
          FATAL_ERROR( "unable to allocate memory for pattern") ;
       }
-      strncpy( newPattern->pattern, argv[optind], strlen( argv[optind] ) ) ;
+      strncpy( newFilter->pattern, argv[optind], strlen( argv[optind] ) ) ;
 
       // Insert newPattern to the linked list
-      newPattern->next = patternHead ;
-      patternHead = newPattern ;
+      newFilter->next = filterHead ;
+      filterHead = newFilter ;
 
       optind += 1 ;
    }
@@ -476,13 +476,13 @@ void reset_config() {
    strncpy( pagemapFilePath, "/proc/self/pagemap", FILENAME_MAX ) ;
    strncpy( iomemFilePath,   "/proc/iomem",        FILENAME_MAX ) ;
 
-   /// Free the #IncludePattern linked list from #patternHead
-   struct IncludePattern* currentPattern = patternHead ;
+   /// Free the #IncludePattern linked list from #filterHead
+   struct IncludePattern* currentPattern = filterHead ;
    while( currentPattern != NULL ) {
       struct IncludePattern* oldPattern = currentPattern ;
       currentPattern = currentPattern->next ;
       free( oldPattern ) ;
    }
 
-   patternHead = NULL ;
+   filterHead = NULL ;
 }
