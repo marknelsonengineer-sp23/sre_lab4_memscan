@@ -45,20 +45,30 @@ struct MapEntry {
 /// getMaps()
 ///
 /// [1]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
+///
+/// @return The head of a linked list of #MapEntry nodes
 extern struct MapEntry* getMaps() ;
 
 /// Scan all readable memory regions.
 ///
 /// Anything that changes the physical pagemap information should be done
 /// before calling scanMaps()
+///
+/// @param maps A linked list of #MapEntry nodes
 extern void scanMaps( struct MapEntry* maps ) ;
 
 /// Read data from `pagemap`, `pageflags` and `pagecount` and get information
 /// about the physical pages referenced in `maps`
+///
+/// @param maps A linked list of #MapEntry nodes
 extern void readPagemapInfo( struct MapEntry* maps ) ;
 
 /// Print the map, results of the scan and physical page info
+///
+/// @param maps A linked list of #MapEntry nodes
 extern void printMaps( struct MapEntry* maps ) ;
 
 /// Release any resources that may have been created by the maps module
+///
+/// @param maps A linked list of #MapEntry nodes
 extern void releaseMaps( struct MapEntry* maps ) ;

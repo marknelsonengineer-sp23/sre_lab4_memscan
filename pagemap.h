@@ -28,7 +28,7 @@
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
 struct PageInfo {
    void*    virtualAddress;  ///< The virtual address that this structure represents
-   bool     valid;           ///< `true` if the data was successfully read and decoded from #PAGEMAP_FILE
+   bool     valid;           ///< `true` if the data was successfully read and decoded from #pagemapFilePath
    void*    pfn;             ///< The Page Frame Number (if present).  Valid when `!swapped`.
    uint8_t  swap_type;       ///< A 5-bit index into a table of swapfiles.  Valid when `swapped`.
    void*    swap_offset;     ///< A 50-bit index into a swapfile.  Valid when `swapped`.
