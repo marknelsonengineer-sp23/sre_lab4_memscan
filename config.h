@@ -187,9 +187,10 @@ extern void reset_config() ;
 
 /// The type of Filter
 enum FilterType {
-   PATTERN  ///< Search MapEntry.sPath for pattern and include the region if there's a hit
-  ,INDEX    ///< Search MapEntry.index and include the region if there's a match
-  ,ADDRESS  ///< Search MapEntry and include the region if the virtual address is in the entry
+   PATTERN     ///< Search MapEntry.sPath for pattern and include the region if there's a hit
+  ,INDEX       ///< Search MapEntry.index and include the region if there's a match
+  ,ADDRESS     ///< Search MapEntry and include the region if the virtual address is in the entry
+  ,PERMISSION  ///< Search MapEntry and include the region if the permission matches the filter
 } ;
 
 
@@ -201,6 +202,9 @@ struct Filter {
                               ///< Search patterns `r` `w` and `x` will match on MapEntry.sPermissions.
    size_t          index ;    ///< Search for this MapEntry.index
    void*           address ;  ///< Include if this is between MapEntry.pAddressStart and MapEntry.pAddressEnd
+   bool            read ;     ///< Include if the region has the read permission
+   bool            write ;    ///< Include if the region has the write permission
+   bool            execute ;  ///< Include if the region has the execute permission
    struct Filter*  next ;     ///< The next #Filter in the linked list or `NULL` for the end of the list.
 } ;
 

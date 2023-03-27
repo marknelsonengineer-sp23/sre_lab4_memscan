@@ -69,11 +69,26 @@ will allow you to do the following:
     - `# ./memscan --path 0`2
   - Map a region to a specific address, then look at it
     - `# ./memscan --map_mem=200K --map_addr=0x2000 0x2000`
+    - Consistently finding regions at a specific address is hard because of 
+      [ASLR] (Address Space Layout Randomization).
   - Look for regions that have `libc` in their `--path` (you may need to change the search)
     - `# ./memscan --path libc`
+  - Look at the default heap and stack
+    - `# ./memscan --path heap stack`
+      - One of things you'll learn when you work with memscan is that there can
+        be many heaps (if you allocate a large block) and many stacks (in multi-threaded
+        programs).
+  - Look at just the executable regions (or just the writable regions) (or both!)
+    - `# ./memscan --path +rx`
+    - `# ./memscan --path +rw`
+    - `# ./memscan --path +rx +rw`
+    - You may see a region that's executable, but not readable:
+      - `# ./memscan --path +x`
 - To stress test memscan and do a bit of everything, try this:
   - `clear && ./memscan --block=/etc/passwd --stream=/etc/passwd --map_file=/etc/passwd --read --local=16384 --numLocal=500 --malloc=1M --numMalloc=4 --map_mem=13M --map_addr=0x555000000000 --fill --threads=10 --sleep=1 --scan_byte=0xc3 --shannon --path --phys`
-  
+
+[ASLR]: https://en.wikipedia.org/wiki/Address_space_layout_randomization
+
 
 ### Handling errors & warnings in a testing framework
 - MemScan does not have a dedicated logger.

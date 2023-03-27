@@ -139,26 +139,15 @@ struct MapEntry* getMaps() {
                }
                goto Next ;
             }
+            if( current->type == PERMISSION ) {
+               if( ( newMap->sPermissions[0] == ((current->read)    ? 'r' : '-' ))
+               &&  ( newMap->sPermissions[1] == ((current->write)   ? 'w' : '-' ))
+               &&  ( newMap->sPermissions[2] == ((current->execute) ? 'x' : '-' )) ) {
+                  newMap->include = true ;
+               }
+               goto Next ;
+            }
             if( current->type == PATTERN ) {
-               // Compare pattern with 'r' 'w' and 'x' permissions
-               if( strcmp( current->pattern, "r" ) == 0 ) {
-                  if( newMap->sPermissions[0] == 'r' ) {
-                     newMap->include = true ;
-                  }
-                  goto Next ;
-               }
-               if( strcmp( current->pattern, "w" ) == 0 ) {
-                  if( newMap->sPermissions[1] == 'w' ) {
-                     newMap->include = true ;
-                  }
-                  goto Next ;
-               }
-               if( strcmp( current->pattern, "x" ) == 0 ) {
-                  if( newMap->sPermissions[2] == 'x' ) {
-                     newMap->include = true ;
-                  }
-                  goto Next ;
-               }
                if( newMap->sPath != NULL) {
                   if( strstr( newMap->sPath, current->pattern ) != NULL ) {
                      newMap->include = true ;

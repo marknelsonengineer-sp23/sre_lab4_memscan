@@ -1,14 +1,21 @@
 Usage
 =====
 ````
-Usage: memscan [OPTION]... [PATTERN]... 
+Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... 
+       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...
        memscan -i|--iomem
 
-  When PATTERN is present, only process sections with a path that includes PATTERN
-  If PATTERN is 'r' 'w' or 'x' then include sections with that permission
-  When PATTERN is not present, process all sections
+  When FILTER is present, only process sections that match a filter
+  If FILTER is a decimal number, match it to the region's index
+  If FILTER is a hex number, include regions with that virtual address
+  If FILTER starts with + and r w or x then include sections with that permission
+  When FILTER is not present, process all sections
 
 The options below may be used to select memscan's operation
+
+TARGETING OPTIONS
+      --pid=NUM            scan process ID (by default, it scans itself)
+      --iomem              print a summary of /proc/iomem
 
 PRE-SCAN OPTIONS
   -b, --block=FILE         open FILE using block I/O before the memscan
@@ -36,10 +43,10 @@ SCAN OPTIONS
                            and physical page
 
 OUTPUT OPTIONS
-  -i, --iomem              print a summary of /proc/iomem
       --path               print the path (if available) in the memscan
   -p, --phys               print a summary of the physical pages w/ flags
   -P  --pfn                print each physical page number w/ flags
+                           --pnf and --phys are exclusive
 
 PROGRAM OPTIONS
   -h, --help               display this help and exit

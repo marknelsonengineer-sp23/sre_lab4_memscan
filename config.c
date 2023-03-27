@@ -55,7 +55,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "  When FILTER is present, only process sections that match a filter\n" ) ;
    PRINT( outStream, "  If FILTER is a decimal number, match it to the region's index\n" ) ;
    PRINT( outStream, "  If FILTER is a hex number, include regions with that virtual address\n" ) ;
-   PRINT( outStream, "  If FILTER is 'r' 'w' or 'x' then include sections with that permission\n" ) ;
+   PRINT( outStream, "  If FILTER starts with + and r w or x then include sections with that permission\n" ) ;
    PRINT( outStream, "  When FILTER is not present, process all sections\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "The options below may be used to select memscan's operation\n" ) ;
@@ -389,6 +389,15 @@ void processOptions( int argc, char* argv[] ) {
          goto NextOption ;
       }
 
+      // Search for permissions:  Filters that start with a +...
+      if( argv[optind][0] == '+' ) {
+         newFilter->read    = ( strchr( argv[optind], 'r' ) != NULL ) ;
+         newFilter->write   = ( strchr( argv[optind], 'w' ) != NULL ) ;
+         newFilter->execute = ( strchr( argv[optind], 'x' ) != NULL ) ;
+         newFilter->type = PERMISSION ;
+         goto NextOption ;
+      }
+
       newFilter->pattern = malloc( strlen( argv[optind] ) ) ;
       if( newFilter->pattern == NULL ) {
          FATAL_ERROR( "unable to allocate memory for a filter's pattern") ;
@@ -402,11 +411,14 @@ void processOptions( int argc, char* argv[] ) {
       filterHead = newFilter ;
 
       #ifdef DEBUG
-         printf( "newFilter->type=%d\n", newFilter->type ) ;
+         printf( "newFilter->type=%d\n",      newFilter->type ) ;
          printf( "newFilter->pattern=[%s]\n", newFilter->pattern ) ;
-         printf( "newFilter->index=%zu\n", newFilter->index ) ;
-         printf( "newFilter->address=%p\n", newFilter->address ) ;
-         printf( "newFilter->next=%p\n", newFilter->next ) ;
+         printf( "newFilter->index=%zu\n",    newFilter->index ) ;
+         printf( "newFilter->address=%p\n",   newFilter->address ) ;
+         printf( "newFilter->read=%d\n",      newFilter->read ) ;
+         printf( "newFilter->write=%d\n",     newFilter->write ) ;
+         printf( "newFilter->execute=%d\n",   newFilter->execute ) ;
+         printf( "newFilter->next=%p\n",      newFilter->next ) ;
       #endif
 
       optind += 1 ;
