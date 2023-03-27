@@ -2,7 +2,6 @@ Usage
 =====
 ````
 Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... 
-       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...
        memscan -i|--iomem
 
   When FILTER is present, only process sections that match a filter
@@ -14,7 +13,6 @@ Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILT
 The options below may be used to select memscan's operation
 
 TARGETING OPTIONS
-      --pid=NUM            scan process ID (by default, it scans itself)
       --iomem              print a summary of /proc/iomem
 
 PRE-SCAN OPTIONS

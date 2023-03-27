@@ -49,7 +49,7 @@ void printUsage( FILE* outStream ) {
    ASSERT( outStream != NULL ) ;
 
    PRINT( outStream, "Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... \n" ) ;
-   PRINT( outStream, "       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...\n" ) ;
+// PRINT( outStream, "       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...\n" ) ;
    PRINT( outStream, "       memscan -i|--iomem\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "  When FILTER is present, only process sections that match a filter\n" ) ;
@@ -59,6 +59,10 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "  When FILTER is not present, process all sections\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "The options below may be used to select memscan's operation\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "TARGETING OPTIONS\n" ) ;
+// PRINT( outStream, "      --pid=NUM            scan process ID (by default, it scans itself)\n" ) ;
+   PRINT( outStream, "      --iomem              print a summary of /proc/iomem\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "PRE-SCAN OPTIONS\n" ) ;
    PRINT( outStream, "  -b, --block=FILE         open FILE using block I/O before the memscan\n" ) ;
