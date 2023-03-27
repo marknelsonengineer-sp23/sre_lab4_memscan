@@ -43,29 +43,32 @@ extern "C" struct MapEntry map[MAX_ENTRIES] ;
 
 // This isn't totally comprehensive, but it's better than nothing
 BOOST_AUTO_TEST_CASE( test_getMaps_unit ) {
-   strcpy( mapsFilePath, "test_maps/maps.test" ) ;
-   BOOST_CHECK_NO_THROW( getMaps() ) ;
+   strcpy( mapsFilePath, "test_maps/maps.unitTest.1" ) ;
+   struct MapEntry* mapList = NULL ;
+   BOOST_CHECK_NO_THROW( mapList = getMaps() ) ;
 
-   BOOST_CHECK_EQUAL( map[0].sAddressStart, "00000000" ) ;
-   BOOST_CHECK_EQUAL( map[0].pAddressStart, (void*) 0x00000000 ) ;
+   BOOST_CHECK( mapList != NULL ) ;
 
-   BOOST_CHECK_EQUAL( map[0].sAddressEnd, "ffffffff" ) ;
-   BOOST_CHECK_EQUAL( map[0].pAddressEnd, (void*) 0xffffffff ) ;
+   BOOST_CHECK_EQUAL( mapList->sAddressStart, "00000000" ) ;
+   BOOST_CHECK_EQUAL( mapList->pAddressStart, (void*) 0x00000000 ) ;
 
-   BOOST_CHECK_EQUAL( map[0].sPermissions, "rwxp" ) ;
-   BOOST_CHECK_EQUAL( map[0].sOffset, "01234567" ) ;
-   BOOST_CHECK_EQUAL( map[0].sDevice, "00:02" ) ;
+   BOOST_CHECK_EQUAL( mapList->sAddressEnd, "ffffffff" ) ;
+   BOOST_CHECK_EQUAL( mapList->pAddressEnd, (void*) 0xffffffff ) ;
 
-   BOOST_CHECK_EQUAL( map[0].sPath, "/init" ) ;
-   BOOST_CHECK_EQUAL( map[0].include, true ) ;
+   BOOST_CHECK_EQUAL( mapList->sPermissions, "rwxp" ) ;
+   BOOST_CHECK_EQUAL( mapList->sOffset, "01234567" ) ;
+   BOOST_CHECK_EQUAL( mapList->sDevice, "00:02" ) ;
 
-   BOOST_CHECK_EQUAL( map[0].numBytes, 0xffffffff ) ;
-   BOOST_CHECK_EQUAL( map[0].numPages,    0xfffff ) ;
+   BOOST_CHECK_EQUAL( mapList->sPath, "/init" ) ;
+   BOOST_CHECK_EQUAL( mapList->include, true ) ;
 
-   BOOST_CHECK_EQUAL( map[0].pages, (void*) NULL ) ;
+   BOOST_CHECK_EQUAL( mapList->numBytes, 0xffffffff ) ;
+   BOOST_CHECK_EQUAL( mapList->numPages,    0xfffff ) ;
 
-   BOOST_CHECK_EQUAL( map[0].numBytesFound, 0 ) ;
-   BOOST_CHECK_EQUAL( map[0].shannonEntropy, 0.0 ) ;
+   BOOST_CHECK_EQUAL( mapList->pages, (void*) NULL ) ;
+
+   BOOST_CHECK_EQUAL( mapList->numBytesFound, 0 ) ;
+   BOOST_CHECK_EQUAL( mapList->shannonEntropy, 0.0 ) ;
 }
 
 BOOST_AUTO_TEST_SUITE_END()
