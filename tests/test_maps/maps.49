@@ -1,0 +1,78 @@
+00420000-004d4000 r-xp 00000000 b3:02 9620       /usr/sbin/ntpd
+004e4000-004e7000 r--p 000b4000 b3:02 9620       /usr/sbin/ntpd
+004e7000-004eb000 rw-p 000b7000 b3:02 9620       /usr/sbin/ntpd
+004eb000-0053c000 rw-p 00000000 00:00 0 
+02241000-02262000 rw-p 00000000 00:00 0          [heap]
+02262000-02283000 rw-p 00000000 00:00 0          [heap]
+76800000-76821000 rw-p 00000000 00:00 0 
+76821000-76900000 ---p 00000000 00:00 0 
+769aa000-769ae000 r-xp 00000000 b3:02 2367       /usr/lib/arm-linux-gnueabihf/libnss_dns-2.31.so
+769ae000-769bd000 ---p 00004000 b3:02 2367       /usr/lib/arm-linux-gnueabihf/libnss_dns-2.31.so
+769bd000-769be000 r--p 00003000 b3:02 2367       /usr/lib/arm-linux-gnueabihf/libnss_dns-2.31.so
+769be000-769bf000 rw-p 00004000 b3:02 2367       /usr/lib/arm-linux-gnueabihf/libnss_dns-2.31.so
+769bf000-769d1000 r-xp 00000000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+769d1000-769e0000 ---p 00012000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+769e0000-769e1000 r--p 00011000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+769e1000-769e2000 rw-p 00012000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+769e2000-769e4000 rw-p 00000000 00:00 0 
+769e4000-769e6000 r-xp 00000000 b3:02 5577       /usr/lib/arm-linux-gnueabihf/libnss_mdns4_minimal.so.2
+769e6000-769f6000 ---p 00002000 b3:02 5577       /usr/lib/arm-linux-gnueabihf/libnss_mdns4_minimal.so.2
+769f6000-769f7000 r--p 00002000 b3:02 5577       /usr/lib/arm-linux-gnueabihf/libnss_mdns4_minimal.so.2
+769f7000-769f8000 rw-p 00003000 b3:02 5577       /usr/lib/arm-linux-gnueabihf/libnss_mdns4_minimal.so.2
+769f8000-769f9000 ---p 00000000 00:00 0 
+769f9000-76a39000 rw-p 00000000 00:00 0 
+76a39000-76a43000 r-xp 00000000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76a43000-76a52000 ---p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76a52000-76a53000 r--p 00009000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76a53000-76a54000 rw-p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76a54000-76a5a000 rw-p 00000000 00:00 0 
+76a5a000-76a76000 r-xp 00000000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+76a76000-76a85000 ---p 0001c000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+76a85000-76a86000 r--p 0001b000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+76a86000-76a87000 rw-p 0001c000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+76a94000-76a96000 rw-p 00000000 00:00 0 
+76a96000-76a99000 r-xp 00000000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76a99000-76aa8000 ---p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76aa8000-76aa9000 r--p 00002000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76aa9000-76aaa000 rw-p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76aaa000-76be8000 r-xp 00000000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76be8000-76bf8000 ---p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76bf8000-76bfa000 r--p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76bfa000-76bfb000 rw-p 00140000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76bfb000-76bfe000 rw-p 00000000 00:00 0 
+76bfe000-76c16000 r-xp 00000000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76c16000-76c26000 ---p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76c26000-76c27000 r--p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76c27000-76c28000 rw-p 00019000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76c28000-76c2a000 rw-p 00000000 00:00 0 
+76c2a000-76e1d000 r-xp 00000000 b3:02 5394       /usr/lib/arm-linux-gnueabihf/libcrypto.so.1.1
+76e1d000-76e2c000 ---p 001f3000 b3:02 5394       /usr/lib/arm-linux-gnueabihf/libcrypto.so.1.1
+76e2c000-76e45000 r--p 001f2000 b3:02 5394       /usr/lib/arm-linux-gnueabihf/libcrypto.so.1.1
+76e45000-76e46000 rw-p 0020b000 b3:02 5394       /usr/lib/arm-linux-gnueabihf/libcrypto.so.1.1
+76e46000-76e4a000 rw-p 00000000 00:00 0 
+76e4a000-76ea8000 r-xp 00000000 b3:02 2363       /usr/lib/arm-linux-gnueabihf/libm-2.31.so
+76ea8000-76eb7000 ---p 0005e000 b3:02 2363       /usr/lib/arm-linux-gnueabihf/libm-2.31.so
+76eb7000-76eb8000 r--p 0005d000 b3:02 2363       /usr/lib/arm-linux-gnueabihf/libm-2.31.so
+76eb8000-76eb9000 rw-p 0005e000 b3:02 2363       /usr/lib/arm-linux-gnueabihf/libm-2.31.so
+76eb9000-76ed4000 r-xp 00000000 b3:02 3949       /usr/lib/arm-linux-gnueabihf/libopts.so.25.17.1
+76ed4000-76ee4000 ---p 0001b000 b3:02 3949       /usr/lib/arm-linux-gnueabihf/libopts.so.25.17.1
+76ee4000-76ee5000 r--p 0001b000 b3:02 3949       /usr/lib/arm-linux-gnueabihf/libopts.so.25.17.1
+76ee5000-76ee6000 rw-p 0001c000 b3:02 3949       /usr/lib/arm-linux-gnueabihf/libopts.so.25.17.1
+76ee6000-76eec000 r-xp 00000000 b3:02 5387       /usr/lib/arm-linux-gnueabihf/libcap.so.2.44
+76eec000-76efb000 ---p 00006000 b3:02 5387       /usr/lib/arm-linux-gnueabihf/libcap.so.2.44
+76efb000-76efc000 r--p 00005000 b3:02 5387       /usr/lib/arm-linux-gnueabihf/libcap.so.2.44
+76efc000-76efd000 rw-p 00006000 b3:02 5387       /usr/lib/arm-linux-gnueabihf/libcap.so.2.44
+76efd000-76f01000 r-xp 00000000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f01000-76f10000 ---p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f10000-76f11000 r--p 00003000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f11000-76f12000 rw-p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f12000-76f34000 r-xp 00000000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f39000-76f3a000 ---p 00000000 00:00 0 
+76f3a000-76f44000 rw-p 00000000 00:00 0 
+76f44000-76f45000 r--p 00022000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f45000-76f46000 rw-p 00023000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+7e94c000-7e96d000 rw-p 00000000 00:00 0          [stack]
+7eec4000-7eec5000 r-xp 00000000 00:00 0          [sigpage]
+7eec5000-7eec6000 r--p 00000000 00:00 0          [vvar]
+7eec6000-7eec7000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]

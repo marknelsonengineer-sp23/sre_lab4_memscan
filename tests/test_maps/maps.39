@@ -1,0 +1,40 @@
+00010000-0004e000 r-xp 00000000 b3:02 28365      /usr/sbin/dhcpcd
+0005e000-0005f000 r--p 0003e000 b3:02 28365      /usr/sbin/dhcpcd
+0005f000-00060000 rw-p 0003f000 b3:02 28365      /usr/sbin/dhcpcd
+00060000-00061000 rw-p 00000000 00:00 0 
+019bc000-01a63000 rw-p 00000000 00:00 0          [heap]
+76cf8000-76d10000 r-xp 00000000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76d10000-76d20000 ---p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76d20000-76d21000 r--p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76d21000-76d22000 rw-p 00019000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76d22000-76d24000 rw-p 00000000 00:00 0 
+76d24000-76d46000 r-xp 00000000 b3:02 19818      /usr/lib/arm-linux-gnueabihf/libudev.so.1.7.0
+76d46000-76d56000 ---p 00022000 b3:02 19818      /usr/lib/arm-linux-gnueabihf/libudev.so.1.7.0
+76d56000-76d57000 r--p 00022000 b3:02 19818      /usr/lib/arm-linux-gnueabihf/libudev.so.1.7.0
+76d57000-76d58000 rw-p 00023000 b3:02 19818      /usr/lib/arm-linux-gnueabihf/libudev.so.1.7.0
+76d58000-76d59000 r-xp 00000000 b3:02 21024      /usr/lib/arm-linux-gnueabihf/dhcpcd/dev/udev.so
+76d59000-76d68000 ---p 00001000 b3:02 21024      /usr/lib/arm-linux-gnueabihf/dhcpcd/dev/udev.so
+76d68000-76d69000 r--p 00000000 b3:02 21024      /usr/lib/arm-linux-gnueabihf/dhcpcd/dev/udev.so
+76d69000-76d6a000 rw-p 00001000 b3:02 21024      /usr/lib/arm-linux-gnueabihf/dhcpcd/dev/udev.so
+76d6a000-76ea8000 r-xp 00000000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76ea8000-76eb8000 ---p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76eb8000-76eba000 r--p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76eba000-76ebb000 rw-p 00140000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76ebb000-76ebe000 rw-p 00000000 00:00 0 
+76ebe000-76ec1000 r-xp 00000000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76ec1000-76ed0000 ---p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76ed0000-76ed1000 r--p 00002000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76ed1000-76ed2000 rw-p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76ed2000-76ed6000 r-xp 00000000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ed6000-76ee5000 ---p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ee5000-76ee6000 r--p 00003000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ee6000-76ee7000 rw-p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ee7000-76f09000 r-xp 00000000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f17000-76f19000 rw-p 00000000 00:00 0 
+76f19000-76f1a000 r--p 00022000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f1a000-76f1b000 rw-p 00023000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+7ee76000-7ee97000 rw-p 00000000 00:00 0          [stack]
+7efb7000-7efb8000 r-xp 00000000 00:00 0          [sigpage]
+7efb8000-7efb9000 r--p 00000000 00:00 0          [vvar]
+7efb9000-7efba000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]

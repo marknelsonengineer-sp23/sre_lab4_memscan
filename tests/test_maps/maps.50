@@ -1,0 +1,31 @@
+00010000-0001c000 r-xp 00000000 b3:02 21656      /usr/sbin/agetty
+0002b000-0002c000 r--p 0000b000 b3:02 21656      /usr/sbin/agetty
+0002c000-0002d000 rw-p 0000c000 b3:02 21656      /usr/sbin/agetty
+0002d000-0002f000 rw-p 00000000 00:00 0 
+00ca6000-00cc7000 rw-p 00000000 00:00 0          [heap]
+76b0a000-76b5f000 r--p 00000000 b3:02 2352       /usr/lib/locale/C.UTF-8/LC_CTYPE
+76b5f000-76d5f000 r--p 00000000 b3:02 8287       /usr/lib/locale/locale-archive
+76d5f000-76d69000 r-xp 00000000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76d69000-76d78000 ---p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76d78000-76d79000 r--p 00009000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76d79000-76d7a000 rw-p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76d7a000-76d80000 rw-p 00000000 00:00 0 
+76d80000-76ebe000 r-xp 00000000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76ebe000-76ece000 ---p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76ece000-76ed0000 r--p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76ed0000-76ed1000 rw-p 00140000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76ed1000-76ed4000 rw-p 00000000 00:00 0 
+76ed4000-76ed8000 r-xp 00000000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ed8000-76ee7000 ---p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ee7000-76ee8000 r--p 00003000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ee8000-76ee9000 rw-p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ee9000-76f0b000 r-xp 00000000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f12000-76f19000 r--s 00000000 b3:02 4414       /usr/lib/arm-linux-gnueabihf/gconv/gconv-modules.cache
+76f19000-76f1b000 rw-p 00000000 00:00 0 
+76f1b000-76f1c000 r--p 00022000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f1c000-76f1d000 rw-p 00023000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+7e7f9000-7e81a000 rw-p 00000000 00:00 0          [stack]
+7eaf3000-7eaf4000 r-xp 00000000 00:00 0          [sigpage]
+7eaf4000-7eaf5000 r--p 00000000 00:00 0          [vvar]
+7eaf5000-7eaf6000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]

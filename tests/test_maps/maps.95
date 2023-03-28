@@ -1,0 +1,108 @@
+00010000-000a4000 r-xp 00000000 b3:02 21830      /usr/sbin/rsyslogd
+000b4000-000b6000 r--p 00094000 b3:02 21830      /usr/sbin/rsyslogd
+000b6000-000ba000 rw-p 00096000 b3:02 21830      /usr/sbin/rsyslogd
+000ba000-000bb000 rw-p 00000000 00:00 0 
+016be000-016df000 rw-p 00000000 00:00 0          [heap]
+755ff000-75600000 ---p 00000000 00:00 0 
+75600000-75e00000 rw-p 00000000 00:00 0 
+75e00000-75e28000 rw-p 00000000 00:00 0 
+75e28000-75f00000 ---p 00000000 00:00 0 
+75f00000-75f2e000 rw-p 00000000 00:00 0 
+75f2e000-76000000 ---p 00000000 00:00 0 
+76000000-76021000 rw-p 00000000 00:00 0 
+76021000-76100000 ---p 00000000 00:00 0 
+7610e000-7610f000 ---p 00000000 00:00 0 
+7610f000-7650f000 rw-p 00000000 00:00 0 
+7650f000-76510000 ---p 00000000 00:00 0 
+76510000-76972000 rw-p 00000000 00:00 0 
+76972000-76976000 r-xp 00000000 b3:02 7522       /usr/lib/arm-linux-gnueabihf/rsyslog/imklog.so
+76976000-76985000 ---p 00004000 b3:02 7522       /usr/lib/arm-linux-gnueabihf/rsyslog/imklog.so
+76985000-76986000 r--p 00003000 b3:02 7522       /usr/lib/arm-linux-gnueabihf/rsyslog/imklog.so
+76986000-76987000 rw-p 00004000 b3:02 7522       /usr/lib/arm-linux-gnueabihf/rsyslog/imklog.so
+76987000-7698e000 r-xp 00000000 b3:02 7556       /usr/lib/arm-linux-gnueabihf/rsyslog/imuxsock.so
+7698e000-7699d000 ---p 00007000 b3:02 7556       /usr/lib/arm-linux-gnueabihf/rsyslog/imuxsock.so
+7699d000-7699e000 r--p 00006000 b3:02 7556       /usr/lib/arm-linux-gnueabihf/rsyslog/imuxsock.so
+7699e000-7699f000 rw-p 00007000 b3:02 7556       /usr/lib/arm-linux-gnueabihf/rsyslog/imuxsock.so
+7699f000-769a9000 r-xp 00000000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+769a9000-769b8000 ---p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+769b8000-769b9000 r--p 00009000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+769b9000-769ba000 rw-p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+769ba000-769c0000 rw-p 00000000 00:00 0 
+769c0000-769c5000 r-xp 00000000 b3:02 7557       /usr/lib/arm-linux-gnueabihf/rsyslog/lmnet.so
+769c5000-769d4000 ---p 00005000 b3:02 7557       /usr/lib/arm-linux-gnueabihf/rsyslog/lmnet.so
+769d4000-769d5000 r--p 00004000 b3:02 7557       /usr/lib/arm-linux-gnueabihf/rsyslog/lmnet.so
+769d5000-769d6000 rw-p 00005000 b3:02 7557       /usr/lib/arm-linux-gnueabihf/rsyslog/lmnet.so
+769d6000-769d8000 rw-p 00000000 00:00 0 
+769d8000-769f4000 r-xp 00000000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+769f4000-76a03000 ---p 0001c000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+76a03000-76a04000 r--p 0001b000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+76a04000-76a05000 rw-p 0001c000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+76a05000-76acd000 r-xp 00000000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+76acd000-76add000 ---p 000c8000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+76add000-76ade000 r--p 000c8000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+76ade000-76ae2000 rw-p 000c9000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+76ae2000-76afe000 r-xp 00000000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76afe000-76b0d000 ---p 0001c000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76b0d000-76b0e000 r--p 0001b000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76b0e000-76b0f000 rw-p 0001c000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76b0f000-76bca000 r-xp 00000000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+76bca000-76bda000 ---p 000bb000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+76bda000-76bdb000 r--p 000bb000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+76bdb000-76bdc000 rw-p 000bc000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+76bdc000-76bfc000 r-xp 00000000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76bfc000-76c0b000 ---p 00020000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76c0b000-76c0c000 r--p 0001f000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76c0c000-76c0d000 rw-p 00020000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76c0d000-76c13000 r-xp 00000000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+76c13000-76c23000 ---p 00006000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+76c23000-76c24000 r--p 00006000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+76c24000-76c25000 rw-p 00007000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+76c25000-76c27000 rw-p 00000000 00:00 0 
+76c27000-76d65000 r-xp 00000000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76d65000-76d75000 ---p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76d75000-76d77000 r--p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76d77000-76d78000 rw-p 00140000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76d78000-76d7b000 rw-p 00000000 00:00 0 
+76d7b000-76d81000 r-xp 00000000 b3:02 5675       /usr/lib/arm-linux-gnueabihf/libuuid.so.1.3.0
+76d81000-76d90000 ---p 00006000 b3:02 5675       /usr/lib/arm-linux-gnueabihf/libuuid.so.1.3.0
+76d90000-76d91000 r--p 00005000 b3:02 5675       /usr/lib/arm-linux-gnueabihf/libuuid.so.1.3.0
+76d91000-76d92000 rw-p 00006000 b3:02 5675       /usr/lib/arm-linux-gnueabihf/libuuid.so.1.3.0
+76d92000-76e36000 r-xp 00000000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76e36000-76e45000 ---p 000a4000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76e45000-76e47000 r--p 000a3000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76e47000-76e48000 rw-p 000a5000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76e48000-76e49000 rw-p 00000000 00:00 0 
+76e49000-76e52000 r-xp 00000000 b3:02 5430       /usr/lib/arm-linux-gnueabihf/libfastjson.so.4.3.0
+76e52000-76e61000 ---p 00009000 b3:02 5430       /usr/lib/arm-linux-gnueabihf/libfastjson.so.4.3.0
+76e61000-76e62000 r--p 00008000 b3:02 5430       /usr/lib/arm-linux-gnueabihf/libfastjson.so.4.3.0
+76e62000-76e63000 rw-p 00009000 b3:02 5430       /usr/lib/arm-linux-gnueabihf/libfastjson.so.4.3.0
+76e63000-76e65000 r-xp 00000000 b3:02 5424       /usr/lib/arm-linux-gnueabihf/libestr.so.0.0.0
+76e65000-76e74000 ---p 00002000 b3:02 5424       /usr/lib/arm-linux-gnueabihf/libestr.so.0.0.0
+76e74000-76e75000 r--p 00001000 b3:02 5424       /usr/lib/arm-linux-gnueabihf/libestr.so.0.0.0
+76e75000-76e76000 rw-p 00002000 b3:02 5424       /usr/lib/arm-linux-gnueabihf/libestr.so.0.0.0
+76e76000-76e79000 r-xp 00000000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76e79000-76e88000 ---p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76e88000-76e89000 r--p 00002000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76e89000-76e8a000 rw-p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76e8a000-76ea2000 r-xp 00000000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76ea2000-76eb2000 ---p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76eb2000-76eb3000 r--p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76eb3000-76eb4000 rw-p 00019000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76eb4000-76eb6000 rw-p 00000000 00:00 0 
+76eb6000-76ecd000 r-xp 00000000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+76ecd000-76edc000 ---p 00017000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+76edc000-76edd000 r--p 00016000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+76edd000-76ede000 rw-p 00017000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+76ede000-76ee2000 r-xp 00000000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ee2000-76ef1000 ---p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ef1000-76ef2000 r--p 00003000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ef2000-76ef3000 rw-p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76ef3000-76f15000 r-xp 00000000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f23000-76f25000 rw-p 00000000 00:00 0 
+76f25000-76f26000 r--p 00022000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f26000-76f27000 rw-p 00023000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+7eb6c000-7eb8d000 rw-p 00000000 00:00 0          [stack]
+7ec14000-7ec15000 r-xp 00000000 00:00 0          [sigpage]
+7ec15000-7ec16000 r--p 00000000 00:00 0          [vvar]
+7ec16000-7ec17000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]

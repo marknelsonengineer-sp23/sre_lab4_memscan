@@ -1,0 +1,143 @@
+00010000-00026000 r-xp 00000000 b3:02 21577      /usr/libexec/polkitd
+00035000-00036000 r--p 00015000 b3:02 21577      /usr/libexec/polkitd
+00036000-00037000 rw-p 00016000 b3:02 21577      /usr/libexec/polkitd
+00e1b000-00e57000 rw-p 00000000 00:00 0          [heap]
+74700000-74721000 rw-p 00000000 00:00 0 
+74721000-74800000 ---p 00000000 00:00 0 
+748ff000-74900000 ---p 00000000 00:00 0 
+74900000-75100000 rw-p 00000000 00:00 0 
+75100000-75121000 rw-p 00000000 00:00 0 
+75121000-75200000 ---p 00000000 00:00 0 
+752ff000-75300000 ---p 00000000 00:00 0 
+75300000-75b00000 rw-p 00000000 00:00 0 
+75b00000-75b21000 rw-p 00000000 00:00 0 
+75b21000-75c00000 ---p 00000000 00:00 0 
+75ca3000-75cad000 r-xp 00000000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+75cad000-75cbc000 ---p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+75cbc000-75cbd000 r--p 00009000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+75cbd000-75cbe000 rw-p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+75cbe000-75cc4000 rw-p 00000000 00:00 0 
+75cd1000-75cd2000 ---p 00000000 00:00 0 
+75cd2000-764d4000 rw-p 00000000 00:00 0 
+764d4000-764f0000 r-xp 00000000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+764f0000-764ff000 ---p 0001c000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+764ff000-76500000 r--p 0001b000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+76500000-76501000 rw-p 0001c000 b3:02 5462       /usr/lib/arm-linux-gnueabihf/libgpg-error.so.0.29.0
+76501000-7658a000 r-xp 00000000 b3:02 4018       /usr/lib/arm-linux-gnueabihf/libpcre2-8.so.0.10.1
+7658a000-76599000 ---p 00089000 b3:02 4018       /usr/lib/arm-linux-gnueabihf/libpcre2-8.so.0.10.1
+76599000-7659a000 r--p 00088000 b3:02 4018       /usr/lib/arm-linux-gnueabihf/libpcre2-8.so.0.10.1
+7659a000-7659b000 rw-p 00089000 b3:02 4018       /usr/lib/arm-linux-gnueabihf/libpcre2-8.so.0.10.1
+7659b000-765df000 r-xp 00000000 b3:02 5363       /usr/lib/arm-linux-gnueabihf/libblkid.so.1.1.0
+765df000-765ee000 ---p 00044000 b3:02 5363       /usr/lib/arm-linux-gnueabihf/libblkid.so.1.1.0
+765ee000-765f1000 r--p 00043000 b3:02 5363       /usr/lib/arm-linux-gnueabihf/libblkid.so.1.1.0
+765f1000-765f2000 rw-p 00046000 b3:02 5363       /usr/lib/arm-linux-gnueabihf/libblkid.so.1.1.0
+765f2000-7660e000 r-xp 00000000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+7660e000-7661d000 ---p 0001c000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+7661d000-7661e000 r--p 0001b000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+7661e000-7661f000 rw-p 0001c000 b3:02 5449       /usr/lib/arm-linux-gnueabihf/libgcc_s.so.1
+7661f000-766e7000 r-xp 00000000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+766e7000-766f7000 ---p 000c8000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+766f7000-766f8000 r--p 000c8000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+766f8000-766fc000 rw-p 000c9000 b3:02 5450       /usr/lib/arm-linux-gnueabihf/libgcrypt.so.20.2.8
+766fc000-76718000 r-xp 00000000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76718000-76727000 ---p 0001c000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76727000-76728000 r--p 0001b000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76728000-76729000 rw-p 0001c000 b3:02 5523       /usr/lib/arm-linux-gnueabihf/liblz4.so.1.9.3
+76729000-767e4000 r-xp 00000000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+767e4000-767f4000 ---p 000bb000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+767f4000-767f5000 r--p 000bb000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+767f5000-767f6000 rw-p 000bc000 b3:02 5699       /usr/lib/arm-linux-gnueabihf/libzstd.so.1.4.8
+767f6000-767f8000 rw-p 00000000 00:00 0 
+767f8000-76818000 r-xp 00000000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76818000-76827000 ---p 00020000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76827000-76828000 r--p 0001f000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76828000-76829000 rw-p 00020000 b3:02 5524       /usr/lib/arm-linux-gnueabihf/liblzma.so.5.2.5
+76829000-7682f000 r-xp 00000000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+7682f000-7683f000 ---p 00006000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+7683f000-76840000 r--p 00006000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+76840000-76841000 rw-p 00007000 b3:02 2373       /usr/lib/arm-linux-gnueabihf/librt-2.31.so
+76841000-768a7000 r-xp 00000000 b3:02 5599       /usr/lib/arm-linux-gnueabihf/libpcre.so.3.13.3
+768a7000-768b6000 ---p 00066000 b3:02 5599       /usr/lib/arm-linux-gnueabihf/libpcre.so.3.13.3
+768b6000-768b7000 r--p 00065000 b3:02 5599       /usr/lib/arm-linux-gnueabihf/libpcre.so.3.13.3
+768b7000-768b8000 rw-p 00066000 b3:02 5599       /usr/lib/arm-linux-gnueabihf/libpcre.so.3.13.3
+768b8000-768bf000 r-xp 00000000 b3:02 5433       /usr/lib/arm-linux-gnueabihf/libffi.so.7.1.0
+768bf000-768ce000 ---p 00007000 b3:02 5433       /usr/lib/arm-linux-gnueabihf/libffi.so.7.1.0
+768ce000-768cf000 r--p 00006000 b3:02 5433       /usr/lib/arm-linux-gnueabihf/libffi.so.7.1.0
+768cf000-768d0000 rw-p 00007000 b3:02 5433       /usr/lib/arm-linux-gnueabihf/libffi.so.7.1.0
+768d0000-768e2000 r-xp 00000000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+768e2000-768f1000 ---p 00012000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+768f1000-768f2000 r--p 00011000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+768f2000-768f3000 rw-p 00012000 b3:02 2372       /usr/lib/arm-linux-gnueabihf/libresolv-2.31.so
+768f3000-768f5000 rw-p 00000000 00:00 0 
+768f5000-76918000 r-xp 00000000 b3:02 5635       /usr/lib/arm-linux-gnueabihf/libselinux.so.1
+76918000-76927000 ---p 00023000 b3:02 5635       /usr/lib/arm-linux-gnueabihf/libselinux.so.1
+76927000-76928000 r--p 00022000 b3:02 5635       /usr/lib/arm-linux-gnueabihf/libselinux.so.1
+76928000-76929000 rw-p 00023000 b3:02 5635       /usr/lib/arm-linux-gnueabihf/libselinux.so.1
+76929000-7692a000 rw-p 00000000 00:00 0 
+7692a000-7697b000 r-xp 00000000 b3:02 5543       /usr/lib/arm-linux-gnueabihf/libmount.so.1.1.0
+7697b000-7698a000 ---p 00051000 b3:02 5543       /usr/lib/arm-linux-gnueabihf/libmount.so.1.1.0
+7698a000-7698c000 r--p 00050000 b3:02 5543       /usr/lib/arm-linux-gnueabihf/libmount.so.1.1.0
+7698c000-7698d000 rw-p 00052000 b3:02 5543       /usr/lib/arm-linux-gnueabihf/libmount.so.1.1.0
+7698d000-76990000 r-xp 00000000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76990000-7699f000 ---p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+7699f000-769a0000 r--p 00002000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+769a0000-769a1000 rw-p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+769a1000-769b8000 r-xp 00000000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+769b8000-769c7000 ---p 00017000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+769c7000-769c8000 r--p 00016000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+769c8000-769c9000 rw-p 00017000 b3:02 5698       /usr/lib/arm-linux-gnueabihf/libz.so.1.2.11
+769c9000-769cb000 r-xp 00000000 b3:02 5457       /usr/lib/arm-linux-gnueabihf/libgmodule-2.0.so.0.6600.8
+769cb000-769db000 ---p 00002000 b3:02 5457       /usr/lib/arm-linux-gnueabihf/libgmodule-2.0.so.0.6600.8
+769db000-769dc000 r--p 00002000 b3:02 5457       /usr/lib/arm-linux-gnueabihf/libgmodule-2.0.so.0.6600.8
+769dc000-769dd000 rw-p 00003000 b3:02 5457       /usr/lib/arm-linux-gnueabihf/libgmodule-2.0.so.0.6600.8
+769dd000-769df000 rw-p 00000000 00:00 0 
+769df000-76b1d000 r-xp 00000000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76b1d000-76b2d000 ---p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76b2d000-76b2f000 r--p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76b2f000-76b30000 rw-p 00140000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76b30000-76b33000 rw-p 00000000 00:00 0 
+76b33000-76b4b000 r-xp 00000000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76b4b000-76b5b000 ---p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76b5b000-76b5c000 r--p 00018000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76b5c000-76b5d000 rw-p 00019000 b3:02 2371       /usr/lib/arm-linux-gnueabihf/libpthread-2.31.so
+76b5d000-76b5f000 rw-p 00000000 00:00 0 
+76b5f000-76b81000 r-xp 00000000 b3:02 4485       /usr/lib/arm-linux-gnueabihf/libexpat.so.1.6.12
+76b81000-76b90000 ---p 00022000 b3:02 4485       /usr/lib/arm-linux-gnueabihf/libexpat.so.1.6.12
+76b90000-76b92000 r--p 00021000 b3:02 4485       /usr/lib/arm-linux-gnueabihf/libexpat.so.1.6.12
+76b92000-76b93000 rw-p 00023000 b3:02 4485       /usr/lib/arm-linux-gnueabihf/libexpat.so.1.6.12
+76b93000-76c37000 r-xp 00000000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76c37000-76c46000 ---p 000a4000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76c46000-76c48000 r--p 000a3000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76c48000-76c49000 rw-p 000a5000 b3:02 4533       /usr/lib/arm-linux-gnueabihf/libsystemd.so.0.30.0
+76c49000-76c4a000 rw-p 00000000 00:00 0 
+76c4a000-76d5b000 r-xp 00000000 b3:02 5456       /usr/lib/arm-linux-gnueabihf/libglib-2.0.so.0.6600.8
+76d5b000-76d6b000 ---p 00111000 b3:02 5456       /usr/lib/arm-linux-gnueabihf/libglib-2.0.so.0.6600.8
+76d6b000-76d6c000 r--p 00111000 b3:02 5456       /usr/lib/arm-linux-gnueabihf/libglib-2.0.so.0.6600.8
+76d6c000-76d6d000 rw-p 00112000 b3:02 5456       /usr/lib/arm-linux-gnueabihf/libglib-2.0.so.0.6600.8
+76d6d000-76db7000 r-xp 00000000 b3:02 5460       /usr/lib/arm-linux-gnueabihf/libgobject-2.0.so.0.6600.8
+76db7000-76dc6000 ---p 0004a000 b3:02 5460       /usr/lib/arm-linux-gnueabihf/libgobject-2.0.so.0.6600.8
+76dc6000-76dc8000 r--p 00049000 b3:02 5460       /usr/lib/arm-linux-gnueabihf/libgobject-2.0.so.0.6600.8
+76dc8000-76dc9000 rw-p 0004b000 b3:02 5460       /usr/lib/arm-linux-gnueabihf/libgobject-2.0.so.0.6600.8
+76dc9000-76f55000 r-xp 00000000 b3:02 5455       /usr/lib/arm-linux-gnueabihf/libgio-2.0.so.0.6600.8
+76f55000-76f65000 ---p 0018c000 b3:02 5455       /usr/lib/arm-linux-gnueabihf/libgio-2.0.so.0.6600.8
+76f65000-76f69000 r--p 0018c000 b3:02 5455       /usr/lib/arm-linux-gnueabihf/libgio-2.0.so.0.6600.8
+76f69000-76f6a000 rw-p 00190000 b3:02 5455       /usr/lib/arm-linux-gnueabihf/libgio-2.0.so.0.6600.8
+76f6a000-76f6b000 rw-p 00000000 00:00 0 
+76f6b000-76f82000 r-xp 00000000 b3:02 5611       /usr/lib/arm-linux-gnueabihf/libpolkit-gobject-1.so.0.0.0
+76f82000-76f92000 ---p 00017000 b3:02 5611       /usr/lib/arm-linux-gnueabihf/libpolkit-gobject-1.so.0.0.0
+76f92000-76f93000 r--p 00017000 b3:02 5611       /usr/lib/arm-linux-gnueabihf/libpolkit-gobject-1.so.0.0.0
+76f93000-76f94000 rw-p 00018000 b3:02 5611       /usr/lib/arm-linux-gnueabihf/libpolkit-gobject-1.so.0.0.0
+76f94000-76f98000 r-xp 00000000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f98000-76fa7000 ---p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76fa7000-76fa8000 r--p 00003000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76fa8000-76fa9000 rw-p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76fa9000-76fcb000 r-xp 00000000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76fd2000-76fd9000 r--s 00000000 b3:02 4414       /usr/lib/arm-linux-gnueabihf/gconv/gconv-modules.cache
+76fd9000-76fdb000 rw-p 00000000 00:00 0 
+76fdb000-76fdc000 r--p 00022000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76fdc000-76fdd000 rw-p 00023000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+7ed7f000-7eda0000 rw-p 00000000 00:00 0          [stack]
+7ee8e000-7ee8f000 r-xp 00000000 00:00 0          [sigpage]
+7ee8f000-7ee90000 r--p 00000000 00:00 0          [vvar]
+7ee90000-7ee91000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]

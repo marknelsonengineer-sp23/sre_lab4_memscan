@@ -1,0 +1,23 @@
+00010000-00039000 r-xp 00000000 b3:02 2114       /usr/bin/hciattach
+00049000-0004a000 r--p 00029000 b3:02 2114       /usr/bin/hciattach
+0004a000-0004c000 rw-p 0002a000 b3:02 2114       /usr/bin/hciattach
+0004c000-0004d000 rw-p 00000000 00:00 0 
+01fdc000-01ffe000 rw-p 00000000 00:00 0          [heap]
+76e3f000-76f7d000 r-xp 00000000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76f7d000-76f8d000 ---p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76f8d000-76f8f000 r--p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76f8f000-76f90000 rw-p 00140000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76f90000-76f93000 rw-p 00000000 00:00 0 
+76f93000-76f97000 r-xp 00000000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f97000-76fa6000 ---p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76fa6000-76fa7000 r--p 00003000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76fa7000-76fa8000 rw-p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76fa8000-76fca000 r-xp 00000000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76fd8000-76fda000 rw-p 00000000 00:00 0 
+76fda000-76fdb000 r--p 00022000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76fdb000-76fdc000 rw-p 00023000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+7ed01000-7ed22000 rw-p 00000000 00:00 0          [stack]
+7ed60000-7ed61000 r-xp 00000000 00:00 0          [sigpage]
+7ed61000-7ed62000 r--p 00000000 00:00 0          [vvar]
+7ed62000-7ed63000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]

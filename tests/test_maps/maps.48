@@ -1,0 +1,40 @@
+00010000-000f9000 r-xp 00000000 b3:02 1545       /usr/bin/bash
+00108000-00109000 r--p 000e8000 b3:02 1545       /usr/bin/bash
+00109000-0010e000 rw-p 000e9000 b3:02 1545       /usr/bin/bash
+0010e000-00118000 rw-p 00000000 00:00 0 
+00628000-0066a000 rw-p 00000000 00:00 0          [heap]
+76910000-7691a000 r-xp 00000000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+7691a000-76929000 ---p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+76929000-7692a000 r--p 00009000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+7692a000-7692b000 rw-p 0000a000 b3:02 2368       /usr/lib/arm-linux-gnueabihf/libnss_files-2.31.so
+7692b000-76931000 rw-p 00000000 00:00 0 
+7693e000-76bb8000 r--p 0006d000 b3:02 8287       /usr/lib/locale/locale-archive
+76bb8000-76db8000 r--p 00000000 b3:02 8287       /usr/lib/locale/locale-archive
+76db8000-76dba000 rw-p 00000000 00:00 0 
+76dba000-76ef8000 r-xp 00000000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76ef8000-76f08000 ---p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76f08000-76f0a000 r--p 0013e000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76f0a000-76f0b000 rw-p 00140000 b3:02 2361       /usr/lib/arm-linux-gnueabihf/libc-2.31.so
+76f0b000-76f0e000 rw-p 00000000 00:00 0 
+76f0e000-76f11000 r-xp 00000000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76f11000-76f20000 ---p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76f20000-76f21000 r--p 00002000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76f21000-76f22000 rw-p 00003000 b3:02 2362       /usr/lib/arm-linux-gnueabihf/libdl-2.31.so
+76f22000-76f41000 r-xp 00000000 b3:02 5658       /usr/lib/arm-linux-gnueabihf/libtinfo.so.6.2
+76f41000-76f51000 ---p 0001f000 b3:02 5658       /usr/lib/arm-linux-gnueabihf/libtinfo.so.6.2
+76f51000-76f53000 r--p 0001f000 b3:02 5658       /usr/lib/arm-linux-gnueabihf/libtinfo.so.6.2
+76f53000-76f54000 rw-p 00021000 b3:02 5658       /usr/lib/arm-linux-gnueabihf/libtinfo.so.6.2
+76f54000-76f58000 r-xp 00000000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f58000-76f67000 ---p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f67000-76f68000 r--p 00003000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f68000-76f69000 rw-p 00004000 b3:02 5336       /usr/lib/arm-linux-gnueabihf/libarmmem-v7l.so
+76f69000-76f8b000 r-xp 00000000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f92000-76f99000 r--s 00000000 b3:02 4414       /usr/lib/arm-linux-gnueabihf/gconv/gconv-modules.cache
+76f99000-76f9b000 rw-p 00000000 00:00 0 
+76f9b000-76f9c000 r--p 00022000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+76f9c000-76f9d000 rw-p 00023000 b3:02 2357       /usr/lib/arm-linux-gnueabihf/ld-2.31.so
+7e7f2000-7e813000 rw-p 00000000 00:00 0          [stack]
+7e920000-7e921000 r-xp 00000000 00:00 0          [sigpage]
+7e921000-7e922000 r--p 00000000 00:00 0          [vvar]
+7e922000-7e923000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
