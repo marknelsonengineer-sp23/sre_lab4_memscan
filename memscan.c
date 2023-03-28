@@ -31,7 +31,13 @@
 int main( int argc, char* argv[] ) {
    // Initialize the program
    reset_config() ;
-   processOptions( argc, argv ) ;  // Process --help, --key, --version
+   processOptions( argc, argv ) ;    // Process --help, --key, --version
+
+   if( ! validateConfig( true ) ) {  // Ensure the configuration is healthy
+      printUsage( stderr ) ;
+      reset_config() ;
+      exit( EXIT_FAILURE ) ;
+   }
 
    checkCapabilities() ;       // Ensure memscan is running with `CAP_SYS_ADMIN`
 
