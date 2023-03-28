@@ -406,6 +406,8 @@ BOOST_FIXTURE_TEST_CASE( test_config_phys, Configuration ) {
    BOOST_CHECK_EQUAL( includePhysicalPageSummary, true ) ;
    BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
    BOOST_CHECK_EQUAL( checkOutputOptions(), true ) ;
+   BOOST_CHECK_EQUAL( scanSelf, true ) ;
+
    BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
 }
 
@@ -436,6 +438,45 @@ BOOST_FIXTURE_TEST_CASE( test_config_block_iomem, Configuration ) {
    BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
 
    std::vector<std::string> arguments = { "memscan", "--block=/bin/cat", "--iomem" } ;
+   MAKE_ARGS() ;
+   processOptions( 3, argv.data() );
+
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_pid, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--pid=111" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( scanSelf, false ) ;
+   BOOST_CHECK_EQUAL( scanPid, 111 ) ;
+   BOOST_CHECK_EQUAL( mapsFilePath, "/proc/111/maps" ) ;
+   BOOST_CHECK_EQUAL( pagemapFilePath, "/proc/111/pagemap" ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+   BOOST_CHECK_EQUAL( checkOutputOptions(), false ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_pid_iomem, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--pid=222", "--iomem" } ;
+   MAKE_ARGS() ;
+   processOptions( 3, argv.data() );
+
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_pid_scan_byte, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--pid=222", "--scan_byte" } ;
    MAKE_ARGS() ;
    processOptions( 3, argv.data() );
 

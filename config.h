@@ -9,10 +9,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include <assert.h>   // For assert()
-#include <stdbool.h>  // For bool
-#include <stdio.h>    // For FILENAME_MAX FILE stderr fprintf()
-#include <stdlib.h>   // For exit()
+#include <assert.h>     // For assert()
+#include <stdbool.h>    // For bool
+#include <stdio.h>      // For FILENAME_MAX FILE stderr fprintf()
+#include <stdlib.h>     // For exit()
+#include <sys/types.h>  // For pid_t
 
 #ifdef TESTING
    #include "tests/boost_test_util.h"  // For throwException()
@@ -108,6 +109,10 @@ extern char mapsFilePath[ FILENAME_MAX ]    ; ///< The path to the process-speci
 extern char pagemapFilePath[ FILENAME_MAX ] ; ///< The path to the process-specific `pagemap` file, defaults to `/proc/self/pagemap`
 extern char iomemFilePath[ FILENAME_MAX ]   ; ///< The path to the system-specific `iomem` file, defaults to `/proc/iomem`.
                                               /// No config changes this.  It's parameterized for unit testing.
+
+extern bool  scanSelf ;  ///< `true` if we are scanning ourself.  `false` if we are scanning another process.
+extern pid_t scanPid ;   ///< The process ID to monitor.  The default is `-1` to monitor yourself.
+
 
 /// Reset the entire configuration and free any resources that may have been
 /// allocated.

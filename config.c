@@ -49,7 +49,7 @@ void printUsage( FILE* outStream ) {
    ASSERT( outStream != NULL ) ;
 
    PRINT( outStream, "Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... \n" ) ;
-// PRINT( outStream, "       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...\n" ) ;
+   PRINT( outStream, "       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...\n" ) ;
    PRINT( outStream, "       memscan --iomem\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "  When FILTER is present, only process memory regions that match:\n" ) ;
@@ -60,7 +60,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "  When no FILTERs are present, process all regions\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "TARGETING OPTIONS\n" ) ;
-// PRINT( outStream, "  --pid=NUM          Scan process ID (by default, it scans itself)\n" ) ;
+   PRINT( outStream, "  --pid=NUM          Scan process ID (by default, it scans itself)\n" ) ;
    PRINT( outStream, "  --iomem            Print a summary of /proc/iomem and exit\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "PRE-SCAN OPTIONS\n" ) ;
@@ -109,6 +109,10 @@ void printUsage( FILE* outStream ) {
 ///
 /// @see https://linux.die.net/man/3/getopt_long
 static struct option long_options[] = {
+   // TARGETING OPTIONS
+   { "pid",       required_argument, 0, 'D' },
+   { "iomem",     no_argument,       0, 'i' },
+
    // PRE-SCAN OPTIONS
    { "block",     required_argument, 0, 'b' },
    { "stream",    required_argument, 0, '0' },
@@ -128,7 +132,6 @@ static struct option long_options[] = {
    { "scan_byte", optional_argument, 0, '3' },
    { "shannon",   no_argument,       0, '4' },
    // OUTPUT OPTIONS
-   { "iomem",     no_argument,       0, 'i' },
    { "path",      no_argument,       0, '5' },
    { "phys",      no_argument,       0, 'p' },
    { "pfn",       no_argument,       0, 'P' },
@@ -179,6 +182,9 @@ char mapsFilePath[ FILENAME_MAX ] ;
 char pagemapFilePath[ FILENAME_MAX ] ;
 char iomemFilePath[ FILENAME_MAX ] ;
 
+bool  scanSelf ;
+pid_t scanPid ;
+
 
 void processOptions( int argc, char* argv[] ) {
    ASSERT( argc >= 1 ) ;  // There's always at least 1 argument
@@ -206,7 +212,17 @@ void processOptions( int argc, char* argv[] ) {
       }
 
       switch ( optionChar ) {
-         case 'b':
+         case 'D': {
+            unsigned long long trialValue = stringToUnsignedLongLongWithScale( optarg ) ;
+            ASSERT( trialValue <= SIZE_MAX ) ;
+            scanPid = (int) trialValue ;
+            scanSelf = false ;
+            sprintf( mapsFilePath, "/proc/%d/maps", scanPid ) ;        /// NOLINT(cert-err33-c): It's OK to ignore the result of `sprintf`
+            sprintf( pagemapFilePath, "/proc/%d/pagemap", scanPid ) ;  //  NOLINT(cert-err33-c): It's OK to ignore the result of `sprintf`
+            }
+            break ;
+
+      case 'b':
             ASSERT( optarg != NULL ) ;
             openFileWithBlockIO = true ;
             strncpy( blockPath, optarg, sizeof( blockPath ) ) ;
@@ -525,6 +541,9 @@ void reset_config() {
    strncpy( pagemapFilePath, "/proc/self/pagemap", FILENAME_MAX ) ;
    strncpy( iomemFilePath,   "/proc/iomem",        FILENAME_MAX ) ;
 
+   scanSelf = true ;
+   scanPid  = -1 ;
+
    /// Free the #Filter linked list from #filterHead
    struct Filter* currentFilter = filterHead ;
    while( currentFilter != NULL ) {
@@ -592,10 +611,17 @@ bool checkOutputOptions() {
 
 bool validateConfig( const bool printReason ) {
    /// - If `--iomem` is set, then none of the checkScanOptions() nor
-   //    checkOutputOptions() can be set
+   ///   checkOutputOptions() can be set
    if( iomemSummary ) {
-      if( checkScanOptions() || checkOutputOptions() ) {
+      if( (! scanSelf ) || checkScanOptions() || checkOutputOptions() ) {
          FAILED_VALIDATION( "illegal options with --iomem" ) ;
+      }
+   }
+
+   /// - If `--pid` is set, then none of the checkScanOptions() can be set
+   if( ! scanSelf ) {
+      if( iomemSummary || checkScanOptions() ) {
+         FAILED_VALIDATION( "illegal options with --pid" ) ;
       }
    }
 

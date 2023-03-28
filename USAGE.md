@@ -2,6 +2,7 @@ Usage
 =====
 ````
 Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... 
+       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...
        memscan --iomem
 
   When FILTER is present, only process memory regions that match:
@@ -12,6 +13,7 @@ Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILT
   When no FILTERs are present, process all regions
 
 TARGETING OPTIONS
+  --pid=NUM          Scan process ID (by default, it scans itself)
   --iomem            Print a summary of /proc/iomem and exit
 
 PRE-SCAN OPTIONS

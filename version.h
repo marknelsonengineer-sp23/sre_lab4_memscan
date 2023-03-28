@@ -18,13 +18,13 @@
 #define VERSION_MAJOR    2
 
 /// Increments with minor functional changes and bugfixes
-#define VERSION_MINOR    2
+#define VERSION_MINOR    3
 
 /// Increments with bugfixes
 #define VERSION_PATCH    0
 
 /// Monotonic counter that tracks the number of compilations
-#define VERSION_BUILD 10967
+#define VERSION_BUILD 11070
 
 #ifndef STRINGIFY_VALUE
 /// C preprocesor trick that converts values into strings at compile time
