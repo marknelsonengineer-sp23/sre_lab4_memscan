@@ -50,57 +50,57 @@ void printUsage( FILE* outStream ) {
 
    PRINT( outStream, "Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... \n" ) ;
 // PRINT( outStream, "       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...\n" ) ;
-   PRINT( outStream, "       memscan -i|--iomem\n" ) ;
+   PRINT( outStream, "       memscan --iomem\n" ) ;
    PRINT( outStream, "\n" ) ;
-   PRINT( outStream, "  When FILTER is present, only process sections that match a filter\n" ) ;
-   PRINT( outStream, "  If FILTER is a decimal number, match it to the region's index\n" ) ;
-   PRINT( outStream, "  If FILTER is a hex number, include regions with that virtual address\n" ) ;
-   PRINT( outStream, "  If FILTER starts with + and r w or x then include sections with that permission\n" ) ;
-   PRINT( outStream, "  When FILTER is not present, process all sections\n" ) ;
-   PRINT( outStream, "\n" ) ;
-   PRINT( outStream, "The options below may be used to select memscan's operation\n" ) ;
+   PRINT( outStream, "  When FILTER is present, only process memory regions that match:\n" ) ;
+   PRINT( outStream, "    - If FILTER is a decimal number, match on the region's index\n" ) ;
+   PRINT( outStream, "    - If FILTER is a hex number (address), match the region that has the address\n" ) ;
+   PRINT( outStream, "    - If FILTER prefix is +, followed by r w or x, include regions with that\n" ) ;
+   PRINT( outStream, "      permission set\n" ) ;
+   PRINT( outStream, "  When no FILTERs are present, process all regions\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "TARGETING OPTIONS\n" ) ;
-// PRINT( outStream, "      --pid=NUM            scan process ID (by default, it scans itself)\n" ) ;
-   PRINT( outStream, "      --iomem              print a summary of /proc/iomem\n" ) ;
+// PRINT( outStream, "  --pid=NUM          Scan process ID (by default, it scans itself)\n" ) ;
+   PRINT( outStream, "  --iomem            Print a summary of /proc/iomem and exit\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "PRE-SCAN OPTIONS\n" ) ;
-   PRINT( outStream, "  -b, --block=FILE         open FILE using block I/O before the memscan\n" ) ;
-   PRINT( outStream, "      --stream=FILE        open FILE using stream I/O before the memscan\n" ) ;
-   PRINT( outStream, "      --map_file=FILE      open FILE using memory mapped I/O before the memscan\n" ) ;
-   PRINT( outStream, "  -r, --read               read the contents of the files\n" ) ;
-// PRINT( outStream, "  -f, --fork               fork a process and display the combined parent and\n" ) ;
-// PRINT( outStream, "                           child memscan\n" ) ;
-   PRINT( outStream, "  -l, --local=NUM[K|M|G]   allocate NUM bytes in local variables before the\n" ) ;
-   PRINT( outStream, "                           memscan\n" ) ;
-   PRINT( outStream, "      --numLocal=NUM       number of local allocations\n" ) ;
-   PRINT( outStream, "  -m, --malloc=NUM[K|M|G]  malloc NUM bytes before the memscan\n" ) ;
-   PRINT( outStream, "      --numMalloc=NUM      number of malloc'd allocations\n" ) ;
-   PRINT( outStream, "      --map_mem=NUM[K|M|G] allocate NUM bytes of memory via mmap before the\n" ) ;
-   PRINT( outStream, "                           memscan\n" ) ;
-   PRINT( outStream, "      --map_addr=ADDR      the starting address of the memory map\n" ) ;
-   PRINT( outStream, "                           by default, the OS will select an address\n" ) ;
-   PRINT( outStream, "      --fill               fill the local, malloc'd and/or mapped memory\n" ) ;
-   PRINT( outStream, "                           with data before the memscan\n" ) ;
-   PRINT( outStream, "  -t, --threads=NUM        create NUM threads before the memscan\n" ) ;
-   PRINT( outStream, "      --sleep=SECONDS      pause the primary thread before scanning\n" ) ;
+   PRINT( outStream, "  --block=FILE       Open FILE using block I/O before the scan\n" ) ;
+   PRINT( outStream, "  --stream=FILE      Open FILE using stream I/O before the scan\n" ) ;
+   PRINT( outStream, "  --map_file=FILE    Open FILE using memory mapped I/O before the scan\n" ) ;
+   PRINT( outStream, "  --read             Read the contents of the files\n" ) ;
+// PRINT( outStream, "  --fork             Fork a process and display the combined parent & child scan\n" ) ;
+   PRINT( outStream, "  --local=SIZE       Allocate SIZE bytes in local variables before the scan\n" ) ;
+   PRINT( outStream, "  --numLocal=NUM     Number of local allocations\n" ) ;
+   PRINT( outStream, "  --malloc=SIZE      Malloc SIZE bytes before the scan\n" ) ;
+   PRINT( outStream, "  --numMalloc=NUM    Number of malloc'd allocations\n" ) ;
+   PRINT( outStream, "  --map_mem=SIZE     Allocate SIZE bytes of memory via mmap before the scan\n" ) ;
+   PRINT( outStream, "  --map_addr=ADDR    The starting address of the memory map; by default, the OS\n" ) ;
+   PRINT( outStream, "                     will select an address\n" ) ;
+   PRINT( outStream, "  --fill             Fill the local, malloc'd and/or mapped memory with data\n" ) ;
+   PRINT( outStream, "                     before the scan\n" ) ;
+   PRINT( outStream, "  --threads=NUM      Create NUM threads before the scan\n" ) ;
+   PRINT( outStream, "  --sleep=NUM        Pause the primary thread for NUM seconds before scanning\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "SCAN OPTIONS\n" ) ;
-   PRINT( outStream, "      --scan_byte[=NUM]    scan for NUM (a byte from 0x00 to 0xff)\n" ) ;
-   PRINT( outStream, "                           or c3 (the x86 RET instruction) by default\n" ) ;
-   PRINT( outStream, "      --shannon            compute Shannon Entropy for each mapped region\n" ) ;
-   PRINT( outStream, "                           and physical page\n" ) ;
+   PRINT( outStream, "  --scan_byte[=NUM]  Scan for NUM (a byte from 0x00 to 0xff)\n" ) ;
+   PRINT( outStream, "                     or c3 (the x86 RET instruction) by default\n" ) ;
+   PRINT( outStream, "  --shannon          Compute Shannon Entropy for each mapped region\n" ) ;
+   PRINT( outStream, "                     and physical page\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "OUTPUT OPTIONS\n" ) ;
-   PRINT( outStream, "      --path               print the path (if available) in the memscan\n" ) ;
-   PRINT( outStream, "  -p, --phys               print a summary of the physical pages w/ flags\n" ) ;
-   PRINT( outStream, "  -P  --pfn                print each physical page number w/ flags\n" ) ;
-   PRINT( outStream, "                           --pnf and --phys are exclusive\n" ) ;
+   PRINT( outStream, "  --path             Print the path (if available)\n" ) ;
+   PRINT( outStream, "  --pfn              Print each physical page number w/ flags\n" ) ;
+   PRINT( outStream, "  --phys             Print a summary of the physical pages w/ flags\n" ) ;
+   PRINT( outStream, "                     --pfn and --phys are exclusive\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "PROGRAM OPTIONS\n" ) ;
-   PRINT( outStream, "  -h, --help               display this help and exit\n" ) ;
-   PRINT( outStream, "  -k, --key                display key to the --phys flags\n" ) ;
-   PRINT( outStream, "  -v, --version            output version information and exit\n" ) ;
+   PRINT( outStream, "  -h, --help         Display this help and exit\n" ) ;
+   PRINT( outStream, "  -k, --key          Display key to the --pfn and --phys flags and exit\n" ) ;
+   PRINT( outStream, "  -v, --version      Display memscan's version and exit\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "SIZE may end in K|M|G to scale by 1,024 or k|m|g to scale by 1,000\n" ) ;
+   PRINT( outStream, "NUM and ADDR may be prefixed by 0x (for hex) or 0b (for binary)\n" ) ;
+   PRINT( outStream, "\n" ) ;
 }
 
 
@@ -140,7 +140,7 @@ static struct option long_options[] = {
 };
 
 /// Define the single character option string
-const char SINGLE_OPTION_STRING[] = "b:rfl:m:t:pPhkv" ;
+const char SINGLE_OPTION_STRING[] = "hkv" ;
 
 
 // All of these globals are set in reset_config()

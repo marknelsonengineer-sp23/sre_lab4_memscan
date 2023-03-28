@@ -48,6 +48,7 @@
       <w>fgetpos</w>
       <w>fgets</w>
       <w>fgetwc</w>
+      <w>filte</w>
       <w>fontpath</w>
       <w>fpreprocessed</w>
       <w>fprintf</w>
