@@ -181,10 +181,7 @@ char iomemFilePath[ FILENAME_MAX ] ;
 
 
 void processOptions( int argc, char* argv[] ) {
-   if( argc < 1 ) {
-      printf( "Unexpected argument count [%d].  Exiting.\n", argc );
-      exit( EXIT_FAILURE );
-   }
+   ASSERT( argc >= 1 ) ;  // There's always at least 1 argument
 
    if( strlen( getProgramName() ) == 0 ) {
       setProgramName( argv[0] ) ;
@@ -197,6 +194,7 @@ void processOptions( int argc, char* argv[] ) {
       FATAL_ERROR( "Unable to set locale" ) ;
    }
 
+   optind = 1 ;  // Reset the option index
    while( true ) {
       int option_index = 0;
       int optionChar;
@@ -540,4 +538,112 @@ void reset_config() {
    }
 
    filterHead = NULL ;
+}
+
+
+/// Check the PRE-SCAN OPTIONS and SCAN OPTIONS
+///
+/// This is an internal helper routine.
+///
+/// @return `true` if any of the PRE-SCAN OPTIONS or SCAN OPTIONS are set
+bool checkScanOptions() {
+   return   blockPath[0]   != '\0'
+         || streamPath[0]  != '\0'
+         || mapFilePath[0] != '\0'
+         || readFileContents
+         || localSize != 0
+         || numLocals != 1
+         || mallocSize != 0
+         || numMallocs != 1
+         || mappedSize != 0
+         || mappedStart != NULL
+         || fillAllocatedMemory
+         || numThreads != 0
+         || sleepSeconds != 0
+         || scanForByte
+         || scanForShannon
+         ;
+}
+
+
+/// Check the OUTPUT OPTIONS
+///
+/// This is an internal helper routine.
+///
+/// @return `true` if any of the OUTPUT OPTIONS are set
+bool checkOutputOptions() {
+   return   printPath
+         || includePhysicalPageNumber
+         || includePhysicalPageSummary
+         ;
+}
+
+
+/// Call when a validation has failed in validateConfig().
+///
+/// If `printReason` is set, then print a message.
+/// In all cases, return `false`
+#define FAILED_VALIDATION( msg )  \
+   if( printReason ) {            \
+      WARNING( msg ) ;            \
+   }                              \
+   return false
+
+
+bool validateConfig( const bool printReason ) {
+   /// - If `--iomem` is set, then none of the checkScanOptions() nor
+   //    checkOutputOptions() can be set
+   if( iomemSummary ) {
+      if( checkScanOptions() || checkOutputOptions() ) {
+         FAILED_VALIDATION( "illegal options with --iomem" ) ;
+      }
+   }
+
+   /// - If `--read` is set, then at least `--block`, `--stream` or
+   ///   `--map_file` must be set
+   if( readFileContents ) {
+      if(    blockPath[0]   == '\0'
+          && streamPath[0]  == '\0'
+          && mapFilePath[0] == '\0' ) {
+         FAILED_VALIDATION( "no file IO options with --read" ) ;
+      }
+   }
+
+   /// - If `--numLocal` is set, then `--local` must be set
+   if( numLocals > 1 ) {
+      if( localSize == 0 ) {
+         FAILED_VALIDATION( "no --local option with --numLocal" ) ;
+      }
+   }
+
+   /// - If `--numMalloc` is set, then `--malloc` must be set
+   if( numMallocs > 1 ) {
+      if( mallocSize == 0 ) {
+         FAILED_VALIDATION( "no --malloc option with --numMalloc" ) ;
+      }
+   }
+
+   /// - If `--map_addr` is set, then `--map_mem` must be set
+   if( mappedStart != NULL ) {
+      if( mappedSize == 0 ) {
+         FAILED_VALIDATION( "no --map_mem option with --map_addr" ) ;
+      }
+   }
+
+   /// - If `--fill` is set, then at least `--local`, `--malloc` or
+   ///   `--map_mem` must be set
+   if( fillAllocatedMemory ) {
+      if(       localSize  == 0
+             && mallocSize == 0
+             && mappedSize == 0 ) {
+         FAILED_VALIDATION( "no memory allocation options with --fill" ) ;
+      }
+   }
+
+   /// - `--pfn` and `--phys` are exclusive
+   if( includePhysicalPageSummary && includePhysicalPageNumber ) {
+      FAILED_VALIDATION( "--pfn and --phys are exclusive" ) ;
+   }
+
+   return true ;
 }

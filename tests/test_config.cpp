@@ -24,6 +24,18 @@ extern "C" {
    #include "../config.h"
 }
 
+/* ****************************************************************************
+   White Box Test Declarations
+
+   These declarations may contain duplicate code or code that needs to be in
+   sync with the code under test.  Because these are white box tests, it's on
+   the tester to ensure the code is in sync.                                 */
+
+extern "C" bool checkScanOptions() ;
+extern "C" bool checkOutputOptions() ;
+
+/* ***************************************************************************/
+
 
 // Ensure that reset_config() runs before we start testing.
 struct MyGlobalFixture {
@@ -123,6 +135,313 @@ BOOST_AUTO_TEST_CASE( test_GET_BIT ) {
    BOOST_CHECK(  GET_BIT( 0x8000000000000000, 63 ) ) ;
    BOOST_CHECK( !GET_BIT( 0x7fffffffffffffff, 63 ) ) ;
 } // test_GET_BIT
+
+
+struct Configuration {
+   Configuration() {
+      BOOST_TEST_MESSAGE( "setup memscan configuration" ) ;
+      reset_config() ;
+      BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+   }
+   ~Configuration() {  // NOLINT( bugprone-exception-escape ): I'm accepting the risk of the destructor throwing an exception
+      BOOST_TEST_MESSAGE( "teardown memscan configuration" ) ;
+      reset_config() ;
+      BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+   }
+} ;
+
+#define MAKE_ARGS() std::vector<char*> argv;               \
+                    for( const auto& arg : arguments )     \
+                       argv.push_back((char*)arg.data());  /* NOLINT(performance-inefficient-vector-operation) */  \
+                    argv.push_back( nullptr )
+
+BOOST_FIXTURE_TEST_CASE( test_config_block, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--block=/etc/passwd" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( blockPath, "/etc/passwd" ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_stream, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--stream=/etc/group" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( streamPath, "/etc/group" ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_map_file, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--map_file=/etc/shadow" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( mapFilePath, "/etc/shadow" ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_read, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--read" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( readFileContents, true ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_local, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--local=500k" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( localSize, 500000 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_numLocal, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--numLocal=12" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( numLocals, 12 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_malloc, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--malloc=500M" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( mallocSize, 524288000 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_num_malloc, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--numMalloc=0xff" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( numMallocs, 255 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_map_mem, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--map_mem=40G" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( mappedSize, 42949672960 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_map_addr, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--map_addr=0x80112233" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( mappedStart, (void*) 0x80112233 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_fill, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--fill" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( fillAllocatedMemory, true ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_threads, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--threads=0b1000" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( numThreads, 8 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_sleep, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--sleep=60" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( sleepSeconds, 60 ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_scan_byte, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--scan_byte" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( scanForByte, true ) ;
+   BOOST_CHECK_EQUAL( byteToScanFor, 0xc3 ) ;
+
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_scan_byte_with_value, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--scan_byte=0xee" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( scanForByte, true ) ;
+   BOOST_CHECK_EQUAL( byteToScanFor, 0xee ) ;
+
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_shannon, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--shannon" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( scanForShannon, true ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), true ) ;
+   BOOST_CHECK_EQUAL( checkOutputOptions(), false ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_path, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--path" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( printPath, true ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+   BOOST_CHECK_EQUAL( checkOutputOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_pfn, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--pfn" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( includePhysicalPageNumber, true ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+   BOOST_CHECK_EQUAL( checkOutputOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_phys, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--phys" } ;
+   MAKE_ARGS() ;
+   processOptions( 2, argv.data() );
+
+   BOOST_CHECK_EQUAL( includePhysicalPageSummary, true ) ;
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+   BOOST_CHECK_EQUAL( checkOutputOptions(), true ) ;
+   BOOST_CHECK_EQUAL( validateConfig( false ), true ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_phys_pfn, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--pfn", "--phys" } ;
+   MAKE_ARGS() ;
+   processOptions( 3, argv.data() );
+
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_iomem_pfn, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--iomem", "--phys" } ;
+   MAKE_ARGS() ;
+   processOptions( 3, argv.data() );
+
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_config_block_iomem, Configuration ) {
+   BOOST_CHECK_EQUAL( checkScanOptions(), false ) ;
+
+   std::vector<std::string> arguments = { "memscan", "--block=/bin/cat", "--iomem" } ;
+   MAKE_ARGS() ;
+   processOptions( 3, argv.data() );
+
+   BOOST_CHECK_EQUAL( validateConfig( false ), false ) ;
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
 /// @endcond

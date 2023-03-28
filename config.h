@@ -114,6 +114,16 @@ extern char iomemFilePath[ FILENAME_MAX ]   ; ///< The path to the system-specif
 extern void reset_config() ;
 
 
+/// Validate the configuration.
+///
+/// Validate enforces major "business rules" of memscan.  It's not looking
+/// duplicate `--help` or `--key` configs.
+///
+/// @param printReason if `true`, then print the reason the validation failed
+/// @return `true` if the configuration is healthy.  `false` if it is not.
+extern bool validateConfig( const bool printReason ) ;
+
+
 /// Print `...` to `outStream`.
 ///
 /// @NOLINTBEGIN(cert-err33-c): No need to check the return value of `fprintf`
