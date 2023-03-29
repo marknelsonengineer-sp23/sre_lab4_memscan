@@ -222,7 +222,7 @@ void processOptions( int argc, char* argv[] ) {
             }
             break ;
 
-      case 'b':
+         case 'b':
             ASSERT( optarg != NULL ) ;
             openFileWithBlockIO = true ;
             strncpy( blockPath, optarg, sizeof( blockPath ) ) ;
