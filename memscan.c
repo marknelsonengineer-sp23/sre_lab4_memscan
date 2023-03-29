@@ -8,17 +8,18 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdlib.h>   // For exit() EXIT_SUCCESS and EXIT_FAILURE
-#include <unistd.h>   // For sleep()
+#include <stdlib.h>    // For exit() EXIT_SUCCESS and EXIT_FAILURE
+#include <sys/wait.h>  // For waitpid()
+#include <unistd.h>    // For sleep()
 
-#include "allocate.h" // For allocatePreScanMemory() fillPreScanMemory() releasePreScanMemory()
-#include "config.h"   // For processOptions() checkCapabilities()
-#include "files.h"    // For openPreScanFiles() readPreScanFiles() closePreScanFiles()
-#include "iomem.h"    // For read_iomem() summarize_iomem()
-#include "maps.h"     // For getMaps() scanMaps() readPagemapInfo() printMaps()
-#include "memscan.h"  // Just cuz
-#include "pagemap.h"  // For closePagemap()
-#include "threads.h"  // For createThreads() closeThreads()
+#include "allocate.h"  // For allocatePreScanMemory() fillPreScanMemory() releasePreScanMemory()
+#include "config.h"    // For processOptions() checkCapabilities()
+#include "files.h"     // For openPreScanFiles() readPreScanFiles() closePreScanFiles()
+#include "iomem.h"     // For read_iomem() summarize_iomem()
+#include "maps.h"      // For getMaps() scanMaps() readPagemapInfo() printMaps()
+#include "memscan.h"   // Just cuz
+#include "pagemap.h"   // For closePagemap()
+#include "threads.h"   // For createThreads() closeThreads()
 
 
 /// A memory scanner:  memscan's `main()`
@@ -46,6 +47,39 @@ int main( int argc, char* argv[] ) {
    if( iomemSummary ) {           // Process --iomem
       summarize_iomem() ;
    } else if( forkProcess ) {     // Process --fork
+      pid_t forkPid = fork() ;
+
+      if( forkPid < 0 ) {
+         FATAL_ERROR( "fork failed" ) ;
+      }
+
+      /// @todo we should be able to implement the pre-scan options with --fork
+
+      // Both the parent & child run concurrently to get maps...
+      struct MapEntry* myMaps = getMaps() ;
+
+      scanMaps( myMaps ) ;        // Process --scan_byte, --shannon
+
+      readPagemapInfo( myMaps ) ; // Process --phys and --pfn
+
+      // The parent waits for the child process to finish...
+      if( forkPid == 0 ) {
+         printf( "Child memscan\n" ) ;
+         printMaps( myMaps ) ;
+
+         printf( "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n" ) ;
+      } else {
+         int returnStatus;
+         waitpid( forkPid, &returnStatus, 0 ) ;  // Parent process waits here for child to terminate.
+
+         printf( "Parent memscan\n " ) ;
+         printMaps( myMaps ) ;
+      }
+
+      releaseMaps( myMaps ) ;
+      myMaps = NULL ;
+
+      closePagemap() ;
 
    } else if( scanPid != -1 ) {   // Process --pid
       struct MapEntry* myMaps = getMaps() ;
