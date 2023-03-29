@@ -565,7 +565,7 @@ void reset_config() {
 /// This is an internal helper routine.
 ///
 /// @return `true` if any of the PRE-SCAN OPTIONS or SCAN OPTIONS are set
-bool checkScanOptions() {
+bool hasScanOptions() {
    return   blockPath[0]   != '\0'
          || streamPath[0]  != '\0'
          || mapFilePath[0] != '\0'
@@ -590,7 +590,7 @@ bool checkScanOptions() {
 /// This is an internal helper routine.
 ///
 /// @return `true` if any of the OUTPUT OPTIONS are set
-bool checkOutputOptions() {
+bool hasOutputOptions() {
    return   printPath
          || includePhysicalPageNumber
          || includePhysicalPageSummary
@@ -610,18 +610,28 @@ bool checkOutputOptions() {
 
 
 bool validateConfig( const bool printReason ) {
-   /// - If `--iomem` is set, then none of the checkScanOptions() nor
-   ///   checkOutputOptions() can be set
+   /// - If `--iomem` is set, then none of the hasScanOptions() nor
+   ///   hasOutputOptions() can be set.  Also, `--iomem` is exclusive
+   ///   with `--fork` and `--pid`.
    if( iomemSummary ) {
-      if( (! scanSelf ) || checkScanOptions() || checkOutputOptions() ) {
+      if( scanPid >= 0 || forkProcess || hasScanOptions() || hasOutputOptions() ) {
          FAILED_VALIDATION( "illegal options with --iomem" ) ;
       }
    }
 
-   /// - If `--pid` is set, then none of the checkScanOptions() can be set
-   if( ! scanSelf ) {
-      if( iomemSummary || checkScanOptions() ) {
+   /// - If `--pid` is set, then none of the hasScanOptions()
+   /// can be set.  Also, `--pid` is exclusive with `--fork` and `--iomem`.
+   if( scanPid >= 0 ) {
+      if( iomemSummary || forkProcess || hasScanOptions() ) {
          FAILED_VALIDATION( "illegal options with --pid" ) ;
+      }
+   }
+
+   /// - If `--fork` is set, then none of the hasScanOptions()
+   /// can be set.  Also, `--fork` is exclusive with `--pid` and `--iomem`.
+   if( forkProcess ) {
+      if( scanPid >= 0 || iomemSummary || hasScanOptions() ) {
+         FAILED_VALIDATION( "illegal options with --fork" ) ;
       }
    }
 
