@@ -31,65 +31,83 @@
 int main( int argc, char* argv[] ) {
    // Initialize the program
    reset_config() ;
-   processOptions( argc, argv ) ;    // Process --help, --key, --version
+   processOptions( argc, argv ) ; // Process --help, --key, --version
 
-   if( ! validateConfig( true ) ) {  // Ensure the configuration is healthy
+   if( ! validateConfig( true ) ) { // Ensure the configuration is healthy
       printUsage( stderr ) ;
       reset_config() ;
       exit( EXIT_FAILURE ) ;
    }
 
-   checkCapabilities() ;       // Ensure memscan is running with `CAP_SYS_ADMIN`
+   checkCapabilities() ;          // Ensure memscan is running with `CAP_SYS_ADMIN`
 
-   read_iomem() ;              // Bring in the physical memory allocation from `iomem`
+   read_iomem() ;                 // Bring in the physical memory allocation from `iomem`
 
-   if( iomemSummary ) {        // Process --iomem
+   if( iomemSummary ) {           // Process --iomem
       summarize_iomem() ;
-      release_iomem() ;
-      reset_config() ;
-      exit( EXIT_SUCCESS ) ;
-   }
+   } else if( forkProcess ) {     // Process --fork
 
-   // Do pre-scan operations
-   openPreScanFiles() ;        // Process --block, --stream, --map_file and --read
-   allocatePreScanMemory() ;   // Process --local, --numLocal, --malloc, --numMalloc,
-                               // --mem_map, --mapAddr and --fill
+   } else if( scanPid != -1 ) {   // Process --pid
+      struct MapEntry* myMaps = getMaps() ;
 
-   /// Anything that changes #mapsFilePath should be done before calling getMaps()
+      scanMaps( myMaps ) ;        // Process --scan_byte, --shannon
 
-   /// Anything that changes the physical pagemap information such as scanning
-   /// or waiting, should be done before calling readPagemapInfo()
+      readPagemapInfo( myMaps ) ; // Process --phys and --pfn
 
-   if( numThreads == 0 ) {
-      if( readFileContents ) {
-         readPreScanFiles() ;  // Process --read
+      printMaps( myMaps ) ;
+
+      releaseMaps( myMaps ) ;
+      myMaps = NULL ;
+
+      closePagemap() ;
+
+   } else if( scanSelf ) {
+      // Do pre-scan operations
+      openPreScanFiles() ;        // Process --block, --stream, --map_file and --read
+      allocatePreScanMemory() ;   // Process --local, --numLocal, --malloc, --numMalloc,
+                                  // --mem_map, --mapAddr and --fill
+
+      /// Anything that changes #mapsFilePath should be done before calling getMaps()
+
+      /// Anything that changes the physical pagemap information such as scanning
+      /// or waiting, should be done before calling readPagemapInfo()
+
+      if( numThreads == 0 ) {
+         if( readFileContents ) {
+            readPreScanFiles() ;  // Process --read
+         }
+
+         if( fillAllocatedMemory ) {
+            fillPreScanMemory() ; // Process --fill
+         }
+      } else {
+         createThreads() ;        // Process --threads (which will do --read and --fill)
       }
 
-      if( fillAllocatedMemory ) {
-         fillPreScanMemory() ; // Process --fill
+      if( sleepSeconds > 0 ) {
+         sleep( sleepSeconds ) ;  // Process --sleep
       }
+
+      struct MapEntry* myMaps = getMaps() ;
+
+      scanMaps( myMaps ) ;        // Process --scan_byte, --shannon
+
+      readPagemapInfo( myMaps ) ; // Process --phys and --pfn
+
+      printMaps( myMaps ) ;
+
+      releaseMaps( myMaps ) ;
+      myMaps = NULL ;
+
+      closeThreads() ;
+      releasePreScanMemory() ;
+      closePreScanFiles() ;
+      closePagemap() ;
+
    } else {
-      createThreads() ;        // Process --threads (which will do --read and --fill)
+      ASSERT( false ) ;           // We should never get here
    }
 
-   if( sleepSeconds > 0 ) {
-      sleep( sleepSeconds ) ;  // Process --sleep
-   }
-
-   struct MapEntry* myMaps = getMaps() ;
-
-   scanMaps( myMaps ) ;        // Process --scan_byte, --shannon
-
-   readPagemapInfo( myMaps ) ; // Process --phys and --pfn
-
-   printMaps( myMaps ) ;
-
-   releaseMaps( myMaps ) ;
-   myMaps = NULL ;
-   closeThreads() ;
-   releasePreScanMemory() ;
-   closePreScanFiles() ;
-   closePagemap() ;
    release_iomem() ;
    reset_config() ;
 
