@@ -1,0 +1,30 @@
+55af37f56000-55af37f59000 r--p 00000000 103:01 4339                      /usr/sbin/agetty
+55af37f59000-55af37f61000 r-xp 00003000 103:01 4339                      /usr/sbin/agetty
+55af37f61000-55af37f64000 r--p 0000b000 103:01 4339                      /usr/sbin/agetty
+55af37f65000-55af37f66000 r--p 0000e000 103:01 4339                      /usr/sbin/agetty
+55af37f66000-55af37f67000 rw-p 0000f000 103:01 4339                      /usr/sbin/agetty
+55af37f67000-55af37f69000 rw-p 00000000 00:00 0 
+55af390d1000-55af390f2000 rw-p 00000000 00:00 0                          [heap]
+7f524dfa8000-7f524dfaf000 r--s 00000000 103:01 3465                      /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7f524dfaf000-7f524e004000 r--p 00000000 103:01 1574                      /usr/lib/locale/C.UTF-8/LC_CTYPE
+7f524e004000-7f524e007000 r--p 00000000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f524e007000-7f524e00e000 r-xp 00003000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f524e00e000-7f524e010000 r--p 0000a000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f524e010000-7f524e011000 r--p 0000b000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f524e011000-7f524e012000 rw-p 0000c000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f524e012000-7f524e01a000 rw-p 00000000 00:00 0 
+7f524e01a000-7f524e03c000 r--p 00000000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f524e03c000-7f524e196000 r-xp 00022000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f524e196000-7f524e1e5000 r--p 0017c000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f524e1e5000-7f524e1e9000 r--p 001ca000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f524e1e9000-7f524e1eb000 rw-p 001ce000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f524e1eb000-7f524e1f1000 rw-p 00000000 00:00 0 
+7f524e1f5000-7f524e1f6000 r--p 00000000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f524e1f6000-7f524e216000 r-xp 00001000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f524e216000-7f524e21e000 r--p 00021000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f524e21f000-7f524e220000 r--p 00029000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f524e220000-7f524e221000 rw-p 0002a000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f524e221000-7f524e222000 rw-p 00000000 00:00 0 
+7ffc03754000-7ffc03775000 rw-p 00000000 00:00 0                          [stack]
+7ffc037d8000-7ffc037dc000 r--p 00000000 00:00 0                          [vvar]
+7ffc037dc000-7ffc037de000 r-xp 00000000 00:00 0                          [vdso]

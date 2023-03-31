@@ -1,0 +1,42 @@
+55ed083f2000-55ed083f5000 r--p 00000000 103:01 4339                      /usr/sbin/agetty
+55ed083f5000-55ed083fd000 r-xp 00003000 103:01 4339                      /usr/sbin/agetty
+55ed083fd000-55ed08400000 r--p 0000b000 103:01 4339                      /usr/sbin/agetty
+55ed08401000-55ed08402000 r--p 0000e000 103:01 4339                      /usr/sbin/agetty
+55ed08402000-55ed08403000 rw-p 0000f000 103:01 4339                      /usr/sbin/agetty
+55ed08403000-55ed08405000 rw-p 00000000 00:00 0 
+55ed087ff000-55ed08820000 rw-p 00000000 00:00 0                          [heap]
+7f8b3010b000-7f8b3010e000 r--p 00000000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f8b3010e000-7f8b30115000 r-xp 00003000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f8b30115000-7f8b30117000 r--p 0000a000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f8b30117000-7f8b30118000 r--p 0000b000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f8b30118000-7f8b30119000 rw-p 0000c000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f8b30119000-7f8b3011f000 rw-p 00000000 00:00 0 
+7f8b30123000-7f8b30178000 r--p 00000000 103:01 1574                      /usr/lib/locale/C.UTF-8/LC_CTYPE
+7f8b30178000-7f8b30179000 r--p 00000000 103:01 1582                      /usr/lib/locale/C.UTF-8/LC_NUMERIC
+7f8b30179000-7f8b3017a000 r--p 00000000 103:01 1585                      /usr/lib/locale/C.UTF-8/LC_TIME
+7f8b3017a000-7f8b302ed000 r--p 00000000 103:01 1573                      /usr/lib/locale/C.UTF-8/LC_COLLATE
+7f8b302ed000-7f8b302ee000 r--p 00000000 103:01 1580                      /usr/lib/locale/C.UTF-8/LC_MONETARY
+7f8b302ee000-7f8b302ef000 r--p 00000000 103:01 1579                      /usr/lib/locale/C.UTF-8/LC_MESSAGES/SYS_LC_MESSAGES
+7f8b302ef000-7f8b302f0000 r--p 00000000 103:01 1583                      /usr/lib/locale/C.UTF-8/LC_PAPER
+7f8b302f0000-7f8b302f7000 r--s 00000000 103:01 3465                      /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7f8b302f7000-7f8b302f9000 rw-p 00000000 00:00 0 
+7f8b302f9000-7f8b3031b000 r--p 00000000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f8b3031b000-7f8b30475000 r-xp 00022000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f8b30475000-7f8b304c4000 r--p 0017c000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f8b304c4000-7f8b304c8000 r--p 001ca000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f8b304c8000-7f8b304ca000 rw-p 001ce000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f8b304ca000-7f8b304d0000 rw-p 00000000 00:00 0 
+7f8b304d0000-7f8b304d1000 r--p 00000000 103:01 1581                      /usr/lib/locale/C.UTF-8/LC_NAME
+7f8b304d1000-7f8b304d2000 r--p 00000000 103:01 1572                      /usr/lib/locale/C.UTF-8/LC_ADDRESS
+7f8b304d2000-7f8b304d3000 r--p 00000000 103:01 1584                      /usr/lib/locale/C.UTF-8/LC_TELEPHONE
+7f8b304d3000-7f8b304d4000 r--p 00000000 103:01 1576                      /usr/lib/locale/C.UTF-8/LC_MEASUREMENT
+7f8b304d4000-7f8b304d5000 r--p 00000000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f8b304d5000-7f8b304f5000 r-xp 00001000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f8b304f5000-7f8b304fd000 r--p 00021000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f8b304fd000-7f8b304fe000 r--p 00000000 103:01 1575                      /usr/lib/locale/C.UTF-8/LC_IDENTIFICATION
+7f8b304fe000-7f8b304ff000 r--p 00029000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f8b304ff000-7f8b30500000 rw-p 0002a000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f8b30500000-7f8b30501000 rw-p 00000000 00:00 0 
+7ffc74e6b000-7ffc74e8c000 rw-p 00000000 00:00 0                          [stack]
+7ffc74fb4000-7ffc74fb8000 r--p 00000000 00:00 0                          [vvar]
+7ffc74fb8000-7ffc74fba000 r-xp 00000000 00:00 0                          [vdso]

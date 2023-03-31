@@ -1,0 +1,45 @@
+56493f458000-56493f45b000 r--p 00000000 103:01 179335                    /usr/lib/openssh/sftp-server
+56493f45b000-56493f46e000 r-xp 00003000 103:01 179335                    /usr/lib/openssh/sftp-server
+56493f46e000-56493f475000 r--p 00016000 103:01 179335                    /usr/lib/openssh/sftp-server
+56493f476000-56493f477000 r--p 0001d000 103:01 179335                    /usr/lib/openssh/sftp-server
+56493f477000-56493f478000 rw-p 0001e000 103:01 179335                    /usr/lib/openssh/sftp-server
+56493f478000-56493f479000 rw-p 00000000 00:00 0 
+56493fab2000-56493faf4000 rw-p 00000000 00:00 0                          [heap]
+7f2caa184000-7f2caa187000 r--p 00000000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2caa187000-7f2caa18e000 r-xp 00003000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2caa18e000-7f2caa190000 r--p 0000a000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2caa190000-7f2caa191000 r--p 0000b000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2caa191000-7f2caa192000 rw-p 0000c000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f2caa192000-7f2caa19a000 rw-p 00000000 00:00 0 
+7f2caa19a000-7f2caa1a0000 r--p 00000000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f2caa1a0000-7f2caa1b0000 r-xp 00006000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f2caa1b0000-7f2caa1b6000 r--p 00016000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f2caa1b6000-7f2caa1b7000 r--p 0001b000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f2caa1b7000-7f2caa1b8000 rw-p 0001c000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f2caa1b8000-7f2caa1bc000 rw-p 00000000 00:00 0 
+7f2caa1bc000-7f2caa1bd000 r--p 00000000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2caa1bd000-7f2caa1bf000 r-xp 00001000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2caa1bf000-7f2caa1c0000 r--p 00003000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2caa1c0000-7f2caa1c1000 r--p 00003000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2caa1c1000-7f2caa1c2000 rw-p 00004000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f2caa1c2000-7f2caa1e4000 r--p 00000000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f2caa1e4000-7f2caa33e000 r-xp 00022000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f2caa33e000-7f2caa38d000 r--p 0017c000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f2caa38d000-7f2caa391000 r--p 001ca000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f2caa391000-7f2caa393000 rw-p 001ce000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f2caa393000-7f2caa397000 rw-p 00000000 00:00 0 
+7f2caa397000-7f2caa41d000 r--p 00000000 103:01 1421                      /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1
+7f2caa41d000-7f2caa5c5000 r-xp 00086000 103:01 1421                      /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1
+7f2caa5c5000-7f2caa656000 r--p 0022e000 103:01 1421                      /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1
+7f2caa656000-7f2caa686000 r--p 002be000 103:01 1421                      /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1
+7f2caa686000-7f2caa688000 rw-p 002ee000 103:01 1421                      /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1
+7f2caa688000-7f2caa68e000 rw-p 00000000 00:00 0 
+7f2caa692000-7f2caa693000 r--p 00000000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2caa693000-7f2caa6b3000 r-xp 00001000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2caa6b3000-7f2caa6bb000 r--p 00021000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2caa6bc000-7f2caa6bd000 r--p 00029000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2caa6bd000-7f2caa6be000 rw-p 0002a000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f2caa6be000-7f2caa6bf000 rw-p 00000000 00:00 0 
+7ffcc70f7000-7ffcc7118000 rw-p 00000000 00:00 0                          [stack]
+7ffcc71d9000-7ffcc71dd000 r--p 00000000 00:00 0                          [vvar]
+7ffcc71dd000-7ffcc71df000 r-xp 00000000 00:00 0                          [vdso]

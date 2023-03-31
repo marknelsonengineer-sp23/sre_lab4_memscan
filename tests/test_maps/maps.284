@@ -1,0 +1,53 @@
+56470295a000-564702988000 r--p 00000000 103:01 392                       /usr/bin/bash
+564702988000-564702a43000 r-xp 0002e000 103:01 392                       /usr/bin/bash
+564702a43000-564702a7b000 r--p 000e9000 103:01 392                       /usr/bin/bash
+564702a7c000-564702a7f000 r--p 00121000 103:01 392                       /usr/bin/bash
+564702a7f000-564702a88000 rw-p 00124000 103:01 392                       /usr/bin/bash
+564702a88000-564702a93000 rw-p 00000000 00:00 0 
+5647043fa000-56470445d000 rw-p 00000000 00:00 0                          [heap]
+7fedc8380000-7fedc8383000 r--p 00000000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7fedc8383000-7fedc838a000 r-xp 00003000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7fedc838a000-7fedc838c000 r--p 0000a000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7fedc838c000-7fedc838d000 r--p 0000b000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7fedc838d000-7fedc838e000 rw-p 0000c000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7fedc838e000-7fedc8394000 rw-p 00000000 00:00 0 
+7fedc8398000-7fedc83ed000 r--p 00000000 103:01 1574                      /usr/lib/locale/C.UTF-8/LC_CTYPE
+7fedc83ed000-7fedc83ee000 r--p 00000000 103:01 1582                      /usr/lib/locale/C.UTF-8/LC_NUMERIC
+7fedc83ee000-7fedc83ef000 r--p 00000000 103:01 1585                      /usr/lib/locale/C.UTF-8/LC_TIME
+7fedc83ef000-7fedc8562000 r--p 00000000 103:01 1573                      /usr/lib/locale/C.UTF-8/LC_COLLATE
+7fedc8562000-7fedc8563000 r--p 00000000 103:01 1580                      /usr/lib/locale/C.UTF-8/LC_MONETARY
+7fedc8563000-7fedc8564000 r--p 00000000 103:01 1579                      /usr/lib/locale/C.UTF-8/LC_MESSAGES/SYS_LC_MESSAGES
+7fedc8564000-7fedc8565000 r--p 00000000 103:01 1583                      /usr/lib/locale/C.UTF-8/LC_PAPER
+7fedc8565000-7fedc856c000 r--s 00000000 103:01 3465                      /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7fedc856c000-7fedc856f000 rw-p 00000000 00:00 0 
+7fedc856f000-7fedc8591000 r--p 00000000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fedc8591000-7fedc86eb000 r-xp 00022000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fedc86eb000-7fedc873a000 r--p 0017c000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fedc873a000-7fedc873e000 r--p 001ca000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fedc873e000-7fedc8740000 rw-p 001ce000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7fedc8740000-7fedc8744000 rw-p 00000000 00:00 0 
+7fedc8744000-7fedc8745000 r--p 00000000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7fedc8745000-7fedc8747000 r-xp 00001000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7fedc8747000-7fedc8748000 r--p 00003000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7fedc8748000-7fedc8749000 r--p 00003000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7fedc8749000-7fedc874a000 rw-p 00004000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7fedc874a000-7fedc8758000 r--p 00000000 103:01 2281                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7fedc8758000-7fedc8766000 r-xp 0000e000 103:01 2281                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7fedc8766000-7fedc8774000 r--p 0001c000 103:01 2281                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7fedc8774000-7fedc8778000 r--p 00029000 103:01 2281                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7fedc8778000-7fedc8779000 rw-p 0002d000 103:01 2281                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+7fedc8779000-7fedc877b000 rw-p 00000000 00:00 0 
+7fedc877b000-7fedc877c000 r--p 00000000 103:01 1581                      /usr/lib/locale/C.UTF-8/LC_NAME
+7fedc877c000-7fedc877d000 r--p 00000000 103:01 1572                      /usr/lib/locale/C.UTF-8/LC_ADDRESS
+7fedc877d000-7fedc877e000 r--p 00000000 103:01 1584                      /usr/lib/locale/C.UTF-8/LC_TELEPHONE
+7fedc877e000-7fedc877f000 r--p 00000000 103:01 1576                      /usr/lib/locale/C.UTF-8/LC_MEASUREMENT
+7fedc877f000-7fedc8780000 r--p 00000000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fedc8780000-7fedc87a0000 r-xp 00001000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fedc87a0000-7fedc87a8000 r--p 00021000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fedc87a8000-7fedc87a9000 r--p 00000000 103:01 1575                      /usr/lib/locale/C.UTF-8/LC_IDENTIFICATION
+7fedc87a9000-7fedc87aa000 r--p 00029000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fedc87aa000-7fedc87ab000 rw-p 0002a000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7fedc87ab000-7fedc87ac000 rw-p 00000000 00:00 0 
+7ffd7af0a000-7ffd7af2b000 rw-p 00000000 00:00 0                          [stack]
+7ffd7afa9000-7ffd7afad000 r--p 00000000 00:00 0                          [vvar]
+7ffd7afad000-7ffd7afaf000 r-xp 00000000 00:00 0                          [vdso]

@@ -1,0 +1,129 @@
+556f6d09f000-556f6d0b4000 r--p 00000000 103:01 25182                     /usr/sbin/rsyslogd
+556f6d0b4000-556f6d113000 r-xp 00015000 103:01 25182                     /usr/sbin/rsyslogd
+556f6d113000-556f6d145000 r--p 00074000 103:01 25182                     /usr/sbin/rsyslogd
+556f6d146000-556f6d149000 r--p 000a6000 103:01 25182                     /usr/sbin/rsyslogd
+556f6d149000-556f6d151000 rw-p 000a9000 103:01 25182                     /usr/sbin/rsyslogd
+556f6d151000-556f6d152000 rw-p 00000000 00:00 0 
+556f6e088000-556f6e0c4000 rw-p 00000000 00:00 0                          [heap]
+7f3890000000-7f3890043000 rw-p 00000000 00:00 0 
+7f3890043000-7f3894000000 ---p 00000000 00:00 0 
+7f3894000000-7f3894048000 rw-p 00000000 00:00 0 
+7f3894048000-7f3898000000 ---p 00000000 00:00 0 
+7f3898000000-7f3898021000 rw-p 00000000 00:00 0 
+7f3898021000-7f389c000000 ---p 00000000 00:00 0 
+7f389e73d000-7f389e73e000 ---p 00000000 00:00 0 
+7f389e73e000-7f389ef3e000 rw-p 00000000 00:00 0 
+7f389ef3e000-7f389ef3f000 ---p 00000000 00:00 0 
+7f389ef3f000-7f389f33f000 rw-p 00000000 00:00 0 
+7f389f33f000-7f389f340000 ---p 00000000 00:00 0 
+7f389f340000-7f389f804000 rw-p 00000000 00:00 0 
+7f389f804000-7f389f806000 r--p 00000000 103:01 175727                    /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7f389f806000-7f389f808000 r-xp 00002000 103:01 175727                    /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7f389f808000-7f389f809000 r--p 00004000 103:01 175727                    /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7f389f809000-7f389f80a000 r--p 00004000 103:01 175727                    /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7f389f80a000-7f389f80b000 rw-p 00005000 103:01 175727                    /usr/lib/x86_64-linux-gnu/rsyslog/imklog.so
+7f389f80b000-7f389f80d000 r--p 00000000 103:01 175734                    /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7f389f80d000-7f389f812000 r-xp 00002000 103:01 175734                    /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7f389f812000-7f389f814000 r--p 00007000 103:01 175734                    /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7f389f814000-7f389f815000 r--p 00008000 103:01 175734                    /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7f389f815000-7f389f816000 rw-p 00009000 103:01 175734                    /usr/lib/x86_64-linux-gnu/rsyslog/imuxsock.so
+7f389f816000-7f389f819000 r--p 00000000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f389f819000-7f389f820000 r-xp 00003000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f389f820000-7f389f822000 r--p 0000a000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f389f822000-7f389f823000 r--p 0000b000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f389f823000-7f389f824000 rw-p 0000c000 103:01 1610                      /usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7f389f824000-7f389f82a000 rw-p 00000000 00:00 0 
+7f389f82a000-7f389f82c000 r--p 00000000 103:01 175735                    /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7f389f82c000-7f389f82f000 r-xp 00002000 103:01 175735                    /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7f389f82f000-7f389f831000 r--p 00005000 103:01 175735                    /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7f389f831000-7f389f832000 r--p 00006000 103:01 175735                    /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7f389f832000-7f389f833000 rw-p 00007000 103:01 175735                    /usr/lib/x86_64-linux-gnu/rsyslog/lmnet.so
+7f389f833000-7f389f835000 rw-p 00000000 00:00 0 
+7f389f835000-7f389f839000 r--p 00000000 103:01 2151                      /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.29.0
+7f389f839000-7f389f84e000 r-xp 00004000 103:01 2151                      /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.29.0
+7f389f84e000-7f389f858000 r--p 00019000 103:01 2151                      /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.29.0
+7f389f858000-7f389f859000 ---p 00023000 103:01 2151                      /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.29.0
+7f389f859000-7f389f85a000 r--p 00023000 103:01 2151                      /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.29.0
+7f389f85a000-7f389f85b000 rw-p 00024000 103:01 2151                      /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.29.0
+7f389f85b000-7f389f867000 r--p 00000000 103:01 2141                      /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.8
+7f389f867000-7f389f937000 r-xp 0000c000 103:01 2141                      /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.8
+7f389f937000-7f389f974000 r--p 000dc000 103:01 2141                      /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.8
+7f389f974000-7f389f976000 r--p 00118000 103:01 2141                      /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.8
+7f389f976000-7f389f97b000 rw-p 0011a000 103:01 2141                      /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.8
+7f389f97b000-7f389f97d000 rw-p 00000000 00:00 0 
+7f389f97d000-7f389f980000 r--p 00000000 103:01 2256                      /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.3
+7f389f980000-7f389f99b000 r-xp 00003000 103:01 2256                      /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.3
+7f389f99b000-7f389f99e000 r--p 0001e000 103:01 2256                      /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.3
+7f389f99e000-7f389f99f000 r--p 00020000 103:01 2256                      /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.3
+7f389f99f000-7f389f9a0000 rw-p 00021000 103:01 2256                      /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.3
+7f389f9a0000-7f389f9ab000 r--p 00000000 103:01 2244                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8
+7f389f9ab000-7f389fa66000 r-xp 0000b000 103:01 2244                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8
+7f389fa66000-7f389fa78000 r--p 000c6000 103:01 2244                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8
+7f389fa78000-7f389fa79000 ---p 000d8000 103:01 2244                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8
+7f389fa79000-7f389fa7a000 r--p 000d8000 103:01 2244                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8
+7f389fa7a000-7f389fa7b000 rw-p 000d9000 103:01 2244                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8
+7f389fa7b000-7f389fa7e000 r--p 00000000 103:01 4649                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5
+7f389fa7e000-7f389fa96000 r-xp 00003000 103:01 4649                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5
+7f389fa96000-7f389faa1000 r--p 0001b000 103:01 4649                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5
+7f389faa1000-7f389faa2000 r--p 00025000 103:01 4649                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5
+7f389faa2000-7f389faa3000 rw-p 00026000 103:01 4649                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5
+7f389faa3000-7f389faa5000 r--p 00000000 103:01 1615                      /usr/lib/x86_64-linux-gnu/librt-2.31.so
+7f389faa5000-7f389faa9000 r-xp 00002000 103:01 1615                      /usr/lib/x86_64-linux-gnu/librt-2.31.so
+7f389faa9000-7f389faab000 r--p 00006000 103:01 1615                      /usr/lib/x86_64-linux-gnu/librt-2.31.so
+7f389faab000-7f389faac000 r--p 00007000 103:01 1615                      /usr/lib/x86_64-linux-gnu/librt-2.31.so
+7f389faac000-7f389faad000 rw-p 00008000 103:01 1615                      /usr/lib/x86_64-linux-gnu/librt-2.31.so
+7f389faad000-7f389facf000 r--p 00000000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f389facf000-7f389fc29000 r-xp 00022000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f389fc29000-7f389fc78000 r--p 0017c000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f389fc78000-7f389fc7c000 r--p 001ca000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f389fc7c000-7f389fc7e000 rw-p 001ce000 103:01 1602                      /usr/lib/x86_64-linux-gnu/libc-2.31.so
+7f389fc7e000-7f389fc82000 rw-p 00000000 00:00 0 
+7f389fc82000-7f389fc84000 r--p 00000000 103:01 4301                      /usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7f389fc84000-7f389fc88000 r-xp 00002000 103:01 4301                      /usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7f389fc88000-7f389fc89000 r--p 00006000 103:01 4301                      /usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7f389fc89000-7f389fc8a000 r--p 00006000 103:01 4301                      /usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7f389fc8a000-7f389fc8b000 rw-p 00007000 103:01 4301                      /usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0
+7f389fc8b000-7f389fc8d000 rw-p 00000000 00:00 0 
+7f389fc8d000-7f389fc9f000 r--p 00000000 103:01 3818                      /usr/lib/x86_64-linux-gnu/libsystemd.so.0.30.0
+7f389fc9f000-7f389fd17000 r-xp 00012000 103:01 3818                      /usr/lib/x86_64-linux-gnu/libsystemd.so.0.30.0
+7f389fd17000-7f389fd3c000 r--p 0008a000 103:01 3818                      /usr/lib/x86_64-linux-gnu/libsystemd.so.0.30.0
+7f389fd3c000-7f389fd40000 r--p 000ae000 103:01 3818                      /usr/lib/x86_64-linux-gnu/libsystemd.so.0.30.0
+7f389fd40000-7f389fd41000 rw-p 000b2000 103:01 3818                      /usr/lib/x86_64-linux-gnu/libsystemd.so.0.30.0
+7f389fd41000-7f389fd42000 rw-p 00000000 00:00 0 
+7f389fd42000-7f389fd45000 r--p 00000000 103:01 25177                     /usr/lib/x86_64-linux-gnu/libfastjson.so.4.3.0
+7f389fd45000-7f389fd4c000 r-xp 00003000 103:01 25177                     /usr/lib/x86_64-linux-gnu/libfastjson.so.4.3.0
+7f389fd4c000-7f389fd4e000 r--p 0000a000 103:01 25177                     /usr/lib/x86_64-linux-gnu/libfastjson.so.4.3.0
+7f389fd4e000-7f389fd4f000 r--p 0000b000 103:01 25177                     /usr/lib/x86_64-linux-gnu/libfastjson.so.4.3.0
+7f389fd4f000-7f389fd50000 rw-p 0000c000 103:01 25177                     /usr/lib/x86_64-linux-gnu/libfastjson.so.4.3.0
+7f389fd50000-7f389fd51000 r--p 00000000 103:01 25175                     /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7f389fd51000-7f389fd52000 r-xp 00001000 103:01 25175                     /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7f389fd52000-7f389fd53000 r--p 00002000 103:01 25175                     /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7f389fd53000-7f389fd54000 r--p 00002000 103:01 25175                     /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7f389fd54000-7f389fd55000 rw-p 00003000 103:01 25175                     /usr/lib/x86_64-linux-gnu/libestr.so.0.0.0
+7f389fd55000-7f389fd56000 r--p 00000000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f389fd56000-7f389fd58000 r-xp 00001000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f389fd58000-7f389fd59000 r--p 00003000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f389fd59000-7f389fd5a000 r--p 00003000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f389fd5a000-7f389fd5b000 rw-p 00004000 103:01 1603                      /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+7f389fd5b000-7f389fd61000 r--p 00000000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f389fd61000-7f389fd71000 r-xp 00006000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f389fd71000-7f389fd77000 r--p 00016000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f389fd77000-7f389fd78000 r--p 0001b000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f389fd78000-7f389fd79000 rw-p 0001c000 103:01 1613                      /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+7f389fd79000-7f389fd7d000 rw-p 00000000 00:00 0 
+7f389fd7d000-7f389fd80000 r--p 00000000 103:01 4664                      /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f389fd80000-7f389fd91000 r-xp 00003000 103:01 4664                      /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f389fd91000-7f389fd97000 r--p 00014000 103:01 4664                      /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f389fd97000-7f389fd98000 ---p 0001a000 103:01 4664                      /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f389fd98000-7f389fd99000 r--p 0001a000 103:01 4664                      /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f389fd99000-7f389fd9a000 rw-p 0001b000 103:01 4664                      /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f389fd9a000-7f389fd9c000 rw-p 00000000 00:00 0 
+7f389fda0000-7f389fda1000 r--p 00000000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f389fda1000-7f389fdc1000 r-xp 00001000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f389fdc1000-7f389fdc9000 r--p 00021000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f389fdca000-7f389fdcb000 r--p 00029000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f389fdcb000-7f389fdcc000 rw-p 0002a000 103:01 1597                      /usr/lib/x86_64-linux-gnu/ld-2.31.so
+7f389fdcc000-7f389fdcd000 rw-p 00000000 00:00 0 
+7ffec7baf000-7ffec7bd0000 rw-p 00000000 00:00 0                          [stack]
+7ffec7bd0000-7ffec7bd4000 r--p 00000000 00:00 0                          [vvar]
+7ffec7bd4000-7ffec7bd6000 r-xp 00000000 00:00 0                          [vdso]
