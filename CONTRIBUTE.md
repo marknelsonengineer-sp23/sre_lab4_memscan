@@ -1,26 +1,35 @@
-Contribute to MemScan
+Contribute to Memscan
 =====================
 
-### Setup the development environment
-- THIS SECTION IS STILL INCOMPLETE...
+Memscan is a Makefile-based C Linux usermode console program
+
+
+## Setup the development environment
+To setup your development environment on a fresh system, you'll likely need 
+the following:
+- This section is incomplete, but...
   - ...but it worked on Rasberian!
   - ...and it worked on Debian under WSL2
-- Install Boost:  `# apt-get install libboost-all-dev`
-- Install clang-tidy:  `# apt-get install clang-tidy`
-- Install doxygen:  `# apt-get install doxygen`
-- Install python3-pip ( # pacman -S python-pip ) `# apt-get install python3-pip`
-- Install GitPython:  `# pip install GitPython`
-- Install GraphViz (for DOT):  `# apt-get install graphviz`
-- Install Capabilities:  `# apt-get install libcap-dev`
+
+| Package            	   | Debian / apt-get                     	 | ArchLinux / pacman       	 | RedHat / rpm 	 |
+|------------------------|----------------------------------------|----------------------------|----------------|
+| [Boost]              	 | `# apt-get install libboost-all-dev` 	 | 	                          | 	              |
+| [clang-tidy]         	 | `# apt-get install clang-tidy`       	 | 	                          | 	              |
+| [Doxygen]            	 | `# apt-get install doxygen`          	 | 	                          | 	              |
+| [Python pip]        	  | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 | 	              |
+| [GitPython]          	 | `# pip install GitPython`            	 | 	                          | 	              |
+| [Graphviz] for DOT   	 | `# apt-get install graphviz`         	 | 	                          | 	              |
+| [Capabilities]       	 | `# apt-get install libcap-dev`       	 | 	                          | 	              |
 
 
-### Handling errors & warnings in a testing framework
-- MemScan does not have a dedicated logger.
+
+## Handling errors & warnings in a testing framework
+- Memscan does not have a dedicated logger.
 - Messages and exceptions should be pre-pended with #getProgramName and sent 
   to `stderr`.
 - Instrument programs to make them easily to test.  This is easier with C++ 
   programs that have `try`/`catch` blocks and exceptions.  As a C program, 
-  we have created three tools for our instrumentation:
+  we have created some tools for test instrumentation:
   - `PRINT( outStream, ... )`:  Print a message
   - `WARNING( msg, ... )`:  Print a formatted warning message
   - `ASSERT( condition )`:  Assert a condition.  Call `exit()` when the 
@@ -52,7 +61,7 @@ program in C.  Bare-bones tests will tell us if something works or doesn't
 but not _why_.
 
 
-### Local variables
+## Local variables
 There are many ways to do local variables.  Local variables are fundamentally 
 different from `malloc` and `mmap`.  When the thread of execution exits
 the scope,  the local data evaporates.  The other challenge with local
@@ -60,9 +69,10 @@ variables is how to dynamically size them.  Locals, like globals, are fixed
 at compile-time.  So how do we allocate `--local` bytes of local data when 
 `--local` is only known at run time?
 
-Consider the [stack] and how most programs' [stack frames] work, 
-and it becomes clear that programs cannot allocate an arbitrary amount 
-of local memory.
+Consider the [stack] and how most programs find their parameters and local
+variables relative to the base of their [stack frames], and it becomes clear 
+that programs cannot allocate a block of local memory whose size is only 
+known at runtime.
 
 There are a number of ways we could solve these problems: 
   - Create some local variables on the `main()` thread and immediately 
@@ -108,8 +118,8 @@ find the new stack.
 [Stack Pointer]: https://en.wikipedia.org/wiki/Call_stack#STACK-POINTER
 
 
-### Toolchain
-- MemScan is written in C.
+## Toolchain
+- Memscan is written in C.
   - It's compiled with [gcc](https://gcc.gnu.org).
   - Use `make tidy` to lint the program.  [clang-tidy] is the linter.
   - Use `make doc` to build documentation:  [Doxygen] is used to produce it.
@@ -117,32 +127,37 @@ find the new stack.
   - It uses [Makefile] for its build.
   - It uses [GitHub] for version control.
   - All of the above should run clean and without warnings.
-- MemScan uses [Boost Test] written in C++.  Use `make clean` and 
+- Memscan uses [Boost Test] written in C++.  Use `make clean` and 
   `make test` to test the application.
-- MemScan is a Linux-based, user-mode command-line program that needs to run
+- Memscan is a Linux-based, user-mode command-line program that needs to run
   with root-level privileges.
-  - To get the most out of MemScan, it should be run as `root` or with the 
+  - To get the most out of Memscan, it should be run as `root` or with the 
     `CAP_SYS_ADMIN` capability.  See https://www.kernel.org/doc/Documentation/vm/pagemap.txt
-- MemScan was written in CLion, using `Makefile` based build.  Note:  CLion 
+- Memscan was written in CLion, using `Makefile` based build.  Note:  CLion 
   usually uses a CMake based build.
 
   
-### Coding Conventions
+## Coding Conventions
 - Put 2 blank lines between functions
 - Put a space before the `;`.  Ex. `return true ;`
+- Memscan uses `printf` but we will be converting to TBD  @todo fix this
 
 
-### Naming Conventions
-- I use CaMel case and snake_case interchangeably, depending on my mood.
+## Naming Conventions
+- I use [CaMel case] and [snake_case] interchangeably, depending on my mood.
 - File names and the functions that are in them represent the names of the
   files they are processing.  Ie. `iomem`, `maps`, `pagemap`, et. al..
-- Function names start with lowercase letters.
-- I'm not using [Hungarian notation]
-  in this project.
-- Structures start with uppercase.
+- Function names start with a lowercase letter.
+- Structures, Enums, et al. start with an uppercase letter.
+- Constants and macros are in all UPPERCASE.
+- I'm not consistently using [Hungarian notation], but you might see it from
+  time to time.
+
+[CaMel case]: https://en.wikipedia.org/wiki/Camel_case
+[snake_case]: https://en.wikipedia.org/wiki/Snake_case
 
 
-### Documentation Conventions
+## Documentation Conventions
 - Fully document "published" functions in `.h` files.  Leave internal 
   documentation in the `.c` files.
 - If there's a code-block that's longer than a page, I'll usually comment the 
@@ -151,7 +166,7 @@ find the new stack.
   narrative.
 
 
-### Testing Notes
+## Testing Notes
 I need to work on this section as well.  Memscan is severely test deficient.  I'd
 like to sweep through the code and make a bunch of unit and system tests
 for it.
@@ -162,35 +177,62 @@ One cool thing about memscan is that it's a C program that is tested by a C++
 unit test framework [Boost Test](https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html).  
 It's cool to have this working.
 
-#### Test Results
-|              | Archlinux | Debian                                       | System X | System Y |
-|--------------|-----------|----------------------------------------------|----------|----------|
-| Architecture | x86-64    | x86-64                                       |          |          |
-| Date tested  | Ongoing   | 27 Mar 2023                                  |          |          |
-| Build tested | Ongoing   | 2.1.0+10332                                  |          |          |
-| make memscan | Clean     | Clean                                        |          |          |
-| make doc     | Clean     | A few warnings, as Doxygen is out of date    |          |          |
-| make test    | Clean     | Clean                                        |          |          |
-| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |          |          |
+### Test Results
+|              | Archlinux | Debian                                       | ARM 32-bit | System Y |
+|--------------|-----------|----------------------------------------------|--|----------|
+| Architecture | x86-64    | x86-64                                       |  |          |
+| Date tested  | Ongoing   | 27 Mar 2023                                  |  |          |
+| Build tested | Ongoing   | 2.1.0+10332                                  |  |          |
+| make memscan | Clean     | Clean                                        |  |          |
+| make doc     | Clean     | A few warnings, as Doxygen is out of date    |  |          |
+| make test    | Clean     | Clean                                        |  |          |
+| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |  |          |
 
 
-### Release Procedures
+## Release Procedures
 - Scrub all `@todo`s
-- Review code for:
+- For each source file:
+  - Cleanup `#include` files
+    - Create `scratch.c`, then `#include` each `.h` file and ensure they are
+      self-sufficient:
+      - Ensure they have the `#include`s to stand alone.
+      - Remove any unnecessary `#include`s.
+      - Ensure the functions `#include`d are documented. 
   - `const` correctness
-  - Extraneous `#include`s or ill-documented `#include`s
+    - Look for `const`-able parameters
   - Read the Doxygen content for each source file and Markdown file
   - Check for a space before `;`
+  - Ensure all parameters are validated
+  - `assert( validateThing() )` before-and-after anything that modifies it
 - Run `make lint`
 - Run `make clean` and then `make test`
 - Run `make doc` and then `make publish`
-- Create `scratch.c`, then `#include` each `.h` file and ensure they are 
-  self-sufficient:
-  - Ensure they have the `#include`s to stand alone.  
-  - Ensure the functions they import are documented.
-  - Remove any unnecessary `#include`s.
 - Scrub GitHub issues
 - Tag the release in Git
+
+
+## Source Code Status
+
+| Module               	             | const correctness 	 | include correctness 	 | Review Doxygen 	 | 32-bit 	 | Boost tests 	 |
+|------------------------------------|---------------------|-----------------------|------------------|----------|---------------|
+| `allocate.h` <br> `allocate.c`  	  | 	                   | 	                     | 	                | 	        | 	             |
+| `assembly.h` <br> `assembly.c`  	  | 	                   | 	                     | 	                | 	        | 	             |
+| `colors.h`           	             | 	                   | 	                     | 	                | 	        | 	             |
+| `config.h` <br> `config.c`    	    | 	                   | 	                     | 	                | 	        | 	             |
+| `convert.h` <br> `convert.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
+| `files.h` <br> `files.c`     	     | 	                   | 	                     | 	                | 	        | 	             |
+| `iomem.h` <br> `iomem.c`     	     | 	                   | 	                     | 	                | 	        | 	             |
+| `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	        | 	             |
+| `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
+| `pagecount.h` <br> `pagecount.c` 	 | 	                   | 	                     | 	                | 	        | 	             |
+| `pageflags.h` <br> `pageflags.c` 	 | 	                   | 	                     | 	                | 	        | 	             |
+| `pagemap.h` <br> `pagemap.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
+| `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
+| `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
+| `trim.h` <br> `trim.c`      	      | 	                   | 	                     | 	                | 	        | 	             |
+| `version.h`          	             | 	                   | 	                     | 	                | 	        | 	             |
+
+The `main()` for memscan is in `memscan.c`.
 
 [Hungarian notation]: https://en.wikipedia.org/wiki/Hungarian_notation
 [clang-tidy]: https://releases.llvm.org/13.0.0/tools/clang/tools/extra/docs/clang-tidy/
@@ -199,5 +241,10 @@ It's cool to have this working.
 [Makefile]: https://www.gnu.org/software/make/manual/make.html
 [GitHub]: https://github.com/marknelsonengineer-sp23/sre_lab4_memscan
 [Boost Test]: https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html
+[Boost]: https://www.boost.org/
 [BOOST_CHECK_THROW]: https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/boost_test/utf_reference/testing_tool_ref/assertion_boost_level_throw.html
 [references]: https://www.doxygen.nl/manual/markdown.html#md_reflinks
+[Capabilities]: https://man7.org/linux/man-pages/man7/capabilities.7.html
+[Python pip]:  https://pypi.org/project/pip/
+[GitPython]:  https://gitpython.readthedocs.io/en/stable/
+[Graphviz]:  https://graphviz.org
