@@ -44,8 +44,8 @@ the following:
 - Successful functions should operate silently.
 
 Memscan uses FATAL_ERROR() and ASSERT() for error checking.  Normally,
-these functions will call `exit()`, however when `TESTING` is defined,
-they will call throwException() so [BOOST_CHECK_THROW] can catch it.
+these functions will call `exit( EXIT_FAILURE )`, however when `TESTING` is 
+defined, they will call throwException() so [BOOST_CHECK_THROW] can catch it.
 
 Furthermore, when an unexpected call to FATAL_ERROR() or ASSERT() happens,
 the [Boost Test] framework can catch the exception rather than immediately
