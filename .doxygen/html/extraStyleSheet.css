@@ -37,3 +37,19 @@ span.keywordflow {
 h1 {
     font-size: 1.5em;
 }
+
+/* Format the @API xrefitem Alias */
+p.startdd {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+p.interdd {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+p.enddd {
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
