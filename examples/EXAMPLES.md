@@ -509,8 +509,8 @@ Here's the full output from this command:  `# ./memscan --path --shannon --phys`
 
 ## With an without ASLR
 - Use `# sysctl -w kernal.randomize_va_space=0` to disable ASLR and compare the differences
+- @todo Work on this
 
 ## ARM system
 Memscan running on a Raspberry Pi running Rasberian
-
-TBD
+@todo Work on ARM 
