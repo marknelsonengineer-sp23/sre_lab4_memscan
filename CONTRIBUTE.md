@@ -213,24 +213,24 @@ It's cool to have this working.
 
 ## Source Code Status
 
-| Module               	             | const correctness 	 | include correctness 	 | Review Doxygen 	 | 32-bit 	 | Boost tests 	 |
-|------------------------------------|---------------------|-----------------------|------------------|----------|---------------|
-| `allocate.h` <br> `allocate.c`  	  | 	                   | 	                     | 	                | 	        | 	             |
-| `assembly.h` <br> `assembly.c`  	  | 	                   | 	                     | 	                | 	        | 	             |
-| `colors.h`           	             | 	                   | 	                     | 	                | 	        | 	             |
-| `config.h` <br> `config.c`    	    | 	                   | 	                     | 	                | 	        | 	             |
-| `convert.h` <br> `convert.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
-| `files.h` <br> `files.c`     	     | 	                   | 	                     | 	                | 	        | 	             |
-| `iomem.h` <br> `iomem.c`     	     | 	                   | 	                     | 	                | 	        | 	             |
-| `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	        | 	             |
-| `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
-| `pagecount.h` <br> `pagecount.c` 	 | 	                   | 	                     | 	                | 	        | 	             |
-| `pageflags.h` <br> `pageflags.c` 	 | 	                   | 	                     | 	                | 	        | 	             |
-| `pagemap.h` <br> `pagemap.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
-| `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
-| `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	        | 	             |
-| `trim.h` <br> `trim.c`      	      | 	                   | 	                     | 	                | 	        | 	             |
-| `version.h`          	             | 	                   | 	                     | 	                | 	        | 	             |
+| Module               	             | const correctness 	 | include correctness 	 | Review Doxygen 	 | 32-bit 	  | Boost tests 	 | API documented |
+|------------------------------------|---------------------|-----------------------|------------------|-----------|---------------|:---------------|
+| `allocate.h` <br> `allocate.c`  	  | 	                   | 	                     | 	                | 	         | 	             |                |
+| `assembly.h` <br> `assembly.c`  	  | 	                   | 	                     | 	                | 	         | 	             |                |
+| `colors.h`           	             | 	                   | 	                     | 	                | 	         | 	             |                |
+| `config.h` <br> `config.c`    	    | 	                   | 	                     | 	                | 	         | 	             |                |
+| `convert.h` <br> `convert.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
+| `files.h` <br> `files.c`     	     | 4 Apr 23	           | 	                     | 	4 Apr 23        | 4 Apr 23	 | 	             | 4 Apr 23       |
+| `iomem.h` <br> `iomem.c`     	     | 	                   | 	                     | 	                | 	         | 	             |                |
+| `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	         | 	             |                |
+| `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
+| `pagecount.h` <br> `pagecount.c` 	 | 	                   | 	                     | 	                | 	         | 	             |                |
+| `pageflags.h` <br> `pageflags.c` 	 | 	                   | 	                     | 	                | 	         | 	             |                |
+| `pagemap.h` <br> `pagemap.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
+| `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
+| `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
+| `trim.h` <br> `trim.c`      	      | 	                   | 	                     | 	                | 	         | 	             |                |
+| `version.h`          	             | 	                   | 	                     | 	                | 	         | 	             |                |
 
 The `main()` for memscan is in `memscan.c`.
 
