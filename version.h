@@ -14,17 +14,18 @@
 
 #pragma once
 
-/// Increments with major functional changes
+/// Increments with __major__ functional changes
 #define VERSION_MAJOR    2
 
-/// Increments with minor functional changes and bugfixes
+/// Increments with minor functional changes
 #define VERSION_MINOR    3
 
 /// Increments with bugfixes
 #define VERSION_PATCH    0
 
-/// Monotonic counter that tracks the number of compilations
-#define VERSION_BUILD 11412
+/// Monotonic counter, set by update_version.py, that tracks the number of
+/// compilations.
+#define VERSION_BUILD 11418
 
 #ifndef STRINGIFY_VALUE
 /// C preprocesor trick that converts values into strings at compile time

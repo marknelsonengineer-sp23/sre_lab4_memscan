@@ -230,7 +230,7 @@ It's cool to have this working.
 | `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `trim.h` <br> `trim.c`      	      | 	                   | 	                     | 	                | 	         | 	             |                |
-| `version.h`          	             | 	                   | 	                     | 	                | 	         | 	             |                |
+| `version.h`          	             | 	4 Apr 23           | None	                 | 4 Apr 23	        | 4 Apr 23	 | 	             | 4 Apr 23       |
 
 The `main()` for memscan is in `memscan.c`.
 
