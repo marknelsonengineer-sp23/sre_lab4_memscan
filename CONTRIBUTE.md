@@ -13,15 +13,15 @@ the following:
   - ...but it worked on Rasberian!
   - ...and it worked on Debian under WSL2
 
-| Package            	   | Debian / apt-get                     	 | ArchLinux / pacman       	 | RedHat / rpm 	 |
-|------------------------|----------------------------------------|----------------------------|----------------|
-| [Boost]              	 | `# apt-get install libboost-all-dev` 	 | 	                          | 	              |
-| [clang-tidy]         	 | `# apt-get install clang-tidy`       	 | 	                          | 	              |
-| [Doxygen]            	 | `# apt-get install doxygen`          	 | 	                          | 	              |
-| [Python pip]        	  | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 | 	              |
-| [GitPython]          	 | `# pip install GitPython`            	 | 	                          | 	              |
-| [Graphviz] for DOT   	 | `# apt-get install graphviz`         	 | 	                          | 	              |
-| [Capabilities]       	 | `# apt-get install libcap-dev`       	 | 	                          | 	              |
+| Package            	    | Debian / apt-get                     	 | ArchLinux / pacman       	 | RedHat / rpm 	 |
+|-------------------------|----------------------------------------|----------------------------|----------------|
+| [Boost]              	  | `# apt-get install libboost-all-dev` 	 | 	                          | 	              |
+| [clang-tidy]         	  | `# apt-get install clang-tidy`       	 | 	                          | 	              |
+| [Doxygen]            	  | `# apt-get install doxygen`          	 | 	                          | 	              |
+| [Python pip]            | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 | 	              |
+| [GitPython]          	  | `# pip install GitPython`            	 | 	                          | 	              |
+| [Graphviz] for DOT   	  | `# apt-get install graphviz`         	 | 	                          | 	              |
+| [Capabilities]       	  | `# apt-get install libcap-dev`       	 | 	                          | 	              |
 
 
 
@@ -179,20 +179,20 @@ One cool thing about memscan is that it's a C program that is tested by a C++
 unit test framework [Boost Test](https://www.boost.org/doc/libs/1_81_0/libs/test/doc/html/index.html).  
 It's cool to have this working.
 
+
 ### Test Results
-|              | Archlinux | Debian                                       | ARM 32-bit | System Y |
-|--------------|-----------|----------------------------------------------|------------|----------|
-| Architecture | x86-64    | x86-64                                       |            |          |
-| Date tested  | Ongoing   | 27 Mar 2023                                  |            |          |
-| Build tested | Ongoing   | 2.1.0+10332                                  |            |          |
-| make memscan | Clean     | Clean                                        |            |          |
-| make doc     | Clean     | A few warnings, as Doxygen is out of date    |            |          |
-| make test    | Clean     | Clean                                        |            |          |
-| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |            |          |
+|              | Archlinux | Debian on WSL                                | ARM 32-bit |
+|--------------|-----------|----------------------------------------------|------------|
+| Architecture | x86-64    | x86-64                                       |            |
+| Date tested  | Ongoing   | 27 Mar 2023                                  |            |
+| Build tested | Ongoing   | 2.1.0+10332                                  |            |
+| make memscan | Clean     | Clean                                        |            |
+| make doc     | Clean     | A few warnings, as Doxygen is out of date    |            |
+| make test    | Clean     | Clean                                        |            |
+| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |            |
 
 
 ## Release Procedures
-- Scrub all `@todo`s
 - For each source file:
   - Cleanup `#include` files
     - Create `scratch.c`, then `#include` each `.h` file and ensure they are
@@ -202,6 +202,10 @@ It's cool to have this working.
       - Ensure the functions `#include`d are documented. 
   - `const` correctness
     - Look for `const`-able parameters
+  - Look for any API calls and document them with `@API{}`
+    - Man pages come from:  https://man.archlinux.org
+    - Some calls have multiple man pages; reference system calls (2) first, 
+      then the Standard C API (3) and lastly the POSIX API (3p)
   - Read the Doxygen content for each source file and Markdown file
   - Check for a space before `;`
   - Ensure all parameters are validated
@@ -211,7 +215,8 @@ It's cool to have this working.
 - Run `make clean` and then `make test`
 - Run `make doc` and then `make publish`
 - Scrub GitHub issues
-- Tag the release in Git
+- Scrub all `@todo`s
+- Create a tagged release in Git
 
 
 ## Source Code Status
