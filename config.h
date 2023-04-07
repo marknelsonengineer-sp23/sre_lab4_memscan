@@ -66,7 +66,15 @@ enum Endian { ENDIAN_UNKNOWN=-1  ///< If the endianness is unknown
 
 
 /// The type definition for PFNs (Page Frame Numbers)
+///
+/// Normally, it's bad form to typedef a pointer, but we aren't
+/// defining a regular pointer in C, rather this is a distinct datatype
+/// that happens to be a pointer.  Memscan will never dereference
+/// this pointer.
 typedef void* pfn_t ;
+
+/// The type definition for a constant PFN (Page Frame Number)
+typedef const pfn_t const_pfn_t ;
 
 
 /// Return the endianness of the current computer

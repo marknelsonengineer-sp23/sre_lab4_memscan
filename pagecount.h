@@ -34,7 +34,7 @@ typedef uint64_t pagecount_t ;
 ///
 /// @param pfn The Page Frame Number
 /// @return    The number of times the PFN is mapped
-extern pagecount_t getPagecount( const pfn_t pfn ) ;
+extern pagecount_t getPagecount( const_pfn_t pfn ) ;
 
 
 /// Close any open pagecount resources

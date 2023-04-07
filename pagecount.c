@@ -37,7 +37,7 @@ static const char PAGECOUNT_FILE[] = "/proc/kpagecount" ;
 static int pagecount_fd = -1 ;
 
 
-pagecount_t getPagecount( const pfn_t pfn ) {
+pagecount_t getPagecount( const_pfn_t pfn ) {
    off_t pagecount_offset = (long) ((size_t) pfn * sizeof( uint64_t ) ) ;
 
    if( pagecount_fd < 0 ) {
