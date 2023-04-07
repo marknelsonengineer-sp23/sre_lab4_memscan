@@ -12,7 +12,10 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "../pagecount.h"
+extern "C" {
+   #include "../pagecount.h"
+   #include "../pageflags.h"
+}
 
 BOOST_AUTO_TEST_SUITE( test_pagemap )
 
@@ -20,6 +23,12 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       BOOST_CHECK_EQUAL( sizeof( uint64_t ),    PAGECOUNT_ENTRY ) ;
       BOOST_CHECK_EQUAL( sizeof( pagecount_t ), PAGECOUNT_ENTRY ) ;
       BOOST_CHECK_EQUAL( sizeof( pfn_t ),       PAGECOUNT_ENTRY ) ;
+   }
+
+   BOOST_AUTO_TEST_CASE( test_pageflags ) {
+      BOOST_CHECK_EQUAL( sizeof( uint64_t ),    PAGEFLAG_ENTRY ) ;
+      BOOST_CHECK_EQUAL( sizeof( pageflags_t ), PAGEFLAG_ENTRY ) ;
+      BOOST_CHECK_EQUAL( sizeof( pfn_t ),       PAGEFLAG_ENTRY ) ;
    }
 
 BOOST_AUTO_TEST_SUITE_END()

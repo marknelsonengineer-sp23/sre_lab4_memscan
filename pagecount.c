@@ -23,7 +23,7 @@
 #include <fcntl.h>      // For open() O_RDONLY
 #include <unistd.h>     // For pread() close()
 
-#include "config.h"     // For FATAL_ERROR() pfn_t
+#include "config.h"     // For FATAL_ERROR() const_pfn_t
 #include "pagecount.h"  // Just cuz
 
 
@@ -38,7 +38,7 @@ static int pagecount_fd = -1 ;
 
 
 pagecount_t getPagecount( const_pfn_t pfn ) {
-   off_t pagecount_offset = (long) ((size_t) pfn * sizeof( uint64_t ) ) ;
+   off_t pagecount_offset = (long) ((size_t) pfn * sizeof( pfn_t ) ) ;
 
    if( pagecount_fd < 0 ) {
       /// @API{ open, https://man.archlinux.org/man/open.2 }
@@ -71,9 +71,8 @@ pagecount_t getPagecount( const_pfn_t pfn ) {
 void closePagecount() {
    /// Pagecount holds some files open (like #pagecount_fd) in static variables.
    /// Close the files properly.
-   /// @API{ close, https://man.archlinux.org/man/close.2 }
    if( pagecount_fd != -1 ) {
-      int closeStatus = close( pagecount_fd ) ;
+      int closeStatus = close( pagecount_fd ) ;  /// @API{ close, https://man.archlinux.org/man/close.2 }
       pagecount_fd = -1 ;
       if( closeStatus != 0 ) {
          FATAL_ERROR( "Unable to close [%s]", PAGECOUNT_FILE ) ;

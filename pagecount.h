@@ -22,7 +22,7 @@
 #include "config.h"  // For pfn_t
 
 
-/// The datatype of the pagecount in `/proc/pagecount`
+/// The datatype of the pagecount in #PAGECOUNT_FILE
 typedef uint64_t pagecount_t ;
 
 

@@ -19,6 +19,8 @@
 #include <stdint.h>   // For uint8_t unit64_t
 #include <stdio.h>    // For FILE
 
+#include "config.h"   // For pfn_t
+
 
 /// Hold information about a physical page
 ///
@@ -29,7 +31,7 @@
 struct PageInfo {
    void*    virtualAddress;  ///< The virtual address that this structure represents
    bool     valid;           ///< `true` if the data was successfully read and decoded from #pagemapFilePath
-   void*    pfn;             ///< The Page Frame Number (if present).  Valid when `!swapped`.
+   pfn_t    pfn;             ///< The Page Frame Number (if present).  Valid when `!swapped`.
    uint8_t  swap_type;       ///< A 5-bit index into a table of swapfiles.  Valid when `swapped`.
    void*    swap_offset;     ///< A 50-bit index into a swapfile.  Valid when `swapped`.
    bool     soft_dirty;      ///< PTE is soft-dirty (see [Documentation/vm/soft-dirty.txt](https://www.kernel.org/doc/Documentation/vm/soft-dirty.txt))

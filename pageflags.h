@@ -2,7 +2,14 @@
 //         University of Hawaii, College of Engineering
 //         sre_lab4_memscan - EE 205 - Spr 2023
 //
-/// Get flags for each physical page from `kpageflags`
+/// Get flags for each physical page from `/proc/kpageflags`
+///
+/// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt)...
+///
+///     This file contains a 64-bit set of flags for each page, indexed by PFN
+///
+/// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
+/// @see https://www.kernel.org/doc/html/latest/admin-guide/mm/pagemap.html
 ///
 /// @file   pageflags.h
 /// @author Mark Nelson <marknels@hawaii.edu>
@@ -10,6 +17,15 @@
 #pragma once
 
 #include "pagemap.h"  // For PageInfo
+
+
+/// The datatype of the pageflag data in #PAGEFLAG_FILE
+typedef uint64_t pageflags_t ;
+
+
+/// The size of each #pageflags_t entry
+#define PAGEFLAG_ENTRY sizeof( pageflags_t )
+
 
 /// Get physical frame flags from #PAGEFLAG_FILE and put them into #PageInfo
 ///
