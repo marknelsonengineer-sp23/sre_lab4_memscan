@@ -42,8 +42,8 @@ static int mmap_fd = -1 ;
 void* mmapBuffer = NULL ;
 
 
-/// @API{ stat, https://man.archlinux.org/man/stat.3p }
-/// @API{ open, https://man.archlinux.org/man/open.3p.en }
+/// @API{ stat, https://man.archlinux.org/man/stat.2 }
+/// @API{ open, https://man.archlinux.org/man/open.2 }
 /// @API{ fopen, https://man.archlinux.org/man/fopen.3 }
 /// @API{ mmap, https://man.archlinux.org/man/mmap.2 }
 void openPreScanFiles() {
@@ -91,7 +91,7 @@ void openPreScanFiles() {
 
 
 /// @API{ malloc, https://man.archlinux.org/man/malloc.3 }
-/// @API{ read, https://man.archlinux.org/man/read.3p }
+/// @API{ read, https://man.archlinux.org/man/read.2 }
 /// @API{ fread, https://man.archlinux.org/man/fread.3 }
 /// @API{ free, https://man.archlinux.org/man/free.3 }
 void readPreScanFiles() {
@@ -175,7 +175,7 @@ void readPreScanFiles() {
 } // readPreScanFiles
 
 
-/// @API{ close, https://man.archlinux.org/man/close.3p }
+/// @API{ close, https://man.archlinux.org/man/close.2 }
 /// @API{ fclose, https://man.archlinux.org/man/fclose.3 }
 /// @API{ munmap, https://man.archlinux.org/man/munmap.2 }
 void closePreScanFiles() {
