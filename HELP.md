@@ -1,6 +1,9 @@
 How to use Memscan
 ==================
 
+@brief Documents various ways to use memscan with links to 
+       detailed [examples](examples/EXAMPLES.md)
+
 - Usage:  
   - `# ./memscan --version`
   - `# ./memscan --key`

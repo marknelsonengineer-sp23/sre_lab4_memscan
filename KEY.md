@@ -1,5 +1,9 @@
 Key to Flags
 ============
+
+@brief Documents the key to the flags memscan outputs with the
+       `--pfn` and `--phys` command line options
+
 ````
 memscan --phys will output physical pages like this:
 

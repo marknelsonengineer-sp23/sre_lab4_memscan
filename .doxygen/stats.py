@@ -96,6 +96,9 @@ def print_title():
 	print("Project Statistics")
 	print("==================")
 	print("")
+	print("@brief Documents high-level statistics about the source code and")
+	print("       git repository")
+	print("")
 
 
 ## Print the [Shields.io](https://shields.io) tags

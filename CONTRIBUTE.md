@@ -1,8 +1,10 @@
 Contribute to Memscan
 =====================
 
-Memscan is a Makefile-based C Linux usermode console program
+@brief Documents the development environment, development philosophy, major
+       design decisions, code conventions, et al.
 
+Memscan is a Makefile-based C Linux usermode console program
 
 ## Setup the development environment
 To setup your development environment on a fresh system, you'll likely need 

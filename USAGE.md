@@ -1,5 +1,8 @@
 Usage
 =====
+
+@brief Documents the command line parameters for memscan
+
 ````
 Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... 
        memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...

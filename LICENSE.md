@@ -1,5 +1,8 @@
 License
 =======
+
+@brief Documents the current license for memscan
+
 Copyright (C) 2023 Mark Nelson, All rights reserved. 
 
 You are not required to accept this license in order to receive or

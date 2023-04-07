@@ -1,6 +1,8 @@
 Examples
 ========
 
+@brief Documents detailed examples with screenshots, annotations and analysis
+
 ## Swap
 One of the goals of memscan is to observe how and when systems swap pages to memory.
 

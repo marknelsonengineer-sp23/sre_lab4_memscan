@@ -40,6 +40,9 @@ with open(OUTFILE, 'w') as redirected_output:
 
 	print("Usage")
 	print("=====")
+	print("")
+	print("@brief Documents the command line parameters for memscan")
+	print("")
 	print("````")
 
 	## Run the program and collect the output

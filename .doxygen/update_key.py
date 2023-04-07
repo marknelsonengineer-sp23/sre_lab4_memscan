@@ -28,6 +28,10 @@ with open(OUTFILE, 'w') as redirected_output:
 
 	print("Key to Flags")
 	print("============")
+	print("")
+	print("@brief Documents the key to the flags memscan outputs with the")
+	print("       `--pfn` and `--phys` command line options")
+	print("")
 	print("````")
 
 	## Run the program and collect the output
