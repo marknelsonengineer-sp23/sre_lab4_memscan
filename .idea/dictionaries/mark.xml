@@ -50,11 +50,13 @@
       <w>fgetwc</w>
       <w>filte</w>
       <w>fontpath</w>
+      <w>fopen</w>
       <w>fpreprocessed</w>
       <w>fprintf</w>
       <w>fputc</w>
       <w>fputwc</w>
       <w>fputws</w>
+      <w>fread</w>
       <w>freopen</w>
       <w>fscanf</w>
       <w>fseek</w>
@@ -147,6 +149,7 @@
       <w>programlisting</w>
       <w>propget</w>
       <w>propput</w>
+      <w>prot</w>
       <w>putc</w>
       <w>putwc</w>
       <w>qhelpgenerator</w>
@@ -243,10 +246,12 @@
       <w>wcstoumax</w>
       <w>wcsxfrm</w>
       <w>wctob</w>
+      <w>whitebox</w>
       <w>wmemchr</w>
       <w>wprintf</w>
       <w>writeback</w>
       <w>wscanf</w>
+      <w>xopen</w>
     </words>
   </dictionary>
 </component>

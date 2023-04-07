@@ -4,6 +4,12 @@
 //
 /// Get the number of times each physical page is mapped from `/proc/kpagecount`
 ///
+/// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt)...
+///
+///     This file contains a 64-bit count of the number of times each page is
+///     mapped, indexed by PFN.
+///
+///
 /// @file   pagecount.c
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,17 +23,12 @@
 #include <fcntl.h>      // For open() O_RDONLY
 #include <unistd.h>     // For pread() close()
 
-#include "config.h"     // For FATAL_ERROR()
+#include "config.h"     // For FATAL_ERROR() pfn_t
 #include "pagecount.h"  // Just cuz
 
 
 /// The `kpagecount` file we intend to read from `/proc`
 static const char PAGECOUNT_FILE[] = "/proc/kpagecount" ;
-
-/// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt),
-/// each pagecount entry is `8` bytes long
-#define PAGECOUNT_ENTRY 8
-
 
 /// A static file descriptor to #PAGECOUNT_FILE (or `-1` if it hasn't been set yet)
 ///
@@ -36,7 +37,7 @@ static const char PAGECOUNT_FILE[] = "/proc/kpagecount" ;
 static int pagecount_fd = -1 ;
 
 
-uint64_t getPagecount( const void* pfn ) {
+pagecount_t getPagecount( const pfn_t pfn ) {
    off_t pagecount_offset = (long) ((size_t) pfn * sizeof( uint64_t ) ) ;
 
    if( pagecount_fd < 0 ) {
@@ -47,12 +48,12 @@ uint64_t getPagecount( const void* pfn ) {
       }
    }
 
-   uint64_t pagecount_data ;
+   pagecount_t pagecount_data ;
 
-   // There's some risk here... some pread functions may return something between
-   // 1 and 7 bytes, and we'd continue the read.  There's examples of how to
-   // do this in our GitHub history, but I'm simplifying the code for now and
-   // just requesting a single 8 byte read -- take it or leave it.
+   // There's a small risk here... some pread functions may return something
+   // between 1 and 7 bytes, and we'd continue the read.  There's examples of
+   // how to do this in our GitHub history, but I'm simplifying the code for
+   // now and just requesting a single 8 byte read -- take it or leave it.
    /// @API{ pread, https://man.archlinux.org/man/pread.2 }
    ssize_t ret = pread( pagecount_fd                  // File descriptor
                        ,((uint8_t*) &pagecount_data)  // Destination buffer

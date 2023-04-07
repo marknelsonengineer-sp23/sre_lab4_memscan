@@ -65,6 +65,10 @@ enum Endian { ENDIAN_UNKNOWN=-1  ///< If the endianness is unknown
 } ;
 
 
+/// The type definition for PFNs (Page Frame Numbers)
+typedef void* pfn_t ;
+
+
 /// Return the endianness of the current computer
 ///
 /// @see https://en.wikipedia.org/wiki/Endianness
