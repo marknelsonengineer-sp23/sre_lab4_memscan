@@ -12,6 +12,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <exception>  // For exception
+
 extern "C" {
    #include "../trim.h"
 }
@@ -42,7 +44,7 @@ void clearAndSetBuffer( const char newContents[] ) {
    tester to ensure the code is in sync.                                     */
 
 enum CharClass {
-   ASCII       ///< The character is a printable ASCII character
+    ASCII       ///< The character is a printable ASCII character
    ,WHITESPACE  ///< The character is neither an ASCII nor END character
    ,END         ///< The character is the null terminator `'\0'`
 };
@@ -245,7 +247,6 @@ BOOST_AUTO_TEST_SUITE( test_trim )
 
 
    BOOST_AUTO_TEST_CASE( test_trim_shift_left_whitebox ) {
-      // I'm deliberately choosing not to test the error conditions right now
       clearAndSetBuffer( "" );  BOOST_CHECK_EQUAL( shift_left( buffer, 0, 0 ), "" );
       clearAndSetBuffer( " " );  BOOST_CHECK_EQUAL( shift_left( buffer, 1, 1 ), "" );
       clearAndSetBuffer( "  " );  BOOST_CHECK_EQUAL( shift_left( buffer, 2, 2 ), "" );
@@ -255,6 +256,13 @@ BOOST_AUTO_TEST_SUITE( test_trim )
       clearAndSetBuffer( "   AB" );  BOOST_CHECK_EQUAL( shift_left( buffer, 3, 3 ), "AB" );
       clearAndSetBuffer( "   AB CD " );  BOOST_CHECK_EQUAL( shift_left( buffer, 3, 3 ), "AB CD " );
       clearAndSetBuffer( "\t\t\tA" );  BOOST_CHECK_EQUAL( shift_left( buffer, 3, 3 ), "A" );
+   }
+
+   BOOST_AUTO_TEST_CASE( test_trim_shift_left_whitebox_asserts ) {
+      clearAndSetBuffer( "" );  BOOST_CHECK_THROW( shift_left( buffer, 0, 1 ), exception );
+      clearAndSetBuffer( " " );  BOOST_CHECK_THROW( shift_left( buffer, 1, 2 ), exception );
+      clearAndSetBuffer( "  " );  BOOST_CHECK_THROW( shift_left( buffer, 2, 3 ), exception );
+      clearAndSetBuffer( "   " );  BOOST_CHECK_THROW( shift_left( buffer, 3, 4 ), exception );
    }
 
 BOOST_AUTO_TEST_SUITE_END()

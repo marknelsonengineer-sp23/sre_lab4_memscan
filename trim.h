@@ -9,11 +9,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+
 /// Remove all leading whitespace from `inString`
 ///
 /// @param inString The string to trim
 /// @return A string with the leading whitespace removed
 extern char* trim_left( char inString[] ) ;
+
 
 /// Remove all trailing whitespace from `inString`
 ///
@@ -21,22 +23,24 @@ extern char* trim_left( char inString[] ) ;
 /// @return A string with the trailing whitespace removed
 extern char* trim_right( char inString[] ) ;
 
+
 /// Remove all leading and trailing whitespace from `inString`
 ///
 /// @param inString The string to trim
 /// @return A string with the leading & trailing whitespace removed
 extern char* trim_edges( char inString[] ) ;
 
-/// Trim leading & trailing whitespace and collapse consecutive interior whitespace into `" "`
+
+/// Trim leading & trailing whitespace and collapse consecutive interior
+/// whitespace into `" "`
 ///
 /// This function does the following:
-///
-/// @see https://en.cppreference.com/w/c/string/byte/isspace
-///
 ///    - Trim the leading whitespace
 ///    - Trim trailing whitespace
 ///    - Replace consecutive whitespace characters inside the string with
 ///      a single `" "`
+///
+/// @see https://en.cppreference.com/w/c/string/byte/isspace
 ///
 /// @param inString The string to trim
 /// @return A fully trimmed string

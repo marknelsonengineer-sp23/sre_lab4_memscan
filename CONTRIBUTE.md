@@ -231,7 +231,7 @@ It's cool to have this working.
 | `pagemap.h` <br> `pagemap.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
-| `trim.h` <br> `trim.c`      	      | 	                   | 	                     | 	                | 	         | 	             |                |
+| `trim.h` <br> `trim.c`      	      | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | N/A	      | 6 Apr 23	     | 6 Apr 23       |
 | `version.h`          	             | 	4 Apr 23           | None	                 | 4 Apr 23	        | 4 Apr 23	 | 	             | 4 Apr 23       |
 
 The `main()` for memscan is in `memscan.c`.
