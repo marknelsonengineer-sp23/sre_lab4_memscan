@@ -2,7 +2,7 @@
 //         University of Hawaii, College of Engineering
 //         sre_lab4_memscan - EE 205 - Spr 2023
 //
-/// Get the number of times each physical page is mapped from `kpagecount`
+/// Get the number of times each physical page is mapped from `/proc/kpagecount`
 ///
 /// @file   pagecount.c
 /// @author Mark Nelson <marknels@hawaii.edu>
@@ -10,19 +10,19 @@
 
 /// Enables declaration of `pread()`
 ///
-/// @see https://man7.org/linux/man-pages/man3/read.3p.html
+/// @see https://man.archlinux.org/man/pread.2
 /// @NOLINTNEXTLINE(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp): This is a legitimate use of a reserved identifier
 #define _XOPEN_SOURCE 700
 
 #include <fcntl.h>      // For open() O_RDONLY
-#include <unistd.h>     // For close()
+#include <unistd.h>     // For pread() close()
 
 #include "config.h"     // For FATAL_ERROR()
 #include "pagecount.h"  // Just cuz
 
 
 /// The `kpagecount` file we intend to read from `/proc`
-#define PAGECOUNT_FILE "/proc/kpagecount"
+static const char PAGECOUNT_FILE[] = "/proc/kpagecount" ;
 
 /// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt),
 /// each pagecount entry is `8` bytes long
@@ -36,26 +36,28 @@
 static int pagecount_fd = -1 ;
 
 
-uint64_t getPagecount( void* pfn ) {
+uint64_t getPagecount( const void* pfn ) {
    off_t pagecount_offset = (long) ((size_t) pfn * sizeof( uint64_t ) ) ;
 
    if( pagecount_fd < 0 ) {
+      /// @API{ open, https://man.archlinux.org/man/open.2 }
       pagecount_fd = open( PAGECOUNT_FILE, O_RDONLY ) ;
       if( pagecount_fd == -1 ) {
-         FATAL_ERROR( "Unable to open [%s]", PAGECOUNT_FILE );
+         FATAL_ERROR( "Unable to open [%s]", PAGECOUNT_FILE ) ;
       }
    }
 
-   uint64_t pagecount_data;
+   uint64_t pagecount_data ;
 
    // There's some risk here... some pread functions may return something between
    // 1 and 7 bytes, and we'd continue the read.  There's examples of how to
    // do this in our GitHub history, but I'm simplifying the code for now and
    // just requesting a single 8 byte read -- take it or leave it.
+   /// @API{ pread, https://man.archlinux.org/man/pread.2 }
    ssize_t ret = pread( pagecount_fd                  // File descriptor
                        ,((uint8_t*) &pagecount_data)  // Destination buffer
                        ,PAGECOUNT_ENTRY               // Bytes to read
-                       ,pagecount_offset );           // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
+                       ,pagecount_offset ) ;          // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
    if( ret != PAGECOUNT_ENTRY ) {
       printf( "Unable to read[%s] for PFN [%p]\n", PAGECOUNT_FILE, pfn ) ;
       pagecount_data = 0 ;
@@ -68,11 +70,12 @@ uint64_t getPagecount( void* pfn ) {
 void closePagecount() {
    /// Pagecount holds some files open (like #pagecount_fd) in static variables.
    /// Close the files properly.
+   /// @API{ close, https://man.archlinux.org/man/close.2 }
    if( pagecount_fd != -1 ) {
       int closeStatus = close( pagecount_fd ) ;
       pagecount_fd = -1 ;
       if( closeStatus != 0 ) {
-         FATAL_ERROR( "Unable to close [%s]", PAGECOUNT_FILE );
+         FATAL_ERROR( "Unable to close [%s]", PAGECOUNT_FILE ) ;
       }
    }
 } // closePagecount

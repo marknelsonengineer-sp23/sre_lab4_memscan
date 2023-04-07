@@ -181,14 +181,14 @@ It's cool to have this working.
 
 ### Test Results
 |              | Archlinux | Debian                                       | ARM 32-bit | System Y |
-|--------------|-----------|----------------------------------------------|--|----------|
-| Architecture | x86-64    | x86-64                                       |  |          |
-| Date tested  | Ongoing   | 27 Mar 2023                                  |  |          |
-| Build tested | Ongoing   | 2.1.0+10332                                  |  |          |
-| make memscan | Clean     | Clean                                        |  |          |
-| make doc     | Clean     | A few warnings, as Doxygen is out of date    |  |          |
-| make test    | Clean     | Clean                                        |  |          |
-| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |  |          |
+|--------------|-----------|----------------------------------------------|------------|----------|
+| Architecture | x86-64    | x86-64                                       |            |          |
+| Date tested  | Ongoing   | 27 Mar 2023                                  |            |          |
+| Build tested | Ongoing   | 2.1.0+10332                                  |            |          |
+| make memscan | Clean     | Clean                                        |            |          |
+| make doc     | Clean     | A few warnings, as Doxygen is out of date    |            |          |
+| make test    | Clean     | Clean                                        |            |          |
+| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |            |          |
 
 
 ## Release Procedures
@@ -206,6 +206,7 @@ It's cool to have this working.
   - Check for a space before `;`
   - Ensure all parameters are validated
   - `assert( validateThing() )` before-and-after anything that modifies it
+  - Look for CLion problems
 - Run `make lint`
 - Run `make clean` and then `make test`
 - Run `make doc` and then `make publish`
@@ -226,7 +227,7 @@ It's cool to have this working.
 | `iomem.h` <br> `iomem.c`     	     | 	                   | 	                     | 	                | 	         | 	             |                |
 | `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	         | 	             |                |
 | `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
-| `pagecount.h` <br> `pagecount.c` 	 | 	                   | 	                     | 	                | 	         | 	             |                |
+| `pagecount.h` <br> `pagecount.c` 	 | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | 	         | (1) 6 Apr 23	 | 6 Apr 23       |
 | `pageflags.h` <br> `pageflags.c` 	 | 	                   | 	                     | 	                | 	         | 	             |                |
 | `pagemap.h` <br> `pagemap.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
@@ -235,6 +236,8 @@ It's cool to have this working.
 | `version.h`          	             | 	4 Apr 23           | None	                 | 4 Apr 23	        | 4 Apr 23	 | 	             | 4 Apr 23       |
 
 The `main()` for memscan is in `memscan.c`.
+
+(1):  Not worth the effort.
 
 [Hungarian notation]: https://en.wikipedia.org/wiki/Hungarian_notation
 [clang-tidy]: https://releases.llvm.org/13.0.0/tools/clang/tools/extra/docs/clang-tidy/
