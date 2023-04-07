@@ -42,8 +42,18 @@ __asm__ inline ( "MOVL %%ESP, %0 ;"                        \
             : )                  /* clobbered registers */
 #endif
 
+#ifdef __arm__
+#define GET_BASE_OF_STACK( baseOfStack )                   \
+   baseOfStack = NULL ;                                    \
+                                                           \
+__asm__ inline ( "STR SP, [%0]"                            \
+            : "=g"(baseOfStack)  /* output operands */     \
+            :                    /* input operands  */     \
+            : )                  /* clobbered registers */
+#endif
+
 #ifndef GET_BASE_OF_STACK
-   #pragma GCC error "Need inline assembly instructions for this architecture"
+   #pragma GCC error "Need inline assembly instructions for GET_BASE_OF_STACK"
 #endif
 
 /// Get the end of the stack frame for this thread -- which is where new
@@ -85,6 +95,19 @@ extern void* getBaseOfStack() ;
                : )                  /* clobbered registers */
 #endif
 
+#ifdef __arm__
+#define ALLOCATE_LOCAL_STORAGE( newSize )                     \
+                                                              \
+   __asm__ inline ( "LDR r0, %0\n\t"                          \
+                    "SUB SP, SP, r0"                          \
+               :                    /* output operands     */ \
+               : "g" (newSize)      /* input operands      */ \
+               : "r0" )             /* clobbered registers */
+#endif
+
+#ifndef ALLOCATE_LOCAL_STORAGE
+   #pragma GCC error "Need inline assembly instructions for ALLOCATE_LOCAL_STORAGE"
+#endif
 
 /// Subtract `newSize` from the stack, thereby allocating that amount
 /// for local variables.

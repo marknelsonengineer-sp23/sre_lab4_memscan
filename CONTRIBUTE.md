@@ -13,15 +13,17 @@ the following:
   - ...but it worked on Rasberian!
   - ...and it worked on Debian under WSL2
 
-| Package            	    | Debian / apt-get                     	 | ArchLinux / pacman       	 | RedHat / rpm 	 |
-|-------------------------|----------------------------------------|----------------------------|----------------|
-| [Boost]              	  | `# apt-get install libboost-all-dev` 	 | 	                          | 	              |
-| [clang-tidy]         	  | `# apt-get install clang-tidy`       	 | 	                          | 	              |
-| [Doxygen]            	  | `# apt-get install doxygen`          	 | 	                          | 	              |
-| [Python pip]            | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 | 	              |
-| [GitPython]          	  | `# pip install GitPython`            	 | 	                          | 	              |
-| [Graphviz] for DOT   	  | `# apt-get install graphviz`         	 | 	                          | 	              |
-| [Capabilities]       	  | `# apt-get install libcap-dev`       	 | 	                          | 	              |
+| Package            	   | Debian / apt-get                     	 | ArchLinux / pacman       	 | AWS               | RedHat / rpm 	 |
+|------------------------|----------------------------------------|----------------------------|-------------------|----------------|
+| Git                    |                                        |                            | `dnf install git`  |                |
+| C++                    |                                        |                            | `dnf install g++` |                |
+| [Boost]              	 | `# apt-get install libboost-all-dev` 	 | 	                          |                   | 	              |
+| [clang-tidy]         	 | `# apt-get install clang-tidy`       	 | 	                          |                   | 	              |
+| [Doxygen]            	 | `# apt-get install doxygen`          	 | 	                          |                   | 	              |
+| [Python pip]           | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 |                   | 	              |
+| [GitPython]          	 | `# pip install GitPython`            	 | 	                          |                   | 	              |
+| [Graphviz] for DOT   	 | `# apt-get install graphviz`         	 | 	                          |                   | 	              |
+| [Capabilities]       	 | `# apt-get install libcap-dev`       	 | 	                          |                   | 	              |
 
 
 
