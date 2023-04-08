@@ -26,7 +26,7 @@
 #define GET_BASE_OF_STACK( baseOfStack )                   \
    baseOfStack = NULL ;                                    \
                                                            \
-__asm__ inline ( "MOVQ %%RSP, %0 ;"                        \
+__asm__ inline ( "MOVQ %%RSP, %0 ;\n\t"                    \
             : "=g"(baseOfStack)  /* output operands */     \
             :                    /* input operands  */     \
             : )                  /* clobbered registers */
@@ -36,7 +36,7 @@ __asm__ inline ( "MOVQ %%RSP, %0 ;"                        \
 #define GET_BASE_OF_STACK( baseOfStack )                   \
    baseOfStack = NULL ;                                    \
                                                            \
-__asm__ inline ( "MOVL %%ESP, %0 ;"                        \
+__asm__ inline ( "MOVL %%ESP, %0 ;\n\t"                    \
             : "=g"(baseOfStack)  /* output operands */     \
             :                    /* input operands  */     \
             : )                  /* clobbered registers */
@@ -46,10 +46,22 @@ __asm__ inline ( "MOVL %%ESP, %0 ;"                        \
 #define GET_BASE_OF_STACK( baseOfStack )                   \
    baseOfStack = NULL ;                                    \
                                                            \
-__asm__ inline ( "STR SP, [%0]"                            \
+__asm__ inline ( "STR SP, [%0] \n\t"                       \
             : "=g"(baseOfStack)  /* output operands */     \
             :                    /* input operands  */     \
             : )                  /* clobbered registers */
+#endif
+
+#ifdef __ARM_ARCH_ISA_A64
+#define GET_BASE_OF_STACK( baseOfStack )                   \
+   baseOfStack = NULL ;                                    \
+                                                           \
+__asm__ inline ( "mov x9, sp \n\t"                         \
+                 "str x9, %0 \n\t"                         \
+            : "=m"(baseOfStack)  /* output operands */     \
+            :                    /* input operands  */     \
+            : "x9" )             /* clobbered registers */
+
 #endif
 
 #ifndef GET_BASE_OF_STACK
@@ -80,7 +92,7 @@ extern void* getBaseOfStack() ;
 /// @param newSize The number of bytes to allocate for local data
 #define ALLOCATE_LOCAL_STORAGE( newSize )                     \
                                                               \
-   __asm__ inline ( "SUBQ %0, %%RSP ;"                        \
+   __asm__ inline ( "SUBQ %0, %%RSP ;\n\t"                    \
                :                    /* output operands     */ \
                : "g" (newSize)      /* input operands      */ \
                : )                  /* clobbered registers */
@@ -89,7 +101,7 @@ extern void* getBaseOfStack() ;
 #ifdef __i386__
 #define ALLOCATE_LOCAL_STORAGE( newSize )                     \
                                                               \
-   __asm__ inline ( "SUBL %0, %%ESP ;"                        \
+   __asm__ inline ( "SUBL %0, %%ESP ;\n\t"                    \
                :                    /* output operands     */ \
                : "g" (newSize)      /* input operands      */ \
                : )                  /* clobbered registers */
@@ -99,10 +111,20 @@ extern void* getBaseOfStack() ;
 #define ALLOCATE_LOCAL_STORAGE( newSize )                     \
                                                               \
    __asm__ inline ( "LDR r0, %0\n\t"                          \
-                    "SUB SP, SP, r0"                          \
+                    "SUB SP, SP, r0\n\t"                      \
                :                    /* output operands     */ \
                : "g" (newSize)      /* input operands      */ \
                : "r0" )             /* clobbered registers */
+#endif
+
+#ifdef __ARM_ARCH_ISA_A64
+#define ALLOCATE_LOCAL_STORAGE( newSize )                     \
+                                                              \
+   __asm__ inline ( "sub sp, sp, #%0\n\t"                     \
+               :                    /* output operands     */ \
+               : "g" (newSize)      /* input operands      */ \
+               : )                  /* clobbered registers */
+
 #endif
 
 #ifndef ALLOCATE_LOCAL_STORAGE
