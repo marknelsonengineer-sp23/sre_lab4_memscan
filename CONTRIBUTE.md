@@ -12,19 +12,27 @@ the following:
 - This section is incomplete, but...
   - ...but it worked on Rasberian!
   - ...and it worked on Debian under WSL2
+  - ...and it worked on a Fedora-based Amazon Linux 2023 ARM-64
+- After [Git] is installed, you can use `git clone https://github.com/marknelsonengineer-sp23/sre_lab4_memscan.git` 
+  to download memscan
 
-| Package            	   | Debian / apt-get                     	 | ArchLinux / pacman       	 | AWS               | RedHat / rpm 	 |
-|------------------------|----------------------------------------|----------------------------|-------------------|----------------|
-| Git                    |                                        |                            | `dnf install git`  |                |
-| C++                    |                                        |                            | `dnf install g++` |                |
-| [Boost]              	 | `# apt-get install libboost-all-dev` 	 | 	                          |                   | 	              |
-| [clang-tidy]         	 | `# apt-get install clang-tidy`       	 | 	                          |                   | 	              |
-| [Doxygen]            	 | `# apt-get install doxygen`          	 | 	                          |                   | 	              |
-| [Python pip]           | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 |                   | 	              |
-| [GitPython]          	 | `# pip install GitPython`            	 | 	                          |                   | 	              |
-| [Graphviz] for DOT   	 | `# apt-get install graphviz`         	 | 	                          |                   | 	              |
-| [Capabilities]       	 | `# apt-get install libcap-dev`       	 | 	                          |                   | 	              |
+| Package            	   | Debian / apt-get                     	 | ArchLinux / pacman       	 | AWS ARM-64                        | RedHat / rpm 	 |
+|------------------------|----------------------------------------|----------------------------|-----------------------------------|----------------|
+| [Git]                  |                                        |                            | `# dnf install git`               |                |
+| [C++]                  |                                        |                            | `# dnf install g++`               |                |
+| [Capabilities]       	 | `# apt-get install libcap-dev`       	 | 	                          | `# dnf install libcap-devel`      | 	              |
+| [Boost]              	 | `# apt-get install libboost-all-dev` 	 | 	                          | `# dnf install boost-devel`       | 	              |
+| [clang-tidy]         	 | `# apt-get install clang-tidy`       	 | 	                          | `# dnf install clang-tools-extra` | 	              |
+| [Graphviz] for DOT   	 | `# apt-get install graphviz`         	 | 	                          | `# dnf install graphviz`          | 	              |
+| [Python pip]           | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 | `# dnf install python3-pip`       | 	              |
+| [GitPython]          	 | `$ pip install GitPython`            	 | 	                          | `$ pip install GitPython`         | 	              |
+| [Doxygen]            	 | `# apt-get install doxygen`          	 | 	                          | `# dnf install doxygen`           | 	              |
 
+
+If you plan to contribute, don't forget to set your name and eMail in [Git]:
+
+    git config --global user.name "Mark Nelson"
+    git config --global user.email "marknels@hawaii.edu"
 
 
 ## Handling errors & warnings in a testing framework
@@ -124,14 +132,14 @@ find the new stack.
 
 ## Toolchain
 - Memscan is written in C.
-  - It's compiled with [gcc](https://gcc.gnu.org).
+  - It's compiled with [gcc].
   - Use `make tidy` to lint the program.  [clang-tidy] is the linter.
   - Use `make doc` to build documentation:  [Doxygen] is used to produce it.
   - Use `make publish` to publish the documentation to [UHUnix].
   - It uses [Makefile] for its build.
   - It uses [GitHub] for version control.
   - All of the above should run clean and without warnings.
-- Memscan uses [Boost Test] written in C++.  Use `make clean` and 
+- Memscan uses [Boost Test] written in [C++].  Use `make clean` and 
   `make test` to test the application.
 - Memscan is a Linux-based, user-mode command-line program that needs to run
   with root-level privileges.
@@ -183,15 +191,23 @@ It's cool to have this working.
 
 
 ### Test Results
-|              | Archlinux | Debian on WSL                                | ARM 32-bit |
-|--------------|-----------|----------------------------------------------|------------|
-| Architecture | x86-64    | x86-64                                       |            |
-| Date tested  | Ongoing   | 27 Mar 2023                                  |            |
-| Build tested | Ongoing   | 2.1.0+10332                                  |            |
-| make memscan | Clean     | Clean                                        |            |
-| make doc     | Clean     | A few warnings, as Doxygen is out of date    |            |
-| make test    | Clean     | Clean                                        |            |
-| make lint    | Clean     | Some warnings as `clang-tidy` is out of date |            |
+|                   | Archlinux | Debian on WSL                                | AWS ARM-64  |
+|-------------------|-----------|----------------------------------------------|-------------|
+| Architecture      | x86-64    | x86-64                                       | ARM-64      |
+| Date tested       | Ongoing   | 27 Mar 2023                                  | 7 Apr 2023  |
+| Build tested      | Ongoing   | 2.1.0+10332                                  | 2.3.0+12146 |
+| make memscan      | Clean     | Clean                                        | Clean       |
+| make doc          | Clean     | A few warnings, as Doxygen is out of date    |             |
+| make test         | Clean     | Clean                                        | Clean       |
+| make lint         | Clean     | Some warnings as `clang-tidy` is out of date | Clean       |
+| local allocations |           |                                              | Not working |
+| iomem             |           |                                              | Not working |
+
+#### AWS ARM-64
+- The physical page maps are all reporting `Unallocated memory`.  It's like iomem or PFNs 
+  aren't lining up.
+- Local variables are relative to `sp` (the stack pointer) not the base pointer, so 
+  local allocations are segfaulting badly.
 
 
 ## Release Procedures
@@ -260,3 +276,6 @@ The `main()` for memscan is in `memscan.c`.
 [Python pip]:  https://pypi.org/project/pip/
 [GitPython]:  https://gitpython.readthedocs.io/en/stable/
 [Graphviz]:  https://graphviz.org
+[Git]:  https://git-scm.com
+[C++]:  https://gcc.gnu.org
+[gcc]:  https://gcc.gnu.org
