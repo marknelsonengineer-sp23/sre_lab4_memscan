@@ -15,7 +15,7 @@ TARGET = memscan
 all:  $(TARGET) lint doc
 
 CC        = gcc
-CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\"
+CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\" -march=native -mtune=native
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
 LINTFLAGS = --quiet
