@@ -15,25 +15,12 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - name: Install xmllint
-        run: sudo apt-get install -y libcap-dev
+
+      - name: Install dependencies
+        run: sudo apt-get install -y libcap-dev libboost-all-dev
+
       - name: Build memscan
         run: make memscan
-
-      - name: Build Boost
-        id: boost
-        uses: egor-tensin/build-boost@v1
-        with:
-          version: 1.71.0
-          libraries: test
-          platform: x64
-          configuration: Release
-
-      - name: Show paths
-        run: |
-          printf 'Boost has been unpacked to: %s\n' '${{ steps.boost.outputs.root }}'
-          printf 'Libraries can be found here: %s\n' '${{ steps.boost.outputs.librarydir }}'
-        shell: bash
 
       - name: Test memscan
         run: make test
