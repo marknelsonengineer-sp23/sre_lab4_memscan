@@ -1,5 +1,5 @@
 name: Test memscan on push
-run-name: ${{ github.actor }} just pushed an update to memscan
+run-name: ${{ github.actor }} push to memscan
 on: [push]
 jobs:
   Explore-GitHub-Actions:
@@ -15,6 +15,8 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      - name: Install xmllint
+        run: sudo apt-get install -y libcap-dev
       - name: Build memscan
         run: |
           make memscan
