@@ -18,6 +18,7 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get install -y libcap-dev
       - name: Build memscan
-        run: |
-          make memscan
+        run: make memscan
+      - name: Test memscan
+        run: make test
       - run: echo "🍏 This job's status is ${{ job.status }}."
