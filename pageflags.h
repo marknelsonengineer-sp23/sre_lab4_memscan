@@ -19,14 +19,6 @@
 #include "pagemap.h"  // For PageInfo
 
 
-/// The datatype of the pageflag data in #PAGEFLAG_FILE
-typedef uint64_t pageflags_t ;
-
-
-/// The size of each #pageflags_t entry
-#define PAGEFLAG_ENTRY sizeof( pageflags_t )
-
-
 /// Get physical frame flags from #PAGEFLAG_FILE and put them into #PageInfo
 ///
 /// @param page The page to update

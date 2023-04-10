@@ -23,8 +23,9 @@
 #include <fcntl.h>      // For open() O_RDONLY
 #include <unistd.h>     // For pread() close()
 
-#include "config.h"     // For FATAL_ERROR() const_pfn_t
+#include "config.h"     // For FATAL_ERROR()
 #include "pagecount.h"  // Just cuz
+#include "typedefs.h"   // For pfn_t const_pfn_t
 
 
 /// The `kpagecount` file we intend to read from `/proc`

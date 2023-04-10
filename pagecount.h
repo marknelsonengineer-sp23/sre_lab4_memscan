@@ -19,15 +19,7 @@
 
 #include <stdint.h>  // For uint64_t
 
-#include "config.h"  // For pfn_t
-
-
-/// The datatype of the pagecount in #PAGECOUNT_FILE
-typedef uint64_t pagecount_t ;
-
-
-/// The size of each #pagecount_t entry
-#define PAGECOUNT_ENTRY sizeof( pagecount_t )
+#include "typedefs.h"  // For pagecount_t const_pfn_t
 
 
 /// Get a 64-bit count of the number of times each physical page is mapped

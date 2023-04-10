@@ -37,11 +37,8 @@
 #include "pageflags.h"    // For getPageflags() closePageflags()
 #include "pagemap.h"      // Just cuz
 #include "shannon.h"      // For computeShannonEntropy() getShannonClassification()
+#include "typedefs.h"     // for pfn_t
 #include "version.h"      // For STRINGIFY_VALUE()
-
-/// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt),
-/// each pagemap entry is `8` bytes long
-#define PAGEMAP_ENTRY 8
 
 
 /// A static file descriptor to #pagemapFilePath (or `-1` if it hasn't been set)
@@ -74,9 +71,9 @@ inline unsigned char getPageSizeInBits() {
 }
 
 
-struct PageInfo getPageInfo( void* vAddr, bool okToRead ) {
+struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    /// @NOLINTBEGIN( performance-no-int-to-ptr ):  This function mixes `void*` and `size_t`.  C normally warns about this, but in this case, it's OK.
-// printf( "%p\n", vAddr ) ;
+   // printf( "%p\n", vAddr ) ;
 
    struct PageInfo page = {} ;
    memset( &page, 0, sizeof( page ) ) ;
@@ -97,7 +94,7 @@ struct PageInfo getPageInfo( void* vAddr, bool okToRead ) {
       }
    }
 
-   uint64_t pagemap_data;
+   pagemap_t pagemap_data;
 
    page.valid = true ;
    // There's some risk here... some pread functions may return something between
@@ -120,7 +117,7 @@ struct PageInfo getPageInfo( void* vAddr, bool okToRead ) {
          page.swap_type = pagemap_data & 0b000011111 ; // Bits 0-4
          page.swap_offset = (void*) ( ( pagemap_data & 0x007FFFFFFFFFFFC0 ) >> 5 ) ; // Bits 5-54 >> 5 bits
       } else {
-         page.pfn = (void*) ( pagemap_data & 0x7FFFFFFFFFFFFF );  // Bits 0-54
+         page.pfn = (pfn_t) ( pagemap_data & 0x7FFFFFFFFFFFFF );  // Bits 0-54
       }
 
       page.soft_dirty = GET_BIT( pagemap_data, 55 );

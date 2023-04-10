@@ -31,5 +31,11 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       BOOST_CHECK_EQUAL( sizeof( pfn_t ),       PAGEFLAG_ENTRY ) ;
    }
 
+   BOOST_AUTO_TEST_CASE( test_pagemap ) {
+      BOOST_CHECK_EQUAL( sizeof( uint64_t ),    PAGEMAP_ENTRY ) ;
+      BOOST_CHECK_EQUAL( sizeof( pagemap_t ),   PAGEMAP_ENTRY ) ;
+      BOOST_CHECK_EQUAL( sizeof( pfn_t ),       PAGEMAP_ENTRY ) ;
+   }
+
 BOOST_AUTO_TEST_SUITE_END()
 /// @endcond

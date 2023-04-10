@@ -24,8 +24,9 @@
 #include <fcntl.h>      // For open() O_RDONLY
 #include <unistd.h>     // For pread() close()
 
-#include "config.h"     // For FATAL_ERROR() pfn_t
+#include "config.h"     // For FATAL_ERROR()
 #include "pageflags.h"  // Just cuz
+#include "typedefs.h"   // For pfn_t
 
 
 /// The `kpageflags` file we intend to read from `/proc`

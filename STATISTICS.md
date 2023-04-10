@@ -6,9 +6,9 @@ Project Statistics
 
 | Type | Files | Lines | Bytes | Working Lines | Working Bytes |
 |------|------:|------:|------:|--------------:|--------------:|
-|.h Source|16|1,017|43,469|383|8,877|
-|.c Source|14|3,440|126,445|2,240|66,862|
-|Unit Tests|10|1,405|63,778|942|49,675|
+|.h Source|16|1,033|44,077|386|9,016|
+|.c Source|14|3,437|126,689|2,236|66,784|
+|Unit Tests|10|1,411|64,051|947|49,881|
 |Python|4|634|18,264|282|9,204|
 |HTML|1|55|1,021|n/a|n/a|
 |Markdown|9|1,393|97,302|n/a|n/a|
@@ -26,15 +26,15 @@ Project Statistics
 
 ## Software Engineering Metrics
 
-Number of commits:  265
+Number of commits:  266
 
-Number of test cases:  56
+Number of test cases:  57
 
-Number of test assertions:  579
+Number of test assertions:  582
 
 ## GitHub Statistics
 | Repository                           | Commits                   | Issues                  | Social                    |
 |--------------------------------------|---------------------------|-------------------------|---------------------------|
 | ![GitHub code size	in	bytes](https://img.shields.io/github/languages/code-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub repo size](https://img.shields.io/github/repo-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub contributors](https://img.shields.io/github/contributors/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub last	commit](https://img.shields.io/github/last-commit/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub	issues](https://img.shields.io/github/issues-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub	closed issues](https://img.shields.io/github/issues-closed-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub forks](https://img.shields.io/github/forks/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub Repo	stars](https://img.shields.io/github/stars/marknelsonengineer-sp23/sre_lab4_memscan?style=social) |
 
-Automatically generated on Fri 07 Apr 2023 05:30:38 PM 
+Automatically generated on Fri 07 Apr 2023 08:48:46 PM 
