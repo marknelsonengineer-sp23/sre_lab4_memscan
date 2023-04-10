@@ -31,7 +31,7 @@ jobs:
       - name: Lint memscan
         run: make lint
 
-      - name: Build documentation
-        run: make doc
+#     - name: Build documentation
+#       run: make doc
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
