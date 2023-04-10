@@ -4,7 +4,14 @@
 //
 /// Get more information about a virtual address
 ///
+/// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt)...
+///
+///     This file lets a userspace process find out which physical frame each
+///     virtual page is mapped to.  It contains one 64-bit value for each
+///     virtual page.
+///
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
+/// @see https://www.kernel.org/doc/html/latest/admin-guide/mm/pagemap.html
 /// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
 /// @see https://stackoverflow.com/questions/5748492/is-there-any-api-for-determining-the-physical-address-from-virtual-address-in-li/45128487#45128487
 ///
@@ -14,15 +21,15 @@
 
 #pragma once
 
-#include <stdbool.h>  // For bool
-#include <stddef.h>   // For size_t
-#include <stdint.h>   // For uint8_t unit64_t
-#include <stdio.h>    // For FILE
+#include <stdbool.h>    // For bool
+#include <stddef.h>     // For size_t
+#include <stdint.h>     // For uint8_t unit64_t
+#include <stdio.h>      // For FILE
 
 #include "typedefs.h"   // For pfn_t pagecount_t
 
 
-/// Hold information about a physical page
+/// Holds information about a physical page
 ///
 /// Page data comes from several sources, including `pagemap`,
 /// `kpagecount`, `kpageflags` and `iomem`.
@@ -97,7 +104,7 @@ extern unsigned char getPageSizeInBits() ;
 /// @param okToRead `true` if the page can be read.  `false` if this should
 ///                 just find flags
 /// @return The #PageInfo structure for `vAddr`
-extern struct PageInfo getPageInfo( void* vAddr, bool okToRead ) ;
+extern struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) ;
 
 
 /// Print a #PageInfo record with the Page Frame Number

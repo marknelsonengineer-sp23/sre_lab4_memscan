@@ -4,10 +4,16 @@
 //
 /// Get more information about a virtual address
 ///
-/// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
+/// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt)...
+///
+///     This file lets a userspace process find out which physical frame each
+///     virtual page is mapped to.  It contains one 64-bit value for each
+///     virtual page.
+///
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
-/// @see https://www.kernel.org/doc/html/latest/admin-guide/mm/pagemap.html?highlight=pagemap
-/// @see https://docs.huihoo.com/doxygen/linux/kernel/3.7/swap_8h_source.html
+/// @see https://www.kernel.org/doc/html/latest/admin-guide/mm/pagemap.html
+/// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
+/// @see https://stackoverflow.com/questions/5748492/is-there-any-api-for-determining-the-physical-address-from-virtual-address-in-li/45128487#45128487
 ///
 /// @NOLINTBEGIN( readability-magic-numbers ):  Due to the nature of this module, we will allow magic numbers
 ///
@@ -23,16 +29,13 @@
 
 #include <fcntl.h>        // For open() O_RDONLY
 #include <inttypes.h>     // For PRIu64
-#include <stdint.h>       // For uint64_t
 #include <stdio.h>        // For printf()
-#include <stdlib.h>       // For exit() EXIT_FAILURE
 #include <string.h>       // For memset() strncmp()
-#include <sys/syscall.h>  // Definition of SYS_* constants
-#include <unistd.h>       // For sysconf() close()
+#include <unistd.h>       // For sysconf() close() pread() _SC_PAGESIZE
 
 #include "colors.h"       // For ANSI_COLOR_...
 #include "config.h"       // For getProgramName()
-#include "iomem.h"        // For get_iomem_region_description()
+#include "iomem.h"        // For get_iomem_region_description() MAX_IOMEM_DESCRIPTION
 #include "pagecount.h"    // For getPagecount() closePagecount()
 #include "pageflags.h"    // For getPageflags() closePageflags()
 #include "pagemap.h"      // Just cuz
@@ -49,7 +52,7 @@ static int pagemap_fd = -1 ;
 
 
 inline size_t getPageSizeInBytes() {
-   return sysconf( _SC_PAGESIZE ) ;
+   return sysconf( _SC_PAGESIZE ) ;  /// @API{ sysconf, https://man.archlinux.org/man/sysconf.3 }
 }
 
 
@@ -66,7 +69,8 @@ inline unsigned char getPageSizeInBits() {
    /// - Start with the size of an address in bits
    /// - Subtract the number of leading 0s
    /// - Subtract one more to get the index of the first bit
-
+   ///
+   /// @API{ __builtin_clzl, https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fclzl }
    return ( sizeof( size_t ) << 3 ) - __builtin_clzl( getPageSizeInBytes() - 1 ) ;
 }
 
@@ -76,7 +80,7 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    // printf( "%p\n", vAddr ) ;
 
    struct PageInfo page = {} ;
-   memset( &page, 0, sizeof( page ) ) ;
+   memset( &page, 0, sizeof( page ) ) ;  /// @API{ memset, https://man.archlinux.org/man/memset.3 }
 
    page.virtualAddress = vAddr ;
 
@@ -87,6 +91,7 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
 
    off_t pagemap_offset = (long) ((size_t) vAddr / getPageSizeInBytes() * PAGEMAP_ENTRY ) ;
 
+   /// @API{ open, https://man.archlinux.org/man/open.2 }
    if( pagemap_fd < 0 ) {
       pagemap_fd = open( pagemapFilePath, O_RDONLY ) ;
       if( pagemap_fd == -1 ) {
@@ -97,10 +102,11 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    pagemap_t pagemap_data;
 
    page.valid = true ;
-   // There's some risk here... some pread functions may return something between
-   // 1 and 7 bytes, and we'd continue the read.  There's examples of how to
-   // do this in our GitHub history, but I'm simplifying the code for now and
-   // just requesting a single 8 byte read -- take it or leave it.
+   // There's a small risk here... some pread functions may return something
+   // between 1 and 7 bytes, and we'd continue the read.  There's examples of
+   // how to do this in our GitHub history, but I'm simplifying the code for
+   // now and just requesting a single 8 byte read -- take it or leave it.
+   /// @API{ pread, https://man.archlinux.org/man/pread.2 }
    ssize_t ret = pread(pagemap_fd                  // File descriptor
                       ,((uint8_t*) &pagemap_data)  // Destination buffer
                       ,PAGEMAP_ENTRY               // Bytes to read
@@ -341,6 +347,7 @@ enum PageCompare comparePages( const struct PageInfo* left, const struct PageInf
    if( left->pgtable     != right->pgtable )     { same = false ; goto Done ; }
 
    // Make sure PFN Regions are the same
+   /// @API{ strncmp, https://man.archlinux.org/man/strncmp.3 }
    if( strncmp( get_iomem_region_description( left->pfn )
                ,get_iomem_region_description( right->pfn )
                ,MAX_IOMEM_DESCRIPTION ) != 0 ) { same = false ; goto Done ; }
@@ -394,7 +401,7 @@ void closePagemap() {
    /// Pagemap holds some files open (like #pagemap_fd) in static variables.
    /// Close the files properly.
    if( pagemap_fd != -1 ) {
-      int closeStatus = close( pagemap_fd ) ;
+      int closeStatus = close( pagemap_fd ) ;  /// @API{ close, https://man.archlinux.org/man/close.2 }
       pagemap_fd = -1 ;
       if( closeStatus != 0 ) {
          FATAL_ERROR( "Unable to close [%s]", pagemapFilePath );
