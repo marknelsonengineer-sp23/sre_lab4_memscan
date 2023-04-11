@@ -22,16 +22,16 @@ jobs:
       - name: Install GitPython
         run: pip install GitPython
 
-      - name: Install Doxygen
-        uses: mattnotmitt/doxygen-action@edge
-        with:
-          doxyfile-path: '.doxygen/Doxyfile'
+#      - name: Install Doxygen
+#        uses: mattnotmitt/doxygen-action@edge
+#        with:
+#          doxyfile-path: '.doxygen/Doxyfile'
 
       - name: Build memscan
         run: make memscan
 
-#     - name: Test memscan
-#       run: make test
+      - name: Test memscan
+        run: make test
 
       - name: Lint memscan
         run: make lint
