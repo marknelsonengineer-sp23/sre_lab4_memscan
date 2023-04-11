@@ -44,6 +44,8 @@ jobs:
       - name: Build Doxygen Documentation
         run: |
           echo "./doxygen-1.9.6/bin" >> $GITHUB_PATH
+          echo $PATH
+          echo $GITHUB_PATH
           ls -l ./doxygen-1.9.6/bin/doxygen
           make doc
 
