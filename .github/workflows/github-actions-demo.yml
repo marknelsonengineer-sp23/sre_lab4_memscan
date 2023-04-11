@@ -27,11 +27,17 @@ jobs:
 #        with:
 #          doxyfile-path: '.doxygen/Doxyfile'
 
-      - name: Build memscan
-        run: make memscan
+      - name: Make clean
+        run: make clean
 
       - name: Test memscan
         run: make test
+
+      - name: Make clean
+        run: make clean
+
+      - name: Build memscan
+        run: make memscan
 
       - name: Lint memscan
         run: make lint
