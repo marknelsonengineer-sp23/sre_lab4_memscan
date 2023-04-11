@@ -8,6 +8,7 @@ jobs:
       - run: echo "🎉 This job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
@@ -28,7 +29,6 @@ jobs:
           gunzip doxygen-1.9.6.linux.bin.tar.gz
           tar -xf doxygen-1.9.6.linux.bin.tar
           sudo cp ./doxygen-1.9.6/bin/doxygen /usr/local/bin
-          echo "${HOME}/doxygen-1.9.6/bin" >> $GITHUB_PATH
 
       - name: Make clean
         run: make clean
@@ -44,10 +44,6 @@ jobs:
 
       - name: Build Doxygen Documentation
         run: |
-          echo "./doxygen-1.9.6/bin" >> $GITHUB_PATH
-          echo $PATH
-          echo $GITHUB_PATH
-          ls -l ./doxygen-1.9.6/bin/doxygen
           make doc
 
       - name: Lint memscan
