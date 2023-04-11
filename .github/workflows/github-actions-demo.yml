@@ -31,6 +31,13 @@ jobs:
       - name: Make clean
         run: make clean
 
+      - name: Build Doxygen Documentation
+        run: |
+          .doxygen/stats.py
+          .doxygen/update_usage.py
+          .doxygen/update_key.py
+          doxygen-1.9.6/bin/doxygen .doxygen/Doxyfile
+
       - name: Test memscan
         run: make test
 
