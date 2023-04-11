@@ -25,7 +25,7 @@
 
 #include "config.h"     // For FATAL_ERROR()
 #include "pagecount.h"  // Just cuz
-#include "typedefs.h"   // For pfn_t const_pfn_t
+#include "typedefs.h"   // For pfn_t const_pfn_t PFN_FORMAT
 
 
 /// The `kpagecount` file we intend to read from `/proc`
@@ -39,7 +39,7 @@ static int pagecount_fd = -1 ;
 
 
 pagecount_t getPagecount( const_pfn_t pfn ) {
-   off_t pagecount_offset = (long) ((size_t) pfn * sizeof( pfn_t ) ) ;
+   off_t pagecount_offset = (off_t) pfn * (off_t) sizeof( pfn_t ) ;
 
    if( pagecount_fd < 0 ) {
       /// @API{ open, https://man.archlinux.org/man/open.2 }
@@ -61,7 +61,7 @@ pagecount_t getPagecount( const_pfn_t pfn ) {
                        ,PAGECOUNT_ENTRY               // Bytes to read
                        ,pagecount_offset ) ;          // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
    if( ret != PAGECOUNT_ENTRY ) {
-      printf( "Unable to read[%s] for PFN [%p]\n", PAGECOUNT_FILE, pfn ) ;
+      printf( "Unable to read[%s] for PFN [%" PFN_FORMAT "]\n", PAGECOUNT_FILE, pfn ) ;
       pagecount_data = 0 ;
    }
 

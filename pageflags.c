@@ -26,7 +26,7 @@
 
 #include "config.h"     // For FATAL_ERROR()
 #include "pageflags.h"  // Just cuz
-#include "typedefs.h"   // For pfn_t
+#include "typedefs.h"   // For pfn_t PFN_FORMAT
 
 
 /// The `kpageflags` file we intend to read from `/proc`
@@ -41,7 +41,7 @@ static int pageflag_fd = -1 ;
 
 
 void getPageflags( struct PageInfo* page ) {
-   off_t pageflag_offset = (long) ((size_t) page->pfn * sizeof( pfn_t ) ) ;
+   off_t pageflag_offset = (off_t) page->pfn * (off_t) sizeof( pfn_t ) ;
 
    if( pageflag_fd < 0 ) {
       /// @API{ open, https://man.archlinux.org/man/open.2 }
@@ -63,7 +63,7 @@ void getPageflags( struct PageInfo* page ) {
                        ,PAGEFLAG_ENTRY               // Bytes to read
                        ,pageflag_offset ) ;          // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
    if( ret != PAGEFLAG_ENTRY ) {
-      printf( "Unable to read[%s] for PFN [%p]\n", PAGEFLAG_FILE, page->pfn ) ;
+      printf( "Unable to read[%s] for PFN [%" PFN_FORMAT "]\n", PAGEFLAG_FILE, page->pfn ) ;
       pageflag_data = 0 ;
    }
 

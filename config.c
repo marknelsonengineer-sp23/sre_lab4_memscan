@@ -95,7 +95,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "PROGRAM OPTIONS\n" ) ;
    PRINT( outStream, "  -h, --help         Display this help and exit\n" ) ;
-   PRINT( outStream, "  -k, --key          Display key to the --pfn and --phys flags and exit\n" ) ;
+   PRINT( outStream, "  -k, --key          Display key to the --pfn & --phys flags and exit\n" ) ;
    PRINT( outStream, "  -v, --version      Display memscan's version and exit\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "SIZE may end in K|M|G to scale by 1,024 or k|m|g to scale by 1,000\n" ) ;

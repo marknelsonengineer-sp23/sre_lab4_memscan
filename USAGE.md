@@ -50,7 +50,7 @@ OUTPUT OPTIONS
 
 PROGRAM OPTIONS
   -h, --help         Display this help and exit
-  -k, --key          Display key to the --pfn and --phys flags and exit
+  -k, --key          Display key to the --pfn & --phys flags and exit
   -v, --version      Display memscan's version and exit
 
 SIZE may end in K|M|G to scale by 1,024 or k|m|g to scale by 1,000

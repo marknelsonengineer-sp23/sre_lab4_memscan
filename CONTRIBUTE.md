@@ -247,7 +247,7 @@ It's cool to have this working.
 | `config.h` <br> `config.c`    	    | 	                   | 	                     | 	                | 	         | 	             |                |
 | `convert.h` <br> `convert.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `files.h` <br> `files.c`     	     | 4 Apr 23	           | 	                     | 	4 Apr 23        | 4 Apr 23	 | 	             | 4 Apr 23       |
-| `iomem.h` <br> `iomem.c`     	     | 	                   | 	                     | 	                | 	         | 	             |                |
+| `iomem.h` <br> `iomem.c`     	     | 11 Apr 23	          | 	                     | 	                | 	         | 	             |                |
 | `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	         | 	             |                |
 | `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `pagecount.h` <br> `pagecount.c` 	 | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | 	         | (1) 6 Apr 23	 | 6 Apr 23       |
@@ -256,6 +256,7 @@ It's cool to have this working.
 | `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `trim.h` <br> `trim.c`      	      | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | N/A	      | 6 Apr 23	     | 6 Apr 23       |
+| `typedefs.h`                       |                     |                       |                  |           |               |                |
 | `version.h`          	             | 	4 Apr 23           | None	                 | 4 Apr 23	        | 4 Apr 23	 | 	             | 4 Apr 23       |
 
 The `main()` for memscan is in `memscan.c`.

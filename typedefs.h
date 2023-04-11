@@ -16,16 +16,35 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include <stdint.h>     // For unit64_t
+#include <inttypes.h>   // For PRIx64
+
+
 /// The type definition for PFNs (Page Frame Numbers)
 ///
-/// Normally, it's bad form to typedef a pointer, but we aren't
-/// defining a regular pointer in C, rather this is a distinct datatype
-/// that happens to be a pointer.  Memscan will never dereference
-/// this pointer.
-typedef void* pfn_t ;
+/// Per [Kernel.org](https://www.kernel.org/doc/Documentation/vm/pagemap.txt)...
+///
+///     /proc/pid/pagemap lets a userspace process find out which physical
+///     frame each virtual page is mapped to.  It contains one 64-bit value
+///     for each virtual page
+///
+///        * Bits 0-54  page frame number (PFN) if present
+///
+/// Normally, this would be a pointer, but on 32-bit systems, we need 55 bits
+/// to store the PFN.  Therefore, we are storing it in a `uint64_t`.
+/// Memscan will never dereference the PFN.
+typedef uint64_t pfn_t ;
 
 /// The type definition for a constant PFN (Page Frame Number)
 typedef const pfn_t const_pfn_t ;
+
+/// The macro definition for formatting a PFN to print
+///
+/// `PRIx64` is defined in `<inttypes.h>`
+#define PFN_FORMAT PRIx64
+
+/// A constant where bits 0-54 are set
+#define PFN_MASK 0x7FFFFFFFFFFFFFlu
 
 
 /// The datatype of the pagemap data in #pagemapFilePath

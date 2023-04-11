@@ -9,6 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include "typedefs.h"  // For const_pfn_t PFN_MASK
+
 
 /// The longest allowed description in #iomemFilePath
 #define MAX_IOMEM_DESCRIPTION  64
@@ -16,17 +18,15 @@
 /// The description attached to unmapped memory
 #define UNMAPPED_MEMORY_DESCRIPTION "Unmapped memory"
 
-/// The maximum physical address
-///
-/// Assumes a 48-bit physical address bus size (6 bytes).
-#define MAX_PHYS_ADDR 0xffffffffffff
+/// The maximum physical address from #PFN_MASK
+#define MAX_PHYS_ADDR PFN_MASK
 
 
 /// Get a description of the `iomem` region at `physAddr`
 ///
 /// @param physAddr The physical address
 /// @return         A description of the region at `physAddr`
-extern const char* get_iomem_region_description( const void* physAddr ) ;
+extern const char* get_iomem_region_description( const_pfn_t physAddr ) ;
 
 
 /// Read #iomemFilePath to characterize physical addresses

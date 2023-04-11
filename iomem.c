@@ -34,15 +34,16 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <stdbool.h> // For bool, true & false
-#include <stdio.h>   // For printf() fopen() fgets() sscanf() fclose() and FILE
-#include <stdlib.h>  // For malloc() free()
-#include <string.h>  // For strncpy() memset() strlen() strtok() strncmp()
+#include <stdbool.h>   // For bool, true & false
+#include <stdio.h>     // For printf() fopen() fgets() sscanf() fclose() and FILE
+#include <stdlib.h>    // For malloc() free()
+#include <string.h>    // For strncpy() memset() strlen() strtok() strncmp()
 
-#include "config.h"  // For FATAL_ERROR()
-#include "iomem.h"   // Just cuz
-#include "trim.h"    // For trim_edges()
-#include "version.h" // For STRINGIFY_VALUE()
+#include "config.h"    // For FATAL_ERROR()
+#include "iomem.h"     // Just cuz
+#include "trim.h"      // For trim_edges()
+#include "typedefs.h"  // For pfn_t const_pfn_t PFN_MASK
+#include "version.h"   // For STRINGIFY_VALUE()
 
 
 /// The longest allowed line length from #iomemFilePath
@@ -54,8 +55,7 @@ typedef struct Iomem_region Iomem_region_t ;
 /// Hold each `iomem` region as elements in a linked list
 struct Iomem_region {
                    /// The starting physical address of this memory region.
-                   /// This will **_NOT_** be a valid pointer as it's a physical address.
-   void*           start;
+   pfn_t           start;
                    /// Pointer to the next region.
                    /// The end address of this region is `next->start - 1` unless
                    /// `next == NULL`, then it's #MAX_PHYS_ADDR
@@ -96,8 +96,8 @@ Iomem_summary_t* iomem_summary_head = NULL ;
 /// @return The ending physical address which is either:
 ///         1) The byte before the next region's starting address
 ///         2) or #MAX_PHYS_ADDR
-void* getEnd( const Iomem_region_t* region ) {
-   return ( region->next == NULL ) ? ((void*)MAX_PHYS_ADDR) : ( region->next->start - 1 );
+pfn_t getEnd( const Iomem_region_t* region ) {
+   return ( region->next == NULL ) ? ((pfn_t)MAX_PHYS_ADDR) : ( region->next->start - 1 );
 }
 
 
@@ -151,7 +151,7 @@ bool validate_iomem() {
       return false ;
    }
 
-   void* monotonic_address = 0 ;
+   pfn_t monotonic_address = 0 ;
 
    Iomem_region_t* current = &iomem_head;
 
@@ -159,6 +159,7 @@ bool validate_iomem() {
       if( monotonic_address != 0 && current->start <= monotonic_address ) {
          return false ;
       }
+
       monotonic_address = current->start ;
       current = current->next;
    }
@@ -174,15 +175,15 @@ void print_iomem_regions() {
    Iomem_region_t* current = &iomem_head ;
 
    while( current != NULL ) {
-      void* end = getEnd( current ) ;
+      pfn_t end = getEnd( current ) ;
 
-      printf( "%012zx - %012zx  %s\n", (size_t) current->start, (size_t) end, current->description ) ;
+      printf( "%012" PFN_FORMAT " - %012" PFN_FORMAT "  %s\n", current->start, end, current->description ) ;
       current = current->next ;
    }
 }
 
 
-const char* get_iomem_region_description( const void* physAddr ) {
+const char* get_iomem_region_description( const_pfn_t physAddr ) {
    Iomem_region_t* region = &iomem_head;
 
    while( region->next != NULL && region->next->start <= physAddr ) {
@@ -198,13 +199,13 @@ const char* get_iomem_region_description( const void* physAddr ) {
 /// @param start The starting physical address of the new region (inclusive).
 ///              It may overlap with an existing region.
 /// @param end   The ending physical address of the new region.  It must be
-///              within an existing region.  `end` may not be `NULL` and must be
+///              within an existing region.  `end` may not be `0` and must be
 ///              `> start`.
 /// @param description The description of a region (up to #MAX_IOMEM_DESCRIPTION
 ///                    bytes).  The description may not be `NULL` or empty.
-void add_iomem_region( const void* start, const void* end, const char* description ) {
+void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* description ) {
    ASSERT( validate_iomem() ) ;
-   ASSERT( end != NULL ) ;
+   ASSERT( end != 0 ) ;
    ASSERT( end > start ) ;
    ASSERT( description != NULL ) ;
    ASSERT( strlen( description ) != 0 ) ;
@@ -212,7 +213,7 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
    // Find the start...
    Iomem_region_t* current = &iomem_head ;
 
-   void* current_end = getEnd( current ) ;
+   pfn_t current_end = getEnd( current ) ;
 
    while( current->next != NULL && current->start < start && current_end < end ) {
       current = current->next ;
@@ -221,7 +222,7 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
 
    // current should point to the region we need to insert into
 
-   // printf( "addStart=%p addEnd=%p addDesc=[%s] curStart=%p curEnd=%p, curDesc=[%s]\n", start, end, description, current->start, current_end, current->description ) ;
+   // printf( "addStart=%" PFN_FORMAT " addEnd=%" PFN_FORMAT " addDesc=[%s] curStart=%" PFN_FORMAT " curEnd=%" PFN_FORMAT ", curDesc=[%s]\n", start, end, description, current->start, current_end, current->description ) ;
 
    /// The following definitions will help decode how this is implemented:
    ///   - `cur` Current region
@@ -254,10 +255,10 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
       }
 
       strncpy( newRegion->description, current->description, MAX_IOMEM_DESCRIPTION ) ;
-      newRegion->start = (void*) end+1 ;
+      newRegion->start = end+1 ;
       newRegion->next = current->next ;
       current->next = newRegion ;
-      current->start = (void*) start ;
+      current->start = start ;
       strncpy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
    } else if( current->start < start && current_end == end ) {
       /// - If the `addStart > curStart` and `addEnd == curEnd`, then insert a
@@ -272,7 +273,7 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
       }
 
       strncpy( newRegion->description, description, MAX_IOMEM_DESCRIPTION ) ;
-      newRegion->start = (void*) start ;
+      newRegion->start = start ;
       newRegion->next = current->next ;
       current->next = newRegion ;
    } else if( current->start < start && current_end > end ) {
@@ -287,7 +288,7 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
          FATAL_ERROR( "Unable to allocate new iomem region" ) ;
       }
       strncpy( newRegion->description, current->description, MAX_IOMEM_DESCRIPTION ) ;
-      newRegion->start = (void*) end+1 ;
+      newRegion->start = end+1 ;
       newRegion->next = current->next ;
 
       Iomem_region_t* middleRegion = malloc( sizeof( Iomem_region_t ) ) ;
@@ -296,7 +297,7 @@ void add_iomem_region( const void* start, const void* end, const char* descripti
       }
 
       strncpy( middleRegion->description, description, MAX_IOMEM_DESCRIPTION ) ;
-      middleRegion->start = (void*) start ;
+      middleRegion->start = start ;
       middleRegion->next = newRegion ;
       current->next = middleRegion ;
    } else {
@@ -333,18 +334,18 @@ void read_iomem() {
       #endif
 
       char* sAddressStart = strtok( szLine, "-" ) ;
-      char* sAddressEnd = strtok( NULL, " "   ) ;
-      char* sDescription = strtok( NULL, "\n" ) + 2 ;  // The +2 skips over a ": "
+      char* sAddressEnd   = strtok( NULL, " "   ) ;
+      char* sDescription  = strtok( NULL, "\n" ) + 2 ;  // The +2 skips over a ": "
 
       // Convert the strings holding the start & end address into pointers
-      int retVal1 ;
-      int retVal2 ;
-      void* pAddressStart ;
-      void* pAddressEnd ;
-      retVal1 = sscanf( sAddressStart, "%p", &pAddressStart ) ;
-      retVal2 = sscanf( sAddressEnd,   "%p", &pAddressEnd   ) ;
+      char* pEndOfpAddressStart ;  // Used for error detection of strtoul
+      char* pEndOfpAddressEnd ;
+      pfn_t pAddressStart ;
+      pfn_t pAddressEnd ;
+      pAddressStart = strtoul( sAddressStart, &pEndOfpAddressStart, 16 ) ;  /// @NOLINT( readability-magic-numbers):  16 is a magic number
+      pAddressEnd   = strtoul( sAddressEnd,   &pEndOfpAddressEnd,   16 ) ;  /// @NOLINT( readability-magic-numbers):  16 is a magic number
 
-      if( retVal1 != 1 || retVal2 != 1 ) {
+      if( *pEndOfpAddressStart != '\0' || *pEndOfpAddressEnd != '\0' ) {
          FATAL_ERROR( "iomem entry [%s] is unable parse start [%s] or end address [%s]"
          ,sDescription
          ,sAddressStart
@@ -354,11 +355,11 @@ void read_iomem() {
 
       #ifdef DEBUG
          printf( "DEBUG:  " ) ;
-         printf( "sAddressStart=[%s]  ", sAddressStart ) ;
-         printf( "pAddressStart=[%p]  ", pAddressStart ) ;
-         printf( "sAddressEnd=[%s]  ",   sAddressEnd ) ;
-         printf( "pAddressEnd=[%p]  ",   pAddressEnd ) ;
-         printf( "sDescription=[%s]  ",  sDescription ) ;
+         printf( "sAddressStart=[%s]  "             , sAddressStart ) ;
+         printf( "pAddressStart=[%" PFN_FORMAT "]  ", pAddressStart ) ;
+         printf( "sAddressEnd=[%s]  "               , sAddressEnd ) ;
+         printf( "pAddressEnd=[%" PFN_FORMAT "]  "  , pAddressEnd ) ;
+         printf( "sDescription=[%s]  "              , sDescription ) ;
          printf( "\n" ) ;
       #endif
 
@@ -382,10 +383,22 @@ void print_iomem_summary() {
 
    Iomem_summary_t* type = iomem_summary_head;
 
+   size_t totalMappedMemory = 0 ;
+
    while( type != NULL ) {
-      printf( "%-" STRINGIFY_VALUE( MAX_IOMEM_DESCRIPTION ) "s  ", type->description ) ;
-      printf( "%'20zu", type->size ) ;
+      if( type->next != NULL ) {  // If it's not the last record
+         totalMappedMemory += type->size ;
+      } else {
+         printf( "---------------------------------------------------------------------------------------\n" ) ;
+         printf( "%-" STRINGIFY_VALUE( MAX_IOMEM_DESCRIPTION ) "s ", "Total Mapped Memory" ) ;
+         printf( "%'22zu", totalMappedMemory ) ;
+         printf( "\n" ) ;
+      }
+
+      printf( "%-" STRINGIFY_VALUE( MAX_IOMEM_DESCRIPTION ) "s ", type->description ) ;
+      printf( "%'22zu", type->size ) ;
       printf( "\n" ) ;
+
       type = type->next ;
    }
 }

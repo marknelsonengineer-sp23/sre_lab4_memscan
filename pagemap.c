@@ -40,7 +40,7 @@
 #include "pageflags.h"    // For getPageflags() closePageflags()
 #include "pagemap.h"      // Just cuz
 #include "shannon.h"      // For computeShannonEntropy() getShannonClassification()
-#include "typedefs.h"     // for pfn_t
+#include "typedefs.h"     // for pfn_t PFN_FORMAT
 #include "version.h"      // For STRINGIFY_VALUE()
 
 
@@ -89,7 +89,7 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
       page.shannon = computeShannonEntropy( page.virtualAddress, getPageSizeInBytes() ) ;
    }
 
-   off_t pagemap_offset = (long) ((size_t) vAddr / getPageSizeInBytes() * PAGEMAP_ENTRY ) ;
+   off_t pagemap_offset = (off_t) (((long long) vAddr) / getPageSizeInBytes() * PAGEMAP_ENTRY) ;
 
    /// @API{ open, https://man.archlinux.org/man/open.2 }
    if( pagemap_fd < 0 ) {
@@ -123,7 +123,7 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
          page.swap_type = pagemap_data & 0b000011111 ; // Bits 0-4
          page.swap_offset = (void*) ( ( pagemap_data & 0x007FFFFFFFFFFFC0 ) >> 5 ) ; // Bits 5-54 >> 5 bits
       } else {
-         page.pfn = (pfn_t) ( pagemap_data & 0x7FFFFFFFFFFFFF );  // Bits 0-54
+         page.pfn = (pfn_t) ( pagemap_data & PFN_MASK );  // Bits 0-54
       }
 
       page.soft_dirty = GET_BIT( pagemap_data, 55 );
@@ -194,7 +194,7 @@ void printPageFlags( const struct PageInfo* page ) {
    printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->nopage      ? 'N' : ' ' ) ;
    printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->hwpoison    ? '!' : ' ' ) ;
 
-   printf( ANSI_COLOR_BRIGHT_CYAN "  %s " ANSI_COLOR_RESET, get_iomem_region_description( (void*) page->pfn ) ) ;
+   printf( ANSI_COLOR_BRIGHT_CYAN "  %s " ANSI_COLOR_RESET, get_iomem_region_description( page->pfn ) ) ;
 
    if( scanForShannon ) {
       printf( ANSI_COLOR_BRIGHT_YELLOW ) ;
@@ -248,7 +248,7 @@ bool printPageContext( const struct PageInfo* page, const struct PageInfo* start
    }
 
    if( includePhysicalPageNumber && page->present && !page->swapped ) {
-      printf( "pfn: " ANSI_COLOR_GREEN "0x%07zu " ANSI_COLOR_RESET, (size_t) page->pfn ) ;
+      printf( "pfn: " ANSI_COLOR_GREEN "0x%07" PFN_FORMAT " " ANSI_COLOR_RESET, page->pfn ) ;
       printf( "#:%3" PRIu64 " ", page->page_count ) ;
    }
 
