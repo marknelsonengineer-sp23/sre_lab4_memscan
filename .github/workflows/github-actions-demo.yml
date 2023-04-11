@@ -42,7 +42,9 @@ jobs:
         run: make memscan
 
       - name: Build Doxygen Documentation
-        run: make doc
+        run: |
+          echo "${HOME}/doxygen-1.9.6/bin" >> $GITHUB_PATH
+          make doc
 
       - name: Lint memscan
         run: make lint
