@@ -27,6 +27,7 @@ jobs:
           wget -q https://www.doxygen.nl/files/doxygen-1.9.6.linux.bin.tar.gz
           gunzip doxygen-1.9.6.linux.bin.tar.gz
           tar -xf doxygen-1.9.6.linux.bin.tar
+          sudo cp ./doxygen-1.9.6/bin/doxygen /usr/local/bin
           echo "${HOME}/doxygen-1.9.6/bin" >> $GITHUB_PATH
 
       - name: Make clean
