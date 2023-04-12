@@ -10,6 +10,16 @@
 ///     virtual page is mapped to.  It contains one 64-bit value for each
 ///     virtual page.
 ///
+///     * Bits 0-54  page frame number (PFN) if present
+///     * Bits 0-4   swap type if swapped
+///     * Bits 5-54  swap offset if swapped
+///     * Bit  55    pte is soft-dirty (see Documentation/vm/soft-dirty.txt)
+///     * Bit  56    page exclusively mapped (since 4.2)
+///     * Bits 57-60 zero
+///     * Bit  61    page is file-page or shared-anon (since 3.5)
+///     * Bit  62    page swapped
+///     * Bit  63    page present
+///
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
 /// @see https://www.kernel.org/doc/html/latest/admin-guide/mm/pagemap.html
 /// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
@@ -80,9 +90,14 @@ struct PageInfo {
 
 /// Get the size of a memory page in bytes.  Must not be less than 1.
 ///
-///   - x86 CPUs normally support 4K and 2M (1G if architecturally supported) page sizes
-///   - ia64 supports page sizes of 4K, 8K, 64K, 256K, 1M, 4M, 16M, 256M
-///   - ppc64 supports 4K and 16M
+/// CPUs normally support the following page sizes
+///
+/// | Architecture | Page Sizes                           |
+/// |--------------|--------------------------------------|
+/// | x86          | 4K, 2M, 1G                           |
+/// | AArch64      | 4K, 64K                              |
+/// | ia64         | 4K, 8K, 64K, 256K, 1M, 4M, 16M, 256M |
+/// | ppc64        | 4K, 16M                              |
 ///
 /// @return The size of a memory page in bytes
 extern size_t getPageSizeInBytes() ;

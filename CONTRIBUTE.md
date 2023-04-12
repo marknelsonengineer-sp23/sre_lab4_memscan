@@ -229,6 +229,7 @@ It's cool to have this working.
   - Ensure all parameters are validated
   - `assert( validateThing() )` before-and-after anything that modifies it
   - Look for CLion problems
+  - Ensure each `NOLINT` is still relevant and valid
 - Run `make clean` and then `make lint`
 - Run `make clean` and then `make test`
 - Run `make doc` and then `make publish`
@@ -252,7 +253,7 @@ It's cool to have this working.
 | `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `pagecount.h` <br> `pagecount.c` 	 | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | 	         | (1) 6 Apr 23	 | 6 Apr 23       |
 | `pageflags.h` <br> `pageflags.c` 	 | 7 Apr 23	           | 7 Apr 23	             | 7 Apr 23	        | 	         | (1) 7 Apr 23	 | 7 Apr 23       |
-| `pagemap.h` <br> `pagemap.c`   	   | 7 Apr 23	           | 7 Apr 23	             | 	                | 	         | 	             | 7 Apr 23       |
+| `pagemap.h` <br> `pagemap.c`   	   | 7 Apr 23	           | 7 Apr 23	             | 11 Apr 23	       | 	         | 	             | 7 Apr 23       |
 | `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
 | `trim.h` <br> `trim.c`      	      | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | N/A	      | 6 Apr 23	     | 6 Apr 23       |

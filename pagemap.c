@@ -10,12 +10,20 @@
 ///     virtual page is mapped to.  It contains one 64-bit value for each
 ///     virtual page.
 ///
+///     * Bits 0-54  page frame number (PFN) if present
+///     * Bits 0-4   swap type if swapped
+///     * Bits 5-54  swap offset if swapped
+///     * Bit  55    pte is soft-dirty (see Documentation/vm/soft-dirty.txt)
+///     * Bit  56    page exclusively mapped (since 4.2)
+///     * Bits 57-60 zero
+///     * Bit  61    page is file-page or shared-anon (since 3.5)
+///     * Bit  62    page swapped
+///     * Bit  63    page present
+///
 /// @see https://www.kernel.org/doc/Documentation/vm/pagemap.txt
 /// @see https://www.kernel.org/doc/html/latest/admin-guide/mm/pagemap.html
 /// @see http://fivelinesofcode.blogspot.com/2014/03/how-to-translate-virtual-to-physical.html
 /// @see https://stackoverflow.com/questions/5748492/is-there-any-api-for-determining-the-physical-address-from-virtual-address-in-li/45128487#45128487
-///
-/// @NOLINTBEGIN( readability-magic-numbers ):  Due to the nature of this module, we will allow magic numbers
 ///
 /// @file   pagemap.c
 /// @author Mark Nelson <marknels@hawaii.edu>
@@ -76,7 +84,6 @@ inline unsigned char getPageSizeInBits() {
 
 
 struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
-   /// @NOLINTBEGIN( performance-no-int-to-ptr ):  This function mixes `void*` and `size_t`.  C normally warns about this, but in this case, it's OK.
    // printf( "%p\n", vAddr ) ;
 
    struct PageInfo page = {} ;
@@ -119,12 +126,14 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    if( page.valid ) {
       page.swapped = GET_BIT( pagemap_data, 62 );
 
+      /// @NOLINTBEGIN( readability-magic-numbers ):  Due to the nature of this module, we will allow magic numbers
       if( page.swapped ) {
          page.swap_type = pagemap_data & 0b000011111 ; // Bits 0-4
-         page.swap_offset = (void*) ( ( pagemap_data & 0x007FFFFFFFFFFFC0 ) >> 5 ) ; // Bits 5-54 >> 5 bits
+         page.swap_offset = (void*) ( ( pagemap_data & 0x007FFFFFFFFFFFC0 ) >> 5 ) ; // Bits 5-54 >> 5 bits  /// @NOLINT( performance-no-int-to-ptr ):  We need to map an int into a pointer
       } else {
          page.pfn = (pfn_t) ( pagemap_data & PFN_MASK );  // Bits 0-54
       }
+      /// NOLINTEND( readability-magic-numbers )
 
       page.soft_dirty = GET_BIT( pagemap_data, 55 );
       page.exclusive = GET_BIT( pagemap_data, 56 );
@@ -139,7 +148,7 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    }
 
    return( page ) ;
-}  // getPageInfo    /// @NOLINTEND( performance-no-int-to-ptr )
+}
 
 
 /// Print the virtual address starting address for both `--pfn` and `--phys`
@@ -152,7 +161,7 @@ void printVirtualAddressStart( const struct PageInfo* page ) {
 }
 
 
-/// Print the generic information about a page
+/// Print generic information about a page
 ///
 /// @param page The page to print
 void printPageFlags( const struct PageInfo* page ) {
@@ -475,5 +484,3 @@ void printKey( FILE* outStream ) {
    PRINT( outStream, "N:   no page frame exists at the requested address\n" ) ;
    PRINT( outStream, "!:   hardware detected memory corruption: Don't touch this page\n" ) ;
 } // printKey
-
-/// NOLINTEND( readability-magic-numbers )
