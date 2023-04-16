@@ -50,7 +50,7 @@ struct PageInfo {
    bool     valid ;           ///< `true` if the data was successfully read and decoded from #pagemapFilePath
    pfn_t    pfn ;             ///< The Page Frame Number (if present).  Valid when `!swapped`.
    uint8_t  swap_type ;       ///< A 5-bit index into a table of swapfiles.  Valid when `swapped`.
-   void*    swap_offset ;     ///< A 50-bit index into a swapfile.  Valid when `swapped`.
+   void*    swap_offset ;     ///< A 50-bit index into a swapfile.  Valid when `swapped`.  @todo:  This needs to be mapped to a uint64_t
    bool     soft_dirty ;      ///< PTE is soft-dirty (see [Documentation/vm/soft-dirty.txt](https://www.kernel.org/doc/Documentation/vm/soft-dirty.txt))
    bool     exclusive ;       ///< Page exclusively mapped
    bool     file_mapped ;     ///< `true` if the page is `file_mapped`.  Pages are either mapped to a file (file_mapped) or not (anonymously mapped).  See https://stackoverflow.com/questions/13024087/what-are-memory-mapped-page-and-anonymous-page

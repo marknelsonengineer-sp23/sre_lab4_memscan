@@ -89,7 +89,9 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    struct PageInfo page = {} ;
    memset( &page, 0, sizeof( page ) ) ;  /// @API{ memset, https://man.archlinux.org/man/memset.3 }
 
-   page.virtualAddress = vAddr ;
+   uintptr_t pageMask = ~( ( 1 << getPageSizeInBits() ) - 1 ) ;
+   // printf( "pageMask = %lx\n", pageMask ) ;
+   page.virtualAddress = (void*) ( (uintptr_t) vAddr & pageMask );  /// @NOLINT( performance-no-int-to-ptr ):  We need to cast the `uintptr_t` to a `void*`
 
    /// Scan for Shannon entropy before reading `pagemap`, `pageflags` and `pagecount`
    if( okToRead && scanForShannon ) {
@@ -143,7 +145,9 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
       ASSERT( GET_BIT( pagemap_data, 60 ) == 0 );
       page.file_mapped = GET_BIT( pagemap_data, 61 );
       page.present = GET_BIT( pagemap_data, 63 );
+
       page.page_count = getPagecount( page.pfn ) ;
+
       getPageflags( &page ) ;
    }
 
@@ -198,7 +202,7 @@ void printPageFlags( const struct PageInfo* page ) {
    printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->mmap        ? 'M' : ' ' ) ;
    printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->anon        ? 'A' : ' ' ) ;
    printf( ANSI_COLOR_YELLOW   "%c" ANSI_COLOR_RESET, page->swapcache   ? 'C' : ' ' ) ;
-   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->swapbacked  ? 'B' : ' ' ) ;
+   printf( ANSI_COLOR_GREEN    "%c" ANSI_COLOR_RESET, page->swapbacked  ? 'S' : ' ' ) ;
 
    printf( ANSI_COLOR_CYAN     "%c" ANSI_COLOR_RESET, page->nopage      ? 'N' : ' ' ) ;
    printf( ANSI_COLOR_RED      "%c" ANSI_COLOR_RESET, page->hwpoison    ? '!' : ' ' ) ;
@@ -478,7 +482,7 @@ void printKey( FILE* outStream ) {
    PRINT( outStream, "M:   memory mapped page\n" ) ;
    PRINT( outStream, "A:   anonymous: memory mapped page that is not part of a file\n" ) ;
    PRINT( outStream, "C:   swapCache: page is mapped to swap space, i.e. has an associated swap entry\n" ) ;
-   PRINT( outStream, "B:   swapBacked: page is backed by swap/RAM\n" ) ;
+   PRINT( outStream, "S:   swapBacked: page is backed by swap/RAM\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "Rarely seen flags\n" ) ;
    PRINT( outStream, "N:   no page frame exists at the requested address\n" ) ;

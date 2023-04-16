@@ -60,7 +60,7 @@ R:   reclaim: page will be reclaimed soon after its pageout IO completed
 M:   memory mapped page
 A:   anonymous: memory mapped page that is not part of a file
 C:   swapCache: page is mapped to swap space, i.e. has an associated swap entry
-B:   swapBacked: page is backed by swap/RAM
+S:   swapBacked: page is backed by swap/RAM
 
 Rarely seen flags
 N:   no page frame exists at the requested address

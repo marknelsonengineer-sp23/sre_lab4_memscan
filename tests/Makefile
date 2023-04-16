@@ -40,7 +40,7 @@ lint: $(TARGET)
 	$(LINT) $(LINTFLAGS) $(SRC) --
 
 test: $(TARGET)
-	./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
+	sudo ./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
 
 clean:
 	rm -f $(TARGET) *.o
