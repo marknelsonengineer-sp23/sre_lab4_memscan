@@ -73,8 +73,8 @@ enum PageInfoValidation {
    ,MAKE_ENUMS( THP )           ,MAKE_ENUMS( BALLOON )
    ,MAKE_ENUMS( ZERO_PAGE )     ,MAKE_ENUMS( IDLE )
    ,MAKE_ENUMS( PGTABLE )
-   ,COUNT_IS_ONE       ,COUNT_IS_PLURAL
-   ,COUNT_NEUTRAL
+   ,COUNT_IS_0         ,COUNT_IS_1
+   ,COUNT_IS_PLURAL    ,COUNT_NEUTRAL
    ,OTHERWISE_1       = FLAG_SET
    ,OTHERWISE_0       = FLAG_CLEAR
    ,OTHERWISE_NEUTRAL = FLAG_NEUTRAL
@@ -121,7 +121,8 @@ void setState( enum PageInfoValidation arg, enum FlagState flagState[] ) {
       MAKE_STATE( ZERO_PAGE ) ;     MAKE_STATE( IDLE ) ;
       MAKE_STATE( PGTABLE ) ;
 
-      case COUNT_IS_ONE:    flagState[ COUNT_IS_ONE ]    = FLAG_SET ; break ;
+      case COUNT_IS_0:      flagState[ COUNT_IS_0 ]      = FLAG_SET ; break ;
+      case COUNT_IS_1:      flagState[ COUNT_IS_1 ]      = FLAG_SET ; break ;
       case COUNT_IS_PLURAL: flagState[ COUNT_IS_PLURAL ] = FLAG_SET ; break ;
       case COUNT_NEUTRAL:   flagState[ COUNT_NEUTRAL ]   = FLAG_SET ; break ;
 
@@ -197,7 +198,12 @@ bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
    CHECK_FLAG( ZERO_PAGE, zero_page ) ;     CHECK_FLAG( IDLE, idle ) ;
    CHECK_FLAG( PGTABLE, pgtable ) ;
 
-   if( flagState[ COUNT_IS_ONE ] == FLAG_SET && pPage->page_count != 1 ) {
+   if( flagState[ COUNT_IS_0 ] == FLAG_SET && pPage->page_count != 0 ) {
+      cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be 0" << endl;
+      return false ;
+   }
+
+   if( flagState[ COUNT_IS_1 ] == FLAG_SET && pPage->page_count != 1 ) {
       cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be 1" << endl;
       return false ;
    }
@@ -239,10 +245,35 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       BOOST_CHECK_EQUAL( getPageSizeInBytes(), 1 << getPageSizeInBits() ) ;
    }
 
+
    BOOST_AUTO_TEST_CASE( test_getPageInfo_local ) {
-      int aLocalInt ;
+      // aLocalInt is at the top of the stack and should be mapped into memory
+      int aLocalInt = 0xff ;
       struct PageInfo stackPage = getPageInfo( &aLocalInt, true ) ;
-      BOOST_CHECK( validatePageInfo( &aLocalInt, &stackPage, VALID, PRESENT, COUNT_IS_ONE, EXCLUSIVE, UPTODATE, LRU, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
+      BOOST_CHECK( validatePageInfo( &aLocalInt, &stackPage, VALID, PRESENT, COUNT_IS_1, EXCLUSIVE, UPTODATE, LRU, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
+
+      // 2 pages up from the top of the stack should be unmapped
+      void* topOfStackPlusTwoPages = &aLocalInt + getPageSizeInBytes()*2 ;
+      struct PageInfo stackPage2 = getPageInfo( topOfStackPlusTwoPages, true ) ;
+      BOOST_CHECK( validatePageInfo( topOfStackPlusTwoPages, &stackPage2, VALID, NOT_PRESENT, COUNT_IS_0, OTHERWISE_0 ) ) ;
+   }
+
+
+   BOOST_AUTO_TEST_CASE( test_getPageInfo_malloc ) {
+      char* smallMalloc = (char*) malloc( 64 ) ;
+      smallMalloc[0] = (char) 0xff ;  // Make sure it's paged into memory
+      struct PageInfo smallMallocPage = getPageInfo( smallMalloc, true ) ;
+      BOOST_CHECK( validatePageInfo( smallMalloc, &smallMallocPage, VALID, PRESENT, COUNT_IS_1, EXCLUSIVE, UPTODATE, NEUTRAL_LRU, NEUTRAL_ACTIVE, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
+   }
+
+
+   BOOST_AUTO_TEST_CASE( test_getPageInfo_readOnlyData ) {
+      // This should come from libc's read-only section
+      char* errorMessage = strerror( E2BIG ) ;
+      char errorCharacter = errorMessage[0] ;  // Make sure it's paged into memory
+      (void) errorCharacter ;  // Avoid an unused variable warning
+      struct PageInfo errorMessagePage = getPageInfo( errorMessage, true ) ;
+      BOOST_CHECK( validatePageInfo( errorMessage, &errorMessagePage, VALID, PRESENT, REFERENCED, FILE_MAPPED, COUNT_IS_PLURAL, NOT_EXCLUSIVE, UPTODATE, LRU, MMAP, OTHERWISE_0 ) ) ;
    }
 
 BOOST_AUTO_TEST_SUITE_END()
