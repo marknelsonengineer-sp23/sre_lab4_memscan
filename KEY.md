@@ -7,16 +7,16 @@ Key to Flags
 ````
 memscan --phys will output physical pages like this:
 
-0x55a5be863000 - 0x55a5be864fff page not present
-0x55a5be865000 - 0x55a5be8abfff Flags: *X           \      IO: U LRU:L    MA B    System RAM
-0x55a5be8ac000 - 0x55a5be8adfff Flags: *X           \      IO: U LRU: A   MA B    System RAM
+0x55a5be863000 - 0x55a5be864fff   8,192 page not present
+0x55a5be865000 - 0x55a5be8abfff 290,816 Flags: *X           \      IO: U LRU:L    MA S    System RAM
+0x55a5be8ac000 - 0x55a5be8adfff   8,192 Flags: *X           \      IO: U LRU: A   MA S    System RAM
 
 
 memscan --pfn will output physical pages like this:
 
-0x7ffca078e000 - pfn: 0x0279672 #:  1 Flags: *X           \      IO: U LRU:L    MA B    System RAM H: 0.564 Very low entropy
-0x7ffca078f000 - pfn: 0x0214113 #:  1 Flags: *X           \      IO: U LRU:L    MA B    System RAM H: 3.082 English text in UNICODE
-0x7ffca0790000 - pfn: 0x0118352 #:  1 Flags: *X           \      IO: U LRU:L    MA B    System RAM H: 1.190 Unknown
+0x7ffca078e000 - pfn: 0x0279672 #:  1 Flags: *X           \      IO: U LRU:L    MA S    System RAM H: 0.564 Very low entropy
+0x7ffca078f000 - pfn: 0x0214113 #:  1 Flags: *X           \      IO: U LRU:L    MA S    System RAM H: 3.082 English text in UNICODE
+0x7ffca0790000 - pfn: 0x0118352 #:  1 Flags: *X           \      IO: U LRU:L    MA S    System RAM H: 1.190 Unknown
 
 
 Each line starts with the virtual address region of the physical page.

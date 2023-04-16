@@ -364,7 +364,6 @@ void processOptions( int argc, char* argv[] ) {
             break ;
 
          case 'k':
-            /// @todo Colorize the `--key` output
             printKey( stdout ) ;
             exit( EXIT_SUCCESS ) ;
             break ;
