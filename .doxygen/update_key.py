@@ -37,6 +37,8 @@ with open(OUTFILE, 'w') as redirected_output:
 
 	## Run the program and collect the output
 	s = subprocess.check_output(INVOKE_USAGE, shell=True)
+
+	## Remove ANSI color strings
 	ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
 	s_without_ansi = ansi_escape.sub('', s.decode("utf-8"))
 	print(s_without_ansi)
