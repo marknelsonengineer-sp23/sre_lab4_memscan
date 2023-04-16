@@ -354,7 +354,7 @@ void processOptions( int argc, char* argv[] ) {
             printf( "%s Endian system ", getEndianness() == BIG ? "Big" : "Little" ) ;
             printf( "with %'zu-byte page size\n", getPageSizeInBytes() ) ;
             printf( "Copyright (C) 2023 Mark Nelson, All rights reserved.\n") ;
-            printf( "Written by Mark Nelson\n" );
+            printf( "Written by Mark Nelson\n" ) ;
             exit( EXIT_SUCCESS ) ;
             break ;
 
