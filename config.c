@@ -380,13 +380,13 @@ void processOptions( int argc, char* argv[] ) {
    }
 
    // Search the remaining arguments, which should be filters
+   /// @API{ calloc, https://man.archlinux.org/man/calloc.3 }
    while (optind < argc) {
       // Allocate and zero out a new Filter
-      struct Filter* newFilter = malloc( sizeof ( struct Filter ) ) ;
+      struct Filter* newFilter = calloc( 1, sizeof ( struct Filter ) ) ;
       if( newFilter == NULL ) {
          FATAL_ERROR( "unable to allocate memory for newFilter") ;
       }
-      memset( newFilter, 0, sizeof( struct Filter ) ) ;
 
       // Search for addresses:  Filters that start with 0x...
       if( argv[optind][0] == '0' && argv[optind][1] == 'x' ) {

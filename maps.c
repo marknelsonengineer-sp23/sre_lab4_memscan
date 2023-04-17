@@ -76,11 +76,11 @@ struct MapEntry* getMaps() {
       }
 
       // Allocate a new MapEntry and zero it out
-      struct MapEntry* newMap = malloc( sizeof( struct MapEntry ) ) ;
+      /// @API{ calloc, https://man.archlinux.org/man/calloc.3 }
+      struct MapEntry* newMap = calloc( 1, sizeof( struct MapEntry ) ) ;
       if( newMap == NULL ) {
          FATAL_ERROR( "unable to allocate a new MapEntry" ) ;
       }
-      memset( newMap, 0, sizeof( struct MapEntry ) ) ;
       newMap->index = mapIndex ;
 
       // Allocate a new szLine in newMap
@@ -261,7 +261,8 @@ void readPagemapInfo( struct MapEntry* maps ) {  // Process --pfn --phys
 
       bool okToRead = currentMap->include && currentMap->sPermissions[0] == 'r' ;
 
-      currentMap->pages = malloc( sizeof( struct PageInfo ) * currentMap->numPages ) ;
+      /// @API{ calloc, https://man.archlinux.org/man/calloc.3 }
+      currentMap->pages = calloc( currentMap->numPages, sizeof( struct PageInfo ) ) ;
       if( currentMap->pages == NULL ) {
          FATAL_ERROR( "unable to allocate memory for map entry [%zu]", currentMap->index ) ;
       }
