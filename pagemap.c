@@ -91,7 +91,7 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
 
    uintptr_t pageMask = ~( ( 1 << getPageSizeInBits() ) - 1 ) ;
    // printf( "pageMask = %lx\n", pageMask ) ;
-   page.virtualAddress = (void*) ( (uintptr_t) vAddr & pageMask );  /// @NOLINT( performance-no-int-to-ptr ):  We need to cast the `uintptr_t` to a `void*`
+   page.virtualAddress = (void*) ( (uintptr_t) vAddr & pageMask ) ;  /// @NOLINT( performance-no-int-to-ptr ):  We need to cast the `uintptr_t` to a `void*`
 
    /// Scan for Shannon entropy before reading `pagemap`, `pageflags` and `pagecount`
    if( okToRead && scanForShannon ) {
@@ -104,11 +104,11 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    if( pagemap_fd < 0 ) {
       pagemap_fd = open( pagemapFilePath, O_RDONLY ) ;
       if( pagemap_fd == -1 ) {
-         FATAL_ERROR( "Unable to open [%s]", pagemapFilePath );
+         FATAL_ERROR( "Unable to open [%s]", pagemapFilePath ) ;
       }
    }
 
-   pagemap_t pagemap_data;
+   pagemap_t pagemap_data ;
 
    page.valid = true ;
    // There's a small risk here... some pread functions may return something
@@ -119,32 +119,32 @@ struct PageInfo getPageInfo( void* vAddr, const bool okToRead ) {
    ssize_t ret = pread(pagemap_fd                  // File descriptor
                       ,((uint8_t*) &pagemap_data)  // Destination buffer
                       ,PAGEMAP_ENTRY               // Bytes to read
-                      ,pagemap_offset );           // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
+                      ,pagemap_offset ) ;          // Read data from this offset  /// @NOLINT( bugprone-narrowing-conversions ):  `pread`'s `offset` parameter is a `off_t` (`long`), so we have to accept the narrowing conversion
    if( ret != PAGEMAP_ENTRY ) {
       page.valid = false ;
       printf( "Unable to read[%s] for [%p]\n", pagemapFilePath, vAddr ) ;
    }
 
    if( page.valid ) {
-      page.swapped = GET_BIT( pagemap_data, 62 );
+      page.swapped = GET_BIT( pagemap_data, 62 ) ;
 
       /// @NOLINTBEGIN( readability-magic-numbers ):  Due to the nature of this module, we will allow magic numbers
       if( page.swapped ) {
          page.swap_type = pagemap_data & 0b000011111 ; // Bits 0-4
          page.swap_offset = (void*) ( ( pagemap_data & 0x007FFFFFFFFFFFC0 ) >> 5 ) ; // Bits 5-54 >> 5 bits  /// @NOLINT( performance-no-int-to-ptr ):  We need to map an int into a pointer
       } else {
-         page.pfn = (pfn_t) ( pagemap_data & PFN_MASK );  // Bits 0-54
+         page.pfn = (pfn_t) ( pagemap_data & PFN_MASK ) ;  // Bits 0-54
       }
       /// NOLINTEND( readability-magic-numbers )
 
-      page.soft_dirty = GET_BIT( pagemap_data, 55 );
-      page.exclusive = GET_BIT( pagemap_data, 56 );
-      ASSERT( GET_BIT( pagemap_data, 57 ) == 0 );
-      ASSERT( GET_BIT( pagemap_data, 58 ) == 0 );
-      ASSERT( GET_BIT( pagemap_data, 59 ) == 0 );
-      ASSERT( GET_BIT( pagemap_data, 60 ) == 0 );
-      page.file_mapped = GET_BIT( pagemap_data, 61 );
-      page.present = GET_BIT( pagemap_data, 63 );
+      page.soft_dirty = GET_BIT( pagemap_data, 55 ) ;
+      page.exclusive = GET_BIT( pagemap_data, 56 ) ;
+      ASSERT( GET_BIT( pagemap_data, 57 ) == 0 ) ;
+      ASSERT( GET_BIT( pagemap_data, 58 ) == 0 ) ;
+      ASSERT( GET_BIT( pagemap_data, 59 ) == 0 ) ;
+      ASSERT( GET_BIT( pagemap_data, 60 ) == 0 ) ;
+      page.file_mapped = GET_BIT( pagemap_data, 61 ) ;
+      page.present = GET_BIT( pagemap_data, 63 ) ;
 
       page.page_count = getPagecount( page.pfn ) ;
 
@@ -228,7 +228,7 @@ void printPageFlags( const struct PageInfo* page ) {
 /// @return `true` if flags should be printed.  `false` if flags should not
 ///         be printed.
 bool printPageContext( const struct PageInfo* page, const struct PageInfo* startPage ) {
-   ASSERT( page != NULL );
+   ASSERT( page != NULL ) ;
 
    if( includePhysicalPageNumber ) {
       ASSERT( startPage == NULL ) ;
@@ -252,10 +252,10 @@ bool printPageContext( const struct PageInfo* page, const struct PageInfo* start
    }
 
    if( page->swapped ) {
-      printf( ANSI_COLOR_RED "swapped: " ANSI_COLOR_RESET );
+      printf( ANSI_COLOR_RED "swapped: " ANSI_COLOR_RESET ) ;
       printf( "type: %u  ", page->swap_type );
       if( includePhysicalPageNumber ) {
-         printf( "offset: 0x%p  ", page->swap_offset );
+         printf( "offset: 0x%p  ", page->swap_offset ) ;
       }
       return false ;
    }

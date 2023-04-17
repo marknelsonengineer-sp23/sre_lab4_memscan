@@ -45,7 +45,7 @@ enum FlagState {
    ,FLAG_SET     = 128   ///< Rule:  validatePageInfo() will verify that the PageInfo flag is `true`
    ,FLAG_CLEAR   = 129   ///< Rule:  validatePageInfo() will verify that the PageInfo flag is `false`
    ,FLAG_NEUTRAL = 130   ///< Rule:  validatePageInfo() does not care if the PageInfo flag is `true` or `false`
-};
+} ;
 
 
 /// Make the #PageInfoValidation enum rules (`HUGE`, `NOT_HUGE` and
@@ -181,7 +181,7 @@ void setState( enum PageInfoValidation rule, enum FlagState flagState[] ) {
          }
          break ;
       default:
-         assert( false );
+         assert( false ) ;
    }
 }
 
@@ -240,7 +240,7 @@ bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
 
    va_list args ;
    va_start( args, pPage ) ;
-   enum PageInfoValidation result;
+   enum PageInfoValidation result ;
    enum FlagState flagState[ VALIDATION_LAST ] ;
 
    memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
@@ -249,7 +249,7 @@ bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
       result = (enum PageInfoValidation) va_arg( args, int ) ;
       setState( result, flagState ) ;
    } while( !lastArg( result ) ) ;
-   va_end( args );
+   va_end( args ) ;
 
    CHECK_FLAG( VALID, valid ) ;
    CHECK_FLAG( EXCLUSIVE, exclusive ) ;     CHECK_FLAG( FILE_MAPPED, file_mapped ) ;
@@ -270,17 +270,17 @@ bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
    CHECK_FLAG( PGTABLE, pgtable ) ;
 
    if( flagState[ COUNT_IS_0 ] == FLAG_SET && pPage->page_count != 0 ) {
-      cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be 0" << endl;
+      cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be 0" << endl ;
       return false ;
    }
 
    if( flagState[ COUNT_IS_1 ] == FLAG_SET && pPage->page_count != 1 ) {
-      cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be 1" << endl;
+      cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be 1" << endl ;
       return false ;
    }
 
    if( flagState[ COUNT_IS_PLURAL ] == FLAG_SET && pPage->page_count <= 1 ) {
-      cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be greater than 1" << endl;
+      cout << getProgramName() << ":  Count is " << pPage->page_count << " when it should be greater than 1" << endl ;
       return false ;
    }
 

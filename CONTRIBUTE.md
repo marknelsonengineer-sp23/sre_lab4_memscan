@@ -262,7 +262,7 @@ It's cool to have this working.
 
 The `main()` for memscan is in `memscan.c`.
 
-- (1):  Did lots of work to test getPageInfo().  The file generates some output, which we need to start capturing to consider this fully tested
+- (1):  getPageInfo() has comprehensive unit tests.  comparePages() needs some tests, but I don't want to do them right now.  The other routines print things to the screen and don't lend themselves to unit testing.  I intend to implement system tests to exercise this code.
 
 [Hungarian notation]: https://en.wikipedia.org/wiki/Hungarian_notation
 [clang-tidy]: https://releases.llvm.org/13.0.0/tools/clang/tools/extra/docs/clang-tidy/
