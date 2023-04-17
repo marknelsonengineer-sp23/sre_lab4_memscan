@@ -240,30 +240,29 @@ It's cool to have this working.
 
 ## Source Code Status
 
-| Module               	             | const correctness 	 | include correctness 	 | Review Doxygen 	 | 32-bit 	  | Boost tests 	 | API documented |
-|------------------------------------|---------------------|-----------------------|------------------|-----------|---------------|:---------------|
-| `allocate.h` <br> `allocate.c`  	  | 	                   | 	                     | 	                | 	         | 	             |                |
-| `assembly.h` <br> `assembly.c`  	  | 	                   | 	                     | 	                | 	         | 	             |                |
-| `colors.h`           	             | 	                   | 	                     | 	                | 	         | 	             |                |
-| `config.h` <br> `config.c`    	    | 	                   | 	                     | 	                | 	         | 	             |                |
-| `convert.h` <br> `convert.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
-| `files.h` <br> `files.c`     	     | 4 Apr 23	           | 	                     | 	4 Apr 23        | 4 Apr 23	 | 	             | 4 Apr 23       |
-| `iomem.h` <br> `iomem.c`     	     | 11 Apr 23	          | 	                     | 	                | 	         | 	             |                |
-| `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	         | 	             |                |
-| `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
-| `pagecount.h` <br> `pagecount.c` 	 | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | 	         | (1) 6 Apr 23	 | 6 Apr 23       |
-| `pageflags.h` <br> `pageflags.c` 	 | 7 Apr 23	           | 7 Apr 23	             | 7 Apr 23	        | 	         | (1) 7 Apr 23	 | 7 Apr 23       |
-| `pagemap.h` <br> `pagemap.c`   	   | 7 Apr 23	           | 7 Apr 23	             | 11 Apr 23	       | 	         | (2)	          | 7 Apr 23       |
-| `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
-| `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	             |                |
-| `trim.h` <br> `trim.c`      	      | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | N/A	      | 6 Apr 23	     | 6 Apr 23       |
-| `typedefs.h`                       |                     |                       |                  |           |               |                |
-| `version.h`          	             | 	4 Apr 23           | None	                 | 4 Apr 23	        | 4 Apr 23	 | 	             | 4 Apr 23       |
+| Module               	             | const correctness 	 | include correctness 	 | Review Doxygen 	 | 32-bit 	  | Boost tests 	  | API documented |
+|------------------------------------|---------------------|-----------------------|------------------|-----------|----------------|:---------------|
+| `allocate.h` <br> `allocate.c`  	  | 	                   | 	                     | 	                | 	         | 	              |                |
+| `assembly.h` <br> `assembly.c`  	  | 	                   | 	                     | 	                | 	         | 	              |                |
+| `colors.h`           	             | 	                   | 	                     | 	                | 	         | 	              |                |
+| `config.h` <br> `config.c`    	    | 	                   | 	                     | 	                | 	         | 	              |                |
+| `convert.h` <br> `convert.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
+| `files.h` <br> `files.c`     	     | 4 Apr 23	           | 	                     | 	4 Apr 23        | 4 Apr 23	 | 	              | 4 Apr 23       |
+| `iomem.h` <br> `iomem.c`     	     | 11 Apr 23	          | 	                     | 	                | 	         | 	              |                |
+| `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	         | 	              |                |
+| `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
+| `pagecount.h` <br> `pagecount.c` 	 | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | 	         | 16 Apr 23	     | 6 Apr 23       |
+| `pageflags.h` <br> `pageflags.c` 	 | 7 Apr 23	           | 7 Apr 23	             | 7 Apr 23	        | 	         | 16 Apr 23	     | 7 Apr 23       |
+| `pagemap.h` <br> `pagemap.c`   	   | 7 Apr 23	           | 7 Apr 23	             | 11 Apr 23	       | 	         | (1) 16 Apr 23	 | 7 Apr 23       |
+| `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
+| `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
+| `trim.h` <br> `trim.c`      	      | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | N/A	      | 6 Apr 23	      | 6 Apr 23       |
+| `typedefs.h`                       |                     |                       |                  |           |                |                |
+| `version.h`          	             | 	4 Apr 23           | None	                 | 4 Apr 23	        | 4 Apr 23	 | 	              | 4 Apr 23       |
 
 The `main()` for memscan is in `memscan.c`.
 
-- (1):  Not worth the effort.
-- (2):  Did lots of work to test getPageInfo().  The file generates some output, which we need to start capturing to consider this fully tested
+- (1):  Did lots of work to test getPageInfo().  The file generates some output, which we need to start capturing to consider this fully tested
 
 [Hungarian notation]: https://en.wikipedia.org/wiki/Hungarian_notation
 [clang-tidy]: https://releases.llvm.org/13.0.0/tools/clang/tools/extra/docs/clang-tidy/

@@ -12,6 +12,10 @@
 /// what the Kernel is doing with these flags.  In other words, we'd be accepting
 /// the flags without testing them.
 ///
+/// In writing these tests, it's important to stay focused on testing memscan's
+/// code and not try to test `libc` or the Kernel.  We also leave testing
+/// Shannon entropy to another test module as this is complex enough.
+///
 /// The end result is to write an expressive test like this:
 ///
 ///       BOOST_CHECK( validatePageInfo( &somePage, VALID, PRESENT, NOT_EXCLUSIVE, NEUTRAL_LRU, COUNT_IS_PLURAL, OTHERWISE_0 ) ) ;
@@ -21,33 +25,39 @@
 /// @file   test_pagemap.cpp
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
-/// @cond Suppress Doxygen warnings
 
-#define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
 #include <cstdarg>   // For va_list va_start, et. al.
 #include <iostream>  // For cout endl
 
 extern "C" {
-   #include "../config.h"  // For getProgramName()
+   #include "../config.h"   // For getProgramName()
    #include "../pagemap.h"
 }
 
 using namespace std ;
 
+
+/// The rule for each entry in `flagState[]`
 enum FlagState {
-    UNDEFINED    = 0
-   ,FLAG_SET     = 128
-   ,FLAG_CLEAR   = 129
-   ,FLAG_NEUTRAL = 130
+    UNDEFINED    = 0     ///< No rule has been set yet
+   ,FLAG_SET     = 128   ///< Rule:  validatePageInfo() will verify that the PageInfo flag is `true`
+   ,FLAG_CLEAR   = 129   ///< Rule:  validatePageInfo() will verify that the PageInfo flag is `false`
+   ,FLAG_NEUTRAL = 130   ///< Rule:  validatePageInfo() does not care if the PageInfo flag is `true` or `false`
 };
 
 
-/// Make the PageInfoValidation enumerations
-#define MAKE_ENUMS( flag )    flag, NOT_##flag, NEUTRAL_##flag \
+/// Make the #PageInfoValidation enum rules (`HUGE`, `NOT_HUGE` and
+/// `NEUTRAL_HUGE`) from a `flag` (`HUGE`)
+///
+/// @param flag The name of the flag (in UPPERCASE) from the PageInfo struct.
+///             For example, `VALID`, `EXCLUSIVE`, `HUGE`, etc.
+#define MAKE_ENUMS( flag )            \
+    flag,  NOT_##flag,  NEUTRAL_##flag
 
-/// Enumerations for identifying how to test the PageInfo structure
+
+/// Enum containing every rule for testing the PageInfo structure
 ///
 /// PageInfo members that are **not** tested include:
 ///   - The `soft_dirty` flag as it will always be neutral.
@@ -82,6 +92,17 @@ enum PageInfoValidation {
 } ;
 
 
+/// Return `true` if this is the last `rule` for validatePageInfo()
+///
+/// validatePageInfo() is a [variadic] function.  Normally, [variadic] functions
+/// require a count, but to keep the parameter count low, I decided that we'd end
+/// after we process an `OTHERWISE_` rule.
+///
+/// @param rule The validation rule to examine
+/// @return `true` if we see an `OTHERWISE_` rule.  `false` if we
+///         should keep processing [variadic] parameters.
+///
+/// [variadic]: https://en.cppreference.com/w/cpp/utility/variadic
 bool lastArg( enum PageInfoValidation rule ) {
    switch( rule ) {
       case OTHERWISE_1:
@@ -94,15 +115,35 @@ bool lastArg( enum PageInfoValidation rule ) {
 }
 
 
-/// Make the setState() `case:` statements
-#define MAKE_STATE( flag ) \
+/// Make the setState() `case:` statements that collect the rules
+///
+/// @param flag Use this `flag` to build three rules
+#define MAKE_STATE( flag )                                                  \
    case flag:             flagState[ flag ]       = FLAG_SET     ; break ;  \
    case NOT_##flag:       flagState[ flag ]       = FLAG_CLEAR   ; break ;  \
    case NEUTRAL_##flag:   flagState[ flag ]       = FLAG_NEUTRAL ; break
 
 
-void setState( enum PageInfoValidation arg, enum FlagState flagState[] ) {
-   switch( arg ) {
+/// Interpret `rule` and set the appropriate value in `flagState[]`
+///
+///   - If `rule == BUDDY`, set `flagState[ BUDDY ] to FLAG_SET`
+///   - If `rule == NOT_BUDDY`, set `flagState[ BUDDY ] to FLAG_CLEAR`
+///   - If `rule == NEUTRAL_BUDDY`, set `flagState[ BUDDY ] to FLAG_NEUTRAL`
+///
+/// When an `OTHERWISE_` argument is processed, then iterate over `flagState[]`
+/// and set all `UNDEFINED` flags to `rule`.  At this point, every flagState
+/// has a rule... either `FLAG_SET`, `FLAG_CLEAR` or `FLAG_NEUTRAL`.
+///
+/// One of the four `COUNT_` flags should be set and the other three should
+/// be clear.
+///
+/// @param rule A [variadic] argument passed to validatePageInfo()
+/// @param flagState An array holding the instructions on how to interpret
+///                  the values in `struct PageInfo`
+///
+/// [variadic]: https://en.cppreference.com/w/cpp/utility/variadic
+void setState( enum PageInfoValidation rule, enum FlagState flagState[] ) {
+   switch( rule ) {
       MAKE_STATE( VALID ) ;
       MAKE_STATE( EXCLUSIVE ) ;     MAKE_STATE( FILE_MAPPED ) ;
       MAKE_STATE( SWAPPED ) ;       MAKE_STATE( PRESENT ) ;
@@ -134,7 +175,7 @@ void setState( enum PageInfoValidation arg, enum FlagState flagState[] ) {
                flagState[ i ] = FLAG_CLEAR ;
             }
             if( flagState[ i ] == UNDEFINED ) {
-               flagState[ i ] = (enum FlagState) arg ;
+               flagState[ i ] = (enum FlagState) rule ;
                // cout << "Setting flag " << i << " to " << arg << endl;
             }
          }
@@ -145,6 +186,17 @@ void setState( enum PageInfoValidation arg, enum FlagState flagState[] ) {
 }
 
 
+/// Associates each `flag` with a rule and a PageInfo `.member` value -- validating
+/// the rule against the value in the PageInfo member variable.
+///
+///   - If the rule is `FLAG_SET` and the member is `false`, then print a
+///     message and return `false`
+///   - If the rule is `FLAG_CLEAR` and the member is `true`, then print a
+///     message and return `false`
+///   - If we are neutral, then we don't care, so just return `true`
+///
+/// @param flag The flag to check:  `BUDDY`, `MMAP`, `ANON`, etc.
+/// @param member The member variable in PageInfo:  `.buddy`, `.mmap`, `.anon`, etc.
 #define CHECK_FLAG( flag, member )                                                             \
    /* cout << "flag = " #flag "   member = " #member << "   flagState[flag] = " << flagState[ flag ] << "   value = " << pPage->member << endl; */  \
    if( flagState[ flag ] == FLAG_SET && ! pPage->member ) {                                    \
@@ -157,8 +209,24 @@ void setState( enum PageInfoValidation arg, enum FlagState flagState[] ) {
    }
 
 
-/// Callers must end this with one of the 3 OTHERWISE enums
-/// NOLINTNEXTLINE( cert-dcl50-cpp ):  Using a C-style variadic
+/// Test struct PageInfo populated by getPageInfo()
+///
+/// - Ensure the `virtualAddress` is in PageInfo
+/// - Iterate over a [variadic] set of #PageInfoValidation parameters and set
+///   rules in `flagState`
+/// - Validate every flag in PageInfo
+/// - Validate PageInfo.page_count
+///
+/// @param virtualAddress The address to compare against PageInfo.virtualAddress
+/// @param pPage A pointer to a PageInfo structure that was populated by getPageInfo()
+/// @param ... A [variadic] of #PageInfoValidation rules.  Callers must end with one
+///            of the 3 `OTHERWISE_` enums
+/// @return If there are any problems, return `false`.  If every validation
+///         passes, return `true`
+///
+/// [variadic]: https://en.cppreference.com/w/cpp/utility/variadic
+///
+/// NOLINTNEXTLINE( cert-dcl50-cpp ):  Using a C-style [variadic]
 bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
 
    size_t pageMask = ~( ( 1 << getPageSizeInBits() ) - 1 ) ;
@@ -220,8 +288,11 @@ bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
 }
 
 
+/// @cond Suppress Doxygen warnings
 BOOST_AUTO_TEST_SUITE( test_pagemap )
 
+   /// This is an unusual test as it's not testing memscan.  Instead, it's exercising
+   /// code in test_pagemap.cpp.
    BOOST_AUTO_TEST_CASE( test_lastArg ) {
       for( int i = 0 ; i < VALIDATION_LAST ; i++ ) {
          enum PageInfoValidation validation = (enum PageInfoValidation) i ;
@@ -233,6 +304,9 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       }
    }
 
+
+   /// This is an unusual test as it's not testing memscan.  Instead, it's exercising
+   /// code in test_pagemap.cpp.
    BOOST_AUTO_TEST_CASE( test_setState_VALID ) {
       enum FlagState flagState[ VALIDATION_LAST ] ;
       memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
@@ -248,6 +322,8 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
    }
 
 
+   /// This is an unusual test as it's not testing memscan.  Instead, it's exercising
+   /// code in test_pagemap.cpp.
    BOOST_AUTO_TEST_CASE( test_setState_NOT_ACTIVE ) {
       enum FlagState flagState[ VALIDATION_LAST ] ;
       memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
@@ -263,6 +339,8 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
    }
 
 
+   /// This is an unusual test as it's not testing memscan.  Instead, it's exercising
+   /// code in test_pagemap.cpp.
    BOOST_AUTO_TEST_CASE( test_setState_NEUTRAL_PGTABLE ) {
       enum FlagState flagState[ VALIDATION_LAST ] ;
       memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
@@ -278,6 +356,8 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
    }
 
 
+   /// This is an unusual test as it's not testing memscan.  Instead, it's exercising
+   /// code in test_pagemap.cpp.
    BOOST_AUTO_TEST_CASE( test_setState_COUNT ) {
       struct PageInfo aPage ;
       memset( &aPage, 0, sizeof( struct PageInfo ) ) ;
@@ -348,6 +428,7 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       void* topOfStackPlusTwoPages = &aLocalInt + getPageSizeInBytes()*2 ;
       struct PageInfo stackPage2 = getPageInfo( topOfStackPlusTwoPages, true ) ;
       BOOST_CHECK( validatePageInfo( topOfStackPlusTwoPages, &stackPage2, VALID, NOT_PRESENT, COUNT_IS_0, OTHERWISE_0 ) ) ;
+      closePagemap() ;
    }
 
 
@@ -356,6 +437,7 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       smallMalloc[0] = (char) 0xff ;  // Make sure it's paged into memory
       struct PageInfo smallMallocPage = getPageInfo( smallMalloc, true ) ;
       BOOST_CHECK( validatePageInfo( smallMalloc, &smallMallocPage, VALID, PRESENT, COUNT_IS_1, EXCLUSIVE, UPTODATE, NEUTRAL_LRU, NEUTRAL_ACTIVE, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
+      closePagemap() ;
    }
 
 
@@ -366,6 +448,7 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       (void) errorCharacter ;  // Avoid an unused variable warning
       struct PageInfo errorMessagePage = getPageInfo( errorMessage, true ) ;
       BOOST_CHECK( validatePageInfo( errorMessage, &errorMessagePage, VALID, PRESENT, REFERENCED, FILE_MAPPED, COUNT_IS_PLURAL, NEUTRAL_UNEVICTABLE, NOT_EXCLUSIVE, UPTODATE, LRU, MMAP, OTHERWISE_0 ) ) ;
+      closePagemap() ;
    }
 
 BOOST_AUTO_TEST_SUITE_END()
