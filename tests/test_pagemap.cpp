@@ -130,6 +130,9 @@ void setState( enum PageInfoValidation arg, enum FlagState flagState[] ) {
       case OTHERWISE_0:
       case OTHERWISE_NEUTRAL:
          for( int i = 0 ; i < VALIDATION_LAST ; i++ ) {
+            if( ( i == COUNT_IS_0 || i == COUNT_IS_1 || i == COUNT_IS_PLURAL || i == COUNT_NEUTRAL ) && flagState[ i ] == UNDEFINED ) {
+               flagState[ i ] = FLAG_CLEAR ;
+            }
             if( flagState[ i ] == UNDEFINED ) {
                flagState[ i ] = (enum FlagState) arg ;
                // cout << "Setting flag " << i << " to " << arg << endl;
@@ -175,7 +178,7 @@ bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
    memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
 
    do {
-      result = (enum PageInfoValidation) va_arg( args, int );
+      result = (enum PageInfoValidation) va_arg( args, int ) ;
       setState( result, flagState ) ;
    } while( !lastArg( result ) ) ;
    va_end( args );
@@ -275,11 +278,33 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
    }
 
 
-   BOOST_AUTO_TEST_CASE( test_setState_XXX ) {
+   BOOST_AUTO_TEST_CASE( test_setState_COUNT ) {
       struct PageInfo aPage ;
       memset( &aPage, 0, sizeof( struct PageInfo ) ) ;
+      aPage.virtualAddress = NULL ;
+      BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_0, OTHERWISE_0 ), true ) ;
+      // BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_1, OTHERWISE_0 ), false ) ;
+      // BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_PLURAL, OTHERWISE_0 ), false ) ;
+      BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_NEUTRAL, OTHERWISE_0 ), true ) ;
 
-      BOOST_CHECK( validatePageInfo( NULL, &aPage, COUNT_IS_0, OTHERWISE_0 ) ) ;
+      aPage.valid = aPage.exclusive = aPage.file_mapped = aPage.swapped = aPage.present
+      = aPage.locked = aPage.error = aPage.referenced = aPage.uptodate = aPage.dirty = aPage.lru
+      = aPage.active = aPage.slab = aPage.writeback = aPage.reclaim = aPage.buddy = aPage.mmap
+      = aPage.anon = aPage.swapcache = aPage.swapbacked = aPage.comp_head = aPage.comp_tail
+      = aPage.huge = aPage.unevictable = aPage.hwpoison = aPage.nopage = aPage.ksm
+      = aPage.thp = aPage.balloon = aPage.zero_page = aPage.idle = aPage.pgtable
+      = true ;
+      aPage.page_count = 2 ;
+      // BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_0, OTHERWISE_1 ), false ) ;
+      // BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_1, OTHERWISE_1 ), false ) ;
+      BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_PLURAL, OTHERWISE_1 ), true ) ;
+      BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_NEUTRAL, OTHERWISE_1 ), true ) ;
+
+      aPage.page_count = 1 ;
+      // BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_0, OTHERWISE_1 ), false ) ;
+      BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_1, OTHERWISE_1 ), true ) ;
+      // BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_IS_PLURAL, OTHERWISE_1 ), false ) ;
+      BOOST_CHECK_EQUAL( validatePageInfo( NULL, &aPage, COUNT_NEUTRAL, OTHERWISE_1 ), true ) ;
    }
 
 
