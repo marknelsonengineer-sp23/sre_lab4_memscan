@@ -15,6 +15,7 @@ TARGET = boost_tests
 all:  $(TARGET) lint
 
 CXX       = g++
+# Boost tests compile-run faster without -DBOOST_TEST_DYN_LINK
 CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS) -std=c++17 -march=native -mtune=native
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy

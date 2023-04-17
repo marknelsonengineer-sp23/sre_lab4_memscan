@@ -9,7 +9,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @cond Suppress Doxygen warnings
 
-#define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
 #include <exception>  // For exception

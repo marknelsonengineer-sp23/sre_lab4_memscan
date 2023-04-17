@@ -10,7 +10,6 @@
 /// @cond Suppress Doxygen warnings
 
 #define BOOST_TEST_MODULE memscan
-#define BOOST_TEST_DYN_LINK
 #include <boost/test/included/unit_test.hpp>  // include this to get main()
 #include <boost/test/unit_test.hpp>
 

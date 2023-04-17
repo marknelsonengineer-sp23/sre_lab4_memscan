@@ -97,6 +97,7 @@
       <w>labelfontname</w>
       <w>labelfontsize</w>
       <w>ldlibs</w>
+      <w>libc's</w>
       <w>libiconv</w>
       <w>lintflags</w>
       <w>macrofile</w>
