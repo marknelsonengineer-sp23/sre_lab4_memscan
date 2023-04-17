@@ -7,6 +7,7 @@ Usage
 Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... 
        memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...
        memscan --iomem
+       memscan-static
 
   When FILTER is present, only process memory regions that match:
     - If FILTER is a decimal number, match on the region's index
@@ -14,6 +15,9 @@ Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILT
     - If FILTER prefix is +, followed by r w or x, include regions with that
       permission set
   When no FILTERs are present, process all regions
+
+memscan-static has the same usage as memscan.  The difference is that it's
+built statically.
 
 TARGETING OPTIONS
   --pid=NUM          Scan process ID (by default, it scans itself)

@@ -51,6 +51,7 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "Usage: memscan [PRE-SCAN OPTIONS]... [SCAN OPTIONS]... [OUTPUT OPTIONS]... [FILTER]... \n" ) ;
    PRINT( outStream, "       memscan --pid=NUM [OUTPUT OPTIONS]... [FILTER]...\n" ) ;
    PRINT( outStream, "       memscan --iomem\n" ) ;
+   PRINT( outStream, "       memscan-static\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "  When FILTER is present, only process memory regions that match:\n" ) ;
    PRINT( outStream, "    - If FILTER is a decimal number, match on the region's index\n" ) ;
@@ -58,6 +59,9 @@ void printUsage( FILE* outStream ) {
    PRINT( outStream, "    - If FILTER prefix is +, followed by r w or x, include regions with that\n" ) ;
    PRINT( outStream, "      permission set\n" ) ;
    PRINT( outStream, "  When no FILTERs are present, process all regions\n" ) ;
+   PRINT( outStream, "\n" ) ;
+   PRINT( outStream, "memscan-static has the same usage as memscan.  The difference is that it's\n" ) ;
+   PRINT( outStream, "built statically.\n" ) ;
    PRINT( outStream, "\n" ) ;
    PRINT( outStream, "TARGETING OPTIONS\n" ) ;
    PRINT( outStream, "  --pid=NUM          Scan process ID (by default, it scans itself)\n" ) ;

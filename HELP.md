@@ -84,5 +84,7 @@ How to use Memscan
   - `# ./memscan --path --pid=1 --pfn +rw`
 - To stress test memscan and do a bit of everything, try this:
     - `clear && ./memscan --block=/etc/passwd --stream=/etc/passwd --map_file=/etc/passwd --read --local=16384 --numLocal=500 --malloc=1M --numMalloc=4 --map_mem=13M --map_addr=0x555000000000 --fill --threads=10 --sleep=1 --scan_byte=0xc3 --shannon --path --phys`
+- To look at memscan that was compiled statically, try this:
+  - `# ./memscan-static --path`
 
 [ASLR]: https://en.wikipedia.org/wiki/Address_space_layout_randomization
