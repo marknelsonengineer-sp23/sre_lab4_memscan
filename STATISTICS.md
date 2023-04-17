@@ -7,13 +7,13 @@ Project Statistics
 | Type | Files | Lines | Bytes | Working Lines | Working Bytes |
 |------|------:|------:|------:|--------------:|--------------:|
 |.h Source|17|1,079|46,124|392|9,152|
-|.c Source|14|3,471|130,821|2,252|69,602|
-|Unit Tests|10|1,825|82,131|1,193|58,682|
+|.c Source|14|3,472|130,923|2,250|69,527|
+|Unit Tests|10|1,818|81,942|1,186|58,500|
 |Python|4|639|18,427|285|9,333|
 |HTML|1|55|1,021|n/a|n/a|
-|Markdown|9|1,395|97,792|n/a|n/a|
+|Markdown|9|1,453|100,479|n/a|n/a|
 |Images|15|n/a|3,244,929|n/a|n/a|
-|Other	Files|307|n/a|3,030,353|n/a|n/a|
+|Other	Files|307|n/a|3,030,553|n/a|n/a|
 
 ## Tags
 | Tag | Date | Author |
@@ -26,7 +26,7 @@ Project Statistics
 
 ## Software Engineering Metrics
 
-Number of commits:  306
+Number of commits:  309
 
 Number of test cases:  66
 
@@ -37,4 +37,4 @@ Number of test assertions:  610
 |--------------------------------------|---------------------------|-------------------------|---------------------------|
 | ![GitHub code size	in	bytes](https://img.shields.io/github/languages/code-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub repo size](https://img.shields.io/github/repo-size/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub contributors](https://img.shields.io/github/contributors/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub last	commit](https://img.shields.io/github/last-commit/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub	issues](https://img.shields.io/github/issues-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub	closed issues](https://img.shields.io/github/issues-closed-raw/marknelsonengineer-sp23/sre_lab4_memscan?style=social) | ![GitHub forks](https://img.shields.io/github/forks/marknelsonengineer-sp23/sre_lab4_memscan?style=social) <br/> ![GitHub Repo	stars](https://img.shields.io/github/stars/marknelsonengineer-sp23/sre_lab4_memscan?style=social) |
 
-Automatically generated on Sun 16 Apr 2023 10:33:51 PM 
+Automatically generated on Mon 17 Apr 2023 09:26:49 AM 

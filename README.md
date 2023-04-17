@@ -225,15 +225,18 @@ To that end, your program does not have to match the output perfectly... here ar
 # Makefile {#MakeTargets}
 Memscan 2 uses the following `Makefile` targets:
 
-| Command      | Purpose                                                            |
-|--------------|--------------------------------------------------------------------|
-| `make`       | Compile your program                                               |
-| `make test`  | Compile your program and run it.  Run as `root` to pass all tests. |
-| `make debug` | Compile your program with debug mode ( `DEBUG` is defined)         |
-| `make clean` | Remove any compiler output                                         |
-| `make doc`   | Make a Doxygen website and push it to UH UNIX                      |
-| `make lint`  | Use `clang-tidy` to do static analysis on the source code          |
+| Command       | Purpose                                                       |
+|---------------|---------------------------------------------------------------|
+| `make`        | Compile memscan                                               |
+| `make test`   | Compile memscan and run it.  Run as `root` to pass all tests. |
+| `make debug`  | Compile memscan with debug mode ( `DEBUG` is defined)         |
+| `make static` | Statically compile memscan                                    |
+| `make clean`  | Remove all compiler-generated files                           |
+| `make doc`    | Make a Doxygen website and push it to UH UNIX                 |
+| `make lint`   | Use `clang-tidy` to do static analysis on the source code     |
 
+To statically compile memscan, you need to manually build and install libcap.
+ArchLinux does not normally ship static libraries.
 
 # Toolchain
 This project is the product of a tremendous amount of R&D and would not be possible without the following world-class tools:

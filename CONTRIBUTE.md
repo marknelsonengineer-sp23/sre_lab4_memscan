@@ -35,6 +35,17 @@ If you plan to contribute, don't forget to set your name and eMail in [Git]:
     git config --global user.email "marknels@hawaii.edu"
 
 
+ArchLinux does not normally ship `.a` files.  To statically link memscan, we
+need to manually install `libcap`.  
+
+    git clone https://git.kernel.org/pub/scm/libs/libcap/libcap.git
+    cd libcap
+    make
+    make test
+    make sudotest
+    sudo make install
+
+
 ## Handling errors & warnings in a testing framework
 - Memscan does not have a dedicated logger.
 - Messages and exceptions should be pre-pended with #getProgramName and sent 
@@ -200,6 +211,7 @@ It's cool to have this working.
 | make doc          | Clean     | A few warnings, as Doxygen is out of date    |             |
 | make test         | Clean     | Clean                                        | Clean       |
 | make lint         | Clean     | Some warnings as `clang-tidy` is out of date | Clean       |
+| make static       | Clean     |                                              |             |
 | local allocations |           |                                              | Not working |
 | iomem             |           |                                              | Not working |
 

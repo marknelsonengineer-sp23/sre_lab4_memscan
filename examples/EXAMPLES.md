@@ -509,6 +509,49 @@ Here's the full output from this command:  `# ./memscan --path --shannon --phys`
   memory regions in such a convoluted setup.
 
 
+## Static Compilation
+A static build is a compiled version of a program which has been statically 
+linked against libraries.  This means that memscan should not bind to any shared
+libraries.  Let's see if it really works.
+
+#### Setup for static compilation
+ArchLinux does not normally ship `.a` files.  To statically link memscan, we
+need to manually install `libcap` to get `libcap.a`.
+
+    git clone https://git.kernel.org/pub/scm/libs/libcap/libcap.git
+    cd libcap
+    make
+    make test
+    make sudotest
+    sudo make install
+
+Finally, in memscan's directory, `make static`.
+
+#### Running a statically built memscan
+
+Here's the full output from this command:  `$ sudo ./memscan-static --path`
+                                          
+    0: 0x400000 - 0x400fff                  4,096 r--p /media/sf_Src/src-clion/sre_lab4_memscan/memscan-static
+    1: 0x401000 - 0x4b0fff                720,896 r-xp /media/sf_Src/src-clion/sre_lab4_memscan/memscan-static
+    2: 0x4b1000 - 0x4e1fff                200,704 r--p /media/sf_Src/src-clion/sre_lab4_memscan/memscan-static
+    3: 0x4e2000 - 0x4e5fff                 16,384 r--p /media/sf_Src/src-clion/sre_lab4_memscan/memscan-static
+    4: 0x4e6000 - 0x4e8fff                 12,288 rw-p /media/sf_Src/src-clion/sre_lab4_memscan/memscan-static
+    5: 0x4e9000 - 0x4f4fff                 49,152 rw-p
+    6: 0x2187000 - 0x21a8fff              139,264 rw-p [heap]
+    7: 0x7f9191200000 - 0x7f91914e8fff  3,051,520 r--p /usr/lib/locale/locale-archive excluded
+    8: 0x7ffe10813000 - 0x7ffe10833fff    135,168 rw-p [stack]
+    9: 0x7ffe1092b000 - 0x7ffe1092efff     16,384 r--p [vvar] excluded
+    10: 0x7ffe1092f000 - 0x7ffe10930fff     8,192 r-xp [vdso]
+    11: 0xffffffffff600000 - 0xffffffffff600fff      4,096 --xp read permission not set
+
+#### Observations
+- There's no sign of `/usr/lib/libc.so.6`, `/usr/lib/x86_64-linux-gnu/libm-2.31.so`, etc.
+- There's just `memscan-static`, `[heap]`, `[stack]`, etc.  Just about 
+  everything has it's place.
+- I'd like to explore what memory region `5:` has in it and why it's there.  Maybe it's
+  local variable storage or BSS for the `locale-archive`.
+
+
 ## With an without ASLR
 - Use `# sysctl -w kernal.randomize_va_space=0` to disable ASLR and compare the differences
 - @todo Work on this

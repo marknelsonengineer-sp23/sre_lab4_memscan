@@ -37,7 +37,10 @@ memscan.o: maps.h config.h
 	$(CC) $(CFLAGS) -c $<
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LDLIBS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LDLIBS)
+
+static: $(OBJ)
+	$(CC) -static -static-libgcc -L/usr/local/lib $(CFLAGS) -o $(TARGET)-static $(OBJ) $(LDLIBS)
 
 lint: $(TARGET)
 	$(LINT) $(LINTFLAGS) $(SRC) --
