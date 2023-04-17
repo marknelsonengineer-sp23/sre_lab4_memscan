@@ -219,11 +219,76 @@ bool validatePageInfo( void* virtualAddress, PageInfo* pPage, ... ) {
 
 BOOST_AUTO_TEST_SUITE( test_pagemap )
 
+   BOOST_AUTO_TEST_CASE( test_lastArg ) {
+      for( int i = 0 ; i < VALIDATION_LAST ; i++ ) {
+         enum PageInfoValidation validation = (enum PageInfoValidation) i ;
+         if( validation == OTHERWISE_1 || validation == OTHERWISE_0 || validation == OTHERWISE_NEUTRAL ) {
+            BOOST_CHECK_EQUAL( lastArg( validation ), true ) ;
+            continue ;
+         }
+         BOOST_CHECK_EQUAL( lastArg( validation ), false ) ;
+      }
+   }
+
+   BOOST_AUTO_TEST_CASE( test_setState_VALID ) {
+      enum FlagState flagState[ VALIDATION_LAST ] ;
+      memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
+
+      setState( VALID, flagState ) ;
+      for( int i = 0 ; i < VALIDATION_LAST ; i++ ) {
+         if( i == VALID ) {
+            BOOST_CHECK_EQUAL( flagState[ i ], FLAG_SET ) ;
+         } else {
+            BOOST_CHECK_EQUAL( flagState[ i ], UNDEFINED ) ;
+         }
+      }
+   }
+
+
+   BOOST_AUTO_TEST_CASE( test_setState_NOT_ACTIVE ) {
+      enum FlagState flagState[ VALIDATION_LAST ] ;
+      memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
+
+      setState( NOT_ACTIVE, flagState ) ;
+      for( int i = 0 ; i < VALIDATION_LAST ; i++ ) {
+         if( i == ACTIVE ) {
+            BOOST_CHECK_EQUAL( flagState[ i ], FLAG_CLEAR ) ;
+         } else {
+            BOOST_CHECK_EQUAL( flagState[ i ], UNDEFINED ) ;
+         }
+      }
+   }
+
+
+   BOOST_AUTO_TEST_CASE( test_setState_NEUTRAL_PGTABLE ) {
+      enum FlagState flagState[ VALIDATION_LAST ] ;
+      memset( flagState, 0, sizeof( flagState ) ) ;  // Set all flagStates to UNDEFINED
+
+      setState( NEUTRAL_PGTABLE, flagState ) ;
+      for( int i = 0 ; i < VALIDATION_LAST ; i++ ) {
+         if( i == PGTABLE ) {
+            BOOST_CHECK_EQUAL( flagState[ i ], FLAG_NEUTRAL ) ;
+         } else {
+            BOOST_CHECK_EQUAL( flagState[ i ], UNDEFINED ) ;
+         }
+      }
+   }
+
+
+   BOOST_AUTO_TEST_CASE( test_setState_XXX ) {
+      struct PageInfo aPage ;
+      memset( &aPage, 0, sizeof( struct PageInfo ) ) ;
+
+      BOOST_CHECK( validatePageInfo( NULL, &aPage, COUNT_IS_0, OTHERWISE_0 ) ) ;
+   }
+
+
    BOOST_AUTO_TEST_CASE( test_pagecount ) {
       BOOST_CHECK_EQUAL( sizeof( uint64_t ),    PAGECOUNT_ENTRY ) ;
       BOOST_CHECK_EQUAL( sizeof( pagecount_t ), PAGECOUNT_ENTRY ) ;
       BOOST_CHECK_EQUAL( sizeof( pfn_t ),       PAGECOUNT_ENTRY ) ;
    }
+
 
    BOOST_AUTO_TEST_CASE( test_pageflags ) {
       BOOST_CHECK_EQUAL( sizeof( uint64_t ),    PAGEFLAG_ENTRY ) ;
@@ -231,11 +296,13 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       BOOST_CHECK_EQUAL( sizeof( pfn_t ),       PAGEFLAG_ENTRY ) ;
    }
 
+
    BOOST_AUTO_TEST_CASE( test_pagemap ) {
       BOOST_CHECK_EQUAL( sizeof( uint64_t ),    PAGEMAP_ENTRY ) ;
       BOOST_CHECK_EQUAL( sizeof( pagemap_t ),   PAGEMAP_ENTRY ) ;
       BOOST_CHECK_EQUAL( sizeof( pfn_t ),       PAGEMAP_ENTRY ) ;
    }
+
 
    BOOST_AUTO_TEST_CASE( test_getPageSize ) {
       // Get a cue when we run across a non 4K page system
@@ -273,7 +340,7 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       char errorCharacter = errorMessage[0] ;  // Make sure it's paged into memory
       (void) errorCharacter ;  // Avoid an unused variable warning
       struct PageInfo errorMessagePage = getPageInfo( errorMessage, true ) ;
-      BOOST_CHECK( validatePageInfo( errorMessage, &errorMessagePage, VALID, PRESENT, REFERENCED, FILE_MAPPED, COUNT_IS_PLURAL, NOT_EXCLUSIVE, UPTODATE, LRU, MMAP, OTHERWISE_0 ) ) ;
+      BOOST_CHECK( validatePageInfo( errorMessage, &errorMessagePage, VALID, PRESENT, REFERENCED, FILE_MAPPED, COUNT_IS_PLURAL, NEUTRAL_UNEVICTABLE, NOT_EXCLUSIVE, UPTODATE, LRU, MMAP, OTHERWISE_0 ) ) ;
    }
 
 BOOST_AUTO_TEST_SUITE_END()
