@@ -4,7 +4,7 @@
 //
 /// Process `/proc/iomem` to characterize physical pages
 ///
-/// Here's a sample of `proc\iomem`
+/// Here's a sample of `/proc/iomem`
 /// ````
 ///    00000000-00000fff : Reserved
 ///    00001000-0009ffff : System RAM
@@ -39,10 +39,10 @@
 #include <stdlib.h>    // For malloc() free()
 #include <string.h>    // For strncpy() memset() strlen() strtok() strncmp()
 
-#include "config.h"    // For FATAL_ERROR()
+#include "config.h"    // For FATAL_ERROR() ASSERT() iomemFilePath
 #include "iomem.h"     // Just cuz
 #include "trim.h"      // For trim_edges()
-#include "typedefs.h"  // For pfn_t const_pfn_t PFN_MASK
+#include "typedefs.h"  // For pfn_t const_pfn_t PFN_MASK PFN_FORMAT
 #include "version.h"   // For STRINGIFY_VALUE()
 
 
@@ -55,13 +55,13 @@ typedef struct Iomem_region Iomem_region_t ;
 /// Hold each `iomem` region as elements in a linked list
 struct Iomem_region {
                    /// The starting physical address of this memory region.
-   pfn_t           start;
+   pfn_t           start ;
                    /// Pointer to the next region.
                    /// The end address of this region is `next->start - 1` unless
                    /// `next == NULL`, then it's #MAX_PHYS_ADDR
-   Iomem_region_t* next;
+   Iomem_region_t* next ;
                    /// The name/description of this memory region
-   char            description[ MAX_IOMEM_DESCRIPTION ];
+   char            description[ MAX_IOMEM_DESCRIPTION ] ;
 } ;
 
 
@@ -78,11 +78,11 @@ typedef struct Iomem_summary Iomem_summary_t ;
 /// A summary (sum of region sizes) of #Iomem_region records in a linked list
 struct Iomem_summary {
    /// The total number of bytes for all of the regions with this `description`.
-   size_t           size;
+   size_t           size ;
    /// Pointer to the next summary.
-   Iomem_summary_t* next;
+   Iomem_summary_t* next ;
    /// The name/description of this memory region
-   char             description[ MAX_IOMEM_DESCRIPTION ];
+   char             description[ MAX_IOMEM_DESCRIPTION ] ;
 } ;
 
 
@@ -97,11 +97,14 @@ Iomem_summary_t* iomem_summary_head = NULL ;
 ///         1) The byte before the next region's starting address
 ///         2) or #MAX_PHYS_ADDR
 pfn_t getEnd( const Iomem_region_t* region ) {
-   return ( region->next == NULL ) ? ((pfn_t)MAX_PHYS_ADDR) : ( region->next->start - 1 );
+   return ( region->next == NULL ) ? ((pfn_t)MAX_PHYS_ADDR) : ( region->next->start - 1 ) ;
 }
 
 
 /// Recursively zero out and free the `iomem` region linked list
+///
+/// @API{ memset, https://man.archlinux.org/man/memset.3 }
+/// @API{ free, https://man.archlinux.org/man/free.3 }
 ///
 /// @param region The region to zero out and free
 void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursion): Recursion is authorized
@@ -123,6 +126,7 @@ void release_iomem() {
    // Set the head pointer to its initial values
    iomem_head.start = 0 ;
    iomem_head.next = NULL ;
+   /// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
    strncpy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
 
    // Free the summary list
@@ -131,7 +135,7 @@ void release_iomem() {
    while( currentSummary != NULL ) {
       Iomem_summary_t* oldSummary = currentSummary ;
       currentSummary = currentSummary->next ;
-      free( oldSummary ) ;
+      free( oldSummary ) ;  /// @API{ free, https://man.archlinux.org/man/free.3 }
    }
    iomem_summary_head = NULL ;
 }
@@ -153,7 +157,7 @@ bool validate_iomem() {
 
    pfn_t monotonic_address = 0 ;
 
-   Iomem_region_t* current = &iomem_head;
+   Iomem_region_t* current = &iomem_head ;
 
    while( current != NULL ) {
       if( monotonic_address != 0 && current->start <= monotonic_address ) {
@@ -161,10 +165,10 @@ bool validate_iomem() {
       }
 
       monotonic_address = current->start ;
-      current = current->next;
+      current = current->next ;
    }
 
-   return true;
+   return true ;
 }
 
 
@@ -184,10 +188,10 @@ void print_iomem_regions() {
 
 
 const char* get_iomem_region_description( const_pfn_t physAddr ) {
-   Iomem_region_t* region = &iomem_head;
+   Iomem_region_t* region = &iomem_head ;
 
    while( region->next != NULL && region->next->start <= physAddr ) {
-      region = region->next;
+      region = region->next ;
    }
 
    return region->description ;
@@ -231,6 +235,8 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
    ///   - `new` The new region record (added to the right of `old` in the linked
    ///           list)
    ///
+   /// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
+   /// @API{ malloc, https://man.archlinux.org/man/malloc.3 }
    /// There are several scenarios for inserting regions...
    ///
    if( current->start == start && current_end == end ) {
@@ -305,7 +311,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       #ifndef TESTING
          print_iomem_regions() ;
       #endif
-      FATAL_ERROR( "requested region overlaps and is not valid" );
+      FATAL_ERROR( "requested region overlaps and is not valid" ) ;
    }
 
    ASSERT( validate_iomem() ) ;
@@ -317,7 +323,7 @@ void read_iomem() {
 
    FILE* file = NULL ;  // File handle to #iomemFilePath
 
-   file = fopen( iomemFilePath, "r" ) ;
+   file = fopen( iomemFilePath, "r" ) ;  /// @API{ fopen, https://man.archlinux.org/man/fopen.3 }
    if( file == NULL ) {
       FATAL_ERROR( "Unable to open [%s]", iomemFilePath ) ;
    }
@@ -325,7 +331,7 @@ void read_iomem() {
    char* pRead ;
    char szLine[ MAX_LINE_LENGTH ] ;
 
-   pRead = fgets( szLine, MAX_LINE_LENGTH, file ) ;
+   pRead = fgets( szLine, MAX_LINE_LENGTH, file ) ;  /// @API{ fgets, https://man.archlinux.org/man/fgets.3 }
    trim_edges( szLine ) ;
 
    while( pRead != NULL ) {
@@ -333,6 +339,7 @@ void read_iomem() {
          printf( "%s\n", szLine ) ;
       #endif
 
+      /// @API{ strtok, https://man.archlinux.org/man/strtok.3 }
       char* sAddressStart = strtok( szLine, "-" ) ;
       char* sAddressEnd   = strtok( NULL, " "   ) ;
       char* sDescription  = strtok( NULL, "\n" ) + 2 ;  // The +2 skips over a ": "
@@ -342,6 +349,7 @@ void read_iomem() {
       char* pEndOfpAddressEnd ;
       pfn_t pAddressStart ;
       pfn_t pAddressEnd ;
+      /// @API{ strtoul, https://man.archlinux.org/man/strtoul.3 }
       pAddressStart = strtoul( sAddressStart, &pEndOfpAddressStart, 16 ) ;  /// @NOLINT( readability-magic-numbers):  16 is a magic number
       pAddressEnd   = strtoul( sAddressEnd,   &pEndOfpAddressEnd,   16 ) ;  /// @NOLINT( readability-magic-numbers):  16 is a magic number
 
@@ -365,12 +373,12 @@ void read_iomem() {
 
       add_iomem_region( pAddressStart, pAddressEnd, sDescription ) ;
 
-      pRead = fgets( szLine, MAX_LINE_LENGTH, file );
+      pRead = fgets( szLine, MAX_LINE_LENGTH, file ) ;
       trim_edges( szLine ) ;
    } // while()
 
 
-   int iRetVal = fclose( file ) ;
+   int iRetVal = fclose( file ) ;  /// @API{ fclose, https://man.archlinux.org/man/fclose.3 }
    if( iRetVal != 0 ) {
       FATAL_ERROR( "Unable to close [%s]", iomemFilePath ) ;
    }
@@ -379,9 +387,9 @@ void read_iomem() {
 
 /// Print the linked list of #Iomem_summary records under #iomem_summary_head
 void print_iomem_summary() {
-   printf( "Summary of %s\n", iomemFilePath );
+   printf( "Summary of %s\n", iomemFilePath ) ;
 
-   Iomem_summary_t* type = iomem_summary_head;
+   Iomem_summary_t* type = iomem_summary_head ;
 
    size_t totalMappedMemory = 0 ;
 
@@ -408,9 +416,9 @@ void print_iomem_summary() {
 ///
 /// Implementation of a bubble sort of a linked list
 void sort_iomem_summary() {
-   bool swapped;
+   bool swapped ;
    do {
-      swapped = false;
+      swapped = false ;
 
       Iomem_summary_t* type = iomem_summary_head ;
       Iomem_summary_t* prev = NULL ;
@@ -418,25 +426,25 @@ void sort_iomem_summary() {
       while( type != NULL && type->next != NULL ) {  // While there are at least 2 types...
          // printf( "head=[%p]  prev=[%p]  type=[%p, %zu]  type->next=[%p, %zu]  type->next->next=[%p]\n", iomem_type_head, prev, type, type->size, type->next, type->next->size, type->next->next ) ;
          if( type->size > type->next->size ) {  // Swap the two types...
-            swapped = true;
+            swapped = true ;
             if( prev == NULL ) {  // Swap involves the head...
                // printf( "Swap head\n" );
-               Iomem_summary_t* temp = iomem_summary_head->next->next;
-               iomem_summary_head = type->next;
-               iomem_summary_head->next = type;
-               type->next = temp;
-               type = iomem_summary_head;
+               Iomem_summary_t* temp = iomem_summary_head->next->next ;
+               iomem_summary_head = type->next ;
+               iomem_summary_head->next = type ;
+               type->next = temp ;
+               type = iomem_summary_head ;
             } else {
-               // printf( "Swap interior" );
-               Iomem_summary_t* temp = type->next->next;
-               prev->next = type->next;
-               prev->next->next = type;
-               type->next = temp;
-               type = prev->next;
+               // printf( "Swap interior" ) ;
+               Iomem_summary_t* temp = type->next->next ;
+               prev->next = type->next ;
+               prev->next->next = type ;
+               type->next = temp ;
+               type = prev->next ;
             }
          }
-         prev = type;
-         type = type->next;
+         prev = type ;
+         type = type->next ;
       }
    } while( swapped ) ;  // If we swapped two rows, then keep sorting
 } // sort_iomem
@@ -445,6 +453,10 @@ void sort_iomem_summary() {
 /// Iterate over the #Iomem_region linked list from #iomem_head and either
 /// find an existing #Iomem_summary (based on matching the description) and add
 /// to it or create a new one.
+///
+/// @API{ strncmp, https://man.archlinux.org/man/strncmp.3 }
+/// @API{ malloc, https://man.archlinux.org/man/malloc.3 }
+/// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
 void compose_iomem_summary() {
    Iomem_region_t* region = &iomem_head ;
 
