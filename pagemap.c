@@ -253,7 +253,7 @@ bool printPageContext( const struct PageInfo* page, const struct PageInfo* start
 
    if( page->swapped ) {
       printf( ANSI_COLOR_RED "swapped: " ANSI_COLOR_RESET ) ;
-      printf( "type: %u  ", page->swap_type );
+      printf( "type: %u  ", page->swap_type ) ;
       if( includePhysicalPageNumber ) {
          printf( "offset: 0x%p  ", page->swap_offset ) ;
       }
@@ -270,7 +270,7 @@ bool printPageContext( const struct PageInfo* page, const struct PageInfo* start
 
 
 void printFullPhysicalPage( const struct PageInfo* page ) {
-   ASSERT( page != NULL );
+   ASSERT( page != NULL ) ;
 
    printVirtualAddressStart( page ) ;
    if( printPageContext( page, NULL ) ) {
@@ -417,7 +417,7 @@ void closePagemap() {
       int closeStatus = close( pagemap_fd ) ;  /// @API{ close, https://man.archlinux.org/man/close.2 }
       pagemap_fd = -1 ;
       if( closeStatus != 0 ) {
-         FATAL_ERROR( "Unable to close [%s]", pagemapFilePath );
+         FATAL_ERROR( "Unable to close [%s]", pagemapFilePath ) ;
       }
    }
 

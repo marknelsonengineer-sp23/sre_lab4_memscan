@@ -82,7 +82,7 @@ void openPreScanFiles() {
          FATAL_ERROR( "unable to open --map_file=[%s]", mapFilePath ) ;
       }
 
-      mmapBuffer = mmap( NULL, mmapFileStat.st_size, PROT_READ, MAP_PRIVATE, mmap_fd, 0 );
+      mmapBuffer = mmap( NULL, mmapFileStat.st_size, PROT_READ, MAP_PRIVATE, mmap_fd, 0 ) ;
       if( mmapBuffer == MAP_FAILED ) {
          FATAL_ERROR( "unable to map file --map_file=[%s]", mapFilePath ) ;
       }

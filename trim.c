@@ -161,7 +161,7 @@ char* trim( char inString[] ) {
                case WHITESPACE:
                   index++ ;
                   distance++ ;
-                  state = WORK_TO_DO;
+                  state = WORK_TO_DO ;
                   continue ;
             }
             break ;
@@ -175,7 +175,7 @@ char* trim( char inString[] ) {
                   index++ ;
                   continue ;
                case WHITESPACE:
-                  inString[ index ] = ' ';  // Jam a space into this position
+                  inString[ index ] = ' ' ;  // Jam a space into this position
                   index++ ;
                   state = ON_NOTICE ;
                   continue ;
@@ -197,12 +197,12 @@ char* trim( char inString[] ) {
                   state = WORK_TO_DO ;
                   continue ;
             }
-            break;
+            break ;
          case WORK_TO_DO:
             switch( classifyChar( inString[index] )) {
                case ASCII:
                case END:
-                  state = SHIFT;
+                  state = SHIFT ;
                   continue ;
                case WHITESPACE:
                   index++ ;

@@ -56,7 +56,7 @@ static void* mappedAllocation = NULL ;
 ///     allocateLocalMemory_recurse()
 ///   - The mutex is unlocked in releasePreScanMemory(), which allows the
 ///     thread to continue, unwind its recursive calls and end.
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER ;
 
 
 /// Semaphore to track when the local variables have been created ;
@@ -74,9 +74,9 @@ void allocateLocalMemory_recurse( const size_t remainingLocalAllocations ) {
    if( remainingLocalAllocations == 0 ) {
       // printf( "...waiting...\n" ) ;
 
-      sem_post( &localAllocationsReady );
+      sem_post( &localAllocationsReady ) ;
 
-      pthread_mutex_lock( &mutex );
+      pthread_mutex_lock( &mutex ) ;
 
       // printf( "Released!!!\n" ) ;
       return ;
@@ -160,7 +160,7 @@ void allocatePreScanMemory() {
 
       // Use a semaphore to continue main() only after the local memory allocation
       // is done
-      sem_init( &localAllocationsReady, 0, 0 );
+      sem_init( &localAllocationsReady, 0, 0 ) ;
 
       int rVal = pthread_create( &localAllocationThread, NULL, &localAllocationThreadStart, NULL ) ;
       if( rVal != 0 ) {

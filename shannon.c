@@ -36,12 +36,12 @@ double computeShannonEntropy( const void* buffer, const size_t length ) {
       number_of_unique_values++ ;
    }
 
-   // printf( "number_of_unique_values=%zu\n", number_of_unique_values );
+   // printf( "number_of_unique_values=%zu\n", number_of_unique_values ) ;
 
    for (int i = 0 ; i < 256 ; i++) {  // @NOLINT(readability-magic-numbers)
       if( histogram[i] != 0 ) {
          // printf( "i=%d  histogram[i]=%d  H=%lf\n", i, histogram[i], H ) ;
-         H -= (double)histogram[i] / (double)length * log2( (double)histogram[i] / (double)length );
+         H -= (double)histogram[i] / (double)length * log2( (double)histogram[i] / (double)length ) ;
       }
    }
 
@@ -82,7 +82,7 @@ static struct Classification classification[] = {
         ,{ 7.500, "Encrypted/compressed" }
         ,{ 7.900, "Random" }
         ,{ 8.001, "OUT OF BOUNDS" }
-};
+} ;
 
 
 /// The maximum value of Shannon Entropy for 8-bit bytes

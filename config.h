@@ -26,7 +26,7 @@
 ///             program name).  Always `>= 1`.
 /// @param argv A `NULL` terminated array of `char[]` arguments containing the
 ///             command line options
-extern void processOptions( int argc, char* argv[] );
+extern void processOptions( int argc, char* argv[] ) ;
 
 
 /// Ensure memscan is running with the `CAP_SYS_ADMIN` capability
@@ -185,7 +185,7 @@ extern bool validateConfig( const bool printReason ) ;
         ,"%s: " msg ".  Exiting.\n"  \
         ,getProgramName()            \
         ,##__VA_ARGS__ ) ;           \
-      exit( EXIT_FAILURE );          \
+      exit( EXIT_FAILURE ) ;         \
       /* NOLINTEND(cert-err33-c) */  \
       (void)0
 #endif

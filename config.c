@@ -36,7 +36,7 @@ struct Filter* filterHead ;
 
 
 enum Endian getEndianness() {
-   int i = 1;
+   int i = 1 ;
 
    if( *(char *)&i == 1 ) {  // little endian if true
       return LITTLE ;
@@ -144,7 +144,7 @@ static struct option long_options[] = {
    { "key",       no_argument,       0, 'k' },
    { "version",   no_argument,       0, 'v' },
    { 0, 0, 0, 0 }
-};
+} ;
 
 /// Define the single character option string
 const char SINGLE_OPTION_STRING[] = "hkv" ;
@@ -198,7 +198,7 @@ void processOptions( int argc, char* argv[] ) {
    }
 
    /// Set locale so numbers we can print localized numbers i.e. `1,024`.
-   char* sRetVal;
+   char* sRetVal ;
    sRetVal = setlocale( LC_NUMERIC, "" ) ;
    if( sRetVal == NULL ) {
       FATAL_ERROR( "Unable to set locale" ) ;
@@ -206,10 +206,10 @@ void processOptions( int argc, char* argv[] ) {
 
    optind = 1 ;  // Reset the option index
    while( true ) {
-      int option_index = 0;
-      int optionChar;
+      int option_index = 0 ;
+      int optionChar ;
 
-      optionChar = getopt_long(argc, argv, SINGLE_OPTION_STRING, long_options, &option_index);
+      optionChar = getopt_long(argc, argv, SINGLE_OPTION_STRING, long_options, &option_index) ;
 
       if( optionChar == -1 ) {
          break ;  // Done processing getopt_long
@@ -337,11 +337,11 @@ void processOptions( int argc, char* argv[] ) {
 
          case '3':
             if( optarg != NULL ) {
-               unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( optarg );
-               ASSERT( trialValue <= UCHAR_MAX );
-               byteToScanFor = (unsigned char) trialValue;
+               unsigned long long trialValue = stringToUnsignedLongLongWithBasePrefix( optarg ) ;
+               ASSERT( trialValue <= UCHAR_MAX ) ;
+               byteToScanFor = (unsigned char) trialValue ;
             }
-            scanForByte = true;
+            scanForByte = true ;
             break ;
 
          case '4':
@@ -374,7 +374,7 @@ void processOptions( int argc, char* argv[] ) {
 
          case '5':
             printPath = true ;
-            break;
+            break ;
 
          default:
             printUsage( stderr ) ;

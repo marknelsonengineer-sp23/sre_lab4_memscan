@@ -245,7 +245,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       ///   ````
       ///   <curStart, curEnd, curDesc> --> <curStart, curEnd, addDesc>
       ///   ````
-      // printf( "Replace region\n" );
+      // printf( "Replace region\n" ) ;
       strncpy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
    } else if( current->start == start && current_end > end ) {
       /// - If the `addStart == curStart` and `addEnd < curEnd`, then insert a
@@ -253,7 +253,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       ///   ````
       ///   <curStart, curEnd, curDesc> --> <curStart, addEnd, addDesc> -> <addEnd+1, curEnd, curDesc>
       ///   ````
-      // printf( "Create new-left\n" );
+      // printf( "Create new-left\n" ) ;
 
       Iomem_region_t* newRegion = malloc( sizeof( Iomem_region_t ) ) ;
       if( newRegion == NULL ) {
@@ -272,7 +272,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       ///   ````
       ///   <curStart, curEnd, curDesc> --> <curStart, addStart-1, curDesc> -> <addStart, addEnd, addDesc>
       ///   ````
-      // printf( "Create new-right\n" );
+      // printf( "Create new-right\n" ) ;
       Iomem_region_t* newRegion = malloc( sizeof( Iomem_region_t ) ) ;
       if( newRegion == NULL ) {
          FATAL_ERROR( "Unable to allocate new iomem region" ) ;
@@ -288,7 +288,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       ///   ````
       ///   <curStart, curEnd, curDesc> --> <curStart, addStart-1, curDesc> -> <addStart, addEnd, addDesc> -> <addEnd+1, curEnd, curDesc>
       ///   ````
-      // printf( "Create new-middle\n" );
+      // printf( "Create new-middle\n" ) ;
       Iomem_region_t* newRegion = malloc( sizeof( Iomem_region_t ) ) ;
       if( newRegion == NULL ) {
          FATAL_ERROR( "Unable to allocate new iomem region" ) ;
@@ -428,7 +428,7 @@ void sort_iomem_summary() {
          if( type->size > type->next->size ) {  // Swap the two types...
             swapped = true ;
             if( prev == NULL ) {  // Swap involves the head...
-               // printf( "Swap head\n" );
+               // printf( "Swap head\n" ) ;
                Iomem_summary_t* temp = iomem_summary_head->next->next ;
                iomem_summary_head = type->next ;
                iomem_summary_head->next = type ;

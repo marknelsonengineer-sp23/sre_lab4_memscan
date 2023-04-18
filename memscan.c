@@ -69,7 +69,7 @@ int main( int argc, char* argv[] ) {
 
          printf( "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n" ) ;
       } else {
-         int returnStatus;
+         int returnStatus ;
          waitpid( forkPid, &returnStatus, 0 ) ;  // Parent process waits here for child to terminate.
 
          printf( "Parent memscan\n " ) ;
