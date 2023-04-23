@@ -4,7 +4,17 @@
 //
 /// Process `/proc/iomem` to characterize physical pages
 ///
-/// Here's a sample of `/proc/iomem`
+/// `/proc/iomem` contains the map of the system's physical memory.  Computers
+/// use physical memory addresses for things other than general purpose memory
+/// (the sort used by programs and data).  Memory-mapped IO maps certain
+/// physical addresses directly to hardware devices like network and video cards.
+///
+/// Addressing details are negotiated and assigned dynamically by the cards and
+/// the host computer as the system starts up.  The `/proc/iomem` contains the
+/// negotiated memory map.
+///
+/// The first column displays the memory addresses of physical memory regions.
+/// The second column has a description of the region.
 /// ````
 ///    00000000-00000fff : Reserved
 ///    00001000-0009ffff : System RAM
@@ -15,7 +25,11 @@
 ///        82000000-823fffff : vboxguest
 /// ````
 ///
-/// Here's a sample summary
+/// The addresses are not virtual – they are physical (or bus) addresses.  The
+/// datatype for a physical addresses in memscan is #pfn_t.
+///
+/// Combining the descriptions and sorting by size, we can summarize the total
+/// amount of memory for each region:
 /// ````
 /// Summary of /proc/iomem
 /// ahci                                         8,192
