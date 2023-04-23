@@ -1,0 +1,35 @@
+00000000-0000ffff : reserved
+00010000-0009fbff : System RAM
+0009fc00-0009ffff : reserved
+000a0000-000bffff : Video RAM area
+000c0000-000cf7ff : Video ROM
+000e0000-000fffff : reserved
+  000f0000-000fffff : System ROM
+00100000-bffbffff : System RAM
+  01000000-01538f03 : Kernel code
+  01538f04-017c217f : Kernel data
+  01877000-0194dfff : Kernel bss
+bffc0000-bffcdfff : ACPI Tables
+bffce000-bffeffff : ACPI Non-volatile Storage
+bfff0000-bfffffff : reserved
+cff00000-dfefffff : PCI Bus 0000:01
+  d0000000-d7ffffff : 0000:01:00.0
+e0000000-efffffff : PCI MMCONFIG 0000 [bus 00-ff]
+  e0000000-efffffff : pnp 00:0d
+f0000000-f7ffffff : 0000:00:00.0
+fca00000-feafffff : PCI Bus 0000:01
+  fd000000-fdffffff : 0000:01:00.0
+  feae0000-feafffff : 0000:01:00.0
+febc0000-febdffff : 0000:00:0d.0
+  febc0000-febdffff : e1000
+febf0000-febf7fff : 0000:00:0a.0
+  febf0000-febf7fff : 0000:00:0a.0
+febfbc00-febfbcff : 0000:00:10.4
+  febfbc00-febfbcff : ehci_hcd
+fec00000-fec00fff : reserved
+  fec00000-fec003ff : IOAPIC 0
+fecc0000-fecc03ff : IOAPIC 1
+fee00000-fee00fff : Local APIC
+  fee00000-fee00fff : pnp 00:09
+ff7c0000-ffffffff : reserved
+  fff80000-ffffffff : pnp 00:0e
