@@ -2,7 +2,7 @@
 //   University of Hawaii, College of Engineering
 //   Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
 //
-/// Comprehensive test of iomem module
+/// Comprehensive test of the iomem module
 ///
 /// @file   test_iomem.cpp
 /// @author Mark Nelson <marknels@hawaii.edu>
@@ -36,18 +36,31 @@ extern "C" void sort_iomem_summary() ;
 
 /* ***************************************************************************/
 
+struct TestIomemFixture {
+   TestIomemFixture()  {
+      BOOST_TEST_MESSAGE( "setup fixture" ) ;
+      BOOST_CHECK_NO_THROW( release_iomem() ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+   }
+   ~TestIomemFixture() {
+      BOOST_TEST_MESSAGE( "teardown fixture" ) ;
+      BOOST_CHECK_NO_THROW( release_iomem() ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+   }
+} ;
 
 BOOST_AUTO_TEST_SUITE( test_iomem )
 
-BOOST_AUTO_TEST_CASE( test_read_iomem_bulk ) {
-    /// Read the contents of `./tests/test_iomem`, which contains sample `iomem` files from
-    /// a variety of Linux systems.
+BOOST_FIXTURE_TEST_CASE( test_read_iomem_bulk, TestIomemFixture ) {
+    /// Read the contents of `./tests/test_iomem`, containing sample `iomem`
+    /// files from a variety of Linux systems.
    const std::filesystem::path sandbox{"test_iomem"};
 
    for (auto const& dir_entry : std::filesystem::directory_iterator{sandbox}) {
       // std::cout << dir_entry.path() << '\n';
       strncpy( iomemFilePath, dir_entry.path().u8string().c_str(), sizeof( iomemFilePath ) ) ;
       BOOST_CHECK_NO_THROW( read_iomem() ) ;
+      BOOST_CHECK_EQUAL( validate_iomem(), true ) ;
       BOOST_CHECK_NO_THROW( compose_iomem_summary() ) ;
       BOOST_CHECK_NO_THROW( sort_iomem_summary() ) ;
       // BOOST_CHECK_NO_THROW( print_iomem_summary() ) ;
@@ -56,19 +69,18 @@ BOOST_AUTO_TEST_CASE( test_read_iomem_bulk ) {
 }
 
 
-BOOST_AUTO_TEST_CASE( test_iomem_release ) {
+BOOST_FIXTURE_TEST_CASE( test_iomem_release, TestIomemFixture ) {
+   BOOST_CHECK_EQUAL( get_iomem_region_description( 0x00000000000 ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+   BOOST_CHECK_EQUAL( get_iomem_region_description( MAX_PHYS_ADDR ), UNMAPPED_MEMORY_DESCRIPTION ) ;
    BOOST_CHECK( validate_iomem() ) ;
    BOOST_CHECK_NO_THROW( release_iomem() ) ;
-   BOOST_CHECK( validate_iomem() ) ;
-   BOOST_CHECK_NO_THROW( release_iomem() ) ;
+   BOOST_CHECK_EQUAL( get_iomem_region_description( 0x00000000000 ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+   BOOST_CHECK_EQUAL( get_iomem_region_description( MAX_PHYS_ADDR ), UNMAPPED_MEMORY_DESCRIPTION ) ;
    BOOST_CHECK( validate_iomem() ) ;
 }
 
 
-BOOST_AUTO_TEST_CASE( test_iomem_add ) {
-   BOOST_CHECK( validate_iomem() ) ;
-   BOOST_CHECK_NO_THROW( release_iomem() ) ;
-
+BOOST_FIXTURE_TEST_CASE( test_iomem_add, TestIomemFixture ) {
    BOOST_CHECK_EQUAL( get_iomem_region_description(         0x000 ), UNMAPPED_MEMORY_DESCRIPTION ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description(         0x100 ), UNMAPPED_MEMORY_DESCRIPTION ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description( MAX_PHYS_ADDR ), UNMAPPED_MEMORY_DESCRIPTION ) ;
@@ -181,8 +193,7 @@ BOOST_AUTO_TEST_CASE( test_iomem_add ) {
 } // test_iomem_add
 
 
-BOOST_AUTO_TEST_CASE( test_iomem_add_bad ) {
-   BOOST_CHECK( validate_iomem() ) ;
+BOOST_FIXTURE_TEST_CASE( test_iomem_add_bad, TestIomemFixture ) {
    BOOST_CHECK_FAIL( add_iomem_region( 0x000, 0x000, "test" ) ) ;
    BOOST_CHECK_FAIL( add_iomem_region( 0x001, 0x000, "test" ) ) ;
    BOOST_CHECK_FAIL( add_iomem_region( 0x000, 0x001, NULL ) ) ;
@@ -192,8 +203,7 @@ BOOST_AUTO_TEST_CASE( test_iomem_add_bad ) {
    BOOST_CHECK( validate_iomem() ) ;
 }
 
-BOOST_AUTO_TEST_CASE( test_iomem_add_overlap ) {
-   BOOST_CHECK( validate_iomem() ) ;
+BOOST_FIXTURE_TEST_CASE( test_iomem_add_overlap, TestIomemFixture ) {
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x000, 0x0FF, "region 0 - new") ) ;
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x100, 0x1FF, "region 1 - new") ) ;
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x200, 0x2FF, "region 2 - new") ) ;
