@@ -68,14 +68,16 @@ typedef struct Iomem_region Iomem_region_t ;
 
 /// Hold each `iomem` region as elements in a linked list
 struct Iomem_region {
-                   /// The starting physical address of this memory region.
-   pfn_t           start ;
-                   /// Pointer to the next region.
-                   /// The end address of this region is `next->start - 1` unless
-                   /// `next == NULL`, then it's #MAX_PHYS_ADDR
+   /// The starting physical address of this memory region.
+   pfn_t start ;
+
+   /// Pointer to the next region.
+   /// The end address of this region is `next->start - 1` unless
+   /// `next == NULL`, then it's #MAX_PHYS_ADDR
    Iomem_region_t* next ;
-                   /// The name/description of this memory region
-   char            description[ MAX_IOMEM_DESCRIPTION ] ;
+
+   /// The name/description of this memory region
+   char description[ MAX_IOMEM_DESCRIPTION ] ;
 } ;
 
 
@@ -88,15 +90,17 @@ Iomem_region_t iomem_head = { 0, NULL, UNMAPPED_MEMORY_DESCRIPTION } ;
 /// Typedef of #Iomem_summary
 typedef struct Iomem_summary Iomem_summary_t ;
 
-
 /// A summary (sum of region sizes) of #Iomem_region records in a linked list
 struct Iomem_summary {
-   /// The total number of bytes for all of the regions with this `description`.
-   size_t           size ;
+   /// The total number of bytes for all of the regions with this
+   /// Iomem_region.description.
+   size_t size ;
+
    /// Pointer to the next summary.
    Iomem_summary_t* next ;
+
    /// The name/description of this memory region
-   char             description[ MAX_IOMEM_DESCRIPTION ] ;
+   char description[ MAX_IOMEM_DESCRIPTION ] ;
 } ;
 
 
@@ -132,18 +136,18 @@ void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursio
 
 
 void release_iomem() {
-   // Recursively zero out the linked list
+   /// Recursively zero out the #iomem_head linked list
    if( iomem_head.next != NULL ) {
       free_iomem_region( iomem_head.next ) ;
    }
 
-   // Set the head pointer to its initial values
+   /// Set the head pointer to its initial values
    iomem_head.start = 0 ;
    iomem_head.next = NULL ;
    /// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
    strncpy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
 
-   // Free the summary list
+   /// Free the summary list
    Iomem_summary_t* currentSummary = iomem_summary_head ;
 
    while( currentSummary != NULL ) {
@@ -155,9 +159,9 @@ void release_iomem() {
 }
 
 
-/// Validate the `iomem` linked list
+/// Validate the #iomem_head linked list
 ///
-/// The validation rules are:
+/// The validation rules for #iomem_head are:
 ///   - The list can not be empty
 ///   - The first start address must be 0
 ///   - Every region must monotonically increase
@@ -221,6 +225,7 @@ const char* get_iomem_region_description( const_pfn_t physAddr ) {
 ///              `> start`.
 /// @param description The description of a region (up to #MAX_IOMEM_DESCRIPTION
 ///                    bytes).  The description may not be `NULL` or empty.
+///                    It is assumed that `description` is already trimmed.
 void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* description ) {
    ASSERT( validate_iomem() ) ;
    ASSERT( end != 0 ) ;
@@ -498,6 +503,8 @@ void compose_iomem_summary() {
 
 
 void summarize_iomem() {
+   ASSERT( validate_iomem() ) ;
+
    compose_iomem_summary() ;
    sort_iomem_summary() ;
    print_iomem_summary() ;
