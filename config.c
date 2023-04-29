@@ -689,7 +689,7 @@ bool validateConfig( const bool printReason ) {
 }
 
 
-void stringCopy( char *restrict dest, const char *restrict src, size_t count ) {
+void stringCopy( char* dest, const char* src, size_t count ) {
    ASSERT( dest != NULL ) ;
    ASSERT( src != NULL ) ;
    ASSERT( count > 0 ) ;
