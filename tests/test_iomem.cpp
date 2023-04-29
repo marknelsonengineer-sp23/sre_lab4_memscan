@@ -30,6 +30,7 @@ extern "C" {
 
 extern "C" bool validate_iomem() ;
 extern "C" void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* description ) ;
+extern "C" void print_iomem_regions() ;
 extern "C" void compose_iomem_summary() ;
 extern "C" void sort_iomem_summary() ;
 extern "C" void print_iomem_summary() ;
@@ -66,6 +67,7 @@ BOOST_FIXTURE_TEST_CASE( test_read_iomem_bulk, TestIomemFixture ) {
       BOOST_CHECK_NO_THROW( compose_iomem_summary() ) ;
       BOOST_CHECK_NO_THROW( sort_iomem_summary() ) ;
       // BOOST_CHECK_NO_THROW( print_iomem_summary() ) ;
+      // print_iomem_regions() ;
    }
 }
 
@@ -262,6 +264,7 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add, TestIomemFixture ) {
    BOOST_CHECK_NO_THROW( compose_iomem_summary() ) ;
    BOOST_CHECK_NO_THROW( sort_iomem_summary() ) ;
    //BOOST_CHECK_NO_THROW( print_iomem_summary() ) ;
+   //print_iomem_regions() ;
 
    BOOST_CHECK_NO_THROW( release_iomem() ) ;
    BOOST_CHECK( validate_iomem() ) ;
@@ -307,6 +310,7 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_description, TestIomemFixture ) {
       BOOST_CHECK_NO_THROW( add_iomem_region( 0x010, 0x020, largeDescription.c_str() ) ) ;
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x018 ), referenceDesc ) ;
       BOOST_CHECK( validate_iomem() ) ;
+      // print_iomem_regions() ;
       BOOST_CHECK_NO_THROW( release_iomem() ) ;
    }
 
@@ -319,6 +323,7 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_description, TestIomemFixture ) {
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x011 ), referenceDesc ) ;
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x014 ), "D" ) ;
       BOOST_CHECK( validate_iomem() ) ;
+      // print_iomem_regions() ;
       BOOST_CHECK_NO_THROW( release_iomem() ) ;
    }
 
@@ -331,6 +336,7 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_description, TestIomemFixture ) {
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x01C ), "E" ) ;
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x01E ), referenceDesc ) ;
       BOOST_CHECK( validate_iomem() ) ;
+      // print_iomem_regions() ;
       BOOST_CHECK_NO_THROW( release_iomem() ) ;
    }
 
@@ -344,6 +350,7 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_description, TestIomemFixture ) {
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x018 ), referenceDesc ) ;
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x01A ), "F" ) ;
       BOOST_CHECK( validate_iomem() ) ;
+      // print_iomem_regions() ;
       BOOST_CHECK_NO_THROW( release_iomem() ) ;
    }
 } // test_iomem_add_description
@@ -382,6 +389,7 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_overlap, TestIomemFixture ) {
    BOOST_CHECK_FAIL( add_iomem_region( 0x37F, 0x47F, "overlap region 3 - right middle") ) ;
 
    BOOST_CHECK( validate_iomem() ) ;
+   // print_iomem_regions() ;
 }
 
 
@@ -438,11 +446,13 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_one_byte_regions, TestIomemFixture ) {
       BOOST_CHECK_EQUAL( get_iomem_region_description( 0x701 + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
       BOOST_CHECK( validate_iomem() ) ;
    }
+   // print_iomem_regions() ;
 }
 
 BOOST_FIXTURE_TEST_CASE( test_iomem_iomem6, TestIomemFixture ) {
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x00000000, 0x00000fff, "Reserved") ) ;
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x00000000, 0x00000000, "PCI Bus 0000:00") ) ;
+   // print_iomem_regions() ;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

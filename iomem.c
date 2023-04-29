@@ -183,6 +183,9 @@ bool validate_iomem() {
 
 /// Print all of the `iomem` regions.
 ///
+/// @internal This is intended for debugging.  It's not output by any
+///           of memscan's options.
+///
 /// Assumes a 48-bit physical address bus size (6 bytes or 12 characters wide).
 void print_iomem_regions() {
    Iomem_region_t* current = &iomem_head ;
@@ -422,7 +425,10 @@ void print_iomem_summary() {
 
 /// Sort the linked list of #Iomem_summary records under #iomem_summary_head
 ///
-/// Implementation of a bubble sort of a linked list
+/// @internal Implements an efficient bubble sort of a linked list.  Because
+///           we will always maintain the list, this sort will be fairly
+///           efficient as we'll always be increasing/slotting just one
+///           value.
 void sort_iomem_summary() {
    bool swapped ;
    do {
