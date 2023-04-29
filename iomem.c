@@ -224,15 +224,13 @@ const char* get_iomem_region_description( const_pfn_t physAddr ) {
 /// @param start The starting physical address of the new region (inclusive).
 ///              It may overlap with an existing region.
 /// @param end   The ending physical address of the new region.  It must be
-///              within an existing region.  `end` may not be `0` and must be
-///              `> start`.
+///              within an existing region.  `end` must be `>= start`.
 /// @param description The description of a region (up to #MAX_IOMEM_DESCRIPTION
 ///                    bytes).  The description may not be `NULL` or empty.
 ///                    It is assumed that `description` is already trimmed.
 void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* description ) {
    ASSERT( validate_iomem() ) ;
-   ASSERT( end != 0 ) ;
-   ASSERT( end > start ) ;
+   ASSERT( end >= start ) ;
    ASSERT( description != NULL ) ;
    ASSERT( strlen( description ) != 0 ) ;
 

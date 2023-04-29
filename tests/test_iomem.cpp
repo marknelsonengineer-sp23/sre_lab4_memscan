@@ -275,7 +275,6 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add, TestIomemFixture ) {
 
 
 BOOST_FIXTURE_TEST_CASE( test_iomem_add_bad, TestIomemFixture ) {
-   BOOST_CHECK_FAIL( add_iomem_region( 0x000, 0x000, "Map a region that ends at 0" ) ) ;
    BOOST_CHECK_FAIL( add_iomem_region( 0x001, 0x000, "Map a region where start > end at the extreme" ) ) ;
 
    BOOST_CHECK_FAIL( add_iomem_region( 0x80000000000, 0x7ffffffffff, "Map a region where start > end" ) ) ;
@@ -383,6 +382,67 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_overlap, TestIomemFixture ) {
    BOOST_CHECK_FAIL( add_iomem_region( 0x37F, 0x47F, "overlap region 3 - right middle") ) ;
 
    BOOST_CHECK( validate_iomem() ) ;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( test_iomem_add_one_byte_regions, TestIomemFixture ) {
+   for( size_t i = 0x0000 ; i <= 0xF000 ; i += 0x1000 ) {
+      // Update the first byte (as a boundry condition)
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x000 + i, 0x000 + i, "One byte") ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x000 + i ), "One byte" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x001 + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+
+      // Split a region into 2
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x100 + i, 0x100 + i, "One byte") ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x0FF + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x100 + i ), "One byte" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x101 + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+
+      // Replace a one-byte region
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x100 + i, 0x100 + i, "Still One byte") ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x0FF + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x100 + i ), "Still One byte" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x101 + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+
+      // Insert a one-byte region on the left of an existing region
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x200 + i, 0x300 + i, "A region") ) ;
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x200 + i, 0x200 + i, "One byte on left") ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x1FF + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x200 + i ), "One byte on left" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x201 + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x300 + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x301 + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+
+      // Insert a one-byte region on the right of an existing region
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x400 + i, 0x500 + i, "A region") ) ;
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x500 + i, 0x500 + i, "One byte on right") ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x3FF + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x400 + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x4FF + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x500 + i ), "One byte on right" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x501 + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+
+      // Insert a one-byte region in the middle of an existing region (just to be sure)
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x600 + i, 0x700 + i, "A region") ) ;
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x680 + i, 0x680 + i, "One byte in the middle") ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x5FF + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x600 + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x67F + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x680 + i ), "One byte in the middle" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x681 + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x700 + i ), "A region" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x701 + i ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+   }
+}
+
+BOOST_FIXTURE_TEST_CASE( test_iomem_iomem6, TestIomemFixture ) {
+   BOOST_CHECK_NO_THROW( add_iomem_region( 0x00000000, 0x00000fff, "Reserved") ) ;
+   BOOST_CHECK_NO_THROW( add_iomem_region( 0x00000000, 0x00000000, "PCI Bus 0000:00") ) ;
 }
 
 BOOST_AUTO_TEST_SUITE_END()
