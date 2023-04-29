@@ -253,3 +253,4 @@ This project is the product of a tremendous amount of R&D and would not be possi
 | **Linux**      | https://kernel.org         |      <img src=".doxygen/images/logo_linux.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Linux"/>      |
 | **ArchLinux**  | https://archlinux.org      |  <img src=".doxygen/images/logo_archlinux.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="ArchLinux"/>  |
 | **VirtualBox** | https://www.virtualbox.org | <img src=".doxygen/images/logo_virtualbox.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="VirtualBox"/> |
+| **Valgrind**   | https://valgrind.org       |   <img src=".doxygen/images/logo_valgrind.png" style="height:40px; float: center; margin: 0 0 0 0;" alt="Valgrind"/>   |
