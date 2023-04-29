@@ -488,9 +488,10 @@ void checkCapabilities() {
 void setProgramName( const char* newProgramName ) {
    ASSERT( newProgramName != NULL ) ;
 
-   char trialProgramName[ MAX_PROGRAM_NAME ] = {} ;
+   /// @api strncpy https://man.archlinux.org/man/strncpy.3
+   char trialProgramName[ MAX_PROGRAM_NAME ] ;
    strncpy( trialProgramName, newProgramName, MAX_PROGRAM_NAME ) ;
-
+   trialProgramName[ MAX_PROGRAM_NAME - 1 ] = '\0' ;
    trim( trialProgramName ) ;
 
    ASSERT( strlen( trialProgramName ) != 0 ) ;
