@@ -225,3 +225,13 @@ struct Filter {
 
 /// The head pointer to a list of filters
 extern struct Filter* filterHead ;
+
+
+/// Perform a safe, truncated string copy.  Copies at most `count-1` characters
+/// to `dest`.
+///
+/// @param dest  Pointer to the character array to copy to.  Must not be `NULL`.
+/// @param src   Pointer to the character array to copy from.  Must not be `NULL`.
+/// @param count Size of the `dest` buffer, so at most `count-1` characters
+///              will be copied to `dest`.
+extern void stringCopy( char* dest, const char* src, size_t count ) ;

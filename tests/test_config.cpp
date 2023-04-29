@@ -445,5 +445,39 @@ BOOST_FIXTURE_TEST_CASE( test_config_fork_iomem, Configuration ) {
 }
 
 
+BOOST_AUTO_TEST_CASE( test_StringCopy ) {
+   char* nullPtr    = NULL ;
+   char  dest[ 16 ] = "123456789012345" ;
+
+   BOOST_CHECK_FAIL( stringCopy( nullPtr, "Boo", 2 ) ) ;
+
+   BOOST_CHECK_FAIL( stringCopy( dest, nullPtr, 16 ) ) ;
+   BOOST_CHECK_FAIL( stringCopy( dest, "Cat", 0 ) ) ;
+   BOOST_CHECK_FAIL( stringCopy( dest, "Cat", SIZE_MAX ) ) ;
+
+   // Test overlapping regions
+   BOOST_CHECK_FAIL( stringCopy( dest,    dest+1,  16 ) ) ;
+   BOOST_CHECK_FAIL( stringCopy( dest,    dest+15, 16 ) ) ;
+   BOOST_CHECK_FAIL( stringCopy( dest+1,  dest,    16 ) ) ;
+   BOOST_CHECK_FAIL( stringCopy( dest+15, dest,    16 ) ) ;
+
+   // Test regions that wrap around
+   // BOOST_CHECK_FAIL( stringCopy( nullPtr - 8, src,         16 ) ) ;
+   // BOOST_CHECK_FAIL( stringCopy( nullPtr + 8, src,         16 ) ) ;
+   // BOOST_CHECK_FAIL( stringCopy( dest,        nullPtr + 8, 16 ) ) ;
+   // BOOST_CHECK_FAIL( stringCopy( dest,        nullPtr - 8, 16 ) ) ;
+
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "A", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "A" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "AB", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "AB" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "ABC", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "ABC" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "12345678901234", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "12345678901234" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "123456789012345", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "123456789012345" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "1234567890123456", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "123456789012345" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "12345678901234567", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "123456789012345" ) ;
+   BOOST_CHECK_NO_THROW( stringCopy( dest, "123456789012345678", 16 ) ) ;  BOOST_CHECK_EQUAL( dest, "123456789012345" ) ;
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 /// @endcond

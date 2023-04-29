@@ -25,6 +25,8 @@ debug: DEBUG_FLAGS = -g -DDEBUG
 debug: $(TARGET)
 
 test:     CFLAGS   += -DTESTING
+test:     CXXFLAGS += -DTESTING
+
 valgrind: CFLAGS   += -DTESTING -g
 valgrind: CXXFLAGS += -g -O0
 

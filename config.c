@@ -687,3 +687,22 @@ bool validateConfig( const bool printReason ) {
 
    return true ;
 }
+
+
+void stringCopy( char *restrict dest, const char *restrict src, size_t count ) {
+   ASSERT( dest != NULL ) ;
+   ASSERT( src != NULL ) ;
+   ASSERT( count > 0 ) ;
+   ASSERT( count < SIZE_MAX ) ;
+
+   // Wraparound testing doesn't work the way I'd like it to...
+   // ASSERT( dest < dest + count ) ;  // No wraparound!
+   // ASSERT( src  < src  + count ) ;  // No wraparound!
+
+   /// Ensure the two ranges are not overlapping
+   /// @see https://stackoverflow.com/questions/36035074/how-can-i-find-an-overlap-between-two-given-ranges
+   ASSERT( dest > src + count || dest + count < src ) ;
+
+   strncpy( dest, src, count ) ;  // This is a bit more efficient than zeroing
+   dest[ count - 1 ] = '\0' ;     // out the entire destination buffer
+}

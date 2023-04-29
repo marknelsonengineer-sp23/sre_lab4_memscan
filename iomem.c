@@ -268,7 +268,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       ///   <curStart, curEnd, curDesc> --> <curStart, curEnd, addDesc>
       ///   ````
       // printf( "Replace region\n" ) ;
-      strncpy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
+      stringCopy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
    } else if( current->start == start && current_end > end ) {
       /// - If the `addStart == curStart` and `addEnd < curEnd`, then insert a
       ///   new region in the linked list:
@@ -282,12 +282,12 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
          FATAL_ERROR( "Unable to allocate new iomem region" ) ;
       }
 
-      strncpy( newRegion->description, current->description, MAX_IOMEM_DESCRIPTION ) ;
+      stringCopy( newRegion->description, current->description, MAX_IOMEM_DESCRIPTION ) ;
       newRegion->start = end+1 ;
       newRegion->next = current->next ;
       current->next = newRegion ;
       current->start = start ;
-      strncpy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
+      stringCopy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
    } else if( current->start < start && current_end == end ) {
       /// - If the `addStart > curStart` and `addEnd == curEnd`, then insert a
       ///   new region in the linked list:
@@ -300,7 +300,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
          FATAL_ERROR( "Unable to allocate new iomem region" ) ;
       }
 
-      strncpy( newRegion->description, description, MAX_IOMEM_DESCRIPTION ) ;
+      stringCopy( newRegion->description, description, MAX_IOMEM_DESCRIPTION ) ;
       newRegion->start = start ;
       newRegion->next = current->next ;
       current->next = newRegion ;
@@ -315,7 +315,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       if( newRegion == NULL ) {
          FATAL_ERROR( "Unable to allocate new iomem region" ) ;
       }
-      strncpy( newRegion->description, current->description, MAX_IOMEM_DESCRIPTION ) ;
+      stringCopy( newRegion->description, current->description, MAX_IOMEM_DESCRIPTION ) ;
       newRegion->start = end+1 ;
       newRegion->next = current->next ;
 
@@ -324,7 +324,7 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
          FATAL_ERROR( "Unable to allocate new iomem region" ) ;
       }
 
-      strncpy( middleRegion->description, description, MAX_IOMEM_DESCRIPTION ) ;
+      stringCopy( middleRegion->description, description, MAX_IOMEM_DESCRIPTION ) ;
       middleRegion->start = start ;
       middleRegion->next = newRegion ;
       current->next = middleRegion ;
