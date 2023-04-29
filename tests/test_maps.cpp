@@ -31,7 +31,11 @@ BOOST_AUTO_TEST_CASE( test_getMaps_bulk ) {
    for (auto const& dir_entry : std::filesystem::directory_iterator{sandbox}) {
       // std::cout << dir_entry.path() << '\n';
       strncpy( mapsFilePath, dir_entry.path().u8string().c_str(), sizeof( mapsFilePath ) ) ;
-      BOOST_CHECK_NO_THROW( getMaps() ) ;
+
+      struct MapEntry* mapList = NULL ;
+
+      BOOST_CHECK_NO_THROW( mapList = getMaps() ) ;
+      BOOST_CHECK_NO_THROW( releaseMaps( mapList ) ) ;
    }
 }
 
