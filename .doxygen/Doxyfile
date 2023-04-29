@@ -1253,7 +1253,7 @@ CLANG_ADD_INC_PATHS    = YES
 # specified with INPUT and INCLUDE_PATH.
 # This tag requires that the tag CLANG_ASSISTED_PARSING is set to YES.
 
-CLANG_OPTIONS          = "-I /usr/lib/clang/14.0.6/include" \
+CLANG_OPTIONS          = "-I /usr/lib/clang/15.0.7/include" \
                          "-I /usr/include/linux"
 
 # If clang assisted parsing is enabled you can provide the clang parser with the

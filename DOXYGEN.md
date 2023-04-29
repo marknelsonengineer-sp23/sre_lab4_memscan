@@ -77,8 +77,11 @@ As a mortal user:
 As root:
 
      sudo pacman -R xapian-core
-     sudo pacman -R llvm    # This is 368MB, but it's only needed to compile DOxygen.  We will remove it after.
-
+     sudo pacman -R llvm    # This is 368MB, but it's only needed to compile DOxygen.  We will remove it after
+     sudo pacman -Scc       # Clean the cache
+     sudo pacman -Qtd       # List orphan packages
+     sudo rm -rf ~/.cache/*   
+     sudo fstrim -av 
 
 ## To integrate (and run) Doxygen with Visual Studio
 - TODO... I wire it into Tools
