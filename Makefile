@@ -21,10 +21,11 @@ LINT      = clang-tidy
 LINTFLAGS = --quiet
 MAKE      = make
 
-debug: DEBUG_FLAGS = -g -DDEBUG
+debug: DEBUG_FLAGS = -g -DDEBUG -O0
 debug: $(TARGET)
 
-test: CFLAGS += -DTESTING
+test:     CFLAGS += -DTESTING
+valgrind: CFLAGS += -DTESTING -g -O0
 
 export FULL_VERSION = $(shell .doxygen/update_version.py)
 
@@ -59,6 +60,9 @@ publish: doc
 
 test: $(OBJ)
 	cd tests && $(MAKE) test
+
+valgrind: $(OBJ)
+	cd tests && $(MAKE) valgrind
 
 clean:
 	rm -f $(TARGET) *.o

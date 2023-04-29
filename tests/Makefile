@@ -24,7 +24,9 @@ LINTFLAGS = --quiet -extra-arg=-std=c++17
 debug: DEBUG_FLAGS = -g -DDEBUG
 debug: $(TARGET)
 
-test: CFLAGS += -DTESTING
+test:     CFLAGS   += -DTESTING
+valgrind: CFLAGS   += -DTESTING -g
+valgrind: CXXFLAGS += -g -O0
 
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)
@@ -42,6 +44,9 @@ lint: $(TARGET)
 
 test: $(TARGET)
 	sudo ./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
+
+valgrind: $(TARGET)
+	sudo DEBUGINFOD_URLS="https://debuginfod.archlinux.org" valgrind --leak-check=full --track-origins=yes --quiet ./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
 
 clean:
 	rm -f $(TARGET) *.o
