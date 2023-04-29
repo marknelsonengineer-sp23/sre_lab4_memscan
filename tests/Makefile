@@ -27,8 +27,8 @@ debug: $(TARGET)
 test:     CFLAGS   += -DTESTING
 test:     CXXFLAGS += -DTESTING
 
-valgrind: CFLAGS   += -DTESTING -g
-valgrind: CXXFLAGS += -g -O0
+valgrind: CFLAGS   += -DTESTING -g -O0 -fno-inline
+valgrind: CXXFLAGS +=           -g -O0 -fno-inline
 
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)

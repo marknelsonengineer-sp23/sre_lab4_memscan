@@ -25,7 +25,7 @@ debug: DEBUG_FLAGS = -g -DDEBUG -O0
 debug: $(TARGET)
 
 test:     CFLAGS += -DTESTING
-valgrind: CFLAGS += -DTESTING -g -O0
+valgrind: CFLAGS += -DTESTING -g -O0 -fno-inline
 
 export FULL_VERSION = $(shell .doxygen/update_version.py)
 
