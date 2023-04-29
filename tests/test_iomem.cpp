@@ -290,6 +290,7 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_bad, TestIomemFixture ) {
    BOOST_CHECK( validate_iomem() ) ;
 }
 
+
 BOOST_FIXTURE_TEST_CASE( test_iomem_add_description, TestIomemFixture ) {
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x000, 0x001, "  A  " ) ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description( 0x00 ), "  A  " ) ;
@@ -297,8 +298,57 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_description, TestIomemFixture ) {
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x000, 0x001, "  A  B  " ) ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description( 0x00 ), "  A  B  " ) ;
 
-   BOOST_CHECK( validate_iomem() ) ;
-}
+   BOOST_CHECK_NO_THROW( release_iomem() ) ;
+
+   // Test regions that overlay on top of each other
+   for( int i = MAX_IOMEM_DESCRIPTION - 3 ; i <= MAX_IOMEM_DESCRIPTION + 3 ; i++ ) {
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x010, 0x020, "C" ) ) ;
+      std::string referenceDesc( (i < MAX_IOMEM_DESCRIPTION - 1) ? i : (MAX_IOMEM_DESCRIPTION - 1), 'x' ) ;
+      std::string largeDescription( i, 'x' ) ;
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x010, 0x020, largeDescription.c_str() ) ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x018 ), referenceDesc ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+      BOOST_CHECK_NO_THROW( release_iomem() ) ;
+   }
+
+   // Test new region anchored to the left
+   for( int i = MAX_IOMEM_DESCRIPTION - 3 ; i <= MAX_IOMEM_DESCRIPTION + 3 ; i++ ) {
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x010, 0x020, "D" ) ) ;
+      std::string referenceDesc( (i < MAX_IOMEM_DESCRIPTION - 1) ? i : (MAX_IOMEM_DESCRIPTION - 1), 'x' ) ;
+      std::string largeDescription( i, 'x' ) ;
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x010, 0x012, largeDescription.c_str() ) ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x011 ), referenceDesc ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x014 ), "D" ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+      BOOST_CHECK_NO_THROW( release_iomem() ) ;
+   }
+
+   // Test new region anchored to the right
+   for( int i = MAX_IOMEM_DESCRIPTION - 3 ; i <= MAX_IOMEM_DESCRIPTION + 3 ; i++ ) {
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x010, 0x020, "E" ) ) ;
+      std::string referenceDesc( (i < MAX_IOMEM_DESCRIPTION - 1) ? i : (MAX_IOMEM_DESCRIPTION - 1), 'x' ) ;
+      std::string largeDescription( i, 'x' ) ;
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x01D, 0x020, largeDescription.c_str() ) ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x01C ), "E" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x01E ), referenceDesc ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+      BOOST_CHECK_NO_THROW( release_iomem() ) ;
+   }
+
+   // Test new region created in the middle
+   for( int i = MAX_IOMEM_DESCRIPTION - 3 ; i <= MAX_IOMEM_DESCRIPTION + 3 ; i++ ) {
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x010, 0x020, "F" ) ) ;
+      std::string referenceDesc( (i < MAX_IOMEM_DESCRIPTION - 1) ? i : (MAX_IOMEM_DESCRIPTION - 1), 'x' ) ;
+      std::string largeDescription( i, 'x' ) ;
+      BOOST_CHECK_NO_THROW( add_iomem_region( 0x017, 0x019, largeDescription.c_str() ) ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x016 ), "F" ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x018 ), referenceDesc ) ;
+      BOOST_CHECK_EQUAL( get_iomem_region_description( 0x01A ), "F" ) ;
+      BOOST_CHECK( validate_iomem() ) ;
+      BOOST_CHECK_NO_THROW( release_iomem() ) ;
+   }
+} // test_iomem_add_description
+
 
 BOOST_FIXTURE_TEST_CASE( test_iomem_add_overlap, TestIomemFixture ) {
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x100, 0x1FF, "region 1 - new") ) ;
