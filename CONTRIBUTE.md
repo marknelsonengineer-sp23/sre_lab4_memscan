@@ -244,6 +244,8 @@ It's cool to have this working.
   - Ensure each `NOLINT` is still relevant and valid
 - Run `make clean` and then `make lint`
 - Run `make clean` and then `make test`
+- Run `make clean` and then `make valgrind`, which may generate some memory test 
+  failures, but no valgrind issues
 - Run `make doc` and then `make publish`
 - Scrub GitHub issues
 - Scrub all `@todo`s
