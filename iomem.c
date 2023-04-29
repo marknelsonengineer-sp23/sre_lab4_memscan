@@ -96,6 +96,10 @@ struct Iomem_summary {
    /// Iomem_region.description.
    size_t size ;
 
+   /// For use by validate_summary().  It is set to size and then decremented
+   /// to 0 for validation.
+   size_t countback_bucket ;
+
    /// Pointer to the next summary.
    Iomem_summary_t* next ;
 
@@ -120,6 +124,20 @@ pfn_t getEnd( const Iomem_region_t* region ) {
 }
 
 
+/// Release resources used by iomem summary
+void release_iomem_summary() {
+   /// Free the summary list
+   Iomem_summary_t* currentSummary = iomem_summary_head ;
+
+   while( currentSummary != NULL ) {
+      Iomem_summary_t* oldSummary = currentSummary ;
+      currentSummary = currentSummary->next ;
+      memset( oldSummary, 0, sizeof( Iomem_summary_t ) ) ;
+      free( oldSummary ) ;
+   }
+   iomem_summary_head = NULL ;
+}
+
 void release_iomem() {
    /// @API{ memset, https://man.archlinux.org/man/memset.3 }
    /// @API{ free, https://man.archlinux.org/man/free.3 }
@@ -137,16 +155,7 @@ void release_iomem() {
    iomem_head.next = NULL ;
    stringCopy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
 
-   /// Free the summary list
-   Iomem_summary_t* currentSummary = iomem_summary_head ;
-
-   while( currentSummary != NULL ) {
-      Iomem_summary_t* oldSummary = currentSummary ;
-      currentSummary = currentSummary->next ;
-      memset( oldSummary, 0, sizeof( Iomem_summary_t ) ) ;
-      free( oldSummary ) ;
-   }
-   iomem_summary_head = NULL ;
+   release_iomem_summary() ;
 }
 
 
@@ -193,7 +202,11 @@ void print_iomem_regions() {
    while( current != NULL ) {
       pfn_t end = getEnd( current ) ;
 
-      printf( "%012" PFN_FORMAT " - %012" PFN_FORMAT "  %s\n", current->start, end, current->description ) ;
+      printf(  "%012" PFN_FORMAT " - ",  current->start ) ;
+      printf(  "%012" PFN_FORMAT "  ",   end ) ;
+      printf( "(%012" PFN_FORMAT ")  ",  end - current->start + 1 ) ;
+      printf( "%s\n", current->description ) ;
+
       current = current->next ;
    }
 }
@@ -472,6 +485,8 @@ void sort_iomem_summary() {
 /// @API{ malloc, https://man.archlinux.org/man/malloc.3 }
 /// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
 void compose_iomem_summary() {
+   release_iomem_summary() ;
+
    Iomem_region_t* region = &iomem_head ;
 
    while( region != NULL ) {
@@ -497,10 +512,65 @@ void compose_iomem_summary() {
 }
 
 
+/// Validate the #iomem_summary_head list.
+///
+/// Ensure that compose_iomem_summary() and sort_iomem_summary() have run first.
+///
+/// @return `true` if the iomem_summary_head list is healthy.  `false` if it's not.
+bool validate_summary() {
+   ASSERT( validate_iomem() ) ;
+   ASSERT( iomem_summary_head != NULL ) ;
+
+   size_t monotonic_size = 0 ;
+
+   /// Iterate over the summary list and set `countback_bucket` to the summary's
+   /// size.  Also, verify that size is always `>=` the previous value (it's
+   /// monotonically increasing).
+   for( Iomem_summary_t* i = iomem_summary_head ; i != NULL ; i = i->next ) {
+      i->countback_bucket = i->size ;
+
+      if( i->size >= monotonic_size ) {
+         monotonic_size = i->size ;
+      } else {
+         return false ;  // Somehow size is less than monotonic_size
+      }
+   }
+
+   /// Next, iterate over the regions and subtract the region's size from
+   /// `countback_bucket`.
+   for( Iomem_region_t* i = &iomem_head ; i != NULL ; i = i->next ) {  // i is region
+      for( Iomem_summary_t* j = iomem_summary_head ; j != NULL ; j = j->next ) { // j is summary
+         if( strcmp( i->description, j->description ) == 0 ) {
+            j->countback_bucket -= getEnd( i ) - i->start + 1 ;
+         }
+      }
+   }
+
+   /// Finally, iterate back over the summaries and ensure that the
+   /// `countback_bucket`s are `0`.
+   for( Iomem_summary_t* i = iomem_summary_head ; i != NULL ; i = i->next ) {
+      // printf( "description=%s   summary_bucket=%zu\n", i->description, i->countback_bucket ) ;
+      if( i->countback_bucket != 0 ) {
+         // printf( "\n" );
+         // printf( "validate_summary() has failed.  Dumping structures. \n") ;
+         // print_iomem_regions() ;
+         // print_iomem_summary() ;
+         // exit( -1 ) ;
+         return false ;
+      }
+   }
+
+   return true ;
+} // validate_summary
+
+
 void summarize_iomem() {
    ASSERT( validate_iomem() ) ;
 
    compose_iomem_summary() ;
    sort_iomem_summary() ;
+
+   ASSERT( validate_summary() ) ;
+
    print_iomem_summary() ;
 }

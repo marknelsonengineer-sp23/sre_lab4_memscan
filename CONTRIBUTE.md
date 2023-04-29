@@ -16,17 +16,18 @@ the following:
 - After [Git] is installed, you can use `git clone https://github.com/marknelsonengineer-sp23/sre_lab4_memscan.git` 
   to download memscan
 
-| Package            	   | Debian / apt-get                     	 | ArchLinux / pacman       	 | AWS ARM-64                        | RedHat / rpm 	 |
-|------------------------|----------------------------------------|----------------------------|-----------------------------------|----------------|
-| [Git]                  |                                        |                            | `# dnf install git`               |                |
-| [C++]                  |                                        |                            | `# dnf install g++`               |                |
-| [Capabilities]       	 | `# apt-get install libcap-dev`       	 | 	                          | `# dnf install libcap-devel`      | 	              |
-| [Boost]              	 | `# apt-get install libboost-all-dev` 	 | 	                          | `# dnf install boost-devel`       | 	              |
-| [clang-tidy]         	 | `# apt-get install clang-tidy`       	 | 	                          | `# dnf install clang-tools-extra` | 	              |
-| [Graphviz] for DOT   	 | `# apt-get install graphviz`         	 | 	                          | `# dnf install graphviz`          | 	              |
-| [Python pip]           | `# apt-get install python3-pip`      	 | `# pacman -S python-pip` 	 | `# dnf install python3-pip`       | 	              |
-| [GitPython]          	 | `$ pip install GitPython`            	 | 	                          | `$ pip install GitPython`         | 	              |
-| [Doxygen]            	 | `# apt-get install doxygen`          	 | 	                          | `# dnf install doxygen`           | 	              |
+| Package            | Debian / apt-get                     | ArchLinux / pacman       | AWS ARM-64                        | RedHat / rpm |
+|--------------------|--------------------------------------|--------------------------|-----------------------------------|--------------|
+| [Git]              |                                      |                          | `# dnf install git`               |              |
+| [C++]              |                                      |                          | `# dnf install g++`               |              |
+| [Capabilities]     | `# apt-get install libcap-dev`       |                          | `# dnf install libcap-devel`      |              |
+| [Boost]            | `# apt-get install libboost-all-dev` |                          | `# dnf install boost-devel`       |              |
+| [clang-tidy]       | `# apt-get install clang-tidy`       |                          | `# dnf install clang-tools-extra` |              |
+| [Graphviz] for DOT | `# apt-get install graphviz`         |                          | `# dnf install graphviz`          |              |
+| [Python pip]       | `# apt-get install python3-pip`      | `# pacman -S python-pip` | `# dnf install python3-pip`       |              |
+| [GitPython]        | `$ pip install GitPython`            |                          | `$ pip install GitPython`         |              |
+| [Doxygen]          | `# apt-get install doxygen`          |                          | `# dnf install doxygen`           |              |
+| [Valgrind]         | `# apt-get install valgrind`         |                          | `# dnf install valgrind`          |              |
 
 
 If you plan to contribute, don't forget to set your name and eMail in [Git]:
@@ -144,14 +145,17 @@ find the new stack.
 ## Toolchain
 - Memscan is written in C.
   - It's compiled with [gcc].
-  - Use `make tidy` to lint the program.  [clang-tidy] is the linter.
+  - Use `make test` to test the program.  [Boost Test] is the test framework.
+  - Use `make valgrind` to test for memory leaks using [valgrind].
+  - Use `make lint` to lint the program.  [clang-tidy] is the linter.
   - Use `make doc` to build documentation:  [Doxygen] is used to produce it.
   - Use `make publish` to publish the documentation to [UHUnix].
   - It uses [Makefile] for its build.
   - It uses [GitHub] for version control.
   - All of the above should run clean and without warnings.
 - Memscan uses [Boost Test] written in [C++].  Use `make clean` and 
-  `make test` to test the application.
+  `make test` to test the application.  The tests have special flags,
+  so always `make clean` first.
 - Memscan is a Linux-based, user-mode command-line program that needs to run
   with root-level privileges.
   - To get the most out of Memscan, it should be run as `root` or with the 
@@ -163,7 +167,8 @@ find the new stack.
 ## Coding Conventions
 - Put 2 blank lines between functions
 - Put a space before the `;`.  Ex. `return true ;`
-- Memscan uses `printf` but we will be converting to TBD  @todo fix this
+- Memscan uses `printf` but we may convert to something that can be tested 
+  with the [Boost test] framework
 
 
 ## Naming Conventions
@@ -207,11 +212,12 @@ It's cool to have this working.
 | Architecture      | x86-64    | x86-64                                       | ARM-64      |
 | Date tested       | Ongoing   | 27 Mar 2023                                  | 7 Apr 2023  |
 | Build tested      | Ongoing   | 2.1.0+10332                                  | 2.3.0+12146 |
-| make memscan      | Clean     | Clean                                        | Clean       |
-| make doc          | Clean     | A few warnings, as Doxygen is out of date    |             |
-| make test         | Clean     | Clean                                        | Clean       |
-| make lint         | Clean     | Some warnings as `clang-tidy` is out of date | Clean       |
-| make static       | Clean     |                                              |             |
+| `make memscan`    | Clean     | Clean                                        | Clean       |
+| `make doc`        | Clean     | A few warnings, as Doxygen is out of date    |             |
+| `make test`       | Clean     | Clean                                        | Clean       |
+| `make valgrind`   | Clean     |                                              |             |
+| `make lint`       | Clean     | Some warnings as `clang-tidy` is out of date | Clean       |
+| `make static`     | Clean     |                                              |             |
 | local allocations |           |                                              | Not working |
 | iomem             |           |                                              | Not working |
 
@@ -244,8 +250,7 @@ It's cool to have this working.
   - Ensure each `NOLINT` is still relevant and valid
 - Run `make clean` and then `make lint`
 - Run `make clean` and then `make test`
-- Run `make clean` and then `make valgrind`, which may generate some memory test 
-  failures, but no valgrind issues
+- Run `make clean` and then `make valgrind`
 - Run `make doc` and then `make publish`
 - Scrub GitHub issues
 - Scrub all `@todo`s
@@ -254,29 +259,40 @@ It's cool to have this working.
 
 ## Source Code Status
 
-| Module               	             | const correctness 	 | include correctness 	 | Review Doxygen 	 | 32-bit 	  | Boost tests 	  | API documented |
-|------------------------------------|---------------------|-----------------------|------------------|-----------|----------------|:---------------|
-| `allocate.h` <br> `allocate.c`  	  | 	                   | 	                     | 	                | 	         | 	              |                |
-| `assembly.h` <br> `assembly.c`  	  | 	                   | 	                     | 	                | 	         | 	              |                |
-| `colors.h`           	             | 	                   | 	                     | 	                | 	         | 	              |                |
-| `config.h` <br> `config.c`    	    | 	                   | 	                     | 	                | 	         | 	              |                |
-| `convert.h` <br> `convert.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
-| `files.h` <br> `files.c`     	     | 4 Apr 23	           | 	                     | 	4 Apr 23        | 4 Apr 23	 | 	              | 4 Apr 23       |
-| `iomem.h` <br> `iomem.c`     	     | 11 Apr 23	          | 17 Apr 23	            | 	                | 	         | 	              | 17 Apr 23      |
-| `maps.h` <br> `maps.c`      	      | 	                   | 	                     | 	                | 	         | 	              |                |
-| `memscan.h` <br> `memscan.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
-| `pagecount.h` <br> `pagecount.c` 	 | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | 	         | 16 Apr 23	     | 6 Apr 23       |
-| `pageflags.h` <br> `pageflags.c` 	 | 7 Apr 23	           | 7 Apr 23	             | 7 Apr 23	        | 	         | 16 Apr 23	     | 7 Apr 23       |
-| `pagemap.h` <br> `pagemap.c`   	   | 7 Apr 23	           | 7 Apr 23	             | 11 Apr 23	       | 	         | (1) 16 Apr 23	 | 7 Apr 23       |
-| `shannon.h` <br> `shannon.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
-| `threads.h` <br> `threads.c`   	   | 	                   | 	                     | 	                | 	         | 	              |                |
-| `trim.h` <br> `trim.c`      	      | 6 Apr 23	           | 6 Apr 23	             | 6 Apr 23	        | N/A	      | 6 Apr 23	      | 6 Apr 23       |
-| `typedefs.h`                       |                     |                       |                  |           |                |                |
-| `version.h`          	             | 	4 Apr 23           | None	                 | 4 Apr 23	        | 4 Apr 23	 | 	              | 4 Apr 23       |
+| Module                           | const correctness | include correctness | Review Doxygen | 32-bit   | Boost tests   | API documented |
+|----------------------------------|-------------------|---------------------|----------------|----------|---------------|:---------------|
+| `allocate.h` <br> `allocate.c`   |                   |                     |                |          |               |                |
+| `assembly.h` <br> `assembly.c`   |                   |                     |                |          |               |                |
+| `colors.h`                       |                   |                     |                |          |               |                |
+| `config.h` <br> `config.c`       |                   |                     |                |          |               |                |
+| `convert.h` <br> `convert.c`     |                   |                     |                |          |               |                |
+| `files.h` <br> `files.c`         | 4 Apr 23          |                     | 4 Apr 23       | 4 Apr 23 |               | 4 Apr 23       |
+| `iomem.h` <br> `iomem.c`         | 11 Apr 23         | 17 Apr 23           |                |          | 28 Apr 23 (2) | 17 Apr 23      |
+| `maps.h` <br> `maps.c`           |                   |                     |                |          |               |                |
+| `memscan.h` <br> `memscan.c`     |                   |                     |                |          |               |                |
+| `pagecount.h` <br> `pagecount.c` | 6 Apr 23          | 6 Apr 23            | 6 Apr 23       |          | 16 Apr 23     | 6 Apr 23       |
+| `pageflags.h` <br> `pageflags.c` | 7 Apr 23          | 7 Apr 23            | 7 Apr 23       |          | 16 Apr 23     | 7 Apr 23       |
+| `pagemap.h` <br> `pagemap.c`     | 7 Apr 23          | 7 Apr 23            | 11 Apr 23      |          | 16 Apr 23 (1) | 7 Apr 23       |
+| `shannon.h` <br> `shannon.c`     |                   |                     |                |          |               |                |
+| `threads.h` <br> `threads.c`     |                   |                     |                |          |               |                |
+| `trim.h` <br> `trim.c`           | 6 Apr 23          | 6 Apr 23            | 6 Apr 23       | N/A      | 6 Apr 23      | 6 Apr 23       |
+| `typedefs.h`                     |                   |                     |                |          |               |                |
+| `version.h`                      | 4 Apr 23          | None                | 4 Apr 23       | 4 Apr 23 |               | 4 Apr 23       |
 
 The `main()` for memscan is in `memscan.c`.
 
-- (1):  getPageInfo() has comprehensive unit tests.  comparePages() needs some tests, but I don't want to do them right now.  The other routines print things to the screen and don't lend themselves to unit testing.  I intend to implement system tests to exercise this code.
+- (1):  getPageInfo() has comprehensive unit tests.  comparePages() needs some tests, but I don't want to do them right now.  The other 
+        routines print things to the screen and don't lend themselves to unit testing.  I intend to implement system tests to exercise this code.
+- (2):  See the following notes for the iomem module:
+  - release_iomem() and release_iomem_summary() are validated through [valgrind]. 
+  - getEnd() is pretty fundamental... it's also simple.  If this did not work, then lots of other stuff break.  I don’t want to expose 
+    (Whitebox) regions, so I'm not going to directly test this.
+  - print_iomem_regions() is intended for debugging.  It's not output by any of memscan's options.  It's also used to visualize tests.
+  - The heart of the iomem module, get_iomem_region_description() and add_iomem_region() are thoroughly tested.
+  - read_iomem() gets most of its testing through bulk tests.  It does file I/O and parsing and that's pretty well tested.
+  - print_iomem_summary() and summarize_iomem() are not systematically tested.  Everything underneath them are.
+  - compose_iomem_summary() and sort_iomem_summary() are tested with validate_summary() which is called frequently in all the tests and 
+    at key places in the iomem module.
 
 [Hungarian notation]: https://en.wikipedia.org/wiki/Hungarian_notation
 [clang-tidy]: https://releases.llvm.org/13.0.0/tools/clang/tools/extra/docs/clang-tidy/
@@ -295,3 +311,4 @@ The `main()` for memscan is in `memscan.c`.
 [Git]:  https://git-scm.com
 [C++]:  https://gcc.gnu.org
 [gcc]:  https://gcc.gnu.org
+[valgrind]:  https://valgrind.org
