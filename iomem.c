@@ -120,35 +120,22 @@ pfn_t getEnd( const Iomem_region_t* region ) {
 }
 
 
-/// Recursively zero out and free the `iomem` region linked list
-///
-/// @API{ memset, https://man.archlinux.org/man/memset.3 }
-/// @API{ free, https://man.archlinux.org/man/free.3 }
-///
-/// @param region The region to zero out and free.  Can't be `NULL`.
-void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursion): Recursion is authorized
-   ASSERT( region != NULL ) ;
-
-   if( region->next != NULL ) {
-      free_iomem_region( region->next ) ;
-   }
-   // Zero out the region
-   memset( region, 0, sizeof( Iomem_region_t ) ) ;
-   free( region ) ;
-}
-
-
 void release_iomem() {
-   /// Recursively zero out the #iomem_head linked list
-   if( iomem_head.next != NULL ) {
-      free_iomem_region( iomem_head.next ) ;
+   /// @API{ memset, https://man.archlinux.org/man/memset.3 }
+   /// @API{ free, https://man.archlinux.org/man/free.3 }
+
+   Iomem_region_t* currentRegion = iomem_head.next ;
+   while( currentRegion != NULL ) {
+      Iomem_region_t* oldRegion = currentRegion ;
+      currentRegion = currentRegion->next ;
+      memset( oldRegion, 0, sizeof( Iomem_region_t ) ) ;
+      free( oldRegion ) ;
    }
 
    /// Set the head pointer to its initial values
    iomem_head.start = 0 ;
    iomem_head.next = NULL ;
-   /// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
-   strncpy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
+   stringCopy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
 
    /// Free the summary list
    Iomem_summary_t* currentSummary = iomem_summary_head ;
@@ -156,7 +143,8 @@ void release_iomem() {
    while( currentSummary != NULL ) {
       Iomem_summary_t* oldSummary = currentSummary ;
       currentSummary = currentSummary->next ;
-      free( oldSummary ) ;  /// @API{ free, https://man.archlinux.org/man/free.3 }
+      memset( oldSummary, 0, sizeof( Iomem_summary_t ) ) ;
+      free( oldSummary ) ;
    }
    iomem_summary_head = NULL ;
 }
