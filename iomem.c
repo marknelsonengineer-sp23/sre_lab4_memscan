@@ -110,11 +110,12 @@ Iomem_summary_t* iomem_summary_head = NULL ;
 
 /// Compute the end address of a region
 ///
-/// @param region The region to process
+/// @param region The region to process.  Can't be `NULL`.
 /// @return The ending physical address which is either:
 ///         1) The byte before the next region's starting address
 ///         2) or #MAX_PHYS_ADDR
 pfn_t getEnd( const Iomem_region_t* region ) {
+   ASSERT( region != NULL ) ;
    return ( region->next == NULL ) ? ((pfn_t)MAX_PHYS_ADDR) : ( region->next->start - 1 ) ;
 }
 
@@ -124,8 +125,10 @@ pfn_t getEnd( const Iomem_region_t* region ) {
 /// @API{ memset, https://man.archlinux.org/man/memset.3 }
 /// @API{ free, https://man.archlinux.org/man/free.3 }
 ///
-/// @param region The region to zero out and free
+/// @param region The region to zero out and free.  Can't be `NULL`.
 void free_iomem_region( Iomem_region_t* region ) {  /// @NOLINT(misc-no-recursion): Recursion is authorized
+   ASSERT( region != NULL ) ;
+
    if( region->next != NULL ) {
       free_iomem_region( region->next ) ;
    }

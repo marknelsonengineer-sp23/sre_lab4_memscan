@@ -13,11 +13,11 @@
 
 #include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
 
-#include <filesystem>   // For std::filesystem
+#include <filesystem>         // For std::filesystem
 
 extern "C" {
-   #include "../config.h"
-   #include "../iomem.h"
+   #include "../config.h"     // For iomemFilePath
+   #include "../iomem.h"      // For testing
 }
 
 
@@ -59,14 +59,13 @@ BOOST_FIXTURE_TEST_CASE( test_read_iomem_bulk, TestIomemFixture ) {
    const std::filesystem::path sandbox{"test_iomem"};
 
    for (auto const& dir_entry : std::filesystem::directory_iterator{sandbox}) {
-      // std::cout << dir_entry.path() << '\n';
+      // std::cout << dir_entry.path() << std::endl;
       strncpy( iomemFilePath, dir_entry.path().u8string().c_str(), sizeof( iomemFilePath ) ) ;
       BOOST_CHECK_NO_THROW( read_iomem() ) ;
       BOOST_CHECK_EQUAL( validate_iomem(), true ) ;
       BOOST_CHECK_NO_THROW( compose_iomem_summary() ) ;
       BOOST_CHECK_NO_THROW( sort_iomem_summary() ) ;
       // BOOST_CHECK_NO_THROW( print_iomem_summary() ) ;
-      BOOST_CHECK_NO_THROW( release_iomem() ) ;
    }
 }
 
@@ -270,6 +269,8 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add, TestIomemFixture ) {
    BOOST_CHECK_EQUAL( get_iomem_region_description( 0x00000000000 ), UNMAPPED_MEMORY_DESCRIPTION ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description( 0x7ffffffffff ), UNMAPPED_MEMORY_DESCRIPTION ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description( MAX_PHYS_ADDR ), UNMAPPED_MEMORY_DESCRIPTION ) ;
+
+   BOOST_CHECK( validate_iomem() ) ;
 } // test_iomem_add
 
 
@@ -295,17 +296,42 @@ BOOST_FIXTURE_TEST_CASE( test_iomem_add_description, TestIomemFixture ) {
 
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x000, 0x001, "  A  B  " ) ) ;
    BOOST_CHECK_EQUAL( get_iomem_region_description( 0x00 ), "  A  B  " ) ;
+
+   BOOST_CHECK( validate_iomem() ) ;
 }
 
 BOOST_FIXTURE_TEST_CASE( test_iomem_add_overlap, TestIomemFixture ) {
-   BOOST_CHECK_NO_THROW( add_iomem_region( 0x000, 0x0FF, "region 0 - new") ) ;
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x100, 0x1FF, "region 1 - new") ) ;
-   BOOST_CHECK_NO_THROW( add_iomem_region( 0x200, 0x2FF, "region 2 - new") ) ;
    BOOST_CHECK_NO_THROW( add_iomem_region( 0x300, 0x3FF, "region 3 - new") ) ;
 
-   BOOST_CHECK_FAIL( add_iomem_region( 0x000, 0x100, "overlap 1 - bad") ) ;
-   BOOST_CHECK_FAIL( add_iomem_region( 0x0FF, 0x101, "overlap 2 - bad") ) ;
-   // @TODO Add some more overlapping test cases someday
+   BOOST_CHECK_FAIL( add_iomem_region( 0x00000000000, MAX_PHYS_ADDR, "jump regions - extreme") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x0FF, 0x400, "jump regions - tight") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x0FF, 0x200, "jump region 1 - tight") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x2FF, 0x400, "jump region 3 - tight") ) ;
+
+   BOOST_CHECK_FAIL( add_iomem_region( 0x000, 0x100, "overlap region 1 - left edge - extreme left") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x0FF, 0x100, "overlap region 1 - left edge - tight") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x0FF, 0x101, "overlap region 1 - left edge - tight+1") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x07F, 0x17F, "overlap region 1 - left middle") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x0FF, MAX_PHYS_ADDR, "overlap region 1 - left edge - extreme right") ) ;
+
+   BOOST_CHECK_FAIL( add_iomem_region( 0x1FF, 0x2FF, "overlap region 1 - right edge - extreme left") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x1FF, 0x200, "overlap region 1 - right edge - tight") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x1FF, 0x201, "overlap region 1 - right edge - tight+1") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x17F, 0x27F, "overlap region 1 - right middle") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x1FF, MAX_PHYS_ADDR, "overlap region 1 - right edge - extreme right") ) ;
+
+   BOOST_CHECK_FAIL( add_iomem_region( 0x200, 0x300, "overlap region 3 - left edge - extreme left") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x2FF, 0x300, "overlap region 3 - left edge - tight") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x2FF, 0x301, "overlap region 3 - left edge - tight+1") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x27F, 0x37F, "overlap region 3 - left middle") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x2FF, MAX_PHYS_ADDR, "overlap region 3 - left  - extreme right") ) ;
+
+   BOOST_CHECK_FAIL( add_iomem_region( 0x3FF, MAX_PHYS_ADDR, "overlap region 3 - right edge - extreme left") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x3FF, 0x400, "overlap region 3 - right edge - tight") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x3FF, 0x401, "overlap region 3 - right edge - tight+1") ) ;
+   BOOST_CHECK_FAIL( add_iomem_region( 0x37F, 0x47F, "overlap region 3 - right middle") ) ;
+
    BOOST_CHECK( validate_iomem() ) ;
 }
 
