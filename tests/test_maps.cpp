@@ -68,6 +68,8 @@ BOOST_AUTO_TEST_CASE( test_getMaps_unit ) {
 
    BOOST_CHECK_EQUAL( mapList->numBytesFound, 0 ) ;
    BOOST_CHECK_EQUAL( mapList->shannonEntropy, 0.0 ) ;
+
+   BOOST_CHECK_NO_THROW( releaseMaps( mapList ) ) ;
 }
 
 
@@ -127,6 +129,8 @@ BOOST_AUTO_TEST_CASE( test_getMap_unit ) {
    BOOST_CHECK_EQUAL( mapFirst->pages, (void*) NULL ) ;
    BOOST_CHECK_EQUAL( mapFirst->numBytesFound, 0 ) ;
    BOOST_CHECK_EQUAL( mapFirst->shannonEntropy, 0.0 ) ;
+
+   BOOST_CHECK_NO_THROW( releaseMaps( mapList ) ) ;
 }
 
 BOOST_AUTO_TEST_SUITE_END()
