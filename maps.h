@@ -56,7 +56,7 @@ extern struct MapEntry* getMaps() ;
 /// @param virtualAddress The virtual address to find
 /// @return The #MapEntry that's covers `virtualAddress` or `NULL` if it's not
 ///         mapped
-extern struct MapEntry* getMap( struct MapEntry* maps, const void* virtualAddress ) ;
+extern struct MapEntry* getMap( struct MapEntry* const maps, const void* virtualAddress ) ;
 
 
 /// Scan all readable memory regions.
@@ -65,20 +65,20 @@ extern struct MapEntry* getMap( struct MapEntry* maps, const void* virtualAddres
 /// before calling scanMaps()
 ///
 /// @param maps A linked list of #MapEntry nodes
-extern void scanMaps( struct MapEntry* maps ) ;
+extern void scanMaps( struct MapEntry* const maps ) ;
 
 /// Read data from `pagemap`, `pageflags` and `pagecount` and get information
 /// about the physical pages referenced in `maps`
 ///
 /// @param maps A linked list of #MapEntry nodes
-extern void readPagemapInfo( struct MapEntry* maps ) ;
+extern void readPagemapInfo( struct MapEntry* const maps ) ;
 
 /// Print the map, results of the scan and physical page info
 ///
 /// @param maps A linked list of #MapEntry nodes
-extern void printMaps( struct MapEntry* maps ) ;
+extern void printMaps( const struct MapEntry* const maps ) ;
 
 /// Release any resources that may have been created by the maps module
 ///
 /// @param maps A linked list of #MapEntry nodes
-extern void releaseMaps( struct MapEntry* maps ) ;
+extern void releaseMaps( struct MapEntry* const maps ) ;

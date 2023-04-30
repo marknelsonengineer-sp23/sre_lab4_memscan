@@ -48,7 +48,7 @@ test: $(TARGET)
 	sudo ./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
 
 valgrind: $(TARGET)
-	sudo DEBUGINFOD_URLS="https://debuginfod.archlinux.org" \
+	sudo DEBUGINFOD_URLS="https://debuginfod.archlinux.org"                    \
 	valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet  \
 	./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
 

@@ -9,14 +9,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <linux/limits.h>  // For PATH_MAX
+#include <stdbool.h>       // For bool, true & false
 #include <stdio.h>         // For printf() fprintf() fopen() and FILE
-#include <string.h>        // For strtok() strcmp() strstr() memset() strlen()
+#include <stdlib.h>        // For calloc() malloc() free()
+#include <string.h>        // For strtok() strcmp() strstr() memset() strlen() strncpy()
 
 #include "colors.h"  // For ANSI colors i.e. #ANSI_COLOR_RED
 #include "config.h"  // For FATAL_ERROR and other configuration options
 #include "maps.h"    // Just cuz
-#include "pagemap.h" // For PageInfo getPageInfo() printFullPhysicalPage() getPageSizeInBits()
-#include "shannon.h" // For scanForShannon()
+#include "pagemap.h" // For PageInfo getPageInfo() printFullPhysicalPage() getPageSizeInBits() printPageSummary()
+#include "shannon.h" // For computeShannonEntropy() getShannonClassification() MAX_SHANNON_CLASSIFICATION_LENGTH
 #include "version.h" // For STRINGIFY_VALUE()
 
 
@@ -206,7 +208,7 @@ struct MapEntry* getMaps() {
 } // getMaps()
 
 
-struct MapEntry* getMap( struct MapEntry* maps, const void* virtualAddress ) {
+struct MapEntry* getMap( struct MapEntry* const maps, const void* virtualAddress ) {
    struct MapEntry* currentMap = maps ;
    while( currentMap != NULL ) {
       if( virtualAddress >= currentMap->pAddressStart && virtualAddress <= currentMap->pAddressEnd ) {
@@ -219,7 +221,7 @@ struct MapEntry* getMap( struct MapEntry* maps, const void* virtualAddress ) {
 }
 
 
-void scanMaps( struct MapEntry* maps ) {  // Process --scan_byte, --shannon
+void scanMaps( struct MapEntry* const maps ) {  // Process --scan_byte, --shannon
    struct MapEntry* currentMap = maps ;
 
    while( currentMap != NULL ) {
@@ -250,7 +252,7 @@ void scanMaps( struct MapEntry* maps ) {  // Process --scan_byte, --shannon
 } // scanMaps
 
 
-void readPagemapInfo( struct MapEntry* maps ) {  // Process --pfn --phys
+void readPagemapInfo( struct MapEntry* const maps ) {  // Process --pfn --phys
    if( !includePhysicalPageNumber && !includePhysicalPageSummary ) {
       return ;
    }
@@ -277,8 +279,8 @@ void readPagemapInfo( struct MapEntry* maps ) {  // Process --pfn --phys
 } // readPagemapInfo
 
 
-void printMaps( struct MapEntry* maps ) {
-   struct MapEntry* currentMap = maps ;
+void printMaps( const struct MapEntry* const maps ) {
+   const struct MapEntry* currentMap = maps ;
 
    while( currentMap != NULL ) {
       // If we are filtering on patterns, and it's not included, then skip the line.
@@ -352,7 +354,9 @@ void printMaps( struct MapEntry* maps ) {
 } // printMaps
 
 
-void releaseMaps( struct MapEntry* maps ) {
+/// @API{ memset, https://man.archlinux.org/man/memset.3 }
+/// @API{ free,   https://man.archlinux.org/man/free.3 }
+void releaseMaps( struct MapEntry* const maps ) {
    struct MapEntry* currentMap = maps ;
 
    while( currentMap != NULL ) {

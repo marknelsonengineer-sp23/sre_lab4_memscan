@@ -270,7 +270,7 @@ It's cool to have this working.
 | `convert.h` <br> `convert.c`     |                   |                     |                |          |               |                |
 | `files.h` <br> `files.c`         | 4 Apr 23          |                     | 4 Apr 23       | 4 Apr 23 |               | 4 Apr 23       |
 | `iomem.h` <br> `iomem.c`         | 11 Apr 23         | 17 Apr 23           | 29 Apr 23      |          | 28 Apr 23 (2) | 29 Apr 23      |
-| `maps.h` <br> `maps.c`           |                   |                     |                |          |               |                |
+| `maps.h` <br> `maps.c`           | 29 Apr 23         | 29 Apr 23           |                |          |               |                |
 | `memscan.h` <br> `memscan.c`     |                   |                     |                |          |               |                |
 | `pagecount.h` <br> `pagecount.c` | 6 Apr 23          | 6 Apr 23            | 6 Apr 23       |          | 16 Apr 23     | 6 Apr 23       |
 | `pageflags.h` <br> `pageflags.c` | 7 Apr 23          | 7 Apr 23            | 7 Apr 23       |          | 16 Apr 23     | 7 Apr 23       |
