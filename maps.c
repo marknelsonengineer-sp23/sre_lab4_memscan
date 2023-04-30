@@ -356,6 +356,8 @@ void printMaps( const struct MapEntry* const maps ) {
 
 /// @API{ memset, https://man.archlinux.org/man/memset.3 }
 /// @API{ free,   https://man.archlinux.org/man/free.3 }
+///
+/// @param maps A linked list of MapEntry nodes
 void releaseMaps( struct MapEntry* const maps ) {
    struct MapEntry* currentMap = maps ;
 

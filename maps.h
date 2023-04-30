@@ -34,11 +34,11 @@ struct MapEntry {
    struct PageInfo* pages ; ///< Pointer to a #PageInfo array
    size_t numBytesFound ;   ///< Number of #byteToScanFor bytes found in this region when #scanForByte is set
    double shannonEntropy ;  ///< Shannon Entropy of the region when #scanForShannon is set
-   struct MapEntry* next ;  ///< Pointer to the next #MapEntry or `NULL` for the last map in the list
+   struct MapEntry* next ;  ///< Pointer to the next MapEntry or `NULL` for the last map in the list
 } ;
 
 
-/// Parse each line from #mapsFilePath and put the data into a #MapEntry
+/// Parse each line from #mapsFilePath and put the data into a MapEntry
 /// field.  This function makes heavy use of [strtok()][1].
 ///
 /// Anything that changes #mapsFilePath should be done before calling
@@ -46,15 +46,15 @@ struct MapEntry {
 ///
 /// [1]: https://man7.org/linux/man-pages/man3/strtok_r.3.html
 ///
-/// @return The head of a linked list of #MapEntry nodes
+/// @return The head of a linked list of MapEntry nodes
 extern struct MapEntry* getMaps() ;
 
 
-/// Get a #MapEntry at `virtualAddress`
+/// Get a MapEntry at `virtualAddress`
 ///
-/// @param maps           The link list of #MapEntry records to search
+/// @param maps           The link list of MapEntry records to search
 /// @param virtualAddress The virtual address to find
-/// @return The #MapEntry that's covers `virtualAddress` or `NULL` if it's not
+/// @return The MapEntry that's covers `virtualAddress` or `NULL` if it's not
 ///         mapped
 extern struct MapEntry* getMap( struct MapEntry* const maps, const void* virtualAddress ) ;
 
@@ -64,21 +64,19 @@ extern struct MapEntry* getMap( struct MapEntry* const maps, const void* virtual
 /// Anything that changes the physical pagemap information should be done
 /// before calling scanMaps()
 ///
-/// @param maps A linked list of #MapEntry nodes
+/// @param maps A linked list of MapEntry nodes
 extern void scanMaps( struct MapEntry* const maps ) ;
 
 /// Read data from `pagemap`, `pageflags` and `pagecount` and get information
 /// about the physical pages referenced in `maps`
 ///
-/// @param maps A linked list of #MapEntry nodes
+/// @param maps A linked list of MapEntry nodes
 extern void readPagemapInfo( struct MapEntry* const maps ) ;
 
 /// Print the map, results of the scan and physical page info
 ///
-/// @param maps A linked list of #MapEntry nodes
+/// @param maps A linked list of MapEntry nodes
 extern void printMaps( const struct MapEntry* const maps ) ;
 
 /// Release any resources that may have been created by the maps module
-///
-/// @param maps A linked list of #MapEntry nodes
 extern void releaseMaps( struct MapEntry* const maps ) ;
