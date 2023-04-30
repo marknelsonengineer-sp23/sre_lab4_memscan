@@ -18,7 +18,8 @@ jobs:
           ls ${{ github.workspace }}
 
       - name: Install dependencies
-        run: sudo apt-get install -y libcap-dev libboost-all-dev graphviz
+        run: sudo apt-get install -y libcap-dev libboost-all-dev graphviz |
+                                     valgrind
 
       - name: Install GitPython
         run: pip install GitPython
@@ -42,11 +43,19 @@ jobs:
       - name: Build memscan
         run: make memscan
 
+      - name: Build a static memscan
+        run: make static
+
       - name: Build Doxygen Documentation
-        run: |
-          make doc
+        run: make doc
 
       - name: Lint memscan
         run: make lint
+
+      - name: Make clean
+        run: make clean
+
+      - name: Valgrind memscan
+        run: make valgrind
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
