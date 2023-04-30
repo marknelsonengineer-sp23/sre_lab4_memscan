@@ -39,11 +39,11 @@ extern "C" bool hasOutputOptions() ;
 // Ensure that reset_config() runs before we start testing.
 struct MyGlobalFixture {
    static void setup() {
-      BOOST_TEST_MESSAGE( "setup fixture" );
+      BOOST_TEST_MESSAGE( "setup fixture" ) ;
       reset_config() ;
    }
-};
-BOOST_TEST_GLOBAL_FIXTURE( MyGlobalFixture );
+} ;
+BOOST_TEST_GLOBAL_FIXTURE( MyGlobalFixture ) ;
 
 
 BOOST_AUTO_TEST_SUITE( test_config )
@@ -156,9 +156,9 @@ struct Configuration {
    }
 } ;
 
-#define MAKE_ARGS() std::vector<char*> argv;                        \
+#define MAKE_ARGS() std::vector<char*> argv ;                       \
                     for( const auto& arg : arguments )              \
-                       argv.push_back((char*)arg.data());  /* NOLINT(performance-inefficient-vector-operation) */  \
+                       argv.push_back((char*)arg.data()) ;  /* NOLINT(performance-inefficient-vector-operation) */  \
                     argv.push_back( nullptr ) ;                     \
                     BOOST_CHECK_NO_THROW( processOptions( arguments.size(), argv.data() ) )
 

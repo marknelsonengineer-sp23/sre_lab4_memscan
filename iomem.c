@@ -238,7 +238,7 @@ bool validate_summary() {
    for( Iomem_summary_t* i = iomem_summary_head ; i != NULL ; i = i->next ) {
       // printf( "description=%s   summary_bucket=%zu\n", i->description, i->countback_bucket ) ;
       if( i->countback_bucket != 0 ) {
-         // printf( "\n" );
+         // printf( "\n" ) ;
          // printf( "validate_summary() has failed.  Dumping structures. \n") ;
          // print_iomem_regions() ;
          // print_iomem_summary() ;

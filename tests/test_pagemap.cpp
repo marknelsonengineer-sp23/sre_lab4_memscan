@@ -176,7 +176,7 @@ void setState( enum PageInfoValidation rule, enum FlagState flagState[] ) {
             }
             if( flagState[ i ] == UNDEFINED ) {
                flagState[ i ] = (enum FlagState) rule ;
-               // cout << "Setting flag " << i << " to " << arg << endl;
+               // cout << "Setting flag " << i << " to " << arg << endl ;
             }
          }
          break ;
@@ -198,13 +198,13 @@ void setState( enum PageInfoValidation rule, enum FlagState flagState[] ) {
 /// @param flag The flag to check:  `BUDDY`, `MMAP`, `ANON`, etc.
 /// @param member The member variable in PageInfo:  `.buddy`, `.mmap`, `.anon`, etc.
 #define CHECK_FLAG( flag, member )                                                             \
-   /* cout << "flag = " #flag "   member = " #member << "   flagState[flag] = " << flagState[ flag ] << "   value = " << pPage->member << endl; */  \
+   /* cout << "flag = " #flag "   member = " #member << "   flagState[flag] = " << flagState[ flag ] << "   value = " << pPage->member << endl ; */  \
    if( flagState[ flag ] == FLAG_SET && ! pPage->member ) {                                    \
-      cout << getProgramName() << ":  Flag " #flag " is clear when it shouldn't be"  << endl;  \
+      cout << getProgramName() << ":  Flag " #flag " is clear when it shouldn't be"  << endl ; \
       return false ;                                                                           \
    }                                                                                           \
    if( flagState[ flag ] == FLAG_CLEAR && pPage->member )   {                                  \
-      cout << getProgramName() << ":  Flag " #flag " is set when it shouldn't be"  << endl;    \
+      cout << getProgramName() << ":  Flag " #flag " is set when it shouldn't be"  << endl ;   \
       return false ;                                                                           \
    }
 

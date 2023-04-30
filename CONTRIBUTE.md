@@ -235,7 +235,7 @@ It's cool to have this working.
       self-sufficient:
       - Ensure they have the `#include`s to stand alone.
       - Remove any unnecessary `#include`s.
-      - Ensure the functions `#include`d are documented. 
+      - Ensure the functions `#include`d are documented.
   - `const` correctness
     - Look for `const`-able parameters
   - Look for any API calls and document them with `@API{}`
@@ -244,6 +244,8 @@ It's cool to have this working.
       then the Standard C API (3) and lastly the POSIX API (3p)
   - Read the Doxygen content for each source file and Markdown file
   - Check for a space before `;`
+    - Use `clear ; grep --color -n "[[:graph:]];" *.c *.h tests/*.h tests/*.cpp`
+    - ... and Find Regular Expression in CLion:  `\p{Graph};`
   - Ensure all parameters are validated
   - `assert( validateThing() )` before-and-after anything that modifies it
   - Look for CLion problems

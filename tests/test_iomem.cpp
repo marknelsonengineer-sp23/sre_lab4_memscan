@@ -62,10 +62,10 @@ BOOST_AUTO_TEST_SUITE( test_iomem )
 BOOST_FIXTURE_TEST_CASE( test_read_iomem_bulk, TestIomemFixture ) {
     /// Read the contents of `./tests/test_iomem`, containing sample `iomem`
     /// files from a variety of Linux systems.
-   const std::filesystem::path sandbox{"test_iomem"};
+   const std::filesystem::path sandbox{"test_iomem"} ;
 
    for (auto const& dir_entry : std::filesystem::directory_iterator{sandbox}) {
-      // std::cout << dir_entry.path() << std::endl;
+      // std::cout << dir_entry.path() << std::endl ;
       strncpy( iomemFilePath, dir_entry.path().u8string().c_str(), sizeof( iomemFilePath ) ) ;
       BOOST_CHECK_NO_THROW( read_iomem() ) ;
       BOOST_CHECK_EQUAL( validate_iomem(), true ) ;

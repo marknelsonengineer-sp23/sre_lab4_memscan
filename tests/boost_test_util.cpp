@@ -13,5 +13,5 @@
 #include "boost_test_util.h"
 
 extern "C" void throwException() {
-   throw std::exception();
+   throw std::exception() ;
 }
