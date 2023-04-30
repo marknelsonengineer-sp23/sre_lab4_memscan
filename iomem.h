@@ -4,6 +4,8 @@
 //
 /// Process `/proc/iomem` to characterize physical pages
 ///
+/// See iomem.c for a detailed description.
+///
 /// @file   iomem.h
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
@@ -18,11 +20,11 @@
 /// The description attached to unmapped memory
 #define UNMAPPED_MEMORY_DESCRIPTION "Unmapped memory"
 
-/// The maximum physical address from #PFN_MASK
+/// The maximum physical address of #PFN_MASK
 #define MAX_PHYS_ADDR PFN_MASK
 
 
-/// Get a description of the `iomem` region at `physAddr`
+/// Get a description of the physical memory region at `physAddr`
 ///
 /// @param physAddr The physical address
 /// @return         A description of the region at `physAddr`
@@ -36,23 +38,19 @@ extern void read_iomem() ;
 /// Print a sorted summary of #iomemFilePath listing the number of bytes in each
 /// region.
 ///
-/// ````
-/// Summary of /proc/iomem
-/// ahci                                         8,192
-/// Video ROM                                   32,768
-/// ACPI Tables                                 65,536
-/// System ROM                                  65,536
-/// e1000                                      131,072
-/// Kernel data                              2,184,448
-/// Kernel code                             16,784,908
-/// Reserved                                20,357,120
-/// System RAM                           2,096,520,436
-/// Unmapped memory                281,470,711,262,208
-/// ````
+///     Summary of /proc/iomem
+///     ahci                                         8,192
+///     Video ROM                                   32,768
+///     ACPI Tables                                 65,536
+///     System ROM                                  65,536
+///     e1000                                      131,072
+///     Kernel data                              2,184,448
+///     Kernel code                             16,784,908
+///     Reserved                                20,357,120
+///     System RAM                           2,096,520,436
+///     Unmapped memory                281,470,711,262,208
 extern void summarize_iomem() ;
 
 
-/// Release resources needed by the `iomem` module
-///
-/// Release the `iomem` region linked list starting from #iomem_head
+/// Release resources allocated by the `iomem` module
 extern void release_iomem() ;

@@ -4,7 +4,7 @@
 //
 /// Process `/proc/iomem` to characterize physical pages
 ///
-/// `/proc/iomem` contains the map of the system's physical memory.  Computers
+/// `/proc/iomem` contains a map of the system's physical memory.  Computers
 /// use physical memory addresses for things other than general purpose memory
 /// (the sort used by programs and data).  Memory-mapped IO maps certain
 /// physical addresses directly to hardware devices like network and video cards.
@@ -15,34 +15,33 @@
 ///
 /// The first column displays the memory addresses of physical memory regions.
 /// The second column has a description of the region.
-/// ````
-///    00000000-00000fff : Reserved
-///    00001000-0009ffff : System RAM
-///    80000000-fdffffff : PCI Bus 0000:00
-///      80000000-81ffffff : 0000:00:02.0
-///        80000000-81ffffff : vmwgfx probe
-///      82000000-823fffff : 0000:00:04.0
-///        82000000-823fffff : vboxguest
-/// ````
+///
+///     00000000-00000fff : Reserved
+///     00001000-0009ffff : System RAM
+///     80000000-fdffffff : PCI Bus 0000:00
+///       80000000-81ffffff : 0000:00:02.0
+///         80000000-81ffffff : vmwgfx probe
+///       82000000-823fffff : 0000:00:04.0
+///         82000000-823fffff : vboxguest
+///
 ///
 /// The addresses are not virtual – they are physical (or bus) addresses.  The
 /// datatype for a physical addresses in memscan is #pfn_t.
 ///
 /// Combining the descriptions and sorting by size, we can summarize the total
 /// amount of memory for each region:
-/// ````
-/// Summary of /proc/iomem
-/// ahci                                         8,192
-/// Video ROM                                   32,768
-/// ACPI Tables                                 65,536
-/// System ROM                                  65,536
-/// e1000                                      131,072
-/// Kernel data                              2,184,448
-/// Kernel code                             16,784,908
-/// Reserved                                20,357,120
-/// System RAM                           2,096,520,436
-/// Unmapped memory                281,470,711,262,208
-/// ````
+///
+///     Summary of /proc/iomem
+///     ahci                                         8,192
+///     Video ROM                                   32,768
+///     ACPI Tables                                 65,536
+///     System ROM                                  65,536
+///     e1000                                      131,072
+///     Kernel data                              2,184,448
+///     Kernel code                             16,784,908
+///     Reserved                                20,357,120
+///     System RAM                           2,096,520,436
+///     Unmapped memory                281,470,711,262,208
 ///
 /// @file   iomem.c
 /// @author Mark Nelson <marknels@hawaii.edu>
@@ -63,7 +62,7 @@
 /// The longest allowed line length from #iomemFilePath
 #define MAX_LINE_LENGTH 1024
 
-/// Typedef of #Iomem_region
+/// Typedef of Iomem_region
 typedef struct Iomem_region Iomem_region_t ;
 
 /// Hold each `iomem` region as elements in a linked list
@@ -81,7 +80,7 @@ struct Iomem_region {
 } ;
 
 
-/// The head pointer to the #Iomem_region linked list
+/// The head pointer to the Iomem_region linked list
 ///
 /// Unlike many linked lists... this is __always__ set
 Iomem_region_t iomem_head = { 0, NULL, UNMAPPED_MEMORY_DESCRIPTION } ;
@@ -108,7 +107,9 @@ struct Iomem_summary {
 } ;
 
 
-/// The head pointer to the #Iomem_summary linked list
+/// The head pointer to the Iomem_summary linked list.  This list is composed
+/// on-demand when `--iomem` is set and the #iomem_head list has been fully
+/// populated.
 Iomem_summary_t* iomem_summary_head = NULL ;
 
 
@@ -124,7 +125,11 @@ pfn_t getEnd( const Iomem_region_t* region ) {
 }
 
 
-/// Release resources used by iomem summary
+/// Release resources used by the iomem summary linked list starting at
+/// #iomem_summary_head
+///
+/// @API{ memset, https://man.archlinux.org/man/memset.3 }
+/// @API{ free,   https://man.archlinux.org/man/free.3 }
 void release_iomem_summary() {
    /// Free the summary list
    Iomem_summary_t* currentSummary = iomem_summary_head ;
@@ -138,9 +143,11 @@ void release_iomem_summary() {
    iomem_summary_head = NULL ;
 }
 
+
+/// @API{ memset, https://man.archlinux.org/man/memset.3 }
+/// @API{ free,   https://man.archlinux.org/man/free.3 }
 void release_iomem() {
-   /// @API{ memset, https://man.archlinux.org/man/memset.3 }
-   /// @API{ free, https://man.archlinux.org/man/free.3 }
+   /// Release the `iomem` region linked list starting from #iomem_head
 
    Iomem_region_t* currentRegion = iomem_head.next ;
    while( currentRegion != NULL ) {
@@ -150,7 +157,7 @@ void release_iomem() {
       free( oldRegion ) ;
    }
 
-   /// Set the head pointer to its initial values
+   /// Set #iomem_head to its initial values
    iomem_head.start = 0 ;
    iomem_head.next = NULL ;
    stringCopy( iomem_head.description, UNMAPPED_MEMORY_DESCRIPTION, MAX_IOMEM_DESCRIPTION ) ;
@@ -163,8 +170,8 @@ void release_iomem() {
 ///
 /// The validation rules for #iomem_head are:
 ///   - The list can not be empty
-///   - The first start address must be 0
-///   - Every region must monotonically increase
+///   - The first `start` address must be `0`
+///   - Every region's `start` address must monotonically increase
 ///   - No duplicate regions
 ///
 /// @return `true` if the structure is valid.  `false` if it's not.
@@ -190,7 +197,61 @@ bool validate_iomem() {
 }
 
 
-/// Print all of the `iomem` regions.
+/// Validate the #iomem_summary_head linked list.
+///
+/// Ensure that compose_iomem_summary() and sort_iomem_summary() have run first.
+///
+/// @return `true` if the #iomem_summary_head list is healthy.  `false` if it's not.
+///
+/// @API{ strcmp, https://man.archlinux.org/man/strcmp.3 }
+bool validate_summary() {
+   ASSERT( validate_iomem() ) ;
+   ASSERT( iomem_summary_head != NULL ) ;
+
+   size_t monotonic_size = 0 ;
+
+   /// Iterate over the summary list and set `countback_bucket` to the summary's
+   /// size.  Also, verify that size is always `>=` the previous value (it's
+   /// monotonically increasing).
+   for( Iomem_summary_t* i = iomem_summary_head ; i != NULL ; i = i->next ) {
+      i->countback_bucket = i->size ;
+
+      if( i->size >= monotonic_size ) {
+         monotonic_size = i->size ;
+      } else {
+         return false ;  // Somehow size is less than monotonic_size
+      }
+   }
+
+   /// Next, iterate over the regions and subtract the region's size from
+   /// `countback_bucket`.
+   for( Iomem_region_t* i = &iomem_head ; i != NULL ; i = i->next ) {  // i is region
+      for( Iomem_summary_t* j = iomem_summary_head ; j != NULL ; j = j->next ) { // j is summary
+         if( strcmp( i->description, j->description ) == 0 ) {
+            j->countback_bucket -= getEnd( i ) - i->start + 1 ;
+         }
+      }
+   }
+
+   /// Finally, iterate back over the summaries and ensure that all the
+   /// `countback_bucket`s are `0`.
+   for( Iomem_summary_t* i = iomem_summary_head ; i != NULL ; i = i->next ) {
+      // printf( "description=%s   summary_bucket=%zu\n", i->description, i->countback_bucket ) ;
+      if( i->countback_bucket != 0 ) {
+         // printf( "\n" );
+         // printf( "validate_summary() has failed.  Dumping structures. \n") ;
+         // print_iomem_regions() ;
+         // print_iomem_summary() ;
+         // exit( -1 ) ;
+         return false ;
+      }
+   }
+
+   return true ;
+} // validate_summary
+
+
+/// Debug Only:  Print all of the `iomem` regions.
 ///
 /// @internal This is intended for debugging.  It's not output by any
 ///           of memscan's options.
@@ -232,6 +293,8 @@ const char* get_iomem_region_description( const_pfn_t physAddr ) {
 /// @param description The description of a region (up to #MAX_IOMEM_DESCRIPTION
 ///                    bytes).  The description may not be `NULL` or empty.
 ///                    It is assumed that `description` is already trimmed.
+///
+/// @API{ malloc,  https://man.archlinux.org/man/malloc.3 }
 void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* description ) {
    ASSERT( validate_iomem() ) ;
    ASSERT( end >= start ) ;
@@ -256,27 +319,26 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
    ///   - `cur` Current region
    ///   - `add` The region we want to add
    ///   - `old` The original region record
-   ///   - `new` The new region record (added to the right of `old` in the linked
-   ///           list)
+   ///   - `new` The new region record (added to the right of `old` in the
+   ///           linked list)
    ///
-   /// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
-   /// @API{ malloc, https://man.archlinux.org/man/malloc.3 }
-   /// There are several scenarios for inserting regions...
+   /// There are several scenarios for inserting regions into the linked list...
    ///
    if( current->start == start && current_end == end ) {
-      /// - If `addStart == currStart && addEnd == curEnd`, then just replace
+      /// - If `currStart == addStart` and `curEnd == addEnd`, then just replace
       ///   the description:
-      ///   ````
-      ///   <curStart, curEnd, curDesc> --> <curStart, curEnd, addDesc>
-      ///   ````
+      ///
+      ///   `<curStart, curEnd, curDesc>` @emoji :arrow_right: `<curStart, curEnd, addDesc>`
+      ///
       // printf( "Replace region\n" ) ;
       stringCopy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
+
    } else if( current->start == start && current_end > end ) {
-      /// - If the `addStart == curStart` and `addEnd < curEnd`, then insert a
-      ///   new region in the linked list:
-      ///   ````
-      ///   <curStart, curEnd, curDesc> --> <curStart, addEnd, addDesc> -> <addEnd+1, curEnd, curDesc>
-      ///   ````
+      /// - If the `curStart == addStart` and `curEnd > addEnd`, then insert a
+      ///   new region in the linked list (anchored to the left):
+      ///
+      ///   `<curStart, curEnd, curDesc>` @emoji :arrow_right: `<curStart, addEnd, addDesc> -> <addEnd+1, curEnd, curDesc>`
+      ///
       // printf( "Create new-left\n" ) ;
 
       Iomem_region_t* newRegion = malloc( sizeof( Iomem_region_t ) ) ;
@@ -290,12 +352,13 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       current->next = newRegion ;
       current->start = start ;
       stringCopy( current->description, description, MAX_IOMEM_DESCRIPTION ) ;
+
    } else if( current->start < start && current_end == end ) {
-      /// - If the `addStart > curStart` and `addEnd == curEnd`, then insert a
-      ///   new region in the linked list:
-      ///   ````
-      ///   <curStart, curEnd, curDesc> --> <curStart, addStart-1, curDesc> -> <addStart, addEnd, addDesc>
-      ///   ````
+      /// - If the `curStart < addStart` and `curEnd == addEnd`, then insert a
+      ///   new region in the linked list (anchored to the right):
+      ///
+      ///   `<curStart, curEnd, curDesc>` @emoji :arrow_right: `<curStart, addStart-1, curDesc> -> <addStart, addEnd, addDesc>`
+      ///
       // printf( "Create new-right\n" ) ;
       Iomem_region_t* newRegion = malloc( sizeof( Iomem_region_t ) ) ;
       if( newRegion == NULL ) {
@@ -306,12 +369,13 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       newRegion->start = start ;
       newRegion->next = current->next ;
       current->next = newRegion ;
+
    } else if( current->start < start && current_end > end ) {
-      /// - If the `addStart > curStart` and `addEnd < curEnd`, then insert two
-      ///   new regions in the linked list:
-      ///   ````
-      ///   <curStart, curEnd, curDesc> --> <curStart, addStart-1, curDesc> -> <addStart, addEnd, addDesc> -> <addEnd+1, curEnd, curDesc>
-      ///   ````
+      /// - If the `curStart < addStart` and `curEnd > addEnd`, then insert two
+      ///   new regions in the linked list (one on either side of the `add` region):
+      ///
+      ///   `<curStart, curEnd, curDesc>` @emoji :arrow_right: `<curStart, addStart-1, curDesc> -> <addStart, addEnd, addDesc> -> <addEnd+1, curEnd, curDesc>`
+      ///
       // printf( "Create new-middle\n" ) ;
       Iomem_region_t* newRegion = malloc( sizeof( Iomem_region_t ) ) ;
       if( newRegion == NULL ) {
@@ -330,8 +394,9 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
       middleRegion->start = start ;
       middleRegion->next = newRegion ;
       current->next = middleRegion ;
+
    } else {
-      /// - Anything else should return an error (it's an overlapping region)
+      /// - Anything else should return an error as it's an overlapping region
       #ifndef TESTING
          print_iomem_regions() ;
       #endif
@@ -342,12 +407,18 @@ void add_iomem_region( const_pfn_t start, const_pfn_t end, const char* descripti
 } // add_iomem_region
 
 
+/// @API{ FILE,    https://man.archlinux.org/man/FILE.3type }
+/// @API{ fopen,   https://man.archlinux.org/man/fopen.3 }
+/// @API{ fgets,   https://man.archlinux.org/man/fgets.3 }
+/// @API{ strtok,  https://man.archlinux.org/man/strtok.3 }
+/// @API{ strtoul, https://man.archlinux.org/man/strtoul.3 }
+/// @API{ fclose,  https://man.archlinux.org/man/fclose.3 }
 void read_iomem() {
    release_iomem() ;
 
    FILE* file = NULL ;  // File handle to #iomemFilePath
 
-   file = fopen( iomemFilePath, "r" ) ;  /// @API{ fopen, https://man.archlinux.org/man/fopen.3 }
+   file = fopen( iomemFilePath, "r" ) ;
    if( file == NULL ) {
       FATAL_ERROR( "Unable to open [%s]", iomemFilePath ) ;
    }
@@ -355,7 +426,7 @@ void read_iomem() {
    char* pRead ;
    char szLine[ MAX_LINE_LENGTH ] ;
 
-   pRead = fgets( szLine, MAX_LINE_LENGTH, file ) ;  /// @API{ fgets, https://man.archlinux.org/man/fgets.3 }
+   pRead = fgets( szLine, MAX_LINE_LENGTH, file ) ;
    trim_edges( szLine ) ;
 
    while( pRead != NULL ) {
@@ -363,7 +434,6 @@ void read_iomem() {
          printf( "%s\n", szLine ) ;
       #endif
 
-      /// @API{ strtok, https://man.archlinux.org/man/strtok.3 }
       char* sAddressStart = strtok( szLine, "-" ) ;
       char* sAddressEnd   = strtok( NULL, " "   ) ;
       char* sDescription  = strtok( NULL, "\n" ) + 2 ;  // The +2 skips over a ": "
@@ -402,14 +472,14 @@ void read_iomem() {
    } // while()
 
 
-   int iRetVal = fclose( file ) ;  /// @API{ fclose, https://man.archlinux.org/man/fclose.3 }
+   int iRetVal = fclose( file ) ;
    if( iRetVal != 0 ) {
       FATAL_ERROR( "Unable to close [%s]", iomemFilePath ) ;
    }
 } // read_iomem
 
 
-/// Print the linked list of #Iomem_summary records under #iomem_summary_head
+/// Print the linked list of Iomem_summary records under #iomem_summary_head
 void print_iomem_summary() {
    printf( "Summary of %s\n", iomemFilePath ) ;
 
@@ -436,12 +506,10 @@ void print_iomem_summary() {
 }
 
 
-/// Sort the linked list of #Iomem_summary records under #iomem_summary_head
+/// Sort the linked list of Iomem_summary records under #iomem_summary_head
 ///
-/// @internal Implements an efficient bubble sort of a linked list.  Because
-///           we will always maintain the list, this sort will be fairly
-///           efficient as we'll always be increasing/slotting just one
-///           value.
+/// Implements a bubble sort of a linked list.  Terminate when it iterates
+/// through the list and never swaps.
 void sort_iomem_summary() {
    bool swapped ;
    do {
@@ -477,13 +545,12 @@ void sort_iomem_summary() {
 } // sort_iomem
 
 
-/// Iterate over the #Iomem_region linked list from #iomem_head and either
-/// find an existing #Iomem_summary (based on matching the description) and add
+/// Iterate over the Iomem_region linked list from #iomem_head and either
+/// find an existing Iomem_summary (based on matching the description) and add
 /// to it or create a new one.
 ///
 /// @API{ strncmp, https://man.archlinux.org/man/strncmp.3 }
-/// @API{ malloc, https://man.archlinux.org/man/malloc.3 }
-/// @API{ strncpy, https://man.archlinux.org/man/strncpy.3 }
+/// @API{ malloc,  https://man.archlinux.org/man/malloc.3 }
 void compose_iomem_summary() {
    release_iomem_summary() ;
 
@@ -501,7 +568,7 @@ void compose_iomem_summary() {
 
       if( type == NULL ) {  // If we got to the end of the list without a hit, then add an entry
          Iomem_summary_t* newType = malloc( sizeof( Iomem_summary_t )) ;
-         strncpy( newType->description, region->description, MAX_IOMEM_DESCRIPTION ) ;
+         stringCopy( newType->description, region->description, MAX_IOMEM_DESCRIPTION ) ;
          newType->size = getEnd( region ) - region->start + 1 ;
          newType->next = iomem_summary_head ;  // Add newType to the front of the list
          iomem_summary_head = newType ;
@@ -510,58 +577,6 @@ void compose_iomem_summary() {
       region = region->next ;
    }
 }
-
-
-/// Validate the #iomem_summary_head list.
-///
-/// Ensure that compose_iomem_summary() and sort_iomem_summary() have run first.
-///
-/// @return `true` if the iomem_summary_head list is healthy.  `false` if it's not.
-bool validate_summary() {
-   ASSERT( validate_iomem() ) ;
-   ASSERT( iomem_summary_head != NULL ) ;
-
-   size_t monotonic_size = 0 ;
-
-   /// Iterate over the summary list and set `countback_bucket` to the summary's
-   /// size.  Also, verify that size is always `>=` the previous value (it's
-   /// monotonically increasing).
-   for( Iomem_summary_t* i = iomem_summary_head ; i != NULL ; i = i->next ) {
-      i->countback_bucket = i->size ;
-
-      if( i->size >= monotonic_size ) {
-         monotonic_size = i->size ;
-      } else {
-         return false ;  // Somehow size is less than monotonic_size
-      }
-   }
-
-   /// Next, iterate over the regions and subtract the region's size from
-   /// `countback_bucket`.
-   for( Iomem_region_t* i = &iomem_head ; i != NULL ; i = i->next ) {  // i is region
-      for( Iomem_summary_t* j = iomem_summary_head ; j != NULL ; j = j->next ) { // j is summary
-         if( strcmp( i->description, j->description ) == 0 ) {
-            j->countback_bucket -= getEnd( i ) - i->start + 1 ;
-         }
-      }
-   }
-
-   /// Finally, iterate back over the summaries and ensure that the
-   /// `countback_bucket`s are `0`.
-   for( Iomem_summary_t* i = iomem_summary_head ; i != NULL ; i = i->next ) {
-      // printf( "description=%s   summary_bucket=%zu\n", i->description, i->countback_bucket ) ;
-      if( i->countback_bucket != 0 ) {
-         // printf( "\n" );
-         // printf( "validate_summary() has failed.  Dumping structures. \n") ;
-         // print_iomem_regions() ;
-         // print_iomem_summary() ;
-         // exit( -1 ) ;
-         return false ;
-      }
-   }
-
-   return true ;
-} // validate_summary
 
 
 void summarize_iomem() {

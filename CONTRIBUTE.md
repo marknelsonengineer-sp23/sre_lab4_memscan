@@ -267,7 +267,7 @@ It's cool to have this working.
 | `config.h` <br> `config.c`       |                   |                     |                |          |               |                |
 | `convert.h` <br> `convert.c`     |                   |                     |                |          |               |                |
 | `files.h` <br> `files.c`         | 4 Apr 23          |                     | 4 Apr 23       | 4 Apr 23 |               | 4 Apr 23       |
-| `iomem.h` <br> `iomem.c`         | 11 Apr 23         | 17 Apr 23           |                |          | 28 Apr 23 (2) | 17 Apr 23      |
+| `iomem.h` <br> `iomem.c`         | 11 Apr 23         | 17 Apr 23           | 29 Apr 23      |          | 28 Apr 23 (2) | 29 Apr 23      |
 | `maps.h` <br> `maps.c`           |                   |                     |                |          |               |                |
 | `memscan.h` <br> `memscan.c`     |                   |                     |                |          |               |                |
 | `pagecount.h` <br> `pagecount.c` | 6 Apr 23          | 6 Apr 23            | 6 Apr 23       |          | 16 Apr 23     | 6 Apr 23       |
