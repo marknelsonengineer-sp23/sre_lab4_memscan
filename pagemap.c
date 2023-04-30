@@ -73,7 +73,7 @@ inline unsigned char getPageSizeInBits() {
    /// @see https://en.wikipedia.org/wiki/Find_first_set
    /// @see https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
    ///
-   /// @internal
+   /// #### Internal
    /// - Start with the size of an address in bits
    /// - Subtract the number of leading 0s
    /// - Subtract one more to get the index of the first bit

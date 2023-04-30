@@ -253,8 +253,7 @@ bool validate_summary() {
 
 /// Debug Only:  Print all of the `iomem` regions.
 ///
-/// @internal This is intended for debugging.  It's not output by any
-///           of memscan's options.
+/// This is intended for debugging.  It's not output by default.
 ///
 /// Assumes a 48-bit physical address bus size (6 bytes or 12 characters wide).
 void print_iomem_regions() {
