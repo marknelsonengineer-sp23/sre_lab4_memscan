@@ -436,7 +436,7 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       char* smallMalloc = (char*) malloc( 64 ) ;
       smallMalloc[ 0 ] = (char) 0xff ;  // Make sure it's paged into memory
       struct PageInfo smallMallocPage = getPageInfo( smallMalloc, true ) ;
-      BOOST_CHECK( validatePageInfo( smallMalloc, &smallMallocPage, VALID, PRESENT, COUNT_IS_1, EXCLUSIVE, UPTODATE, NEUTRAL_LRU, NEUTRAL_ACTIVE, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
+      BOOST_CHECK( validatePageInfo( smallMalloc, &smallMallocPage, VALID, PRESENT, COUNT_IS_1, EXCLUSIVE, NEUTRAL_UPTODATE, NEUTRAL_LRU, NEUTRAL_ACTIVE, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
       closePagemap() ;
       free( smallMalloc ) ;
       smallMalloc = NULL ;
