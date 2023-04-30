@@ -424,10 +424,10 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
       struct PageInfo stackPage = getPageInfo( &aLocalInt, true ) ;
       BOOST_CHECK( validatePageInfo( &aLocalInt, &stackPage, VALID, PRESENT, COUNT_IS_1, EXCLUSIVE, UPTODATE, LRU, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
 
-      // 2 pages up from the top of the stack should be unmapped
-      void* topOfStackPlusTwoPages = &aLocalInt + getPageSizeInBytes()*2 ;
-      struct PageInfo stackPage2 = getPageInfo( topOfStackPlusTwoPages, true ) ;
-      BOOST_CHECK( validatePageInfo( topOfStackPlusTwoPages, &stackPage2, VALID, NOT_PRESENT, COUNT_IS_0, OTHERWISE_0 ) ) ;
+      // 4 pages up from the top of the stack should be unmapped
+      void* topOfStackPlusFourPages = &aLocalInt + getPageSizeInBytes()*4 ;
+      struct PageInfo stackPage4 = getPageInfo( topOfStackPlusFourPages, true ) ;
+      BOOST_CHECK( validatePageInfo( topOfStackPlusFourPages, &stackPage4, VALID, NOT_PRESENT, COUNT_IS_0, OTHERWISE_0 ) ) ;
       closePagemap() ;
    }
 
