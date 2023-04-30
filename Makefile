@@ -15,7 +15,7 @@ TARGET = memscan
 all:  $(TARGET) lint doc
 
 CC        = gcc
-CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\"
+CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\" -march=native -mtune=native
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
 LINTFLAGS = --quiet
@@ -25,7 +25,7 @@ debug: DEBUG_FLAGS = -g -DDEBUG -O0
 debug: $(TARGET)
 
 test:     CFLAGS += -DTESTING
-valgrind: CFLAGS += -DTESTING -g -O0 -fno-inline
+valgrind: CFLAGS += -DTESTING -g -O0 -fno-inline -march=x86-64 -mtune=generic
 
 export FULL_VERSION = $(shell .doxygen/update_version.py)
 

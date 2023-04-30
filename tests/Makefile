@@ -16,7 +16,7 @@ all:  $(TARGET) lint
 
 CXX       = g++
 # Boost tests compile-run faster without -DBOOST_TEST_DYN_LINK
-CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS) -std=c++17
+CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS) -std=c++17 -march=native -mtune=native
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
 LINTFLAGS = --quiet -extra-arg=-std=c++17
@@ -28,7 +28,7 @@ test:     CFLAGS   += -DTESTING
 test:     CXXFLAGS += -DTESTING
 
 valgrind: CFLAGS   += -DTESTING -g -O0 -fno-inline
-valgrind: CXXFLAGS +=           -g -O0 -fno-inline
+valgrind: CXXFLAGS +=           -g -O0 -fno-inline -march=x86-64 -mtune=generic
 
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)
@@ -48,7 +48,9 @@ test: $(TARGET)
 	sudo ./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
 
 valgrind: $(TARGET)
-	sudo DEBUGINFOD_URLS="https://debuginfod.archlinux.org" valgrind --leak-check=full --track-origins=yes --quiet ./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
+	sudo DEBUGINFOD_URLS="https://debuginfod.archlinux.org" \
+	valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet  \
+	./$(TARGET) --build_info --color_output --show_progress --report_format=HRF --report_level=short
 
 clean:
 	rm -f $(TARGET) *.o
