@@ -25,6 +25,8 @@
       <w>creatordate</w>
       <w>ctors</w>
       <w>cxxflags</w>
+      <w>dboost</w>
+      <w>debuginfod</w>
       <w>deprecatedlist</w>
       <w>diafile</w>
       <w>docsets</w>
