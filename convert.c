@@ -70,13 +70,13 @@ unsigned long long stringToUnsignedLongLongWithBasePrefix( char* inString ) {
    ASSERT( inString != NULL ) ;
    trim( inString ) ;
 
-   int base = 10 ;     /// @NOLINT(readability-magic-numbers):  Base 10 is a legit magic number
+   int base = BASE_10 ;
    if( inString[0] == '0' && inString[1] == 'x' ) {
-      base = 16 ;      // NOLINT(readability-magic-numbers)
+      base = BASE_16 ;
       inString += 2 ;  // Skip the '0x'
    }
    if( inString[0] == '0' && inString[1] == 'b' ) {
-      base = 2 ;
+      base = BASE_2 ;
       inString += 2 ;  // Skip the '0b'
    }
    errno = 0 ;

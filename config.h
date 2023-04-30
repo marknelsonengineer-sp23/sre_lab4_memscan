@@ -47,6 +47,12 @@ void printUsage( FILE* outStream ) ;
 
 #define ONE_MEGABYTE 1048576  ///< One megabyte of something
 
+#define BASE_16           16  ///< Base 16
+
+#define BASE_10           10  ///< Base 10
+
+#define BASE_2             2  ///< Base 2
+
 /// Set the program name
 ///
 /// @param newProgramName The new program name

@@ -373,9 +373,9 @@ void read_iomem() {
       char* pEndOfpAddressEnd ;
       pfn_t pAddressStart ;
       pfn_t pAddressEnd ;
-      /// @API{ strtoul, https://man.archlinux.org/man/strtoul.3 }
-      pAddressStart = strtoul( sAddressStart, &pEndOfpAddressStart, 16 ) ;  /// @NOLINT( readability-magic-numbers):  16 is a magic number
-      pAddressEnd   = strtoul( sAddressEnd,   &pEndOfpAddressEnd,   16 ) ;  /// @NOLINT( readability-magic-numbers):  16 is a magic number
+
+      pAddressStart = strtoul( sAddressStart, &pEndOfpAddressStart, BASE_16 ) ;
+      pAddressEnd   = strtoul( sAddressEnd,   &pEndOfpAddressEnd,   BASE_16 ) ;
 
       if( *pEndOfpAddressStart != '\0' || *pEndOfpAddressEnd != '\0' ) {
          FATAL_ERROR( "iomem entry [%s] is unable parse start [%s] or end address [%s]"
