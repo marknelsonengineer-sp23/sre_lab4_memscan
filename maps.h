@@ -28,13 +28,18 @@ struct MapEntry {
    char*  sDevice ;         ///< String pointer to the device name
    char*  sInode ;          ///< String pointer to the iNode number
    char*  sPath ;           ///< String pointer to the path (may be `NULL`)
-   bool   include ;         ///< `true` if the entry should be processed.  `false` if it should be excluded.
+   bool   include ;         ///< `true` if the entry should be processed.
+                            ///< `false` if it should be excluded.
    size_t numBytes ;        ///< Number of bytes in this region
-   size_t numPages ;        ///< The number of #PageInfo records allocated for this region
+   size_t numPages ;        ///< The number of PageInfo records allocated for
+                            ///< this region
    struct PageInfo* pages ; ///< Pointer to a #PageInfo array
-   size_t numBytesFound ;   ///< Number of #byteToScanFor bytes found in this region when #scanForByte is set
-   double shannonEntropy ;  ///< Shannon Entropy of the region when #scanForShannon is set
-   struct MapEntry* next ;  ///< Pointer to the next MapEntry or `NULL` for the last map in the list
+   size_t numBytesFound ;   ///< Number of #byteToScanFor bytes found in this
+                            ///< region when #scanForByte is set
+   double shannonEntropy ;  ///< Shannon Entropy of the region when
+                            ///< #scanForShannon is set
+   struct MapEntry* next ;  ///< Pointer to the next MapEntry or `NULL` if this
+                            ///< is the last MapEntry in this list
 } ;
 
 

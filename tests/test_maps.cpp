@@ -24,8 +24,8 @@ extern "C" {
 BOOST_AUTO_TEST_SUITE( test_maps )
 
 BOOST_AUTO_TEST_CASE( test_getMaps_bulk ) {
-   /// Read the contents of `./tests/test_maps`, which contains sample `maps` files from
-   /// a variety of Linux systems.
+   /// Read the contents of `./tests/test_maps`, which contains sample `maps`
+   /// files from a variety of Linux systems.
    const std::filesystem::path sandbox{"test_maps"} ;
 
    for (auto const& dir_entry : std::filesystem::directory_iterator{sandbox}) {
