@@ -1,62 +1,73 @@
 ###############################################################################
-###               University of Hawaii, College of Engineering
-###               Animal Farm - EE 205 - Spring 2023
-###
-### Configuration for clang-tidy
-###
-### @see https://clang.llvm.org/extra/clang-tidy/
-###
-### @file   .clang-tidy
-### @author Mark Nelson <marknels@hawaii.edu>
+#  University of Hawaii, College of Engineering
+#  Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
+#
+## Configuration for clang-tidy
+##
+## @see https://clang.llvm.org/extra/clang-tidy/
+##
+## @file   .clang-tidy
+## @author Mark Nelson <marknels@hawaii.edu>
 ###############################################################################
 
+# -*            # Start by turning everything off
+# boost-*       # Enable the following families of checks
+# bugprone-*
+#   -bugprone-easily-swappable-parameters  # I've never liked this lint rule, so I'm removing it
+# cert-*
+#   -cert-err58-cpp      # It's OK to have a static object that may throw an exception during initialization.  If it crashes, at least it happens fast.
+#   -cert-msc30-c,       # We can use the rand() function in C
+#   -cert-msc50-cpp,     # We can use the rand() function in C++
+# clang-analyzer-*
+# llvm-*
+# -llvm-header-guard   # We use #pragma once, not a traditional header guard
+# misc-*
+#   -misc-no-recursion
+#   -misc-non-private-member-variables-in-classes
+# performance-*
+#   -performance-no-int-to-ptr                 # This is another esoteric language feature I'll allow
+# portability-*
+# readability-*
+#   -readability-implicit-bool-conversion      # This is a pain... sometimes it's helpful, but mostly it adds redundant code
+#   -readability-redundant-access-specifiers,  # Redundant access specifiers works for my documentation style
 ---
-Checks:          '-checks=-*,boost-*,bugprone-*,cert-*,clang-analyzer-*,llvm-*,-llvm-header-guard,misc-*,performance-*,portability-*,readability-*,-readability-implicit-bool-conversion,-cert-msc30-c,-cert-msc50-cpp,-readability-redundant-access-specifiers,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling'
-WarningsAsErrors: ''
+Checks: >
+  -*,
+  boost-*,
+  bugprone-*,
+    -bugprone-easily-swappable-parameters,
+  cert-*,
+    -cert-err58-cpp,
+    -cert-msc30-c,
+    -cert-msc32-c,
+    -cert-msc50-cpp,
+    -cert-msc51-cpp,
+  clang-analyzer-*,
+    -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
+  llvm-*,
+    -llvm-header-guard,
+  misc-*,
+    -misc-no-recursion,
+    -misc-non-private-member-variables-in-classes,
+  performance-*,
+    -performance-no-int-to-ptr,
+  portability-*,
+  readability-*,
+    -readability-convert-member-functions-to-static,
+    -readability-implicit-bool-conversion,
+    -readability-magic-numbers,
+    -readability-redundant-access-specifiers,
+    -readability-redundant-string-init
+HeaderFilterRegex: '.+.h'
 AnalyzeTemporaryDtors: false
-FormatStyle:     none
-User:            marknels
+FormatStyle: none
+User: marknels
 CheckOptions:
-  - key:             readability-identifier-length.IgnoredVariableNames
-    value:           '[ijk]'
-  - key:             llvm-else-after-return.WarnOnConditionVariables
-    value:           'false'
-  - key:             modernize-loop-convert.MinConfidence
-    value:           reasonable
-  - key:             modernize-replace-auto-ptr.IncludeStyle
-    value:           llvm
-  - key:             modernize-pass-by-value.IncludeStyle
-    value:           llvm
-  - key:             google-readability-namespace-comments.ShortNamespaceLines
-    value:           '10'
-  - key:             google-readability-namespace-comments.SpacesBeforeComments
-    value:           '2'
-  - key:             cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
-    value:           'true'
-  - key:             google-readability-braces-around-statements.ShortStatementLines
-    value:           '1'
-  - key:             cert-err33-c.CheckedFunctions
-    value:           '::aligned_alloc;::asctime_s;::at_quick_exit;::atexit;::bsearch;::bsearch_s;::btowc;::c16rtomb;::c32rtomb;::calloc;::clock;::cnd_broadcast;::cnd_init;::cnd_signal;::cnd_timedwait;::cnd_wait;::ctime_s;::fclose;::fflush;::fgetc;::fgetpos;::fgets;::fgetwc;::fopen;::fopen_s;::fprintf;::fprintf_s;::fputc;::fputs;::fputwc;::fputws;::fread;::freopen;::freopen_s;::fscanf;::fscanf_s;::fseek;::fsetpos;::ftell;::fwprintf;::fwprintf_s;::fwrite;::fwscanf;::fwscanf_s;::getc;::getchar;::getenv;::getenv_s;::gets_s;::getwc;::getwchar;::gmtime;::gmtime_s;::localtime;::localtime_s;::malloc;::mbrtoc16;::mbrtoc32;::mbsrtowcs;::mbsrtowcs_s;::mbstowcs;::mbstowcs_s;::memchr;::mktime;::mtx_init;::mtx_lock;::mtx_timedlock;::mtx_trylock;::mtx_unlock;::printf_s;::putc;::putwc;::raise;::realloc;::remove;::rename;::scanf;::scanf_s;::setlocale;::setvbuf;::signal;::snprintf;::snprintf_s;::sprintf;::sprintf_s;::sscanf;::sscanf_s;::strchr;::strerror_s;::strftime;::strpbrk;::strrchr;::strstr;::strtod;::strtof;::strtoimax;::strtok;::strtok_s;::strtol;::strtold;::strtoll;::strtoul;::strtoull;::strtoumax;::strxfrm;::swprintf;::swprintf_s;::swscanf;::swscanf_s;::thrd_create;::thrd_detach;::thrd_join;::thrd_sleep;::time;::timespec_get;::tmpfile;::tmpfile_s;::tmpnam;::tmpnam_s;::tss_create;::tss_get;::tss_set;::ungetc;::ungetwc;::vfprintf;::vfprintf_s;::vfscanf;::vfscanf_s;::vfwprintf;::vfwprintf_s;::vfwscanf;::vfwscanf_s;::vprintf_s;::vscanf;::vscanf_s;::vsnprintf;::vsnprintf_s;::vsprintf;::vsprintf_s;::vsscanf;::vsscanf_s;::vswprintf;::vswprintf_s;::vswscanf;::vswscanf_s;::vwprintf_s;::vwscanf;::vwscanf_s;::wcrtomb;::wcschr;::wcsftime;::wcspbrk;::wcsrchr;::wcsrtombs;::wcsrtombs_s;::wcsstr;::wcstod;::wcstof;::wcstoimax;::wcstok;::wcstok_s;::wcstol;::wcstold;::wcstoll;::wcstombs;::wcstombs_s;::wcstoul;::wcstoull;::wcstoumax;::wcsxfrm;::wctob;::wctrans;::wctype;::wmemchr;::wprintf_s;::wscanf;::wscanf_s;'
-  - key:             modernize-loop-convert.MaxCopySize
-    value:           '16'
-  - key:             cert-dcl16-c.NewSuffixes
-    value:           'L;LL;LU;LLU'
-  - key:             cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField
-    value:           'false'
-  - key:             cert-str34-c.DiagnoseSignedUnsignedCharComparisons
-    value:           'false'
-  - key:             modernize-use-nullptr.NullMacros
-    value:           'NULL'
-  - key:             llvm-qualified-auto.AddConstToQualified
-    value:           'false'
-  - key:             modernize-loop-convert.NamingStyle
-    value:           CamelCase
-  - key:             llvm-else-after-return.WarnOnUnfixable
-    value:           'false'
-  - key:             google-readability-function-size.StatementThreshold
-    value:           '800'
-  - key:             readability-function-cognitive-complexity.Threshold
-    value:           '170'
-UseColor:        true
-...
+  readability-identifier-length.IgnoredVariableNames: 'i|j|k|fd'
+  readability-identifier-length.IgnoredParameterNames: 'fd'
+  llvm-else-after-return.WarnOnUnfixable: 'false'
+  cert-msc32-c.DisallowedSeedTypes: 'time_t,std::time_t'
+  readability-function-cognitive-complexity.Threshold: 180
 
+UseColor: true
+...

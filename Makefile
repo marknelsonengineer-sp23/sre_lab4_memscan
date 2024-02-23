@@ -53,9 +53,9 @@ doc: $(TARGET)
 	.doxygen/stats.py
 	.doxygen/update_usage.py
 	.doxygen/update_key.py
+	rsync --recursive --mkpath --checksum --delete --compress --stats --chmod=o+r,Do+x  .doxygen/images  .doxygen/docs/html/.doxygen
+	rsync --recursive --mkpath --checksum --delete --compress --stats --chmod=o+r,Do+x  examples/images .doxygen/docs/html/examples
 	doxygen .doxygen/Doxyfile
-	rsync --recursive --mkpath --checksum --delete .doxygen/images  .doxygen/docs/html/.doxygen
-	rsync --recursive --mkpath --checksum --delete  examples/images .doxygen/docs/html/examples
 
 publish: doc
 	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan

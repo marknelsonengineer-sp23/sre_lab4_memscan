@@ -1,33 +1,28 @@
 /* ////////////////////////////////////////////////////////////////////////////
-//          University of Hawaii, College of Engineering
-//          DTMF_Decoder - EE 469 - Fall 2022
-//
-//  A Windows Desktop C program that decodes DTMF tones
+//  University of Hawaii, College of Engineering
+//  Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2024
 //
 /// Custom style sheet for Doxygen documentation
 ///
-/// @file    extraStyleSheet.css
-/// @version 1.0
-///
 /// @author  Mark Nelson <marknels@hawaii.edu>
-/// @date    2_Nov_2022
+/// @file    extraStyleSheet.css
 //////////////////////////////////////////////////////////////////////////// */
 
 code {
-    color: green;
+    color: lime;
 }
 
 pre.fragment {
-    color: green;
-    background-color: #e8e8e8
+    color: lime;
+    background-color: #1f1f1f
 }
 
 span.comment {
-    color: green;
+    color: lime;
 }
 
 span.preprocessor {
-    color: dimgray;
+    color: silver;
 }
 
 span.keywordflow {
