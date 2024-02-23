@@ -13,7 +13,7 @@ To induce swapping, we need a little help...I use [stressapptest](https://github
 which is available on ArchLinux [here](https://aur.archlinux.org/packages/stressapptest).  Other
 stress testing tools are listed [here](https://wiki.archlinux.org/title/Stress_testing).
 
-#### Install stressapptest
+### Install stressapptest
 `#` runs as `root`.  `$` runs as a mortal user.
 
     # pacman -S libaio
@@ -24,7 +24,7 @@ stress testing tools are listed [here](https://wiki.archlinux.org/title/Stress_t
 
     # pacman -U stressapptest-1.0.9-1-x86_64.pkg.tar.zst
                  
-#### Running memscan and looking at swap
+### Running memscan and looking at swap
 I run the stress test in 3 windows:
   - `$ htop`
   - `# stressapptest`
@@ -32,12 +32,12 @@ I run the stress test in 3 windows:
 
 Start `$ htop` and watch the `Mem` and `Swp` lines.  Run `# stressapptest` then immediately start `# memscan`
 
-#### Notes
+### Notes
   - `stressapptest` only runs for 20 seconds
   - None of the options to `stressapptest` seem to work, but it consumed all the memory for 20 seconds and that's all we need.
   - This virtual machine was provisioned with 2G of memory.
 
-#### Output
+### Output
 Here's a screenshot of the test:
 
 <img src="examples/images/swap_screenshot_1.png" style="width:95%;" alt="Swap Screenshot 1"/>
@@ -351,7 +351,7 @@ Here's the full output:
     35: 0xffffffffff600000 - 0xffffffffff600fff      4,096 --xpread permission not set
         0xffffffffff600000 - 0xffffffffff600fff      4,096 virtual address was not read by pagemap
 
-#### Observations
+### Observations
 When a system is under memory pressure, idle processes will:
   - Read-only pages and zero-pages, it doesn't swap them, it simply evicts them and reports them as `page not present`
   - The 1G region `memscan` allocated was unevenly swapped... 
@@ -361,7 +361,7 @@ When a system is under memory pressure, idle processes will:
 ## Debian
 Here's a simple memscan on a Debian system running under WSL2
 
-#### Output
+### Output
 Here's a screenshot from this command:  `# ./memscan --path --shannon`
 
 <img src="examples/images/debian_screenshot_1.png" style="width:95%;" alt="Debian Screenshot 1"/>
@@ -498,7 +498,7 @@ Here's the full output from this command:  `# ./memscan --path --shannon --phys`
         0x7ffee93fd000 - 0x7ffee93fdfff      4,096 Flags:   F          \      IO:   LRU:     M       System RAM H: 5.118 ARM code
         0x7ffee93fe000 - 0x7ffee93fefff      4,096 Flags:  XF          \      IO:   LRU:     M       System RAM H: 0.201 Very low entropy
 
-#### Observations
+### Observations
 - Debian required `libpthread`, which ArchLinux did not.
   - On both systems `-lpthread` is specified at compile time.  On Debian, 
     `libpthread` is loaded into memory, but on Arch it's not.
@@ -514,7 +514,7 @@ A static build is a compiled version of a program which has been statically
 linked against libraries.  This means that memscan should not bind to any shared
 libraries.  Let's see if it really works.
 
-#### Setup for static compilation
+### Setup for static compilation
 ArchLinux does not normally ship `.a` files.  To statically link memscan, we
 need to manually install `libcap` to get `libcap.a`.
 
@@ -527,7 +527,7 @@ need to manually install `libcap` to get `libcap.a`.
 
 Finally, in memscan's directory, `make static`.
 
-#### Running a statically built memscan
+### Running a statically built memscan
 
 Here's the full output from this command:  `$ sudo ./memscan-static --path`
                                           
@@ -544,7 +544,7 @@ Here's the full output from this command:  `$ sudo ./memscan-static --path`
     10: 0x7ffe1092f000 - 0x7ffe10930fff     8,192 r-xp [vdso]
     11: 0xffffffffff600000 - 0xffffffffff600fff      4,096 --xp read permission not set
 
-#### Observations
+### Observations
 - There's no sign of `/usr/lib/libc.so.6`, `/usr/lib/x86_64-linux-gnu/libm-2.31.so`, etc.
 - There's just `memscan-static`, `[heap]`, `[stack]`, etc.  Just about 
   everything has it's place.

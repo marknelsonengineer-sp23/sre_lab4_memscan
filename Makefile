@@ -53,12 +53,12 @@ doc: $(TARGET)
 	.doxygen/stats.py
 	.doxygen/update_usage.py
 	.doxygen/update_key.py
-	rsync --recursive --mkpath --checksum --delete --compress --stats --chmod=o+r,Do+x  .doxygen/images  .doxygen/docs/html/.doxygen
-	rsync --recursive --mkpath --checksum --delete --compress --stats --chmod=o+r,Do+x  examples/images .doxygen/docs/html/examples
+	rsync --recursive --mkpath --checksum --delete --compress --chmod=o+r,Do+x  .doxygen/images  .doxygen/docs/html/.doxygen
+	rsync --recursive --mkpath --checksum --delete --compress --chmod=o+r,Do+x  examples/images .doxygen/docs/html/examples
 	doxygen .doxygen/Doxyfile
 
 publish: doc
-	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan
+	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan2
 
 test: $(OBJ)
 	cd tests && $(MAKE) -j 4 test

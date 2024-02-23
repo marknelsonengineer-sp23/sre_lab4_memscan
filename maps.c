@@ -60,6 +60,11 @@ bool isEmpty( const char* const szStr ) {
 }
 
 
+/// Validate a MapEntry
+///
+/// @param mapEntry The MapEntry to validate
+///
+/// @return `true` if the entry is healthy.  `false` if it's not.
 bool validateMap( const struct MapEntry* const mapEntry ) {
    /// - MapEntry.szLine must not be `NULL`
    if( mapEntry->szLine == NULL ) {
@@ -100,6 +105,10 @@ bool validateMap( const struct MapEntry* const mapEntry ) {
    return true ;
 }
 
+/// Validate the Maps structure
+///
+/// @param maps The map structure to validate
+///
 /// @return `true` if the `maps` linked list is healthy.  `false` if it's not.
 bool validateMaps( const struct MapEntry* const maps ) {
    size_t i = 0 ;
