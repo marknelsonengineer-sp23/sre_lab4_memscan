@@ -85,3 +85,6 @@ extern void printMaps( const struct MapEntry* const maps ) ;
 
 /// Release any resources that may have been created by the maps module
 extern void releaseMaps( struct MapEntry* const maps ) ;
+
+/// Validate the `maps` linked list
+bool validateMaps( const struct MapEntry* const maps ) ;

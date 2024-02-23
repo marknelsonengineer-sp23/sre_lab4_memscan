@@ -1,28 +1,30 @@
 ###############################################################################
-### University of Hawaii, College of Engineering
-### Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
-###
-### Build and test a memory scanning program
-###
-### @see     https://www.gnu.org/software/make/manual/make.html
-###
-### @file    Makefile
-### @author  Mark Nelson <marknels@hawaii.edu>
+#  University of Hawaii, College of Engineering
+#  Memory Scanner 2 - EE 491F (Software Reverse Engineering) - Spr 2024
+#
+## Build and test a memory scanning program
+##
+## @see     https://www.gnu.org/software/make/manual/make.html
+##
+## Memscan2 was developed under gcc and it does not work with clang
+##
+## @file   Makefile
+## @author Mark Nelson <marknels@hawaii.edu>
 ###############################################################################
 
 TARGET = memscan
 
-all:  $(TARGET) lint doc
+all: $(TARGET)
 
 CC        = gcc
-CFLAGS    = -Wall -Wextra $(DEBUG_FLAGS) -std=c17 -DTARGET=\"$(TARGET)\" -march=native -mtune=native
+CFLAGS    = -std=c17 -Wall -Wextra -Werror -march=native -mtune=native -DTARGET=\"$(TARGET)\" $(DEBUG_FLAGS)
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
-LINTFLAGS = --quiet
+LINTFLAGS = --quiet -extra-arg=-std=c++17
 MAKE      = make
 
 debug: DEBUG_FLAGS = -g -DDEBUG -O0
-debug: $(TARGET)
+debug: clean $(TARGET)
 
 test:     CFLAGS += -DTESTING
 valgrind: CFLAGS += -DTESTING -g -O0 -fno-inline -march=x86-64 -mtune=generic
@@ -59,7 +61,7 @@ publish: doc
 	rsync --recursive --checksum --delete --compress --stats --chmod=o+r,Do+x .doxygen/docs/html/ marknels@uhunix.hawaii.edu:~/public_html/sre/memscan
 
 test: $(OBJ)
-	cd tests && $(MAKE) test
+	cd tests && $(MAKE) -j 4 test
 
 valgrind: $(OBJ)
 	cd tests && $(MAKE) valgrind
@@ -67,4 +69,4 @@ valgrind: $(OBJ)
 clean:
 	rm -f $(TARGET) *.o
 	cd tests && $(MAKE) clean
-	rm -f -r --preserve-root .doxygen/docs/html
+	rm -fr --preserve-root .doxygen/docs/html

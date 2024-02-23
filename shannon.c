@@ -22,7 +22,7 @@ double computeShannonEntropy( const void* buffer, const size_t length ) {
 
    int histogram[256] ;  /// @NOLINT(readability-magic-numbers): In this context, it's OK to use 256 here
    double H = 0.0 ;  /// @NOLINT(readability-identifier-length): H is the standard symbol for Shannon Entropy
-   size_t number_of_unique_values = 0 ;
+   // size_t number_of_unique_values = 0 ;
 
    memset( histogram, 0, sizeof( histogram ) ) ;
 
@@ -31,10 +31,10 @@ double computeShannonEntropy( const void* buffer, const size_t length ) {
       histogram[ value ] += 1 ;
    }
 
-   for( size_t i = 0 ; i < 256 ; i++ ) {  // @NOLINT(readability-magic-numbers)
+   // for( size_t i = 0 ; i < 256 ; i++ ) {  // @NOLINT(readability-magic-numbers)
       // printf( "%3zu: %3d  %s", i, histogram[i], ( i > 0 && i % 16 == 0 ) ? "\n" : "  " ) ;
-      number_of_unique_values++ ;
-   }
+      // number_of_unique_values++ ;
+   // }
 
    // printf( "number_of_unique_values=%zu\n", number_of_unique_values ) ;
 

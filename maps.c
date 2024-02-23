@@ -8,6 +8,7 @@
 /// @author Mark Nelson <marknels@hawaii.edu>
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <ctype.h>         // For isgraph()
 #include <linux/limits.h>  // For PATH_MAX
 #include <stdbool.h>       // For bool, true & false
 #include <stdio.h>         // For printf() fprintf() fopen() and FILE
@@ -34,8 +35,94 @@ char* ExcludePaths[] = { "[vvar]"
                        } ;
 
 
-/// Holds a linked list of map entries
-struct MapEntry* mapHead = NULL ;
+/// Is `szStr` empty?
+///
+/// @param szStr The string to examine
+/// @return `true` if `szStr` is empty (for our purposes).  `false` if it isn't.
+bool isEmpty( const char* const szStr ) {
+   /// Return `true` if:
+   /// - `szStr` is `NULL`
+   if( szStr == NULL ) {
+      return true ;
+   }
+
+   /// - `strlen( szStr ) < 1`
+   if( strlen( szStr ) < 1 ) {
+      return true ;
+   }
+
+   /// - The first character of szStr is not printable
+   if( !isgraph( szStr[0] ) ) {
+      return true ;
+   }
+
+   return false ;
+}
+
+
+bool validateMap( const struct MapEntry* const mapEntry ) {
+   /// - MapEntry.szLine must not be `NULL`
+   if( mapEntry->szLine == NULL ) {
+      return false ;
+   }
+
+   if( isEmpty( mapEntry->sAddressStart ) ) { return false; }
+   if( isEmpty( mapEntry->sAddressEnd   ) ) { return false; }
+   if( isEmpty( mapEntry->sPermissions  ) ) { return false; }
+   if( isEmpty( mapEntry->sOffset       ) ) { return false; }
+   if( isEmpty( mapEntry->sDevice       ) ) { return false; }
+   if( isEmpty( mapEntry->sInode        ) ) { return false; }
+
+   if( mapEntry->sPath != NULL ) {
+      if( isEmpty( mapEntry->sPath ) ) { return false; }
+   }
+
+   if( mapEntry->pAddressStart >= mapEntry->pAddressEnd ) {
+      return false ;
+   }
+
+   if( mapEntry->numBytes <= 0 ) {
+      return false ;
+   }
+
+   if( mapEntry->numBytes != (size_t) ( mapEntry->pAddressEnd - mapEntry->pAddressStart ) ) {
+      return false ;
+   }
+
+   if( mapEntry->numPages <= 0 ) {
+      return false ;
+   }
+
+   if( mapEntry->numPages != (size_t) mapEntry->numBytes >> getPageSizeInBits() ) {
+      return false ;
+   }
+
+   return true ;
+}
+
+/// @return `true` if the `maps` linked list is healthy.  `false` if it's not.
+bool validateMaps( const struct MapEntry* const maps ) {
+   size_t i = 0 ;
+
+   for( const struct MapEntry* mapEntry = maps ; mapEntry != NULL ; mapEntry = mapEntry->next ) {
+      /// - MapEntry.index must be a monotonically increasing value from 0
+      if( mapEntry->index != i ) {
+         return false ;
+      }
+
+      if( !validateMap( mapEntry ) ) {
+         return false ;
+      }
+
+      // Make sure start is increasing
+      // Make sure there's no overlap
+
+
+      i++ ;
+   }
+
+   return true ;
+}
 
 
 struct MapEntry* getMaps() {
@@ -45,7 +132,7 @@ struct MapEntry* getMaps() {
                                                  // will hold the list in reverse
                                                  // order.  This variable will always
                                                  // point to the end of the list and
-                                                 // make it easier to create a list in
+                                                 // makes it easier to create a list in
                                                  // the correct order.
 
    size_t mapIndex = 0 ;
@@ -77,12 +164,13 @@ struct MapEntry* getMaps() {
          continue ;  // Nothing to see here, move on
       }
 
-      // Allocate a new MapEntry and zero it out
+      /// For each valid row, allocate a new MapEntry and zero it out
       /// @API{ calloc, https://man.archlinux.org/man/calloc.3 }
       struct MapEntry* newMap = calloc( 1, sizeof( struct MapEntry ) ) ;
       if( newMap == NULL ) {
          FATAL_ERROR( "unable to allocate a new MapEntry" ) ;
       }
+
       newMap->index = mapIndex ;
 
       // Allocate a new szLine in newMap
@@ -91,7 +179,7 @@ struct MapEntry* getMaps() {
          FATAL_ERROR( "Unable to allocate maps line" ) ;
       }
 
-      strncpy( newMap->szLine, szLine, szLineLength+1 ) ;
+      stringCopy( newMap->szLine, szLine, szLineLength+1 ) ;
 
       // Store data into newMap
       newMap->sAddressStart = strtok( newMap->szLine, "-" ) ;
@@ -189,6 +277,8 @@ struct MapEntry* getMaps() {
          printf( "numPages=[%zu]  ",     newMap->numPages ) ;
          printf( "\n" ) ;
       #endif
+
+      // @todo validate the new map entry
 
       // Insert newMap at the end of the linked list
       *nextMapEntry = newMap ;

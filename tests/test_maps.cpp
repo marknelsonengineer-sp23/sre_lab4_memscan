@@ -13,8 +13,8 @@
 
 #include "boost_test_util.h"  // For BOOST_CHECK_FAIL()
 
-#include <filesystem>   // For std::filesystem
-#include <string>       // For strncpy()
+#include <filesystem>  // For std::filesystem
+#include <string>      // For strncpy()
 
 extern "C" {
    #include "../config.h"
@@ -30,11 +30,12 @@ BOOST_AUTO_TEST_CASE( test_getMaps_bulk ) {
 
    for (auto const& dir_entry : std::filesystem::directory_iterator{sandbox}) {
       // std::cout << dir_entry.path() << '\n' ;
-      strncpy( mapsFilePath, dir_entry.path().u8string().c_str(), sizeof( mapsFilePath ) ) ;
+      stringCopy( mapsFilePath, dir_entry.path().u8string().c_str(), sizeof( mapsFilePath ) ) ;
 
       struct MapEntry* mapList = NULL ;
 
       BOOST_CHECK_NO_THROW( mapList = getMaps() ) ;
+      BOOST_CHECK( validateMaps( mapList ) ) ;
       BOOST_CHECK_NO_THROW( releaseMaps( mapList ) ) ;
    }
 }

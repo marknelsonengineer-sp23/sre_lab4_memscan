@@ -1,13 +1,15 @@
 ###############################################################################
-### University of Hawaii, College of Engineering
-### Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2023
-###
-### Build and test a memory scanning program
-###
-### @see     https://www.gnu.org/software/make/manual/make.html
-###
-### @file    Makefile
-### @author  Mark Nelson <marknels@hawaii.edu>
+#  University of Hawaii, College of Engineering
+#  Lab 4 - Memory Scanner - EE 491F (Software Reverse Engineering) - Spr 2024
+#
+## Build and test a memory scanning program
+##
+## @see     https://www.gnu.org/software/make/manual/make.html
+##
+## Memscan2 was developed under gcc and it does not work with clang
+##
+## @file   Makefile
+## @author Mark Nelson <marknels@hawaii.edu>
 ###############################################################################
 
 TARGET = boost_tests
@@ -16,19 +18,16 @@ all:  $(TARGET) lint
 
 CXX       = g++
 # Boost tests compile-run faster without -DBOOST_TEST_DYN_LINK
-CXXFLAGS  = -Wall -Wextra $(DEBUG_FLAGS) -std=c++17 -march=native -mtune=native
+CXXFLAGS  = -std=c++17 -Wall -Wextra -Werror -march=native -mtune=native -DTARGET=\"$(TARGET)\" $(DEBUG_FLAGS)
 LDLIBS    = -lm -lcap -lpthread
 LINT      = clang-tidy
 LINTFLAGS = --quiet -extra-arg=-std=c++17
 
-debug: DEBUG_FLAGS = -g -DDEBUG
-debug: $(TARGET)
+debug: DEBUG_FLAGS = -g -DDEBUG -O0
+debug: clean $(TARGET)
 
-test:     CFLAGS   += -DTESTING
 test:     CXXFLAGS += -DTESTING
-
-valgrind: CFLAGS   += -DTESTING -g -O0 -fno-inline
-valgrind: CXXFLAGS +=           -g -O0 -fno-inline -march=x86-64 -mtune=generic
+valgrind: CXXFLAGS += -DTESTING -g -O0 -fno-inline -march=x86-64 -mtune=generic
 
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)

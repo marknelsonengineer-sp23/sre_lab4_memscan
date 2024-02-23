@@ -432,17 +432,16 @@ BOOST_AUTO_TEST_SUITE( test_pagemap )
    }
 
 
+   /// This is having trouble passing on the CI server
    BOOST_AUTO_TEST_CASE( test_getPageInfo_malloc ) {
-/*
       char* smallMalloc = (char*) malloc( 64 ) ;
       smallMalloc[ 0 ] = (char) 0xff ;  // Make sure it's paged into memory
-      memset( smallMalloc, 0xff, 64 ) ;
+      // memset( smallMalloc, 0xff, 64 ) ;
       struct PageInfo smallMallocPage = getPageInfo( smallMalloc, true ) ;
       BOOST_CHECK( validatePageInfo( smallMalloc, &smallMallocPage, VALID, PRESENT, COUNT_IS_1, EXCLUSIVE, NEUTRAL_UPTODATE, NEUTRAL_LRU, NEUTRAL_ACTIVE, MMAP, ANON, SWAPBACKED, OTHERWISE_0 ) ) ;
       closePagemap() ;
       free( smallMalloc ) ;
       smallMalloc = NULL ;
-*/
    }
 
 
